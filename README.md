@@ -28,7 +28,7 @@ Note: paths could change depending on cloned repo directory, architecture and OS
 ```bash
 # To build and execute the example server with all basic types
 Open a terminal
-cd hc_cpp
+cd hc-cpp
 source activate
 cd src/app/scratchsrv
 mkposd
@@ -36,7 +36,7 @@ mkposd
 
 # To build and execute the example peer to peer message server
 Open a terminal
-cd hc_cpp
+cd hc-cpp
 source activate
 cd src/app/msgsrv
 mkposd
@@ -44,7 +44,7 @@ mkposd
 
 # To build and execute the HC client
 Open a terminal
-cd hc_cpp
+cd hc-cpp
 source activate
 cd src/app/hccli
 mkposd

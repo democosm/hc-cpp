@@ -1,0 +1,6 @@
+# Aliases
+alias mkposr='make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=rel'
+alias mkposd='make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=dbg'
+
+# Environment variables
+export PROJBASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

@@ -1,0 +1,13 @@
+<server>
+  <name>Proxy</name>
+  <port>1511</port>
+  <conn>
+    <name>agg</name>
+    <timeout>100000</timeout>
+    <udpsocket>
+      <port>0</port>
+      <destipaddr>127.0.0.1</destipaddr>
+      <destport>1510</destport>
+    </udpsocket>
+  </conn>
+</server>

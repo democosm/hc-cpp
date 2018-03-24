@@ -1,0 +1,16 @@
+<server>
+  <name>Scratch</name>
+  <port>1510</port>
+  <conn>
+    <name>scratch</name>
+    <timeout>3000000</timeout>
+    <slipframer>
+      <maxpldsiz>2000</maxpldsiz>
+      <tcpclient>
+        <port>0</port>
+        <srvipaddr>127.0.0.1</srvipaddr>
+        <srvport>1500</srvport>
+      </tcpclient>
+    </slipframer>
+  </conn>
+</server>

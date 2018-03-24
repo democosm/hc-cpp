@@ -1,0 +1,163 @@
+# vim: ft=make
+#********************
+# Default make rules
+#********************
+
+ifeq ($(PKGTYPE), lib)
+default: \
+ $(OBJDSTDIR) \
+ $(LIBDSTDIR) \
+ $(LIBDSTDIR)/lib$(PKGNAME).a
+	@echo "*** Make for $(PKGTYPE) $(PKGNAME) complete ***"
+	@echo ""
+else
+ifeq ($(PKGTYPE), app)
+default: \
+ $(addprefix l-, $(LINKLIBS)) \
+ $(OBJDSTDIR) \
+ $(APPDSTDIR) \
+ $(BINDSTDIR) \
+ $(BINDSTDIR)/$(PKGNAME)
+	@echo "*** Make for $(PKGTYPE) $(PKGNAME) complete ***"
+	@echo "*** Output is in $(BINDSTDIR)/$(PKGNAME) ***"
+	@echo ""
+else
+ifeq ($(PKGTYPE), test)
+default: \
+ $(addprefix l-, $(LINKLIBS)) \
+ $(OBJDSTDIR) \
+ $(TESTDSTDIR) \
+ $(BINDSTDIR) \
+ $(BINDSTDIR)/test_$(PKGNAME)
+	@echo "*** Make for $(PKGTYPE) $(PKGNAME) complete ***"
+	@echo "*** Output is in $(BINDSTDIR)/test_$(PKGNAME) ***"
+	@echo ""
+else
+  default::
+	@echo "Unrecognized package name. Expected 'lib', 'app' or 'test'"
+	@echo ""
+endif #test
+endif #app
+endif #lib
+
+# Target - Library archive
+$(LIBDSTDIR)/lib$(PKGNAME).a: $(OBJLIST)
+	ar -r -c -s $@ $^
+	@echo ""
+
+# Target - Application executable
+$(BINDSTDIR)/$(PKGNAME): $(OBJLIST) $(ARLIST)
+# clang (g++ on OSX) doesn't support start-group linker option
+ifeq ($(UNAME_S),Darwin)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJLIST) $(LIBLIST) $(STDLIBLIST) -o $@
+else
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -Wl,--end-group $(STDLIBLIST) -o $@
+endif
+	@echo ""
+
+# Target - Test executable
+$(BINDSTDIR)/test_$(PKGNAME): $(OBJLIST) $(ARLIST)
+# clang (g++ on OSX) doesn't support start-group linker option
+ifeq ($(UNAME_S),Darwin)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJLIST) $(LIBLIST) $(STDLIBLIST) -o $@
+else
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -lgtest -Wl,--end-group $(STDLIBLIST) -o $@
+endif
+	@echo ""
+
+# Target - Show variables (used to debug the Makefile)
+vars:
+	@echo PROJBASEDIR = $(PROJBASEDIR)
+	@echo TGTPROC = $(TGTPROC)
+	@echo TGTOS = $(TGTOS)
+	@echo TGTBUILD = $(TGTBUILD)
+	@echo PKGNAME = $(PKGNAME)
+	@echo PKGTYPE = $(PKGTYPE)
+	@echo TGTDIR = $(TGTDIR)
+	@echo DEPDSTDIR = $(DEPDSTDIR)
+	@echo OBJDSTDIR = $(OBJDSTDIR)
+	@echo LIBDSTDIR = $(LIBDSTDIR)
+	@echo APPDSTDIR = $(APPDSTDIR)
+	@echo TESTDSTDIR = $(TESTDSTDIR)
+	@echo BINDSTDIR = $(BINDSTDIR)
+	@echo SRCLIST = $(SRCLIST)
+	@echo DEPLIST = $(DEPLIST)
+	@echo OBJLIST = $(OBJLIST)
+	@echo ARLIST = $(ARLIST)
+	@echo LIBLIST = $(LIBLIST)
+	@echo STDLIBLIST = $(STDLIBLIST)
+	@echo AS = $(AS)
+	@echo CC = $(CC)
+	@echo CXX = $(CXX)
+	@echo AR = $(AR)
+	@echo LD = $(LD)
+	@echo ASFLAGS = $(ASFLAGS)
+	@echo CFLAGS = $(CFLAGS)
+	@echo CXXFLAGS = $(CXXFLAGS)
+	@echo ARFLAGS = $(ARFLAGS)
+	@echo LDFLAGS = $(LDFLAGS)
+
+# Target - Remove intermediate files
+clean::
+	rm -f $(OBJLIST)
+	rm -f $(DEPLIST)
+	@echo ""
+
+# Rule - Generate dependencies files from C source
+$(DEPDSTDIR)/%.c.dep: %.c
+	mkdir -p $(DEPDSTDIR)
+	touch $@
+	$(CC) -M $(CFLAGS) $< | sed -e 's;^\([^ ]\);$$(OBJDSTDIR)/\1;' | sed -e 's;\.o:;\.c\.o:;' > $@
+
+# Rule - Generate dependencies files from C++ source
+$(DEPDSTDIR)/%.cc.dep: %.cc
+	mkdir -p $(DEPDSTDIR)
+	touch $@
+	$(CC) -M $(CFLAGS) $< | sed -e 's;^\([^ ]\);$$(OBJDSTDIR)/\1;' | sed -e 's;\.o:;\.cc\.o:;' > $@
+
+# Rule - Generate destination directories if they don't exist
+$(OBJDSTDIR): %:
+	mkdir -p $@
+	@echo ""
+
+$(LIBDSTDIR): %:
+	mkdir -p $@
+	@echo ""
+
+$(APPDSTDIR): %:
+	mkdir -p $@
+	@echo ""
+
+$(TESTDSTDIR): %:
+	mkdir -p $@
+	@echo ""
+
+$(BINDSTDIR): %:
+	mkdir -p $@
+	@echo ""
+
+# Rule - Generate object files from assembly source
+$(OBJDSTDIR)/%.s.o: %.s
+	$(AS) $(ASFLAGS) $< -o $@
+	@echo ""
+
+# Rule - Generate object files from C source
+$(OBJDSTDIR)/%.c.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+	@echo ""
+
+# Rule - Generate object files from C++ source
+$(OBJDSTDIR)/%.cc.o: %.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	@echo ""
+
+# Rule - Generate lib targets
+l-%:
+	@cd $(subst l-,$(PROJBASEDIR)/src/lib/,$@) && $(MAKE)
+
+# Include the dependencies files if appropriate
+ifeq (,$(findstring clean,$(MAKECMDGOALS)))
+ifeq (,$(findstring vars,$(MAKECMDGOALS)))
+-include $(DEPLIST)
+endif
+endif

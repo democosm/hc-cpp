@@ -13,7 +13,7 @@ We want to help embedded system designers succeed, so we've created some very po
 
 ## Download
 
-Pre-built binaries aren't currently created. The source can be downloaded from here: [Releases](https://bitbucket.org/teamhc/hc_cpp).
+Pre-built binaries aren't currently created. The source can be downloaded from here: [Releases](https://github.com/democosm/hc-cpp).
 
 ## Implemented Features
 

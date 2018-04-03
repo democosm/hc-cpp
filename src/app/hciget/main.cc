@@ -84,9 +84,9 @@ int main(int argc, char **argv)
 
   //Perform transaction and check for error
   if((ierr = cli->CLIGet(pathname, eid, val)) != ERR_NONE)
-    cout << ErrToString(ierr) << endl;
+    cout << ErrToString(ierr);
   else
-    cout << val << endl;
+    cout << val;
 
   //Cleanup
   delete cli;

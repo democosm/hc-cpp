@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
   //Perform transaction and check for error
   if((ierr = cli->CLICall(pathname, eid)) != ERR_NONE)
-    cout << ErrToString(ierr) << endl;
+    cout << ErrToString(ierr);
 
   //Cleanup
   delete cli;

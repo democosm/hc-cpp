@@ -7,13 +7,13 @@ PollStatus();
 function OnClickOpenerButton()
 {
   //Do AJAX HC call
-  HCCall('/string/print');
+  HCICall('/pulserelayhigh', 0);
 }
 
 function PollStatus()
 {
   //Do AJAX HC get and display value
-  HCGet('/uint32/vale');
+  HCGet('/temperature');
 
   //Poll again in 1 second
   setTimeout('PollStatus();', 1000);
@@ -25,13 +25,13 @@ function RenderData(data)
   document.getElementById('door state').innerHTML = data.val;
 }
 
-function HCGet(paramname)
+function HCGet(pid)
 {
   //Get HTTP request object
   var req = new XMLHttpRequest();
 
   //Send get request
-  req.open('GET', 'hcget.php?paramname=' + paramname, true);
+  req.open('GET', 'hcget.php?pid=' + pid, true);
   req.onload = OnLoad;
   req.send(null);
 
@@ -45,7 +45,7 @@ function HCGet(paramname)
   }
 }
 
-function HCCall(paramname)
+function HCCall(pid)
 {
   var req;
 
@@ -53,6 +53,18 @@ function HCCall(paramname)
   req = new XMLHttpRequest();
 
   //Send post request
-  req.open('POST', 'hccall.php?paramname=' + paramname, true);
+  req.open('POST', 'hccall.php?pid=' + pid, true);
+  req.send(null);
+}
+
+function HCICall(pid, eid)
+{
+  var req;
+
+  //Get HTTP request object
+  req = new XMLHttpRequest();
+
+  //Send post request
+  req.open('POST', 'hcicall.php?pid=' + pid + '&eid=' + eid, true);
   req.send(null);
 }

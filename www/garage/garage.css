@@ -1,0 +1,17 @@
+h1, div, button
+{
+  color: navy;
+  text-align: center;
+}
+
+body
+{
+  background-color: lightyellow;
+}
+
+.center
+{
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+}

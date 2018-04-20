@@ -86,14 +86,6 @@ private:
   void SubCmdHandler(void);
   void ReadCmdHandler(void);
   void WriteCmdHandler(void);
-  void CLCallCmdHandler(void);
-  void CLGetCmdHandler(void);
-  void CLSetCmdHandler(void);
-  void CLICallCmdHandler(void);
-  void CLIGetCmdHandler(void);
-  void CLISetCmdHandler(void);
-  void CLAddCmdHandler(void);
-  void CLSubCmdHandler(void);
   void CtlThread(void);
 
 private:

@@ -33,9 +33,66 @@
 #include "hcfloatingpoint.hh"
 #include "piserver.hh"
 #include "udpsocket.hh"
+#include <getopt.h>
 #include <inttypes.h>
+#include <unistd.h>
 
 using namespace std;
+
+//Description strings
+static const char *Appversion = "1.0.0 " __DATE__ " " __TIME__;
+static const char *Appbugaddress = "<democosm@gmail.com>";
+static const char Appdoc[] = "Creates a server to control the Raspberry Pi.";
+
+//Application options
+static struct option Longopts[] =
+{
+  { "daemon", 0, NULL, 'd' },
+  { NULL, 0, NULL, 0 }
+};
+
+//Storage for parsed arguments
+struct Args
+{
+  bool daemon;
+};
+
+void Usage()
+{
+  //Print usage information
+  cout << "Raspberry Pi HC server" << endl;
+  cout << "Version: " << Appversion << endl;
+  cout << "Report bugs to: " << Appbugaddress << endl;
+  cout << Appdoc << endl;
+  cout << "[-d, --daemon] Spawn in background mode" << endl;
+}
+
+bool ParseOptions(int argc, char **argv, struct Args* args)
+{
+  int ch;
+  bool valid;
+
+  //Loop through all options or until invalid option reached
+  valid = true;
+  while(((ch = getopt_long(argc, argv, "p", Longopts, NULL)) != -1) && valid)
+  {
+    switch(ch)
+    {
+    case 'd':
+      args->daemon = true;
+      break;
+    default:
+      valid = false;
+      Usage();
+      break;
+    }
+  }
+
+  argc -= optind;
+  argv += optind;
+
+  return valid;
+}
 
 int main(int argc, char **argv)
 {
@@ -45,6 +102,18 @@ int main(int argc, char **argv)
   HCServer *srv;
   HCConsole *hccons;
   HCParameter *param;
+  struct Args args;
+
+  //Set argument default values
+  args.daemon = false;
+
+  //Parse arguments
+  if(!ParseOptions(argc, argv, &args))
+    return -1;
+
+  //Check for daemon mode
+  if(args.daemon)
+    daemon(1, 1);
 
   //Create PI server object
   pisrv = new PIServer();
@@ -72,14 +141,25 @@ int main(int argc, char **argv)
   //Start HC server
   srv->Start();
 
-  //Create HC console
-  hccons = new HCConsole(topcont);
+  //Just loop if in daemon mode otherwise run console
+  if(args.daemon)
+  {
+    while(true)
+      ThreadSleep(1000000);
+  }
+  else
+  {
+    //Create HC console
+    hccons = new HCConsole(topcont);
 
-  //Run console in context of this thread
-  hccons->Run();
+    //Run console in context of this thread
+    hccons->Run();
+
+    //Cleanup
+    delete hccons;
+  }
 
   //Cleanup
-  delete hccons;
   delete srv;
   delete srvdev;
   delete topcont;

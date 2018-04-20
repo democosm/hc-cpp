@@ -67,8 +67,8 @@ HCClient::HCClient(Device *lowdev, HCContainer *parent, uint32_t timeout)
   _goodxactcnt = 0;
   _transaction = 0;
   _xactmutex = new Mutex();
-  _exptransaction = 0;
-  _expopcode = 0;
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
   _timeout = timeout;
   _replyevent = new Event();
 
@@ -628,138 +628,13 @@ template int HCClient::ISet<string>(uint16_t pid, uint32_t eid, const string val
 template int HCClient::Add<string>(uint16_t pid, const string val);
 template int HCClient::Sub<string>(uint16_t pid, const string val);
 
-int HCClient::CLCall(const string &name)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform clcall transaction
-  ierr = CLCallXact(name);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLGet(const string &name, string &val)
-{
-  int ierr;
-
-  //Take the transaction mutex
-  _xactmutex->Wait();
-
-  //Perform clget transaction
-  ierr = CLGetXact(name, val);
-
-  //Give the transaction mutex
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLSet(const string &name, const string &val)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform clset transaction
-  ierr = CLSetXact(name, val);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLICall(const string &name, uint32_t eid)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform clicall transaction
-  ierr = CLICallXact(name, eid);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLIGet(const string &name, uint32_t eid, string &val)
-{
-  int ierr;
-
-  //Take the transaction mutex
-  _xactmutex->Wait();
-
-  //Perform cliget transaction
-  ierr = CLIGetXact(name, eid, val);
-
-  //Give the transaction mutex
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLISet(const string &name, uint32_t eid, const string &val)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform cliset transaction
-  ierr = CLISetXact(name, eid, val);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLAdd(const string &name, const string &val)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform cladd transaction
-  ierr = CLAddXact(name, val);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
-int HCClient::CLSub(const string &name, const string &val)
-{
-  int ierr;
-
-  //Begin mutual exclusion of transaction
-  _xactmutex->Wait();
-
-  //Perform clsub transaction
-  ierr = CLSubXact(name, val);
-
-  //End mutual exclusion of transaction
-  _xactmutex->Give();
-
-  return ierr;
-}
-
 int HCClient::CallXact(uint16_t pid)
 {
   uint16_t ipid;
   int8_t berr;
+
+  //Reset reply event
+  _replyevent->Reset();
 
   //Set expected reply parameters
   _exptransaction = _transaction;
@@ -778,6 +653,10 @@ int HCClient::CallXact(uint16_t pid)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -787,8 +666,16 @@ int HCClient::CallXact(uint16_t pid)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -816,6 +703,9 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   uint16_t ipid;
   uint8_t itype;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_GET_STS;
@@ -837,6 +727,10 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -846,8 +740,16 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -885,6 +787,9 @@ int HCClient::SetXact(uint16_t pid, uint8_t type)
   uint8_t itype;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_SET_STS;
@@ -902,6 +807,10 @@ int HCClient::SetXact(uint16_t pid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -911,8 +820,16 @@ int HCClient::SetXact(uint16_t pid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -953,6 +870,9 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   uint32_t ieid;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_ICALL_STS;
@@ -970,6 +890,10 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -979,8 +903,16 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1021,6 +953,9 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   uint32_t ieid;
   uint8_t itype;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_IGET_STS;
@@ -1043,6 +978,10 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1052,8 +991,16 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1104,6 +1051,9 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
   uint8_t itype;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_ISET_STS;
@@ -1121,6 +1071,10 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1130,8 +1084,16 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1184,6 +1146,9 @@ int HCClient::AddXact(uint16_t pid, uint8_t type)
   uint8_t itype;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_ADD_STS;
@@ -1201,6 +1166,10 @@ int HCClient::AddXact(uint16_t pid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1210,8 +1179,16 @@ int HCClient::AddXact(uint16_t pid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1252,6 +1229,9 @@ int HCClient::SubXact(uint16_t pid, uint8_t type)
   uint8_t itype;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_SUB_STS;
@@ -1269,6 +1249,10 @@ int HCClient::SubXact(uint16_t pid, uint8_t type)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1278,8 +1262,16 @@ int HCClient::SubXact(uint16_t pid, uint8_t type)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1319,6 +1311,9 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
   uint16_t ipid;
   uint32_t ioffset;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_READ_STS;
@@ -1341,6 +1336,10 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1350,8 +1349,16 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1389,6 +1396,9 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   uint32_t ioffset;
   int8_t berr;
 
+  //Reset reply event
+  _replyevent->Reset();
+
   //Set expected reply parameters
   _exptransaction = _transaction;
   _expopcode = HCCell::OPCODE_WRITE_STS;
@@ -1406,6 +1416,10 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
     //Increment send error count
     _senderrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_UNSPEC;
   }
 
@@ -1415,8 +1429,16 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
     //Increment timeout error count
     _timeouterrcnt++;
 
+    //Set expected reply parameters to invalid
+    _exptransaction = 0xFFFF;
+    _expopcode = 0xFFFF;
+
     return ERR_TIMEOUT;
   }
+
+  //Set expected reply parameters to invalid
+  _exptransaction = 0xFFFF;
+  _expopcode = 0xFFFF;
 
   //Read PID from inbound cell
   _icell->Read(ipid);
@@ -1438,522 +1460,6 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   {
     //Increment offset error count
     _offseterrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLCallXact(const string &name)
-{
-  string iname;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLCALL_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLCALL_CMD);
-  _ocell->Write(name);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLGetXact(const string &name, string &val)
-{
-  string iname;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLGET_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLGET_CMD);
-  _ocell->Write(name);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read parameter value from inbound cell
-  _icell->Read(val);
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLSetXact(const string &name, const string &val)
-{
-  string iname;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLSET_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLSET_CMD);
-  _ocell->Write(name);
-  _ocell->Write(val);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLICallXact(const string &name, uint32_t eid)
-{
-  string iname;
-  uint32_t ieid;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLICALL_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLICALL_CMD);
-  _ocell->Write(name);
-  _ocell->Write(eid);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read EID from inbound cell
-  _icell->Read(ieid);
-
-  //Check for inbound EID doesn't match outbound EID
-  if(ieid != eid)
-  {
-    //Increment EID error count
-    _eiderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLIGetXact(const string &name, uint32_t eid, string &val)
-{
-  string iname;
-  uint32_t ieid;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLIGET_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLIGET_CMD);
-  _ocell->Write(name);
-  _ocell->Write(eid);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read EID from inbound cell
-  _icell->Read(ieid);
-
-  //Check for inbound EID doesn't match outbound EID
-  if(ieid != eid)
-  {
-    //Increment EID error count
-    _eiderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read parameter value from inbound cell
-  _icell->Read(val);
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLISetXact(const string &name, uint32_t eid, const string &val)
-{
-  string iname;
-  uint32_t ieid;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLISET_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLISET_CMD);
-  _ocell->Write(name);
-  _ocell->Write(eid);
-  _ocell->Write(val);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read EID from inbound cell
-  _icell->Read(ieid);
-
-  //Check for inbound EID doesn't match outbound EID
-  if(ieid != eid)
-  {
-    //Increment EID error count
-    _eiderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLAddXact(const string &name, const string &val)
-{
-  string iname;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLADD_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLADD_CMD);
-  _ocell->Write(name);
-  _ocell->Write(val);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Read error code from inbound cell
-  _icell->Read(berr);
-
-  //Increment good transaction count
-  _goodxactcnt++;
-
-  return (int)berr;
-}
-
-int HCClient::CLSubXact(const string &name, const string &val)
-{
-  string iname;
-  int8_t berr;
-
-  //Set expected reply parameters
-  _exptransaction = _transaction;
-  _expopcode = HCCell::OPCODE_CLSUB_STS;
-
-  //Format outbound message
-  _omsg->Reset(_transaction++);
-  _ocell->Reset(HCCell::OPCODE_CLSUB_CMD);
-  _ocell->Write(name);
-  _ocell->Write(val);
-  _omsg->Write(_ocell);
-
-  //Print outbound message if requested
-  if(_debug)
-    _omsg->Print("Tx");
-
-  //Send outbound message and check for error
-  if(_omsg->Send(_lowdev) != ERR_NONE)
-  {
-    //Increment send error count
-    _senderrcnt++;
-
-    return ERR_UNSPEC;
-  }
-
-  //Wait for response
-  if(_replyevent->Wait(_timeout) != 0)
-  {
-    //Increment timeout error count
-    _timeouterrcnt++;
-
-    return ERR_TIMEOUT;
-  }
-
-  //Read name from inbound cell
-  _icell->Read(iname);
-
-  //Check for inbound name doesn't match outbound name
-  if(iname != name)
-  {
-    //Increment PID error count
-    _piderrcnt++;
 
     return ERR_UNSPEC;
   }

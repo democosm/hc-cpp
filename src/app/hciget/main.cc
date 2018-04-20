@@ -25,15 +25,17 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "hcclient.hh"
+#include "hcutility.hh"
 #include "str.hh"
 #include "udpsocket.hh"
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
 void Usage(const char *appname)
 {
-  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <EID>" << endl;
+  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <EID> <MAP FILE NAME>" << endl;
 }
 
 int main(int argc, char **argv)
@@ -44,11 +46,25 @@ int main(int argc, char **argv)
   HCClient *cli;
   string pathname;
   uint32_t eid;
-  string val;
+  FILE *mapfile;
+  uint16_t pid;
+  uint8_t type;
+  int8_t int8val;
+  int16_t int16val;
+  int32_t int32val;
+  int64_t int64val;
+  uint8_t uint8val;
+  uint16_t uint16val;
+  uint32_t uint32val;
+  uint64_t uint64val;
+  float floatval;
+  double doubleval;
+  bool boolval;
+  string stringval;
   int ierr;
 
   //Check for wrong number of arguments
-  if(argc != 5)
+  if(argc != 6)
   {
     Usage(argv[0]);
     return -1;
@@ -82,11 +98,114 @@ int main(int argc, char **argv)
   //Turn path name into c++ string
   pathname = argv[3];
 
-  //Perform transaction and check for error
-  if((ierr = cli->CLIGet(pathname, eid, val)) != ERR_NONE)
-    cout << ErrToString(ierr) << endl;
-  else
-    cout << val << endl;
+  //Open map file and check for error
+  if((mapfile = fopen(argv[5], "rb")) == NULL)
+  {
+    cout << "Can't open map file " << argv[5] << endl;
+    return -1;
+  }
+
+  //Lookup PID and type and check for error
+  if(!HCUtility::MapLookup(mapfile, pathname, pid, type))
+  {
+    cout << "Can't find entry for " << pathname << " in " << argv[5] << endl;
+    return -1;
+  }
+
+  //Close map file
+  fclose(mapfile);
+
+  //Transaction depends on type code
+  switch(type)
+  {
+  case HCParameter::TYPE_INT8:
+    if((ierr = cli->IGet(pid, eid, int8val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int8val << endl;
+
+    break;
+  case HCParameter::TYPE_INT16:
+    if((ierr = cli->IGet(pid, eid, int16val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int16val << endl;
+
+    break;
+  case HCParameter::TYPE_INT32:
+    if((ierr = cli->IGet(pid, eid, int32val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int32val << endl;
+
+    break;
+  case HCParameter::TYPE_INT64:
+    if((ierr = cli->IGet(pid, eid, int64val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int64val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT8:
+    if((ierr = cli->IGet(pid, eid, uint8val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint8val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT16:
+    if((ierr = cli->IGet(pid, eid, uint16val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint16val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT32:
+    if((ierr = cli->IGet(pid, eid, uint32val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint32val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT64:
+    if((ierr = cli->IGet(pid, eid, uint64val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint64val << endl;
+
+    break;
+  case HCParameter::TYPE_FLOAT:
+    if((ierr = cli->IGet(pid, eid, floatval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << floatval << endl;
+
+    break;
+  case HCParameter::TYPE_DOUBLE:
+    if((ierr = cli->IGet(pid, eid, doubleval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << doubleval << endl;
+
+    break;
+  case HCParameter::TYPE_BOOL:
+    if((ierr = cli->IGet(pid, eid, boolval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << boolval << endl;
+
+    break;
+  case HCParameter::TYPE_STRING:
+    if((ierr = cli->IGet(pid, eid, stringval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << stringval << endl;
+
+    break;
+  default:
+    cout << ErrToString(ERR_TYPE) << endl;
+    break;
+  }
 
   //Cleanup
   delete cli;

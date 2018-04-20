@@ -70,14 +70,6 @@ public:
   template <typename T> int ISet(uint16_t pid, uint32_t eid, const T val);
   template <typename T> int Add(uint16_t pid, const T val);
   template <typename T> int Sub(uint16_t pid, const T val);
-  int CLCall(const string &name);
-  int CLGet(const string &name, string &val);
-  int CLSet(const string &name, const string &val);
-  int CLICall(const string &name, uint32_t eid);
-  int CLIGet(const string &name, uint32_t eid, string &val);
-  int CLISet(const string &name, uint32_t eid, const string &val);
-  int CLAdd(const string &name, const string &val);
-  int CLSub(const string &name, const string &val);
 
 private:
   int CallXact(uint16_t pid);
@@ -90,14 +82,6 @@ private:
   int SubXact(uint16_t pid, uint8_t type);
   int ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen);
   int WriteXact(uint16_t pid, uint32_t offset);
-  int CLCallXact(const string &name);
-  int CLGetXact(const string &name, string &val);
-  int CLSetXact(const string &name, const string &val);
-  int CLICallXact(const string &name, uint32_t eid);
-  int CLIGetXact(const string &name, uint32_t eid, string &val);
-  int CLISetXact(const string &name, uint32_t eid, const string &val);
-  int CLAddXact(const string &name, const string &val);
-  int CLSubXact(const string &name, const string &val);
   void ReadThread(void);
 
 private:
@@ -122,8 +106,8 @@ private:
   uint32_t _goodxactcnt;
   uint8_t _transaction;
   Mutex *_xactmutex;
-  uint8_t _exptransaction;
-  uint8_t _expopcode;
+  uint16_t _exptransaction;
+  uint16_t _expopcode;
   uint32_t _timeout;
   Event *_replyevent;
   uint8_t *_filebuffer;

@@ -56,22 +56,6 @@ public:
   static const uint8_t OPCODE_READ_STS = 0x11;
   static const uint8_t OPCODE_WRITE_CMD = 0x12;
   static const uint8_t OPCODE_WRITE_STS = 0x13;
-  static const uint8_t OPCODE_CLCALL_CMD = 0x80;
-  static const uint8_t OPCODE_CLCALL_STS = 0x81;
-  static const uint8_t OPCODE_CLGET_CMD = 0x82;
-  static const uint8_t OPCODE_CLGET_STS = 0x83;
-  static const uint8_t OPCODE_CLSET_CMD = 0x84;
-  static const uint8_t OPCODE_CLSET_STS = 0x85;
-  static const uint8_t OPCODE_CLICALL_CMD = 0x86;
-  static const uint8_t OPCODE_CLICALL_STS = 0x87;
-  static const uint8_t OPCODE_CLIGET_CMD = 0x88;
-  static const uint8_t OPCODE_CLIGET_STS = 0x89;
-  static const uint8_t OPCODE_CLISET_CMD = 0x8A;
-  static const uint8_t OPCODE_CLISET_STS = 0x8B;
-  static const uint8_t OPCODE_CLADD_CMD = 0x8C;
-  static const uint8_t OPCODE_CLADD_STS = 0x8D;
-  static const uint8_t OPCODE_CLSUB_CMD = 0x8E;
-  static const uint8_t OPCODE_CLSUB_STS = 0x8F;
 
   //Cell overhead
   static const uint32_t OVERHEAD = 3;

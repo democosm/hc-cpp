@@ -537,54 +537,6 @@ void HCCell::Print(const string &extra)
   case OPCODE_WRITE_STS:
     cout << "Write Sts";
     break;
-  case OPCODE_CLCALL_CMD:
-    cout << "CL Call Cmd";
-    break;
-  case OPCODE_CLCALL_STS:
-    cout << "CL Call Sts";
-    break;
-  case OPCODE_CLGET_CMD:
-    cout << "CL Get Cmd";
-    break;
-  case OPCODE_CLGET_STS:
-    cout << "CL Get Sts";
-    break;
-  case OPCODE_CLSET_CMD:
-    cout << "CL Set Cmd";
-    break;
-  case OPCODE_CLSET_STS:
-    cout << "CL Set Sts";
-    break;
-  case OPCODE_CLICALL_CMD:
-    cout << "CL ICall Cmd";
-    break;
-  case OPCODE_CLICALL_STS:
-    cout << "CL ICall Sts";
-    break;
-  case OPCODE_CLIGET_CMD:
-    cout << "CL IGet Cmd";
-    break;
-  case OPCODE_CLIGET_STS:
-    cout << "CL IGet Sts";
-    break;
-  case OPCODE_CLISET_CMD:
-    cout << "CL ISet Cmd";
-    break;
-  case OPCODE_CLISET_STS:
-    cout << "CL ISet Sts";
-    break;
-  case OPCODE_CLADD_CMD:
-    cout << "CL Add Cmd";
-    break;
-  case OPCODE_CLADD_STS:
-    cout << "CL Add Sts";
-    break;
-  case OPCODE_CLSUB_CMD:
-    cout << "CL Sub Cmd";
-    break;
-  case OPCODE_CLSUB_STS:
-    cout << "CL Sub Sts";
-    break;
   default:
     cout << "Unknown";
     break;

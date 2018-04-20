@@ -25,15 +25,17 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "hcclient.hh"
+#include "hcutility.hh"
 #include "str.hh"
 #include "udpsocket.hh"
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
 void Usage(const char *appname)
 {
-  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <EID>" << endl;
+  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <EID> <MAP FILE NAME>" << endl;
 }
 
 int main(int argc, char **argv)
@@ -44,10 +46,13 @@ int main(int argc, char **argv)
   HCClient *cli;
   string pathname;
   uint32_t eid;
+  FILE *mapfile;
+  uint16_t pid;
+  uint8_t type;
   int ierr;
 
   //Check for wrong number of arguments
-  if(argc != 5)
+  if(argc != 6)
   {
     Usage(argv[0]);
     return -1;
@@ -81,9 +86,36 @@ int main(int argc, char **argv)
   //Turn path name into c++ string
   pathname = argv[3];
 
-  //Perform transaction and check for error
-  if((ierr = cli->CLICall(pathname, eid)) != ERR_NONE)
-    cout << ErrToString(ierr) << endl;
+  //Open map file and check for error
+  if((mapfile = fopen(argv[5], "rb")) == NULL)
+  {
+    cout << "Can't open map file " << argv[5] << endl;
+    return -1;
+  }
+
+  //Lookup PID and type and check for error
+  if(!HCUtility::MapLookup(mapfile, pathname, pid, type))
+  {
+    cout << "Can't find entry for " << pathname << " in " << argv[5] << endl;
+    return -1;
+  }
+
+  //Close map file
+  fclose(mapfile);
+
+  //Transaction depends on type code
+  switch(type)
+  {
+  case HCParameter::TYPE_CALL:
+    //Perform transaction and check for error
+    if((ierr = cli->ICall(pid, eid)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+
+    break;
+  default:
+    cout << ErrToString(ERR_TYPE) << endl;
+    break;
+  }
 
   //Cleanup
   delete cli;

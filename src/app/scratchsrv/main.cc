@@ -40,13 +40,15 @@
 #include "scratchfile.hh"
 #include "scratchstring.hh"
 #include "slipframer.hh"
+#include "thread.hh"
 #include "tlsserver.hh"
 #include "tcpserver.hh"
 #include "udpsocket.hh"
+#include <cassert>
 #include <getopt.h>
 #include <inttypes.h>
-#include <cassert>
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -64,6 +66,7 @@ static struct option Longopts[] =
   { "tcp", 0, NULL, 't' },
   { "tls", 0, NULL, 's' },
   { "port", required_argument, NULL, 'p' },
+  { "daemon", 0, NULL, 'd' },
   { NULL, 0, NULL, 0 }
 };
 
@@ -73,6 +76,7 @@ struct Args
   bool tcp;
   bool tls;
   uint16_t port;
+  bool daemon;
 };
 
 void Usage()
@@ -85,6 +89,7 @@ void Usage()
   cout << "[-t, --tcp] Use TCP for transport protocol" << endl;
   cout << "[-s, --tls] Use TLS for transport protocol" << endl;
   cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << endl;
+  cout << "[-d, --daemon] Spawn in background mode" << endl;
 }
 
 bool ParseOptions(int argc, char **argv, struct Args* args)
@@ -114,6 +119,9 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
         break;
       }
 
+      break;
+    case 'd':
+      args->daemon = true;
       break;
     default:
       valid = false;
@@ -273,10 +281,15 @@ int main(int argc, char **argv)
   args.tcp = false;
   args.tls = false;
   args.port = 1500;
+  args.daemon = false;
 
   //Parse arguments
   if(!ParseOptions(argc, argv, &args))
     return -1;
+
+  //Check for daemon mode
+  if(args.daemon)
+    daemon(1, 1);
 
   //Initialize TLS
   SSL_load_error_strings();	
@@ -539,14 +552,25 @@ int main(int argc, char **argv)
   //Start HC server
   srv->Start();
 
-  //Create HC console
-  hccons = new HCConsole(topcont);
+  //Just loop if in daemon mode otherwise run console
+  if(args.daemon)
+  {
+    while(true)
+      ThreadSleep(1000000);
+  }
+  else
+  {
+    //Create HC console
+    hccons = new HCConsole(topcont);
 
-  //Run console in context of this thread
-  hccons->Run();
+    //Run console in context of this thread
+    hccons->Run();
+
+    //Cleanup
+    delete hccons;
+  }
 
   //Cleanup
-  delete hccons;
   delete srv;
   delete srvdev;
   delete topcont;

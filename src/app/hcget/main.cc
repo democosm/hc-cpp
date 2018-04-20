@@ -25,15 +25,17 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "hcclient.hh"
+#include "hcutility.hh"
 #include "str.hh"
 #include "udpsocket.hh"
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
 void Usage(const char *appname)
 {
-  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME>" << endl;
+  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <MAP FILE NAME>" << endl;
 }
 
 int main(int argc, char **argv)
@@ -43,11 +45,25 @@ int main(int argc, char **argv)
   HCContainer *top;
   HCClient *cli;
   string pathname;
-  string val;
+  FILE *mapfile;
+  uint16_t pid;
+  uint8_t type;
+  int8_t int8val;
+  int16_t int16val;
+  int32_t int32val;
+  int64_t int64val;
+  uint8_t uint8val;
+  uint16_t uint16val;
+  uint32_t uint32val;
+  uint64_t uint64val;
+  float floatval;
+  double doubleval;
+  bool boolval;
+  string stringval;
   int ierr;
 
   //Check for wrong number of arguments
-  if(argc != 4)
+  if(argc != 5)
   {
     Usage(argv[0]);
     return -1;
@@ -56,7 +72,7 @@ int main(int argc, char **argv)
   //Convert server port number to integer and check for error
   if(!StringConvert(argv[2], port))
   {
-    cout << "Invalid port number (" << argv[2] << ")" << endl;
+    cout << "Invalid port number " << argv[2] << endl;
     Usage(argv[0]);
     return -1;
   }
@@ -73,11 +89,114 @@ int main(int argc, char **argv)
   //Turn path name into c++ string
   pathname = argv[3];
 
-  //Perform transaction and check for error
-  if((ierr = cli->CLGet(pathname, val)) != ERR_NONE)
-    cout << ErrToString(ierr) << endl;
-  else
-    cout << val << endl;
+  //Open map file and check for error
+  if((mapfile = fopen(argv[4], "rb")) == NULL)
+  {
+    cout << "Can't open map file " << argv[4] << endl;
+    return -1;
+  }
+
+  //Lookup PID and type and check for error
+  if(!HCUtility::MapLookup(mapfile, pathname, pid, type))
+  {
+    cout << "Can't find entry for " << pathname << " in " << argv[4] << endl;
+    return -1;
+  }
+
+  //Close map file
+  fclose(mapfile);
+
+  //Transaction depends on type code
+  switch(type)
+  {
+  case HCParameter::TYPE_INT8:
+    if((ierr = cli->Get(pid, int8val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int8val << endl;
+
+    break;
+  case HCParameter::TYPE_INT16:
+    if((ierr = cli->Get(pid, int16val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int16val << endl;
+
+    break;
+  case HCParameter::TYPE_INT32:
+    if((ierr = cli->Get(pid, int32val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int32val << endl;
+
+    break;
+  case HCParameter::TYPE_INT64:
+    if((ierr = cli->Get(pid, int64val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << int64val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT8:
+    if((ierr = cli->Get(pid, uint8val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint8val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT16:
+    if((ierr = cli->Get(pid, uint16val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint16val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT32:
+    if((ierr = cli->Get(pid, uint32val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint32val << endl;
+
+    break;
+  case HCParameter::TYPE_UINT64:
+    if((ierr = cli->Get(pid, uint64val)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << uint64val << endl;
+
+    break;
+  case HCParameter::TYPE_FLOAT:
+    if((ierr = cli->Get(pid, floatval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << floatval << endl;
+
+    break;
+  case HCParameter::TYPE_DOUBLE:
+    if((ierr = cli->Get(pid, doubleval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << doubleval << endl;
+
+    break;
+  case HCParameter::TYPE_BOOL:
+    if((ierr = cli->Get(pid, boolval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << boolval << endl;
+
+    break;
+  case HCParameter::TYPE_STRING:
+    if((ierr = cli->Get(pid, stringval)) != ERR_NONE)
+      cout << ErrToString(ierr) << endl;
+    else
+      cout << stringval << endl;
+
+    break;
+  default:
+    cout << ErrToString(ERR_TYPE) << endl;
+    break;
+  }
 
   //Cleanup
   delete cli;

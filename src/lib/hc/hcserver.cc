@@ -63,6 +63,9 @@ HCServer::HCServer(Device *lowdev, HCContainer *top, const string &name, const s
   _infofilename = ".server-";
   _infofilename += name;
   _infofilename += ".xml";
+  _nldfilename = ".server-";
+  _nldfilename += name;
+  _nldfilename += ".nld";
 
   //Initialize PID top and maximum PID count
   _pidtop = 0;
@@ -174,8 +177,11 @@ void HCServer::Add(HCParameter *param)
 
 void HCServer::Start(void)
 {
-  //Serialize to XML descriptor file
-  Serialize();
+  //Save to XML file
+  SaveXML();
+
+  //Save to NLD file
+  SaveNLD();
 
   //Set started flag
   _started = true;
@@ -316,7 +322,7 @@ int HCServer::GetGoodXactCnt(uint32_t &val)
   return ERR_NONE;
 }
 
-void HCServer::Serialize(void)
+void HCServer::SaveXML(void)
 {
   ofstream file;
   HCParameter *param;
@@ -338,14 +344,14 @@ void HCServer::Serialize(void)
   file << "  <name>" << _name << "</name>" << endl;
   file << "  <version>" << _version << "</version>" << endl;
 
-  //Serialize child parameters if contained in PID table
+  //Save child parameters if contained in PID table
   for(param=_top->GetFirstSubParam(); param!=0; param=param->GetNext())
     if(ParamToPID(param, &pid))
-      param->Serialize(file, 2, pid);
+      param->SaveXML(file, 2, pid);
 
-  //Serialize child containers
+  //Save child containers
   for(cont=_top->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
-    Serialize(file, 2, cont);
+    SaveXML(file, 2, cont);
 
   //Footer
   file << "</server>" << endl;
@@ -354,7 +360,7 @@ void HCServer::Serialize(void)
   file.close();
 }
 
-void HCServer::Serialize(ofstream &file, uint32_t indent, HCContainer *startcont)
+void HCServer::SaveXML(ofstream &file, uint32_t indent, HCContainer *startcont)
 {
   HCParameter *param;
   HCContainer *cont;
@@ -367,17 +373,91 @@ void HCServer::Serialize(ofstream &file, uint32_t indent, HCContainer *startcont
   file << string(indent, ' ') << "<cont>" << endl;
   file << string(indent, ' ') << "  <name>" << startcont->GetName() << "</name>" << endl;
 
-  //Serialize child parameters if contained in PID table
+  //Save child parameters if contained in PID table
   for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
     if(ParamToPID(param, &pid))
-      param->Serialize(file, indent + 2, pid);
+      param->SaveXML(file, indent + 2, pid);
 
-  //Serialize child containers
+  //Save child containers
   for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
-    Serialize(file, indent + 2, cont);
+    SaveXML(file, indent + 2, cont);
 
   //Footer
   file << string(indent, ' ') << "</cont>" << endl;
+}
+
+void HCServer::SaveNLD(void)
+{
+  ofstream file;
+  HCParameter *param;
+  HCContainer *cont;
+  uint16_t pid;
+
+  //Open information file
+  file.open(_nldfilename.c_str(), ofstream:: binary);
+
+  //Check for error
+  if(!file.is_open())
+  {
+    cout << __FILE__ << ' ' << __LINE__ << " - Error opening file (" << _nldfilename << ')' << endl;
+    return;
+  }
+
+  //Save child parameters if contained in PID table
+  for(param=_top->GetFirstSubParam(); param!=0; param=param->GetNext())
+    if(ParamToPID(param, &pid))
+      param->SaveNLD(file, pid);
+
+  //Save child containers
+  for(cont=_top->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
+    SaveNLD(file, cont);
+
+  //Close information file
+  file.close();
+}
+
+uint32_t HCServer::SaveNLD(ofstream &file, HCContainer *startcont)
+{
+  HCParameter *param;
+  HCContainer *cont;
+  uint16_t pid;
+  uint8_t namelen;
+  uint32_t datalenpos;
+  uint32_t datalen;
+
+  //Assert valid arguments
+  assert(startcont != 0);
+
+  //Write name
+  namelen = startcont->GetName().length();
+  file.write((const char *)&namelen, sizeof(namelen));
+  file.write(startcont->GetName().c_str(), namelen);
+
+  //Remember position of length and seek ahead
+  datalenpos = file.tellp();
+  file.seekp(sizeof(datalen), ios_base::cur);
+
+  //Initialize data length
+  datalen = 0;
+
+  //Save child parameters if contained in PID table
+  for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
+    if(ParamToPID(param, &pid))
+      datalen += param->SaveNLD(file, pid);
+
+  //Save child containers
+  for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
+    datalen += SaveNLD(file, cont);
+
+  //Seek back to position of length and write it
+  file.seekp(datalenpos);
+  file.write((const char *)&datalen, sizeof(datalen));
+
+  //Seek to end of file
+  file.seekp(0, ios_base::end);
+
+  //Return number of bytes written
+  return 1 + namelen + sizeof(datalen) + datalen;
 }
 
 bool HCServer::ParamToPID(HCParameter *param, uint16_t *pid)

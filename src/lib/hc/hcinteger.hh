@@ -316,7 +316,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -862,7 +862,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -1457,7 +1457,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;

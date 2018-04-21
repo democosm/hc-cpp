@@ -1,3 +1,3 @@
 <?Php
-  system('./hcicall 127.0.0.1 1500 ' . $_GET['pid'] . ' ' . $_GET['eid'] . ' pidtypemap');
+  system('./hcicall 127.0.0.1 1500 ' . $_GET['pid'] . ' ' . $_GET['eid'] . ' .server-Pi.nld');
 ?>

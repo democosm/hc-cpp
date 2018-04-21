@@ -41,8 +41,8 @@ class HCUtility
 public:
   static HCContainer *GetCont(const string &name, HCContainer *startcont, size_t index=0);
   static HCParameter *GetParam(const string &name, HCContainer *startcont, size_t index=0);
-  static uint32_t MapReadString(char *val, FILE *file);
-  static bool MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint8_t &type, size_t index=0);
+  static bool NLDReadString(char *val, FILE *file);
+  static bool NLDLookup(FILE *nldfile, const string &name, uint16_t &pid, uint8_t &type, size_t index=0);
 };
 
 #endif //_HCUTILITY_HH_

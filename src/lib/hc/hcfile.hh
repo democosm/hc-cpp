@@ -157,7 +157,7 @@ public:
     st << "\n  Access: " << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W");
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << string(indent, ' ') << "<file>" << endl;

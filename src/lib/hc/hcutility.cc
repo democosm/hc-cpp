@@ -181,26 +181,26 @@ HCParameter *HCUtility::GetParam(const string &name, HCContainer *startcont, siz
   return 0;
 }
 
-uint32_t HCUtility::MapReadString(char *val, FILE *file)
+bool HCUtility::NLDReadString(char *val, FILE *file)
 {
   uint8_t len;
 
   //Read length from file and check for error
   if(fread(&len, 1, 1, file) != 1)
-    return 0;
+    return false;
 
   //Read string from file and check for error
   if(fread(val, 1, len, file) != len)
-    return 0;
+    return false;
 
   //Ensure null termination
   val[len] = '\0';
 
-  //Return length
-  return (uint32_t)len + 1;
+  //Return success
+  return true;
 }
 
-bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint8_t &type, size_t index)
+bool HCUtility::NLDLookup(FILE *nldfile, const string &name, uint16_t &pid, uint8_t &type, size_t index)
 {
   string nodename;
   size_t nextindex;
@@ -210,7 +210,7 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
   uint8_t readtype;
 
   //Assert valid arguments
-  assert(mapfile != 0);
+  assert(nldfile != 0);
 
   //Loop through directory names in path
   while((nextindex = name.find('/', index)) != string::npos)
@@ -230,10 +230,10 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
     else
     {
       //Search for matching container name
-      while(MapReadString(readname, mapfile) > 0)
+      while(NLDReadString(readname, nldfile))
       {
         //Read length and check for error
-	if(fread(&len, sizeof(len), 1, mapfile) != 1)
+	if(fread(&len, sizeof(len), 1, nldfile) != 1)
 	{
 	  printf("%s - Error reading length of '%s'\n", __FUNCTION__, readname);
 	  return false;
@@ -246,12 +246,12 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
           if(nodename == readname)
           {
             //Recurse
-            return MapLookup(mapfile, name, pid, type, index);
+            return NLDLookup(nldfile, name, pid, type, index);
           }
 	}
 
         //Seek ahead to next entry
-        fseek(mapfile, len, SEEK_CUR);
+        fseek(nldfile, len, SEEK_CUR);
       }
     }
 
@@ -263,10 +263,10 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
   nodename = name.substr(index, name.length()-index);
 
   //Search for matching parameter name
-  while(MapReadString(readname, mapfile) > 0)
+  while(NLDReadString(readname, nldfile))
   {
     //Read length and check for error
-    if(fread(&len, sizeof(len), 1, mapfile) != 1)
+    if(fread(&len, sizeof(len), 1, nldfile) != 1)
     {
       printf("%s - Error reading length of '%s'\n", __FUNCTION__, readname);
       return false;
@@ -279,14 +279,14 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
       if(nodename == readname)
       {
 	//Read PID and check for error
-	if(fread(&readpid, sizeof(readpid), 1, mapfile) != 1)
+	if(fread(&readpid, sizeof(readpid), 1, nldfile) != 1)
 	{
 	  printf("%s - Error reading PID of '%s'\n", __FUNCTION__, readname);
 	  return false;
 	}
 
 	//Read type and check for error
-	if(fread(&readtype, sizeof(readtype), 1, mapfile) != 1)
+	if(fread(&readtype, sizeof(readtype), 1, nldfile) != 1)
 	{
 	  printf("%s - Error reading type of '%s'\n", __FUNCTION__, readname);
 	  return false;
@@ -302,7 +302,7 @@ bool HCUtility::MapLookup(FILE *mapfile, const string &name, uint16_t &pid, uint
     }
 
     //Seek ahead to next entry
-    fseek(mapfile, len, SEEK_CUR);
+    fseek(nldfile, len, SEEK_CUR);
   }
 
   //Not found

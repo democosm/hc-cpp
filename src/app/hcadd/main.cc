@@ -35,7 +35,7 @@ using namespace std;
 
 void Usage(const char *appname)
 {
-  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <VALUE> <MAP FILE NAME>" << endl;
+  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <PATHNAME> <VALUE> <NLD FILE NAME>" << endl;
 }
 
 int main(int argc, char **argv)
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   HCContainer *top;
   HCClient *cli;
   string pathname;
-  FILE *mapfile;
+  FILE *nldfile;
   uint16_t pid;
   uint8_t type;
   int8_t int8val;
@@ -89,22 +89,22 @@ int main(int argc, char **argv)
   //Turn path name into c++ string
   pathname = argv[3];
 
-  //Open map file and check for error
-  if((mapfile = fopen(argv[5], "rb")) == NULL)
+  //Open NLD file and check for error
+  if((nldfile = fopen(argv[5], "rb")) == NULL)
   {
-    cout << "Can't open map file " << argv[5] << endl;
+    cout << "Can't open NLD file " << argv[5] << endl;
     return -1;
   }
 
   //Lookup PID and type and check for error
-  if(!HCUtility::MapLookup(mapfile, pathname, pid, type))
+  if(!HCUtility::NLDLookup(nldfile, pathname, pid, type))
   {
     cout << "Can't find entry for " << pathname << " in " << argv[5] << endl;
     return -1;
   }
 
-  //Close map file
-  fclose(mapfile);
+  //Close NLD file
+  fclose(nldfile);
 
   //Transaction depends on type code
   switch(type)

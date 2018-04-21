@@ -136,7 +136,7 @@ public:
     st << "\n  Type: call";
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << string(indent, ' ') << "<call>" << endl;
@@ -263,7 +263,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 

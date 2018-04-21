@@ -73,8 +73,10 @@ public:
   int GetGoodXactCnt(uint32_t &val);
 
 private:
-  void Serialize(void);
-  void Serialize(ofstream &file, uint32_t indent, HCContainer *startcont);
+  void SaveXML(void);
+  void SaveXML(ofstream &file, uint32_t indent, HCContainer *startcont);
+  void SaveNLD(void);
+  uint32_t SaveNLD(ofstream &file, HCContainer *startcont);
   bool ParamToPID(HCParameter *param, uint16_t *pid);
   void CallCmdHandler(void);
   void GetCmdHandler(void);
@@ -94,6 +96,7 @@ private:
   string _name;
   string _version;
   string _infofilename;
+  string _nldfilename;
   uint32_t _pidtop;
   uint32_t _pidmax;
   HCParameter **_params;

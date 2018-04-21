@@ -183,7 +183,7 @@ public:
     st << "\n  Scale: " << _scale;
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
 
@@ -501,7 +501,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;

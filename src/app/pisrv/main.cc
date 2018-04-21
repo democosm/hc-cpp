@@ -125,7 +125,7 @@ int main(int argc, char **argv)
   srvdev = new UDPSocket(1500);
 
   //Create server
-  srv = new HCServer(srvdev, topcont, "Raspberry PI Server", __DATE__" "__TIME__);
+  srv = new HCServer(srvdev, topcont, "Pi", __DATE__" "__TIME__);
 
   //Add parameters
   param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);

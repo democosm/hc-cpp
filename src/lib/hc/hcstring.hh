@@ -183,7 +183,7 @@ public:
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << string(indent, ' ') << "<str>" << endl;
@@ -457,7 +457,7 @@ public:
     }
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -779,7 +779,7 @@ public:
     st << "\n  Max Size: " << _maxsize;
   }
 
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << string(indent, ' ') << "<strl>" << endl;

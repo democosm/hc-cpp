@@ -109,6 +109,7 @@ public:
   bool GetNextCharInName(const string &name, char &nextchar);
   HCParameter *GetNext(void);
   void SetNext(HCParameter *node);
+  uint32_t  SaveNLD(ofstream &file, uint16_t pid);
   virtual uint8_t GetType(void);
   virtual bool IsReadable(void);
   virtual bool IsWritable(void);
@@ -117,7 +118,7 @@ public:
   virtual bool HasValEnums(void);
   virtual void PrintVal(void);
   virtual void PrintInfo(ostream &st=cout);
-  virtual void Serialize(ofstream &file, uint32_t indent, uint16_t pid);
+  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid);
   virtual int Call(void);
   virtual int CallTbl(uint32_t eid);
   virtual int GetBool(bool &val);

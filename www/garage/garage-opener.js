@@ -7,13 +7,13 @@ PollStatus();
 function OnClickOpenerButton()
 {
   //Do AJAX HC call
-  HCICall('/pi/pulserelayhigh', 0);
+  HCICall('/pulserelayhigh', 0);
 }
 
 function PollStatus()
 {
   //Do AJAX HC get and display value
-  HCGet('/pi/temperature');
+  HCGet('/temperature');
 
   //Poll again in 1 second
   setTimeout('PollStatus();', 1000);

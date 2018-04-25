@@ -31,16 +31,14 @@
 #include "hcparameter.hh"
 #include <string>
 
-using namespace std;
-
 class HCContainer : public HCNode
 {
 public:
-  HCContainer(const string &name);
+  HCContainer(const std::string &name);
   virtual ~HCContainer();
-  bool GetNextCharInName(const string &name, char &nextchar);
+  bool GetNextCharInName(const std::string &name, char &nextchar);
   void PrintPath(void);
-  void PrintInfo(ostream &st=cout);
+  void PrintInfo(std::ostream &st=std::cout);
   HCContainer *GetParent(void);
   void SetParent(HCContainer *node);
   HCContainer *GetNext(void);

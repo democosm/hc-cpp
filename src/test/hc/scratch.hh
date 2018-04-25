@@ -29,18 +29,16 @@
 
 #include <string>
 
-using namespace std;
-
 class Scratch
 {
 public:
   Scratch();
   ~Scratch();
-  int GetString(string &val);
-  int SetString(const string &val);
+  int GetString(std::string &val);
+  int SetString(const std::string &val);
 
 private:
-  string _string;
+  std::string _string;
 };
 
 #endif //_SCRATCH_HH_

@@ -30,20 +30,18 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
 class HCNode
 {
 public:
-  HCNode(const string &name="");
+  HCNode(const std::string &name="");
   virtual ~HCNode();
-  const string GetName(void);
-  void GetName(const string &name);
-  bool IsNamed(const string &name);
-  bool NameMatchesExpression(const string &expression);
+  const std::string GetName(void);
+  void GetName(const std::string &name);
+  bool IsNamed(const std::string &name);
+  bool NameMatchesExpression(const std::string &expression);
 
 protected:
-  string _name;
+  std::string _name;
 };
 
 #endif //_HCNODE_HH_

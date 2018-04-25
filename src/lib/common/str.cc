@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <sstream>
 
+using namespace std;
+
 bool StrExp(const string &str, const string &exp, size_t strind, size_t expind)
 {
   size_t strsiz;

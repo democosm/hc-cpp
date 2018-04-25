@@ -30,18 +30,16 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
 class Text
 {
 public:
   Text();
   ~Text();
-  int GetMessage(string &val);
-  int SetMessage(const string &val);
+  int GetMessage(std::string &val);
+  int SetMessage(const std::string &val);
 
 private:
-  string _message;
+  std::string _message;
 };
 
 #endif //_TEXT_HH_

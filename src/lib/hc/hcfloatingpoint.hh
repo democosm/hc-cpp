@@ -37,8 +37,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //Floating point client stub
 template <class T>
 class HCFloatingPointCli
@@ -102,7 +100,7 @@ public:
   typedef int (C::*SetMethod)(const T);
 
 public:
-  HCFloatingPoint(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale=1.0)
+  HCFloatingPoint(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale=1.0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -161,7 +159,7 @@ public:
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
@@ -170,10 +168,10 @@ public:
     val *= _scale;
 
     //Print value
-    cout << _name << " = " << val << " !" << ErrToString(lerr) << endl;
+    std::cout << _name << " = " << val << " !" << ErrToString(lerr) << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     T dummy;
 
@@ -183,20 +181,20 @@ public:
     st << "\n  Scale: " << _scale;
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
 
     //Generate XML information
-    file << string(indent, ' ') << "<" << TypeString(dummy) << ">" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "  <scl>" << _scale << "</scl>" << endl;
-    file << string(indent, ' ') << "</" << TypeString(dummy) << ">" << endl;
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << ">" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << std::endl;
+    file << std::string(indent, ' ') << "</" << TypeString(dummy) << ">" << std::endl;
   }
 
-  virtual int GetStr(string &val)
+  virtual int GetStr(std::string &val)
   {
     T nval;
     int lerr;
@@ -217,7 +215,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStr(const string &val)
+  virtual int SetStr(const std::string &val)
   {
     T nval;
 
@@ -233,7 +231,7 @@ public:
     return (_object->*_setmethod)(nval / _scale);
   }
 
-  virtual int SetStrLit(const string &val)
+  virtual int SetStrLit(const std::string &val)
   {
     return SetStr(val);
   }
@@ -353,7 +351,7 @@ template <class C>
 class HCFloat : public HCFloatingPoint<C, float>
 {
 public:
-  HCFloat(const string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale=1.0)
+  HCFloat(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale=1.0)
   : HCFloatingPoint<C, float>(name, object, getmethod, setmethod, scale)
   {
   }
@@ -363,7 +361,7 @@ template <class C>
 class HCDouble : public HCFloatingPoint<C, double>
 {
 public:
-  HCDouble(const string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale=1.0)
+  HCDouble(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale=1.0)
   : HCFloatingPoint<C, double>(name, object, getmethod, setmethod, scale)
   {
   }
@@ -379,7 +377,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const T);
 
 public:
-  HCFloatingPointTable(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, T scale=1.0)
+  HCFloatingPointTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, T scale=1.0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -436,18 +434,18 @@ public:
     T val;
     int lerr;
     uint32_t eid;
-    string eidstr;
+    std::string eidstr;
 
     //Check for null method
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
     //Print name
-    cout << _name << endl;
+    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -460,7 +458,7 @@ public:
       if(_eidenums == 0)
       {
         //Print value
-        cout << " [" << eid << "] = " << val << " !" << ErrToString(lerr) << endl;
+        std::cout << " [" << eid << "] = " << val << " !" << ErrToString(lerr) << std::endl;
       }
       else
       {
@@ -468,18 +466,18 @@ public:
         if(!EIDNumToStr(eid, eidstr))
         {
           //Print value (indicate no EID enum string found)
-          cout << " [\e[31m" << eid << "\e[0m] = " << val << " !" << ErrToString(lerr) << endl;
+          std::cout << " [\e[31m" << eid << "\e[0m] = " << val << " !" << ErrToString(lerr) << std::endl;
         }
         else
         {
           //Print value (show EID enum string)
-          cout << " [\"" << eidstr << "\"] = " << val << " !" << ErrToString(lerr) << endl;
+          std::cout << " [\"" << eidstr << "\"] = " << val << " !" << ErrToString(lerr) << std::endl;
         }
       }
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -501,33 +499,33 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<" << TypeString(dummy) << "t>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "  <scl>" << _scale << "</scl>" << endl;
-    file << string(indent, ' ') << "  <size>" << _size << "</size>" << endl;
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << "t>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << std::endl;
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
 
     if(_eidenums != 0)
     {
-      file << string(indent, ' ') << "  <eidenums>" << endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
 
-      file << string(indent, ' ') << "  </eidenums>" << endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
     }
 
-    file << string(indent, ' ') << "</" << TypeString(dummy) << "t>" << endl;
+    file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>" << std::endl;
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     T nval;
     int lerr;
@@ -548,7 +546,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string &val)
   {
     T nval;
 
@@ -676,7 +674,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
   {
     uint32_t i;
 
@@ -702,7 +700,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string &str)
   {
     uint32_t i;
 
@@ -742,7 +740,7 @@ template <class C>
 class HCFloatTable : public HCFloatingPointTable<C, float>
 {
 public:
-  HCFloatTable(const string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums=0, float scale=1.0)
+  HCFloatTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums=0, float scale=1.0)
   : HCFloatingPointTable<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
   {
   }
@@ -752,7 +750,7 @@ template <class C>
 class HCDoubleTable : public HCFloatingPointTable<C, double>
 {
 public:
-  HCDoubleTable(const string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums=0, double scale=1.0)
+  HCDoubleTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums=0, double scale=1.0)
   : HCFloatingPointTable<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
   {
   }

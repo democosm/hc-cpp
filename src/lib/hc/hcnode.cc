@@ -29,6 +29,8 @@
 #include <cassert>
 #include <string>
 
+using namespace std;
+
 HCNode::HCNode(const string &name)
 {
   //Initialize member variables

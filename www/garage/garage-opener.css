@@ -6,12 +6,17 @@ h1, div, button
 
 body
 {
-  background-color: lightyellow;
+  background-color: khaki;
 }
 
 .center
 {
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.bigbutton
+{
+  font-size:64px
 }

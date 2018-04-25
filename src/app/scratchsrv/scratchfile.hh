@@ -31,8 +31,6 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
 class ScratchFile
 {
 public:
@@ -102,7 +100,7 @@ public:
   }
 
 private:
-  string _filename;
+  std::string _filename;
 };
 
 #endif //_SCRATCHFILE_HH_

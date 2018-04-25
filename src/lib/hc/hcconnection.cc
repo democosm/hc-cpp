@@ -37,6 +37,9 @@
 #include <cassert>
 #include <iostream>
 
+using namespace std;
+using namespace tinyxml2;
+
 HCConnection::HCConnection(Device *dev, HCContainer *pcont, const string &contname, uint32_t timeout, const string &sifname)
 {
   XMLDocument doc;

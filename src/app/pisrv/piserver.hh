@@ -27,9 +27,8 @@
 #ifndef _PISERVER_HH_
 #define _PISERVER_HH_
 
+#include "pigpio.hh"
 #include <inttypes.h>
-
-using namespace std;
 
 class PIServer
 {
@@ -40,6 +39,9 @@ public:
   int GetRelayOn(uint32_t eid, bool &val);
   int SetRelayOn(uint32_t eid, bool val);
   int PulseRelayHigh(uint32_t eid);
+
+private:
+  PIGPIO *m_relay[8];
 };
 
 #endif //_PISERVER_HH_

@@ -29,10 +29,8 @@
 
 #include "hcparameter.hh"
 #include <inttypes.h>
-#include <string>
+#include <iostream>
 #include <vector>
-
-using namespace std;
 
 template <typename T>
 class Scratch
@@ -58,14 +56,14 @@ public:
   int Print(void)
   {
     //Print value
-    cout << "Value = \"" << _val << "\"" << endl;
+    std::cout << "Value = \"" << _val << "\"" << std::endl;
     return ERR_NONE;
   }
 
   int TablePrint(uint32_t eid)
   {
     //Print something
-    cout << "Table[" << eid << "] = " << _table[eid] << endl;
+    std::cout << "Table[" << eid << "] = " << _table[eid] << std::endl;
     return ERR_NONE;
   }
 
@@ -169,8 +167,8 @@ public:
 
 private:
   T _val;
-  vector<T> _table;
-  vector<T> _list;
+  std::vector<T> _table;
+  std::vector<T> _list;
   uint32_t _listmaxsize;
 };
 

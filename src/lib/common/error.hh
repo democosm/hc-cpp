@@ -29,8 +29,6 @@
 
 #include <string>
 
-using namespace std;
-
 //Definitions
 #define ERR_NONE      0
 #define ERR_UNSPEC    -1
@@ -54,6 +52,6 @@ using namespace std;
 #define ERR_UNKNOWN   -19 //Don't use. Must be last
 
 //Functions
-const string ErrToString(int err);
+const std::string ErrToString(int err);
 
 #endif //_ERROR_HH_

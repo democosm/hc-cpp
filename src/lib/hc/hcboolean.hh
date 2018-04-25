@@ -37,8 +37,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //Boolean enumeration
 struct HCBooleanEnum
 {
@@ -49,7 +47,7 @@ struct HCBooleanEnum
     _str = "";
   }
 
-  HCBooleanEnum(bool num, const string &str)
+  HCBooleanEnum(bool num, const std::string &str)
   {
     //Initialize member variables
     _num = num;
@@ -57,7 +55,7 @@ struct HCBooleanEnum
   }
 
   bool _num;
-  string _str;
+  std::string _str;
 };
 
 //Boolean client stub
@@ -117,7 +115,7 @@ public:
   typedef int (C::*SetMethod)(const bool);
 
 public:
-  HCBoolean(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum *valenums=0)
+  HCBoolean(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum *valenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -183,7 +181,7 @@ public:
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
@@ -194,7 +192,7 @@ public:
     if(_valenums == 0)
     {
       //Print value
-      cout << _name << " = " << boolalpha << val << noboolalpha << " !" << ErrToString(lerr) << endl;
+      std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
       return;
     }
 
@@ -205,16 +203,16 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
-        cout << _name << " = " << boolalpha << val << noboolalpha << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << endl;
+        std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << std::endl;
         return;
       }
     }
 
     //Print value indicate that no value enum found
-    cout << _name << " = " << boolalpha << val << noboolalpha << "\e[31m\"\"\e[0m !" << ErrToString(lerr) << endl;
+    std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << "\e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     uint32_t i;
 
@@ -279,7 +277,7 @@ public:
     return (_object->*_setmethod)(val);
   }
 
-  virtual int GetStr(string &val)
+  virtual int GetStr(std::string &val)
   {
     bool nval;
     int lerr;
@@ -324,7 +322,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStr(const string &val)
+  virtual int SetStr(const std::string &val)
   {
     bool nval;
 
@@ -340,7 +338,7 @@ public:
     return (_object->*_setmethod)(nval);
   }
 
-  virtual int SetStrLit(const string &val)
+  virtual int SetStrLit(const std::string &val)
   {
     uint32_t i;
 
@@ -469,7 +467,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
   {
     uint32_t i;
 
@@ -512,7 +510,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const bool);
 
 public:
-  HCBooleanTable(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, const HCBooleanEnum *valenums=0)
+  HCBooleanTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, const HCBooleanEnum *valenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -575,19 +573,19 @@ public:
     bool val;
     int lerr;
     uint32_t eid;
-    string valstr;
-    string eidstr;
+    std::string valstr;
+    std::string eidstr;
 
     //Check for null method
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
     //Print name
-    cout << _name << endl;
+    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -602,7 +600,7 @@ public:
         if(_eidenums == 0)
         {
           //Print value
-          cout << " [" << eid << "] = " << boolalpha << val << noboolalpha << " !" << ErrToString(lerr) << endl;
+          std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
         }
         else
         {
@@ -610,12 +608,12 @@ public:
           if(!EIDNumToStr(eid, eidstr))
           {
             //Print value (indicate no EID enum string found)
-            cout << " [\e[31m" << eid << "\e[0m] = " << boolalpha << val << noboolalpha << " !" << ErrToString(lerr) << endl;
+            std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
           }
           else
           {
             //Print value (show EID enum string)
-            cout << " [\"" << eidstr << "\"] = " << boolalpha << val << noboolalpha << " !" << ErrToString(lerr) << endl;
+            std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
           }
         }
       }
@@ -628,12 +626,12 @@ public:
           if(!ValToEnumStr(val, valstr))
           {
             //Print value (indicate no value enum string found)
-            cout << " [" << eid << "] = " << boolalpha << val << noboolalpha << " = \e[31m\"\"\e[0m" << " !" << ErrToString(lerr) << endl;
+            std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m" << " !" << ErrToString(lerr) << std::endl;
           }
           else
           {
             //Print value (show value enum string)
-            cout << " [" << eid << "] = " << boolalpha << val << noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << endl;
+            std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
           }
         }
         else
@@ -645,12 +643,12 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no value or EID enum string found)
-              cout << " [\e[31m" << eid << "\e[0m] = " << boolalpha << val << noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << endl;
+              std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
             }
             else
             {
               //Print value (show EID enum string, indicate no value enum string found)
-              cout << " [\"" << eidstr << "\"] = " << boolalpha << val << noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << endl;
+              std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
             }
           }
           else
@@ -659,12 +657,12 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no EID enum string found, show value enum string)
-              cout << " [\e[31m" << eid << "\e[0m] = " << boolalpha << val << noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << endl;
+              std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
             }
             else
             {
               //Print value (show EID enum string and value enum string)
-              cout << " [\"" << eidstr << "\"] = " << boolalpha << val << noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << endl;
+              std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
             }
           }
         }
@@ -672,7 +670,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     uint32_t i;
 
@@ -701,38 +699,38 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<boolt>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "  <size>" << _size << "</size>" << endl;
+    file << std::string(indent, ' ') << "<boolt>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
 
     if(_eidenums != 0)
     {
-      file << string(indent, ' ') << "  <eidenums>" << endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
 
       for(i=0; _eidenums[i]._str[0] != '\0'; i++)
-        file << string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
 
-      file << string(indent, ' ') << "  </eidenums>" << endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
     }
 
     if(_valenums != 0)
     {
-      file << string(indent, ' ') << "  <valenums>" << endl;
+      file << std::string(indent, ' ') << "  <valenums>" << std::endl;
 
       for(i=0; _valenums[i]._str[0] != '\0'; i++)
-        file << string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << endl;
+        file << std::string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << std::endl;
 
-      file << string(indent, ' ') << "  </valenums>" << endl;
+      file << std::string(indent, ' ') << "  </valenums>" << std::endl;
     }
 
-    file << string(indent, ' ') << "</boolt>" << endl;
+    file << std::string(indent, ' ') << "</boolt>" << std::endl;
   }
 
   virtual int GetBoolTbl(uint32_t eid, bool &val)
@@ -758,7 +756,7 @@ public:
     return (_object->*_setmethod)(eid, val);
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     bool nval;
     int lerr;
@@ -803,7 +801,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string &val)
   {
     bool nval;
     uint32_t i;
@@ -841,7 +839,7 @@ public:
     return (_object->*_setmethod)(eid, nval);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
   {
     uint32_t i;
 
@@ -979,7 +977,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
   {
     uint32_t i;
 
@@ -1005,7 +1003,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string &str)
   {
     uint32_t i;
 
@@ -1031,7 +1029,7 @@ public:
     return false;
   }
 
-  virtual bool ValToEnumStr(bool num, string &str)
+  virtual bool ValToEnumStr(bool num, std::string &str)
   {
     uint32_t i;
 
@@ -1057,7 +1055,7 @@ public:
     return false;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
   {
     uint32_t i;
 

@@ -36,8 +36,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //String client stub
 class HCStringCli
 {
@@ -57,37 +55,37 @@ public:
     //Cleanup
   }
 
-  int Get(string &val)
+  int Get(std::string &val)
   {
     //Delegate to client
     return _cli->Get(_pid, val);
   }
 
-  int Set(const string &val)
+  int Set(const std::string &val)
   {
     //Delegate to client
     return _cli->Set(_pid, val);
   }
 
-  int Add(const string &val)
+  int Add(const std::string &val)
   {
     //Delegate to client
     return _cli->Add(_pid, val);
   }
 
-  int Sub(const string &val)
+  int Sub(const std::string &val)
   {
     //Delegate to client
     return _cli->Sub(_pid, val);
   }
 
-  int IGet(uint32_t eid, string &val)
+  int IGet(uint32_t eid, std::string &val)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val);
   }
 
-  int ISet(uint32_t eid, const string &val)
+  int ISet(uint32_t eid, const std::string &val)
   {
     //Delegate to client
     return _cli->ISet(_pid, eid, val);
@@ -104,11 +102,11 @@ class HCString : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(string &);
-  typedef int (C::*SetMethod)(const string &);
+  typedef int (C::*GetMethod)(std::string &);
+  typedef int (C::*SetMethod)(const std::string &);
 
 public:
-  HCString(const string &name, C *object, GetMethod getmethod, SetMethod setmethod)
+  HCString(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -158,14 +156,14 @@ public:
 
   virtual void PrintVal(void)
   {
-    string val;
+    std::string val;
     int lerr;
 
     //Check for null method
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
@@ -173,27 +171,27 @@ public:
     lerr = (_object->*_getmethod)(val);
 
     //Print value
-    cout << _name << " = \"" << val << "\" !" << ErrToString(lerr) << endl;
+    std::cout << _name << " = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
     st << "\n  Type: str";
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << string(indent, ' ') << "<str>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "</str>" << endl;
+    file << std::string(indent, ' ') << "<str>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "</str>" << std::endl;
   }
 
-  virtual int GetStr(string &val)
+  virtual int GetStr(std::string &val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -206,7 +204,7 @@ public:
     return (_object->*_getmethod)(val);
   }
 
-  virtual int SetStr(const string &val)
+  virtual int SetStr(const std::string &val)
   {
     //Check for null method
     if(_setmethod == 0)
@@ -216,7 +214,7 @@ public:
     return (_object->*_setmethod)(val);
   }
 
-  virtual int SetStrLit(const string &val)
+  virtual int SetStrLit(const std::string &val)
   {
     //Delegate to normal set string method
     return SetStr(val);
@@ -225,7 +223,7 @@ public:
   virtual bool GetCell(HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -270,7 +268,7 @@ public:
   virtual bool SetCell(HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -337,11 +335,11 @@ class HCStringTable : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, string &);
-  typedef int (C::*SetMethod)(uint32_t, const string &);
+  typedef int (C::*GetMethod)(uint32_t, std::string &);
+  typedef int (C::*SetMethod)(uint32_t, const std::string &);
 
 public:
-  HCStringTable(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0)
+  HCStringTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -393,21 +391,21 @@ public:
 
   virtual void PrintVal(void)
   {
-    string val;
+    std::string val;
     int lerr;
     uint32_t eid;
-    string eidstr;
+    std::string eidstr;
 
     //Check for null method
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
     //Print name
-    cout << _name << endl;
+    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -419,7 +417,7 @@ public:
       if(_eidenums == 0)
       {
         //Print value
-        cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << endl;
+        std::cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
       }
       else
       {
@@ -427,18 +425,18 @@ public:
         if(!EIDNumToStr(eid, eidstr))
         {
           //Print value (indicate no EID enum string found)
-          cout << " [\e[31m" << eid << "\e[0m] = \"" << val << "\" !" << ErrToString(lerr) << endl;
+          std::cout << " [\e[31m" << eid << "\e[0m] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
         }
         else
         {
           //Print value (show EID enum string)
-          cout << " [\"" << eidstr << "\"] = \"" << val << "\" !" << ErrToString(lerr) << endl;
+          std::cout << " [\"" << eidstr << "\"] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
         }
       }
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     uint32_t i;
 
@@ -457,31 +455,31 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<strt>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "  <size>" << _size << "</size>" << endl;
+    file << std::string(indent, ' ') << "<strt>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
 
     if(_eidenums != 0)
     {
-      file << string(indent, ' ') << "  <eidenums>" << endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
 
-      file << string(indent, ' ') << "  </eidenums>" << endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
     }
 
-    file << string(indent, ' ') << "</strt>" << endl;
+    file << std::string(indent, ' ') << "</strt>" << std::endl;
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -494,7 +492,7 @@ public:
     return (_object->*_getmethod)(eid, val);
   }
 
-  virtual int SetStrTbl(uint32_t eid, const string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string &val)
   {
     //Check for null method
     if(_setmethod == 0)
@@ -504,7 +502,7 @@ public:
     return (_object->*_setmethod)(eid, val);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
   {
     //Delegate to normal set string method
     return SetStrTbl(eid, val);
@@ -513,7 +511,7 @@ public:
   virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -558,7 +556,7 @@ public:
   virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -618,7 +616,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
   {
     uint32_t i;
 
@@ -644,7 +642,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string &str)
   {
     uint32_t i;
 
@@ -684,12 +682,12 @@ class HCStringList : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, string &);
-  typedef int (C::*AddMethod)(const string &);
-  typedef int (C::*SubMethod)(const string &);
+  typedef int (C::*GetMethod)(uint32_t, std::string &);
+  typedef int (C::*AddMethod)(const std::string &);
+  typedef int (C::*SubMethod)(const std::string &);
 
 public:
-  HCStringList(const string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize)
+  HCStringList(const std::string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -741,7 +739,7 @@ public:
 
   virtual void PrintVal(void)
   {
-    string val;
+    std::string val;
     int lerr;
     uint32_t eid;
 
@@ -749,12 +747,12 @@ public:
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
     //Print name
-    cout << _name << endl;
+    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_maxsize; eid++)
@@ -767,11 +765,11 @@ public:
         break;
 
       //Print value
-      cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << endl;
+      std::cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
     st << "\n  Type: strl";
@@ -779,18 +777,18 @@ public:
     st << "\n  Max Size: " << _maxsize;
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << string(indent, ' ') << "<strl>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>" << endl;
-    file << string(indent, ' ') << "</strl>" << endl;
+    file << std::string(indent, ' ') << "<strl>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>" << std::endl;
+    file << std::string(indent, ' ') << "</strl>" << std::endl;
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -803,7 +801,7 @@ public:
     return (_object->*_getmethod)(eid, val);
   }
 
-  virtual int AddStr(const string &val)
+  virtual int AddStr(const std::string &val)
   {
     //Check for null method
     if(_addmethod == 0)
@@ -813,13 +811,13 @@ public:
     return (_object->*_addmethod)(val);
   }
 
-  virtual int AddStrLit(const string &val)
+  virtual int AddStrLit(const std::string &val)
   {
     //Delegate to normal add string method
     return AddStr(val);
   }
 
-  virtual int SubStr(const string &val)
+  virtual int SubStr(const std::string &val)
   {
     //Check for null method
     if(_submethod == 0)
@@ -829,7 +827,7 @@ public:
     return (_object->*_submethod)(val);
   }
 
-  virtual int SubStrLit(const string &val)
+  virtual int SubStrLit(const std::string &val)
   {
     //Delegate to normal subtract string method
     return SubStr(val);
@@ -838,7 +836,7 @@ public:
   virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -883,7 +881,7 @@ public:
   virtual bool AddCell(HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments
@@ -941,7 +939,7 @@ public:
   virtual bool SubCell(HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    string val;
+    std::string val;
     int lerr;
 
     //Assert valid arguments

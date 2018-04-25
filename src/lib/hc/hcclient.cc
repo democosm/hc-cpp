@@ -31,6 +31,8 @@
 #include <cassert>
 #include <iostream>
 
+using namespace std;
+
 static const HCBooleanEnum Offon[] =
 {
   HCBooleanEnum(0, "Off"),

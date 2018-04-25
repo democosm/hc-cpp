@@ -29,6 +29,8 @@
 #include <cassert>
 #include <iostream>
 
+using namespace std;
+
 HCContainer::HCContainer(const string &name)
 : HCNode(name)
 {

@@ -30,22 +30,20 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
-bool StrExp(const string &str, const string &exp, size_t strind=0, size_t expind=0);
-bool StringIPv4Convert(const string &str, uint32_t &val);
-bool StringConvert(const string &str, bool &val);
-bool StringConvert(const string &str, int8_t &val);
-bool StringConvert(const string &str, int16_t &val);
-bool StringConvert(const string &str, int32_t &val);
-bool StringConvert(const string &str, int64_t &val);
-bool StringConvert(const string &str, uint8_t &val);
-bool StringConvert(const string &str, uint16_t &val);
-bool StringConvert(const string &str, uint32_t &val);
-bool StringConvert(const string &str, uint64_t &val);
-bool StringConvert(const string &str, float &val);
-bool StringConvert(const string &str, double &val);
-bool StringConvert(const string &str, string &val);
+bool StrExp(const std::string &str, const std::string &exp, size_t strind=0, size_t expind=0);
+bool StringIPv4Convert(const std::string &str, uint32_t &val);
+bool StringConvert(const std::string &str, bool &val);
+bool StringConvert(const std::string &str, int8_t &val);
+bool StringConvert(const std::string &str, int16_t &val);
+bool StringConvert(const std::string &str, int32_t &val);
+bool StringConvert(const std::string &str, int64_t &val);
+bool StringConvert(const std::string &str, uint8_t &val);
+bool StringConvert(const std::string &str, uint16_t &val);
+bool StringConvert(const std::string &str, uint32_t &val);
+bool StringConvert(const std::string &str, uint64_t &val);
+bool StringConvert(const std::string &str, float &val);
+bool StringConvert(const std::string &str, double &val);
+bool StringConvert(const std::string &str, std::string &val);
 bool StringConvert(const char *str, bool &val);
 bool StringConvert(const char *str, int8_t &val);
 bool StringConvert(const char *str, int16_t &val);
@@ -57,18 +55,18 @@ bool StringConvert(const char *str, uint32_t &val);
 bool StringConvert(const char *str, uint64_t &val);
 bool StringConvert(const char *str, float &val);
 bool StringConvert(const char *str, double &val);
-bool StringConvert(const char *str, string &val);
-void StringPrint(bool val, string &str);
-void StringPrint(int8_t val, string &str);
-void StringPrint(int16_t val, string &str);
-void StringPrint(int32_t val, string &str);
-void StringPrint(int64_t val, string &str);
-void StringPrint(uint8_t val, string &str);
-void StringPrint(uint16_t val, string &str);
-void StringPrint(uint32_t val, string &str);
-void StringPrint(uint64_t val, string &str);
-void StringPrint(float val, string &str);
-void StringPrint(double val, string &str);
+bool StringConvert(const char *str, std::string &val);
+void StringPrint(bool val, std::string &str);
+void StringPrint(int8_t val, std::string &str);
+void StringPrint(int16_t val, std::string &str);
+void StringPrint(int32_t val, std::string &str);
+void StringPrint(int64_t val, std::string &str);
+void StringPrint(uint8_t val, std::string &str);
+void StringPrint(uint16_t val, std::string &str);
+void StringPrint(uint32_t val, std::string &str);
+void StringPrint(uint64_t val, std::string &str);
+void StringPrint(float val, std::string &str);
+void StringPrint(double val, std::string &str);
 
 #endif //_STR_HH_
 

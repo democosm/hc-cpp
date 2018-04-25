@@ -36,8 +36,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //Call client
 class HCCallCli
 {
@@ -82,7 +80,7 @@ public:
   typedef int (C::*CallMethod)(void);
 
 public:
-  HCCall(const string &name, C *object, CallMethod method)
+  HCCall(const std::string &name, C *object, CallMethod method)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -127,22 +125,22 @@ public:
 
   virtual void PrintVal(void)
   {
-    cout << _name << "()" << endl;
+    std::cout << _name << "()" << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
     st << "\n  Type: call";
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << string(indent, ' ') << "<call>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "</call>" << endl;
+    file << std::string(indent, ' ') << "<call>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "</call>" << std::endl;
   }
 
   virtual int Call(void)
@@ -195,7 +193,7 @@ public:
   typedef int (C::*CallMethod)(uint32_t);
 
 public:
-  HCCallTable(const string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums=0)
+  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -242,10 +240,10 @@ public:
 
   virtual void PrintVal(void)
   {
-    cout << _name << "(0-" << (_size-1) << ')' << endl;
+    std::cout << _name << "(0-" << (_size-1) << ')' << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     uint32_t i;
 
@@ -263,27 +261,27 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<callt>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <size>" << _size << "</size>" << endl;
+    file << std::string(indent, ' ') << "<callt>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
 
     if(_eidenums != 0)
     {
-      file << string(indent, ' ') << "  <eidenums>" << endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
 
-      file << string(indent, ' ') << "  </eidenums>" << endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
     }
 
-    file << string(indent, ' ') << "</callt>" << endl;
+    file << std::string(indent, ' ') << "</callt>" << std::endl;
   }
 
   virtual int CallTbl(uint32_t eid)
@@ -331,7 +329,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
   {
     uint32_t i;
 
@@ -357,7 +355,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string &str)
   {
     uint32_t i;
 

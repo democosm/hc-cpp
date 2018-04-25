@@ -31,6 +31,8 @@
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
+
 HCMessage::HCMessage()
 {
   //Allocate memory for message buffer

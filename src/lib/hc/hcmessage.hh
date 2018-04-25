@@ -33,8 +33,6 @@
 #include <string>
 #include <stdio.h>
 
-using namespace std;
-
 class HCMessage
 {
 public:
@@ -54,7 +52,7 @@ public:
   int Recv(Device *dev);
   bool Read(HCCell *val);
   bool Write(HCCell *val);
-  void Print(const string &extra);
+  void Print(const std::string &extra);
 
 private:
   uint8_t *_buffer;

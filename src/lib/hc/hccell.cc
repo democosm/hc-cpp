@@ -31,6 +31,8 @@
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
+
 HCCell::HCCell()
 {
   //Allocate memory for cell buffer

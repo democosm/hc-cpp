@@ -27,6 +27,8 @@
 #include "hcutility.hh"
 #include <cassert>
 
+using namespace std;
+
 HCContainer *HCUtility::GetCont(const string &name, HCContainer *startcont, size_t index)
 {
   string nodename;

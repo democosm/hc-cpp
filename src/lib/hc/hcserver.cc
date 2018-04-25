@@ -37,6 +37,8 @@
 #include <iostream>
 #include <stdio.h>
 
+using namespace std;
+
 static const HCBooleanEnum Offon[] =
 {
   HCBooleanEnum(0, "Off"),

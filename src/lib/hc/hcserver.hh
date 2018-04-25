@@ -37,8 +37,6 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
 class HCServer
 {
 public:
@@ -52,13 +50,13 @@ public:
   static const uint16_t PID_INFOFILE = 3;
 
 public:
-  HCServer(Device *lowdev, HCContainer *top, const string &name, const string &version, uint32_t pidmax=PID_MAX);
+  HCServer(Device *lowdev, HCContainer *top, const std::string &name, const std::string &version, uint32_t pidmax=PID_MAX);
   ~HCServer();
   HCParameter *GetParam(uint16_t pid);
   void Add(HCParameter *param);
   void Start(void);
-  int GetName(string &val);
-  int GetVersion(string &val);
+  int GetName(std::string &val);
+  int GetVersion(std::string &val);
   int GetInfoFileCRC(uint32_t &val);
   int ReadInfoFile(uint32_t offset, uint8_t *val, uint16_t maxlen, uint16_t &len);
   int GetDebug(bool &val);
@@ -74,9 +72,9 @@ public:
 
 private:
   void SaveXML(void);
-  void SaveXML(ofstream &file, uint32_t indent, HCContainer *startcont);
+  void SaveXML(std::ofstream &file, uint32_t indent, HCContainer *startcont);
   void SaveNLD(void);
-  uint32_t SaveNLD(ofstream &file, HCContainer *startcont);
+  uint32_t SaveNLD(std::ofstream &file, HCContainer *startcont);
   bool ParamToPID(HCParameter *param, uint16_t *pid);
   void CallCmdHandler(void);
   void GetCmdHandler(void);
@@ -93,10 +91,10 @@ private:
 private:
   Device *_lowdev;
   HCContainer *_top;
-  string _name;
-  string _version;
-  string _infofilename;
-  string _nldfilename;
+  std::string _name;
+  std::string _version;
+  std::string _infofilename;
+  std::string _nldfilename;
   uint32_t _pidtop;
   uint32_t _pidmax;
   HCParameter **_params;

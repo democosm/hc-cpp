@@ -37,25 +37,22 @@
 #include "udpsocket.hh"
 #include <string>
 
-using namespace std;
-using namespace tinyxml2;
-
 class HCAggregator
 {
 public:
-  HCAggregator(const string &filename);
+  HCAggregator(const std::string &filename);
   virtual ~HCAggregator();
   HCContainer *GetTopCont(void);
   void AddParamsToServer(HCContainer *startcont);
-  HCServer *ParseServer(XMLElement *pelt);
-  HCConnection *ParseConn(XMLElement *pelt);
-  UDPSocket *ParseUDPSocket(XMLElement *pelt);
-  SLIPFramer *ParseSLIPFramer(XMLElement *pelt);
-  TCPClient *ParseTCPClient(XMLElement *pelt);
-  TLSClient *ParseTLSClient(XMLElement *pelt);
-  bool ParseValue(XMLElement *pelt, const char *name, string &val);
-  bool ParseValue(XMLElement *pelt, const char *name, uint16_t &val);
-  bool ParseValue(XMLElement *pelt, const char *name, uint32_t &val);
+  HCServer *ParseServer(tinyxml2::XMLElement *pelt);
+  HCConnection *ParseConn(tinyxml2::XMLElement *pelt);
+  UDPSocket *ParseUDPSocket(tinyxml2::XMLElement *pelt);
+  SLIPFramer *ParseSLIPFramer(tinyxml2::XMLElement *pelt);
+  TCPClient *ParseTCPClient(tinyxml2::XMLElement *pelt);
+  TLSClient *ParseTLSClient(tinyxml2::XMLElement *pelt);
+  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, std::string &val);
+  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, uint16_t &val);
+  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, uint32_t &val);
 
 private:
   HCContainer *_topcont;

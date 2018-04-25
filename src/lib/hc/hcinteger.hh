@@ -38,9 +38,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-using namespace tinyxml2;
-
 //Integer enumeration
 template <class T>
 struct HCIntegerEnum
@@ -53,18 +50,18 @@ public:
     _str = "";
   }
 
-  HCIntegerEnum(T num, const string &str)
+  HCIntegerEnum(T num, const std::string &str)
   {
     //Initialize member variables
     _num = num;
     _str = str;
   }
 
-  HCIntegerEnum(XMLElement *pelt)
+  HCIntegerEnum(tinyxml2::XMLElement *pelt)
   {
-    XMLElement *elt;
-    string numstr;
-    string eqstr;
+    tinyxml2::XMLElement *elt;
+    std::string numstr;
+    std::string eqstr;
     size_t seppos;
 
     //Initialize member variables
@@ -83,9 +80,9 @@ public:
       {
         //Get enumeration number string and check for error
         eqstr = elt->GetText();
-        if((seppos = eqstr.find(',')) == string::npos)
+        if((seppos = eqstr.find(',')) == std::string::npos)
         {
-          cout << __FILE__ << ' ' << __LINE__ << " - Delimiter not found in equality (" << eqstr << ")\n";
+          std::cout << __FILE__ << ' ' << __LINE__ << " - Delimiter not found in equality (" << eqstr << ")\n";
           return;
         }
         numstr = eqstr.substr(0, seppos);
@@ -93,7 +90,7 @@ public:
         //Convert number and check for error
         if(!StringConvert(numstr.c_str(), _num))
         {
-          cout << __FILE__ << ' ' << __LINE__ << " - Error converting enumeration number (" << numstr << ")\n";
+          std::cout << __FILE__ << ' ' << __LINE__ << " - Error converting enumeration number (" << numstr << ")\n";
           return;
         }
 
@@ -105,7 +102,7 @@ public:
 
 public:
   T _num;
-  string _str;
+  std::string _str;
 };
 
 //Types derived from enumeration template
@@ -198,7 +195,7 @@ public:
   typedef int (C::*SetMethod)(const T);
 
 public:
-  HCInteger(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCIntegerEnum<T> *valenums=0)
+  HCInteger(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCIntegerEnum<T> *valenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -265,7 +262,7 @@ public:
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
       return;
     }
 
@@ -276,7 +273,7 @@ public:
     if(_valenums == 0)
     {
       //Print value
-      cout << _name << " = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " !" << ErrToString(lerr) << "\n";
+      std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
       return;
     }
 
@@ -287,16 +284,16 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
-        cout << _name << " = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
+        std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
         return;
       }
     }
 
     //Print value indicate that no enum found
-    cout << _name << " = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+    std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -316,31 +313,31 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<" << TypeString(dummy) << ">\n";
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
-    file << string(indent, ' ') << "  <name>" << _name << "</name>\n";
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << ">\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
 
     if(_valenums != 0)
     {
-      file << string(indent, ' ') << "  <valenums>\n";
+      file << std::string(indent, ' ') << "  <valenums>\n";
 
       for(i=0; _valenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
+        file << std::string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
 
-      file << string(indent, ' ') << "  </valenums>\n";
+      file << std::string(indent, ' ') << "  </valenums>\n";
     }
 
-    file << string(indent, ' ') << "</" << HCParameter::TypeString(dummy) << ">\n";
+    file << std::string(indent, ' ') << "</" << HCParameter::TypeString(dummy) << ">\n";
   }
 
-  virtual int GetStr(string &val)
+  virtual int GetStr(std::string &val)
   {
     T nval;
     int lerr;
@@ -384,7 +381,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStr(const string &val)
+  virtual int SetStr(const std::string &val)
   {
     T nval;
     uint32_t i;
@@ -418,7 +415,7 @@ public:
     return (_object->*_setmethod)(nval);
   }
 
-  virtual int SetStrLit(const string &val)
+  virtual int SetStrLit(const std::string &val)
   {
     uint32_t i;
 
@@ -547,7 +544,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
   {
     uint32_t i;
 
@@ -585,7 +582,7 @@ template <class C>
 class HCSigned8 : public HCInteger<C, int8_t>
 {
 public:
-  HCSigned8(const string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t), const HCSigned8Enum *valenums=0)
+  HCSigned8(const std::string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t), const HCSigned8Enum *valenums=0)
   : HCInteger<C, int8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -595,7 +592,7 @@ template <class C>
 class HCSigned16 : public HCInteger<C, int16_t>
 {
 public:
-  HCSigned16(const string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t), const HCSigned16Enum *valenums=0)
+  HCSigned16(const std::string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t), const HCSigned16Enum *valenums=0)
   : HCInteger<C, int16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -605,7 +602,7 @@ template <class C>
 class HCSigned32 : public HCInteger<C, int32_t>
 {
 public:
-  HCSigned32(const string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t), const HCSigned32Enum *valenums=0)
+  HCSigned32(const std::string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t), const HCSigned32Enum *valenums=0)
   : HCInteger<C, int32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -615,7 +612,7 @@ template <class C>
 class HCSigned64 : public HCInteger<C, int64_t>
 {
 public:
-  HCSigned64(const string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t), const HCSigned64Enum *valenums=0)
+  HCSigned64(const std::string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t), const HCSigned64Enum *valenums=0)
   : HCInteger<C, int64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -625,7 +622,7 @@ template <class C>
 class HCUnsigned8 : public HCInteger<C, uint8_t>
 {
 public:
-  HCUnsigned8(const string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t), const HCUnsigned8Enum *valenums=0)
+  HCUnsigned8(const std::string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t), const HCUnsigned8Enum *valenums=0)
   : HCInteger<C, uint8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -635,7 +632,7 @@ template <class C>
 class HCUnsigned16 : public HCInteger<C, uint16_t>
 {
 public:
-  HCUnsigned16(const string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t), const HCUnsigned16Enum *valenums=0)
+  HCUnsigned16(const std::string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t), const HCUnsigned16Enum *valenums=0)
   : HCInteger<C, uint16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -645,7 +642,7 @@ template <class C>
 class HCUnsigned32 : public HCInteger<C, uint32_t>
 {
 public:
-  HCUnsigned32(const string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t), const HCUnsigned32Enum *valenums=0)
+  HCUnsigned32(const std::string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t), const HCUnsigned32Enum *valenums=0)
   : HCInteger<C, uint32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -655,7 +652,7 @@ template <class C>
 class HCUnsigned64 : public HCInteger<C, uint64_t>
 {
 public:
-  HCUnsigned64(const string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t), const HCUnsigned64Enum *valenums=0)
+  HCUnsigned64(const std::string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t), const HCUnsigned64Enum *valenums=0)
   : HCInteger<C, uint64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -671,7 +668,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const T);
 
 public:
-  HCIntegerTable(const string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, const HCIntegerEnum<T> *valenums=0)
+  HCIntegerTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, const HCIntegerEnum<T> *valenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -735,19 +732,19 @@ public:
     T val;
     int lerr;
     uint32_t eid;
-    string valstr;
-    string eidstr;
+    std::string valstr;
+    std::string eidstr;
 
     //Check for null method
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
       return;
     }
 
     //Print name
-    cout << _name << "\n";
+    std::cout << _name << "\n";
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -762,7 +759,7 @@ public:
         if(_eidenums == 0)
         {
           //Print value
-          cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " !" << ErrToString(lerr) << "\n";
+          std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
         }
         else
         {
@@ -770,12 +767,12 @@ public:
           if(!EIDNumToStr(eid, eidstr))
           {
             //Print value (indicate no EID enum string found)
-            cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " !" << ErrToString(lerr) << "\n";
+            std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
           }
           else
           {
             //Print value (show EID enum string)
-            cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " !" << ErrToString(lerr) << "\n";
+            std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
           }
         }
       }
@@ -788,12 +785,12 @@ public:
           if(!ValNumToStr(val, valstr))
           {
             //Print value (indicate no value enum string found)
-            cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
           }
           else
           {
             //Print value (show value enum string)
-            cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
           }
         }
         else
@@ -805,12 +802,12 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no value or EID enum string found)
-              cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+              std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
             }
             else
             {
               //Print value (show EID enum string, indicate no value enum string found)
-              cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+              std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
             }
           }
           else
@@ -819,12 +816,12 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no EID enum string found, show value enum string)
-              cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+              std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
             }
             else
             {
               //Print value (show EID enum string and value enum string)
-              cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+              std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
             }
           }
         }
@@ -832,7 +829,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -862,42 +859,42 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<" << TypeString(dummy) << "t>\n";
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
-    file << string(indent, ' ') << "  <name>" << _name << "</name>\n";
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
-    file << string(indent, ' ') << "  <size>" << _size << "</size>\n";
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << "t>\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>\n";
 
     if(_eidenums != 0)
     {
-      file << string(indent, ' ') << "  <eidenums>\n";
+      file << std::string(indent, ' ') << "  <eidenums>\n";
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>\n";
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>\n";
 
-      file << string(indent, ' ') << "  </eidenums>\n";
+      file << std::string(indent, ' ') << "  </eidenums>\n";
     }
 
     if(_valenums != 0)
     {
-      file << string(indent, ' ') << "  <valenums>\n";
+      file << std::string(indent, ' ') << "  <valenums>\n";
 
       for(i=0; _valenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
+        file << std::string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
 
-      file << string(indent, ' ') << "  </valenums>\n";
+      file << std::string(indent, ' ') << "  </valenums>\n";
     }
 
-    file << string(indent, ' ') << "</" << TypeString(dummy) << "t>\n";
+    file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>\n";
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     T nval;
     int lerr;
@@ -942,7 +939,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string &val)
   {
     T nval;
     uint32_t i;
@@ -979,7 +976,7 @@ public:
     return (_object->*_setmethod)(eid, nval);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
   {
     uint32_t i;
 
@@ -1117,7 +1114,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
   {
     uint32_t i;
 
@@ -1143,7 +1140,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string &str)
   {
     uint32_t i;
 
@@ -1169,7 +1166,7 @@ public:
     return false;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
   {
     uint32_t i;
 
@@ -1195,7 +1192,7 @@ public:
     return true;
   }
 
-  bool ValNumToStr(T num, string &str)
+  bool ValNumToStr(T num, std::string &str)
   {
     uint32_t i;
 
@@ -1235,7 +1232,7 @@ template <class C>
 class HCSigned8Table : public HCIntegerTable<C, int8_t>
 {
 public:
-  HCSigned8Table(const string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned8Enum *valenums=0)
+  HCSigned8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned8Enum *valenums=0)
   : HCIntegerTable<C, int8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1245,7 +1242,7 @@ template <class C>
 class HCSigned16Table : public HCIntegerTable<C, int16_t>
 {
 public:
-  HCSigned16Table(const string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned16Enum *valenums=0)
+  HCSigned16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned16Enum *valenums=0)
   : HCIntegerTable<C, int16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1255,7 +1252,7 @@ template <class C>
 class HCSigned32Table : public HCIntegerTable<C, int32_t>
 {
 public:
-  HCSigned32Table(const string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned32Enum *valenums=0)
+  HCSigned32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned32Enum *valenums=0)
   : HCIntegerTable<C, int32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1265,7 +1262,7 @@ template <class C>
 class HCSigned64Table : public HCIntegerTable<C, int64_t>
 {
 public:
-  HCSigned64Table(const string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned64Enum *valenums=0)
+  HCSigned64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCSigned64Enum *valenums=0)
   : HCIntegerTable<C, int64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1275,7 +1272,7 @@ template <class C>
 class HCUnsigned8Table : public HCIntegerTable<C, uint8_t>
 {
 public:
-  HCUnsigned8Table(const string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned8Enum *valenums=0)
+  HCUnsigned8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned8Enum *valenums=0)
   : HCIntegerTable<C, uint8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1285,7 +1282,7 @@ template <class C>
 class HCUnsigned16Table : public HCIntegerTable<C, uint16_t>
 {
 public:
-  HCUnsigned16Table(const string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned16Enum *valenums=0)
+  HCUnsigned16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned16Enum *valenums=0)
   : HCIntegerTable<C, uint16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1295,7 +1292,7 @@ template <class C>
 class HCUnsigned32Table : public HCIntegerTable<C, uint32_t>
 {
 public:
-  HCUnsigned32Table(const string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned32Enum *valenums=0)
+  HCUnsigned32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned32Enum *valenums=0)
   : HCIntegerTable<C, uint32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1305,7 +1302,7 @@ template <class C>
 class HCUnsigned64Table : public HCIntegerTable<C, uint64_t>
 {
 public:
-  HCUnsigned64Table(const string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned64Enum *valenums=0)
+  HCUnsigned64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums=0, const HCUnsigned64Enum *valenums=0)
   : HCIntegerTable<C, uint64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1322,7 +1319,7 @@ public:
   typedef int (C::*SubMethod)(const T);
 
 public:
-  HCIntegerList(const string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize, const HCIntegerEnum<T> *valenums=0)
+  HCIntegerList(const std::string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize, const HCIntegerEnum<T> *valenums=0)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -1392,12 +1389,12 @@ public:
     if(_getmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
       return;
     }
 
     //Print name
-    cout << _name << "\n";
+    std::cout << _name << "\n";
 
     //Loop through all elements
     for(eid=0; eid<_maxsize; eid++)
@@ -1413,7 +1410,7 @@ public:
       if(_valenums == 0)
       {
         //Print value
-        cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " !" << ErrToString(lerr) << "\n";
+        std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
       }
       else
       {
@@ -1424,19 +1421,19 @@ public:
           if(_valenums[i]._num == val)
           {
             //Print value
-            cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
+            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
             break;
           }
         }
 
         //Print value indicate that no enum found
         if(_valenums[i]._str.length() == 0)
-          cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << hex << PrintCast(val) << dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+          std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
       }
     }
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -1457,32 +1454,32 @@ public:
     }
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
 
     //Generate XML information
-    file << string(indent, ' ') << "<" << TypeString(dummy) << "l>\n";
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
-    file << string(indent, ' ') << "  <name>" << _name << "</name>\n";
-    file << string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>\n";
-    file << string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>\n";
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << "l>\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>\n";
 
     if(_valenums != 0)
     {
-      file << string(indent, ' ') << "  <valenums>\n";
+      file << std::string(indent, ' ') << "  <valenums>\n";
 
       for(i=0; _valenums[i]._str.length() != 0; i++)
-        file << string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
+        file << std::string(indent, ' ') << "    <eq>" << PrintCast(_valenums[i]._num) << "," << _valenums[i]._str << "</eq>\n";
 
-      file << string(indent, ' ') << "  </valenums>\n";
+      file << std::string(indent, ' ') << "  </valenums>\n";
     }
 
-    file << string(indent, ' ') << "</" << TypeString(dummy) << "l>\n";
+    file << std::string(indent, ' ') << "</" << TypeString(dummy) << "l>\n";
   }
 
-  virtual int GetStrTbl(uint32_t eid, string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     T nval;
     int lerr;
@@ -1526,7 +1523,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int AddStr(const string &val)
+  virtual int AddStr(const std::string &val)
   {
     T nval;
     uint32_t i;
@@ -1560,7 +1557,7 @@ public:
     return (_object->*_addmethod)(nval);
   }
 
-  virtual int AddStrLit(const string &val)
+  virtual int AddStrLit(const std::string &val)
   {
     uint32_t i;
 
@@ -1586,7 +1583,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual int SubStr(const string &val)
+  virtual int SubStr(const std::string &val)
   {
     T nval;
     uint32_t i;
@@ -1620,7 +1617,7 @@ public:
     return (_object->*_submethod)(nval);
   }
 
-  virtual int SubStrLit(const string &val)
+  virtual int SubStrLit(const std::string &val)
   {
     uint32_t i;
 
@@ -1807,7 +1804,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
   {
     uint32_t i;
 
@@ -1847,7 +1844,7 @@ template <class C>
 class HCSigned8List : public HCIntegerList<C, int8_t>
 {
 public:
-  HCSigned8List(const string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCSigned8Enum *valenums=0)
+  HCSigned8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCSigned8Enum *valenums=0)
   : HCIntegerList<C, int8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1857,7 +1854,7 @@ template <class C>
 class HCSigned16List : public HCIntegerList<C, int16_t>
 {
 public:
-  HCSigned16List(const string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCSigned16Enum *valenums=0)
+  HCSigned16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCSigned16Enum *valenums=0)
   : HCIntegerList<C, int16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1867,7 +1864,7 @@ template <class C>
 class HCSigned32List : public HCIntegerList<C, int32_t>
 {
 public:
-  HCSigned32List(const string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCSigned32Enum *valenums=0)
+  HCSigned32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCSigned32Enum *valenums=0)
   : HCIntegerList<C, int32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1877,7 +1874,7 @@ template <class C>
 class HCSigned64List : public HCIntegerList<C, int64_t>
 {
 public:
-  HCSigned64List(const string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCSigned64Enum *valenums=0)
+  HCSigned64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCSigned64Enum *valenums=0)
   : HCIntegerList<C, int64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1887,7 +1884,7 @@ template <class C>
 class HCUnsigned8List : public HCIntegerList<C, uint8_t>
 {
 public:
-  HCUnsigned8List(const string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUnsigned8Enum *valenums=0)
+  HCUnsigned8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUnsigned8Enum *valenums=0)
   : HCIntegerList<C, uint8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1897,7 +1894,7 @@ template <class C>
 class HCUnsigned16List : public HCIntegerList<C, uint16_t>
 {
 public:
-  HCUnsigned16List(const string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUnsigned16Enum *valenums=0)
+  HCUnsigned16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUnsigned16Enum *valenums=0)
   : HCIntegerList<C, uint16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1907,7 +1904,7 @@ template <class C>
 class HCUnsigned32List : public HCIntegerList<C, uint32_t>
 {
 public:
-  HCUnsigned32List(const string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUnsigned32Enum *valenums=0)
+  HCUnsigned32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUnsigned32Enum *valenums=0)
   : HCIntegerList<C, uint32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -1917,7 +1914,7 @@ template <class C>
 class HCUnsigned64List : public HCIntegerList<C, uint64_t>
 {
 public:
-  HCUnsigned64List(const string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUnsigned64Enum *valenums=0)
+  HCUnsigned64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUnsigned64Enum *valenums=0)
   : HCIntegerList<C, uint64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }

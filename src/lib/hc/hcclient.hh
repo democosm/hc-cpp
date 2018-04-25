@@ -35,11 +35,7 @@
 #include "mutex.hh"
 #include "thread.hh"
 #include <inttypes.h>
-#include <list>
 #include <stdio.h>
-#include <string>
-
-using namespace std;
 
 class HCClient
 {

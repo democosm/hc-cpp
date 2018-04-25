@@ -29,10 +29,9 @@
 
 #include "hcparameter.hh"
 #include <inttypes.h>
+#include <iostream>
 #include <string>
 #include <vector>
-
-using namespace std;
 
 class ScratchString
 {
@@ -57,32 +56,32 @@ public:
   int Print(void)
   {
     //Print value
-    cout << "Value = \"" << _val << "\"" << endl;
+    std::cout << "Value = \"" << _val << "\"" << std::endl;
     return ERR_NONE;
   }
 
   int TablePrint(uint32_t eid)
   {
     //Print something
-    cout << "Table[" << eid << "] = " << _table[eid] << endl;
+    std::cout << "Table[" << eid << "] = " << _table[eid] << std::endl;
     return ERR_NONE;
   }
 
-  int Get(string &val)
+  int Get(std::string &val)
   {
     //Get value
     val = _val;
     return ERR_NONE;
   }
 
-  int Set(const string &val)
+  int Set(const std::string &val)
   {
     //Set value
     _val = val;
     return ERR_NONE;
   }
 
-  int TableGet(uint32_t eid, string &val)
+  int TableGet(uint32_t eid, std::string &val)
   {
     //Check for EID out of range
     if(eid >= _table.size())
@@ -96,7 +95,7 @@ public:
     return ERR_NONE;
   }
 
-  int TableSet(uint32_t eid, const string &val)
+  int TableSet(uint32_t eid, const std::string &val)
   {
     //Check for EID out of range
     if(eid >= _table.size())
@@ -107,7 +106,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListGet(uint32_t eid, string &val)
+  int ListGet(uint32_t eid, std::string &val)
   {
     //Check for EID out of range
     if(eid >= _list.size())
@@ -121,7 +120,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListAdd(const string &val)
+  int ListAdd(const std::string &val)
   {
     uint32_t i;
 
@@ -143,7 +142,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListSub(const string &val)
+  int ListSub(const std::string &val)
   {
     uint32_t i;
 
@@ -167,9 +166,9 @@ public:
   }
 
 private:
-  string _val;
-  vector<string> _table;
-  vector<string> _list;
+  std::string _val;
+  std::vector<std::string> _table;
+  std::vector<std::string> _list;
   uint32_t _listmaxsize;
 };
 

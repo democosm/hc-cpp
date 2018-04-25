@@ -28,6 +28,8 @@
 #include "error.hh"
 #include "str.hh"
 
+using namespace std;
+
 Scratch::Scratch()
 : _string("")
 {

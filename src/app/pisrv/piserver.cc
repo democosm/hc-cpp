@@ -30,59 +30,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-uint32_t Relaygpiomap[8] = { 4, 17, 18, 27, 22, 23, 24, 25 };
-
 PIServer::PIServer()
 {
-  uint32_t i;
-  char command[200];
-
-  //Create GPIO control files for relay board
-  for(i=0; i<8; i++)
-  {
-    sprintf(command, "echo \"%" PRIu32 "\" > /sys/class/gpio/export", Relaygpiomap[i]);
-    system(command);
-  }
-
-  //Takes a while for files to show up
-  ThreadSleep(100000);
-
-  //Set direction of all relay GPIOs to output
-  for(i=0; i<8; i++)
-  {
-    sprintf(command, "echo \"out\" > /sys/class/gpio/gpio%" PRIu32 "/direction", Relaygpiomap[i]);
-    system(command);
-  }
-
-  //Set all relay GPIOs to off (relays are active low controlled)
-  for(i=0; i<8; i++)
-  {
-    sprintf(command, "echo \"1\" > /sys/class/gpio/gpio%" PRIu32 "/value", Relaygpiomap[i]);
-    system(command);
-  }
+  //Create relay GPIO drivers
+  m_relay[0] = new PIGPIO(4, true, true);
+  m_relay[1] = new PIGPIO(17, true, true);
+  m_relay[2] = new PIGPIO(18, true, true);
+  m_relay[3] = new PIGPIO(27, true, true);
+  m_relay[4] = new PIGPIO(22, true, true);
+  m_relay[5] = new PIGPIO(23, true, true);
+  m_relay[6] = new PIGPIO(24, true, true);
+  m_relay[7] = new PIGPIO(25, true, true);
 }
 
 PIServer::~PIServer()
 {
-  uint32_t i;
-  char command[200];
-
-  //Set direction of all relay GPIOs to input
-  for(i=0; i<8; i++)
-  {
-    sprintf(command, "echo \"in\" > /sys/class/gpio/gpio%" PRIu32 "/direction", Relaygpiomap[i]);
-    system(command);
-  }
-
-  //Destroy GPIO control files for relay board
-  for(i=0; i<8; i++)
-  {
-    sprintf(command, "echo \"%" PRIu32 "\" > /sys/class/gpio/unexport", Relaygpiomap[i]);
-    system(command);
-  }
-
-  //Assum it takes a while for files to go away
-  ThreadSleep(100000);
+  //Delete relay GPIO drivers
+  delete m_relay[0];
+  delete m_relay[1];
+  delete m_relay[2];
+  delete m_relay[3];
+  delete m_relay[4];
+  delete m_relay[5];
+  delete m_relay[6];
+  delete m_relay[7];
 }
 
 int PIServer::GetTemperature(float &val)
@@ -108,61 +79,35 @@ int PIServer::GetTemperature(float &val)
 
 int PIServer::GetRelayOn(uint32_t eid, bool &val)
 {
-  char filename[200];
-  FILE *file;
-  uint32_t valint;
+  bool gpioval;
+  int retval;
 
-  //Check for invalid EID
+  //Check for invalid id
   if(eid >= 8)
     return ERR_EID;
 
-  //Open file for manipulating relay GPIO value
-  sprintf(filename, "/sys/class/gpio/gpio%" PRIu32 "/value", Relaygpiomap[eid]);
+  //Get GPIO value and invert since relays are active low driven
+  retval = m_relay[eid]->GetValue(gpioval);
+  val = gpioval ? false : true;
 
-  if((file = fopen(filename, "r")) == NULL)
-    printf("Error opening GPIO %" PRIu32 " file\n", Relaygpiomap[eid]);
-
-  //Read relay value from file
-  fscanf(file, "%" SCNu32, &valint);
-
-  //Convert to bool
-  val = valint == 1 ? false : true;
-
-  //Close file
-  fclose(file);
-
-  return ERR_NONE;
+  return retval;
 }
 
 int PIServer::SetRelayOn(uint32_t eid, bool val)
 {
-  char filename[200];
-  FILE *file;
-
-  //Check for invalid EID
+  //Check for invalid id
   if(eid >= 8)
     return ERR_EID;
 
-  //Open file for manipulating relay GPIO value
-  sprintf(filename, "/sys/class/gpio/gpio%" PRIu32 "/value", Relaygpiomap[eid]);
-
-  if((file = fopen(filename, "w")) == NULL)
-    printf("Error opening GPIO %" PRIu32 " file\n", Relaygpiomap[eid]);
-
-  //Write relay value to file
-  fprintf(file, "%" PRIu32, val ? 0 : 1);
-
-  //Close file
-  fclose(file);
-
-  return ERR_NONE;
+  //Set GPIO value to inverse since relays are active low driven
+  return m_relay[eid]->SetValue(val ? false : true);
 }
 
 int PIServer::PulseRelayHigh(uint32_t eid)
 {
   //Turn relay on, sleep and set turn relay off
   SetRelayOn(eid, true);
-  ThreadSleep(250000);
+  ThreadSleep(50000);
   SetRelayOn(eid, false);
 
   return ERR_NONE;

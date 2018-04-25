@@ -36,8 +36,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 //Command
 class HCCommand
 {
@@ -46,8 +44,8 @@ public:
   ~HCCommand();
   void operator =(const HCCommand &cmd);
   bool operator ==(const HCCommand &cmd);
-  const string GetStr();
-  void GetEnd(string &str);
+  const std::string GetStr();
+  void GetEnd(std::string &str);
   uint32_t GetLen();
   uint32_t GetIndex();
   void Reset();
@@ -57,10 +55,10 @@ public:
   void Insert(char ch);
   void Delete();
   char EndChar();
-  void Tokenize(vector<string> &toks);
+  void Tokenize(std::vector<std::string> &toks);
 
 private:
-  string _str;
+  std::string _str;
   uint32_t _index;
 };
 
@@ -136,10 +134,10 @@ private:
   void CallCmdProc(uint32_t tokcnt);
   void ParamCmdProc(uint32_t tokcnt);
   void Prompt(void);
-  bool GetNextCommonChar(const string &name, HCContainer *startcont, char &ch, size_t index=0);
-  void ShowListing(const string &name, HCContainer *startcont, size_t index=0);
-  void ShowInfo(const string &name, HCContainer *startcont, size_t index=0);
-  void ShowFinds(const string &name, HCContainer *cont);
+  bool GetNextCommonChar(const std::string &name, HCContainer *startcont, char &ch, size_t index=0);
+  void ShowListing(const std::string &name, HCContainer *startcont, size_t index=0);
+  void ShowInfo(const std::string &name, HCContainer *startcont, size_t index=0);
+  void ShowFinds(const std::string &name, HCContainer *cont);
   void ShowPath(HCContainer *cont);
 
 private:
@@ -154,7 +152,7 @@ private:
   HCHistory *_hist;
   HCCommand _cmd;
   HCCommand _cmdcopy;
-  vector<string> _tokens;
+  std::vector<std::string> _tokens;
   bool _exit;
 };
 

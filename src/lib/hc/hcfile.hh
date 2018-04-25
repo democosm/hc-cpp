@@ -36,8 +36,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //File client stub
 class HCFileCli
 {
@@ -87,7 +85,7 @@ public:
   static const uint32_t BUFFSER_SIZE = HCCell::PAYLOAD_MAX - 9;
 
 public:
-  HCFile(const string &name, C *object, ReadMethod readmethod, WriteMethod writemethod)
+  HCFile(const std::string &name, C *object, ReadMethod readmethod, WriteMethod writemethod)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -142,32 +140,32 @@ public:
     if(_readmethod == 0)
     {
       //Print value
-      cout << _name << " !" << ErrToString(ERR_ACCESS) << endl;
+      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
       return;
     }
 
     //Print value
-    cout << _name << " = FILETYPE" << endl;
+    std::cout << _name << " = FILETYPE" << std::endl;
   }
 
-  virtual void PrintInfo(ostream &st=cout)
+  virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
     st << "\n  Type: file";
     st << "\n  Access: " << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W");
   }
 
-  virtual void SaveXML(ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << string(indent, ' ') << "<file>" << endl;
-    file << string(indent, ' ') << "  <pid>" << pid << "</pid>" << endl;
-    file << string(indent, ' ') << "  <name>" << _name << "</name>" << endl;
-    file << string(indent, ' ') << "  <acc>" << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W") << "</acc>" << endl;
-    file << string(indent, ' ') << "</file>" << endl;
+    file << std::string(indent, ' ') << "<file>" << std::endl;
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
+    file << std::string(indent, ' ') << "  <acc>" << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "</file>" << std::endl;
   }
 
-  virtual int Upload(const string &val)
+  virtual int Upload(const std::string &val)
   {
     FILE *file;
     uint32_t offset;
@@ -221,7 +219,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int Download(const string &val)
+  virtual int Download(const std::string &val)
   {
     FILE *file;
     uint16_t len;

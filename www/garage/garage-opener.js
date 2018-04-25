@@ -1,13 +1,27 @@
 //Add event listeners
-document.getElementById('opener button').addEventListener('click', OnClickOpenerButton);
+document.getElementById('door1 button').addEventListener('click', OnClickDoor1Button);
+document.getElementById('door2 button').addEventListener('click', OnClickDoor2Button);
+document.getElementById('door3 button').addEventListener('click', OnClickDoor3Button);
 
 //Start polling status
 PollStatus();
 
-function OnClickOpenerButton()
+function OnClickDoor1Button()
 {
   //Do AJAX HC call
   HCICall('/pulserelayhigh', 0);
+}
+
+function OnClickDoor2Button()
+{
+  //Do AJAX HC call
+  HCICall('/pulserelayhigh', 1);
+}
+
+function OnClickDoor3Button()
+{
+  //Do AJAX HC call
+  HCICall('/pulserelayhigh', 2);
 }
 
 function PollStatus()
@@ -22,7 +36,7 @@ function PollStatus()
 function RenderData(data)
 {
   //Get element and update
-  document.getElementById('door state').innerHTML = data.val;
+  document.getElementById('temperature').innerHTML = data.val;
 }
 
 function HCGet(pid)

@@ -30,8 +30,6 @@
 #include <inttypes.h>
 #include <string>
 
-using namespace std;
-
 class HCCell
 {
 public:
@@ -93,11 +91,11 @@ public:
   bool Write(double val);
   bool Read(bool &val);
   bool Write(bool val);
-  bool Read(string &val);
-  bool Write(const string &val);
+  bool Read(std::string &val);
+  bool Write(const std::string &val);
   bool Read(uint8_t *val, uint32_t maxlen, uint16_t &len);
   bool Write(uint8_t *val, uint16_t len);
-  void Print(const string &extra);
+  void Print(const std::string &extra);
 
 private:
   uint8_t *_buffer;

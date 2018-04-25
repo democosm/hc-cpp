@@ -36,33 +36,30 @@
 #include "tinyxml2.hh"
 #include <string>
 
-using namespace std;
-using namespace tinyxml2;
-
 class HCConnection
 {
 public:
-  HCConnection(Device *dev, HCContainer *pcont, const string &contname, uint32_t timeout, const string &sifname="");
+  HCConnection(Device *dev, HCContainer *pcont, const std::string &contname, uint32_t timeout, const std::string &sifname="");
   virtual ~HCConnection();
-  void ParseServer(XMLElement *pelt, HCContainer *pcont);
-  void ParseCont(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseInteger(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseIntegerTable(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseIntegerList(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> HCIntegerEnum<T> *ParseIntegerEnum(XMLElement *pelt);
-  HCEIDEnum *ParseEIDEnum(XMLElement *pelt);
-  template <typename T> void ParseFloatingPoint(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseFloatingPointTable(XMLElement *pelt, HCContainer *pcont);
-  void ParseBool(XMLElement *pelt, HCContainer *pcont);
-  void ParseBoolT(XMLElement *pelt, HCContainer *pcont);
-  HCBooleanEnum *ParseBoolEnum(XMLElement *pelt);
-  void ParseStr(XMLElement *pelt, HCContainer *pcont);
-  void ParseStrT(XMLElement *pelt, HCContainer *pcont);
-  void ParseStrL(XMLElement *pelt, HCContainer *pcont);
-  void ParseCall(XMLElement *pelt, HCContainer *pcont);
-  void ParseCallT(XMLElement *pelt, HCContainer *pcont);
-  void ParseFile(XMLElement *pelt, HCContainer *pcont);
-  template <typename T> bool ParseValue(XMLElement *pelt, const char *name, T &val);
+  void ParseServer(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseCont(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseInteger(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseIntegerTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseIntegerList(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> HCIntegerEnum<T> *ParseIntegerEnum(tinyxml2::XMLElement *pelt);
+  HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
+  template <typename T> void ParseFloatingPoint(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseFloatingPointTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseBool(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseBoolT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  HCBooleanEnum *ParseBoolEnum(tinyxml2::XMLElement *pelt);
+  void ParseStr(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseStrT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseStrL(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseCall(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseCallT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseFile(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, T &val);
 
 private:
   Device *_dev;

@@ -30,6 +30,9 @@
 #include <iostream>
 #include <string.h>
 
+using namespace std;
+using namespace tinyxml2;
+
 HCAggregator::HCAggregator(const string &filename)
 {
   XMLDocument doc;

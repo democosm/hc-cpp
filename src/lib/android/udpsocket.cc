@@ -35,6 +35,8 @@
 #include <unistd.h>
 #include <cassert>
 
+using namespace std;
+
 UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
 {
   struct sockaddr_in addr;

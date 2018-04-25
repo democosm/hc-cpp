@@ -28,6 +28,8 @@
 #include "error.hh"
 #include <cassert>
 
+using namespace std;
+
 HCParameter::HCParameter(const string &name)
 : HCNode(name)
 {

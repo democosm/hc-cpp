@@ -26,6 +26,8 @@
 
 #include "error.hh"
 
+using namespace std;
+
 //Error strings
 static const string Errstrings[] =
 {

@@ -30,6 +30,8 @@
 #include <cassert>
 #include <iostream>
 
+using namespace std;
+
 Text::Text()
 : _message("")
 {

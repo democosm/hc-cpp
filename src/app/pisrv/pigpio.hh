@@ -1,4 +1,4 @@
-// HC utility
+// Class for controlling GPIO pins of a raspberry pi 3
 //
 // Copyright 2018 Democosm
 // 
@@ -24,23 +24,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCUTILITY_HH_
-#define _HCUTILITY_HH_
+#ifndef _PIGPIO_HH_
+#define _PIGPIO_HH_
 
-#include "hccontainer.hh"
-#include "hcparameter.hh"
-#include "device.hh"
 #include <inttypes.h>
-#include <string>
-#include <stdio.h>
 
-class HCUtility
+class PIGPIO
 {
 public:
-  static HCContainer *GetCont(const std::string &name, HCContainer *startcont, size_t index=0);
-  static HCParameter *GetParam(const std::string &name, HCContainer *startcont, size_t index=0);
-  static bool NLDReadString(char *val, FILE *file);
-  static bool NLDLookup(FILE *nldfile, const std::string &name, uint16_t &pid, uint8_t &type, size_t index=0);
+  PIGPIO(uint8_t num, bool output=false, bool initval=false);
+  ~PIGPIO();
+  int GetValue(bool &val);
+  int SetValue(bool val);
+
+private:
+  uint8_t _num;
 };
 
-#endif //_HCUTILITY_HH_
+#endif //_PIGPIO_HH_

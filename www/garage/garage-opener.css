@@ -1,7 +1,14 @@
-h1, div, button
+h1
 {
   color: navy;
   text-align: center;
+}
+
+div
+{
+  color: navy;
+  text-align: center;
+  font-size: 24px;
 }
 
 body
@@ -18,5 +25,11 @@ body
 
 .bigbutton
 {
-  font-size:64px
+  color: navy;
+  font-size: 48px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  padding: 32px;
+  background: linear-gradient(to bottom right, #E0E0E0, #808080);
+  margin-bottom: 12px;
 }

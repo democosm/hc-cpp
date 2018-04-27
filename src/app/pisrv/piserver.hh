@@ -41,7 +41,7 @@ public:
   int PulseRelayHigh(uint32_t eid);
 
 private:
-  PIGPIO *m_relay[8];
+  PIGPIO *m_relay[3];
 };
 
 #endif //_PISERVER_HH_

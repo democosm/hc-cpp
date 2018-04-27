@@ -131,10 +131,10 @@ int main(int argc, char **argv)
   param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCBooleanTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 8);
+  param = new HCBooleanTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCCallTable<PIServer>("pulserelayhigh", pisrv, &PIServer::PulseRelayHigh, 8);
+  param = new HCCallTable<PIServer>("pulserelayhigh", pisrv, &PIServer::PulseRelayHigh, 3);
   topcont->Add(param);
   srv->Add(param);
 

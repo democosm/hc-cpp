@@ -33,14 +33,9 @@
 PIServer::PIServer()
 {
   //Create relay GPIO drivers
-  m_relay[0] = new PIGPIO(4, true, true);
-  m_relay[1] = new PIGPIO(17, true, true);
-  m_relay[2] = new PIGPIO(18, true, true);
-  m_relay[3] = new PIGPIO(27, true, true);
-  m_relay[4] = new PIGPIO(22, true, true);
-  m_relay[5] = new PIGPIO(23, true, true);
-  m_relay[6] = new PIGPIO(24, true, true);
-  m_relay[7] = new PIGPIO(25, true, true);
+  m_relay[0] = new PIGPIO(26, true, true);
+  m_relay[1] = new PIGPIO(20, true, true);
+  m_relay[2] = new PIGPIO(21, true, true);
 }
 
 PIServer::~PIServer()
@@ -49,11 +44,6 @@ PIServer::~PIServer()
   delete m_relay[0];
   delete m_relay[1];
   delete m_relay[2];
-  delete m_relay[3];
-  delete m_relay[4];
-  delete m_relay[5];
-  delete m_relay[6];
-  delete m_relay[7];
 }
 
 int PIServer::GetTemperature(float &val)
@@ -83,7 +73,7 @@ int PIServer::GetRelayOn(uint32_t eid, bool &val)
   int retval;
 
   //Check for invalid id
-  if(eid >= 8)
+  if(eid >= 3)
     return ERR_EID;
 
   //Get GPIO value and invert since relays are active low driven
@@ -96,7 +86,7 @@ int PIServer::GetRelayOn(uint32_t eid, bool &val)
 int PIServer::SetRelayOn(uint32_t eid, bool val)
 {
   //Check for invalid id
-  if(eid >= 8)
+  if(eid >= 3)
     return ERR_EID;
 
   //Set GPIO value to inverse since relays are active low driven

@@ -82,7 +82,7 @@ int main(int argc, char **argv)
   srvdev = new UDPSocket(port);
 
   //Create server
-  srv = new HCServer(srvdev, topcont, "Msg", __DATE__" "__TIME__);
+  srv = new HCServer(srvdev, topcont, "Msg", __DATE__ " " __TIME__);
 
   //Add parameters
   param = new HCString<Text>("message", text, &Text::GetMessage, &Text::SetMessage); 

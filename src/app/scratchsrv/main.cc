@@ -333,7 +333,7 @@ int main(int argc, char **argv)
   }
 
   //Create server
-  srv = new HCServer(srvdev, topcont, "Scratch", __DATE__" "__TIME__);
+  srv = new HCServer(srvdev, topcont, "Scratch", __DATE__ " " __TIME__);
 
   //Add parameters
   cont = new HCContainer("uint8");

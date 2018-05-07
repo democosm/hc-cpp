@@ -62,7 +62,7 @@ To download openssl development package on Ubuntu, the command is:
 sudo apt-get install openssl-dev
 
 To download openssl development package on Raspberry Pi3, the command is:
-sudo apt-get install openssl-dev
+sudo apt-get install libssl-dev
 
 Disclaimer for openssl (an excerpt from the openssl website):
 

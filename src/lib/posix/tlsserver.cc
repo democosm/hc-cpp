@@ -71,7 +71,7 @@ TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, u
     cout << __FILE__ << ":" << __LINE__ << " - Error setting listening socket reuse" << endl;
 
   //Create SSL context and check for error
-  sslmethod = TLSv1_2_server_method();
+  sslmethod = TLS_server_method();
   if((_sslctx = SSL_CTX_new(sslmethod)) == NULL)
     cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << endl;
 

@@ -78,16 +78,16 @@ int main(int argc, char **argv)
   pathname = argv[3];
 
   //Open NLD file and check for error
-  if((nldfile = fopen(argv[5], "rb")) == NULL)
+  if((nldfile = fopen(argv[4], "rb")) == NULL)
   {
-    cout << "Can't open NLD file " << argv[5] << endl;
+    cout << "Can't open NLD file " << argv[4] << endl;
     return -1;
   }
 
   //Lookup PID and type and check for error
   if(!HCUtility::NLDLookup(nldfile, pathname, pid, type))
   {
-    cout << "Can't find entry for " << pathname << " in " << argv[5] << endl;
+    cout << "Can't find entry for " << pathname << " in " << argv[4] << endl;
     return -1;
   }
 

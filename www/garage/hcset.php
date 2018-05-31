@@ -6,7 +6,8 @@ $params = json_decode($_GET["params"]);
 //Check for error decoding query string
 if($params == null)
 {
-  echo("Query string must be JSON encoded");
+  echo("Syntax: hcset.php?params=JSON array of parameter names and values<br>");
+  echo("Example: hcset.php?params=[[\"/foo\",1],[\"/bar\",\"hello\"]]");
   http_response_code(400);
   exit;
 }
@@ -15,10 +16,10 @@ if($params == null)
 foreach($params as $param)
 {
   //Call HC command line app and trim result
-  $result = trim(shell_exec("./hcicall 127.0.0.1 1500 $param[0] $param[1] server.nld"));
+  $result = trim(shell_exec("./hcset 127.0.0.1 1500 $param[0] $param[1] server.nld"));
 
   //Update response
-  $response[] = array("$param[0]", "$param[1]", "$result");
+  $response[] = array("$param[0]", "$result");
 }
 
 //Format as JSON

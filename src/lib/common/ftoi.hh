@@ -1,4 +1,4 @@
-// Class for controlling a raspberry pi 3
+// Floating point to integer conversion functions
 //
 // Copyright 2018 Democosm
 // 
@@ -24,31 +24,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PISERVER_HH_
-#define _PISERVER_HH_
+#ifndef _FTOI_HH_
+#define _FTOI_HH_
 
-#include "pigpio.hh"
-#include "thread.hh"
 #include <inttypes.h>
 
-class PIServer
-{
-public:
-  PIServer();
-  ~PIServer();
-  int GetTemperature(float &val);
-  int GetCPUUtilization(uint8_t &val);
-  int GetRelayOn(uint32_t eid, bool &val);
-  int SetRelayOn(uint32_t eid, bool val);
-  int PulseRelayHigh(uint32_t eid);
+template <typename T> bool FToI(const double fval, T &ival);
+template <typename T> bool FToU(const double fval, T &ival);
 
-private:
-  void CtlThread(void);
+#endif //_FTOI_HH_
 
-private:
-  PIGPIO *m_relay[3];
-  uint8_t _cpuutilization;
-  Thread<PIServer> *_ctlthread;
-};
-
-#endif //_PISERVER_HH_

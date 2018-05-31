@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     if((ierr = cli->IGet(pid, eid, int8val)) != ERR_NONE)
       cout << ErrToString(ierr) << endl;
     else
-      cout << int8val << endl;
+      cout << (int16_t)int8val << endl;
 
     break;
   case HCParameter::TYPE_INT16:
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
     if((ierr = cli->IGet(pid, eid, uint8val)) != ERR_NONE)
       cout << ErrToString(ierr) << endl;
     else
-      cout << uint8val << endl;
+      cout << (uint16_t)uint8val << endl;
 
     break;
   case HCParameter::TYPE_UINT16:

@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     if((ierr = cli->Get(pid, int8val)) != ERR_NONE)
       cout << ErrToString(ierr) << endl;
     else
-      cout << int8val << endl;
+      cout << (int16_t)int8val << endl;
 
     break;
   case HCParameter::TYPE_INT16:
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     if((ierr = cli->Get(pid, uint8val)) != ERR_NONE)
       cout << ErrToString(ierr) << endl;
     else
-      cout << uint8val << endl;
+      cout << (uint16_t)uint8val << endl;
 
     break;
   case HCParameter::TYPE_UINT16:

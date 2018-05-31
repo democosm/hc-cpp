@@ -1,7 +1,6 @@
-h1
+body
 {
-  color: navy;
-  text-align: center;
+  background-color: khaki;
 }
 
 div
@@ -9,11 +8,6 @@ div
   color: navy;
   text-align: center;
   font-size: 24px;
-}
-
-body
-{
-  background-color: khaki;
 }
 
 .center
@@ -26,10 +20,15 @@ body
 .bigbutton
 {
   color: navy;
-  font-size: 48px;
+  font-size: 32px;
   border-radius: 20px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  padding: 32px;
+  padding: 28px;
   background: linear-gradient(to bottom right, #E0E0E0, #808080);
   margin-bottom: 12px;
+}
+
+.imgborder
+{
+  border: 1px solid black;
 }

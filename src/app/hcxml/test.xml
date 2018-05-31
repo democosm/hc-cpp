@@ -1,0 +1,44 @@
+<server>
+  <name>Pi</name>
+  <version>May 15 2018 04:30:26</version>
+  <f32>
+    <pid>4</pid>
+    <name>temperature</name>
+    <acc>R</acc>
+    <scl>1</scl>
+  </f32>
+  <boolt>
+    <pid>5</pid>
+    <name>relayon</name>
+    <acc>RW</acc>
+    <size>3</size>
+  </boolt>
+  <callt>
+    <pid>6</pid>
+    <name>pulserelayhigh</name>
+    <size>3</size>
+  </callt>
+  <cont>
+    <name>.server</name>
+    <str>
+      <pid>0</pid>
+      <name>name</name>
+      <acc>R</acc>
+    </str>
+    <str>
+      <pid>1</pid>
+      <name>version</name>
+      <acc>R</acc>
+    </str>
+    <u32>
+      <pid>2</pid>
+      <name>infofilecrc</name>
+      <acc>R</acc>
+    </u32>
+    <file>
+      <pid>3</pid>
+      <name>infofile</name>
+      <acc>R</acc>
+    </file>
+  </cont>
+</server>

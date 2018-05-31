@@ -24,6 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "ftoi.hh"
 #include "piserver.hh"
 #include "error.hh"
 #include "thread.hh"
@@ -36,10 +37,20 @@ PIServer::PIServer()
   m_relay[0] = new PIGPIO(26, true, true);
   m_relay[1] = new PIGPIO(20, true, true);
   m_relay[2] = new PIGPIO(21, true, true);
+
+  //Initialize CPU utilization status
+  _cpuutilization = 0.0;
+
+  //Create and start control thread
+  _ctlthread = new Thread<PIServer>(this, &PIServer::CtlThread);
+  _ctlthread->Start();
 }
 
 PIServer::~PIServer()
 {
+  //Delete control thread
+  delete _ctlthread;
+
   //Delete relay GPIO drivers
   delete m_relay[0];
   delete m_relay[1];
@@ -64,6 +75,12 @@ int PIServer::GetTemperature(float &val)
   //Close file
   fclose(file);
 
+  return ERR_NONE;
+}
+
+int PIServer::GetCPUUtilization(uint8_t &val)
+{
+  val = _cpuutilization;
   return ERR_NONE;
 }
 
@@ -101,4 +118,51 @@ int PIServer::PulseRelayHigh(uint32_t eid)
   SetRelayOn(eid, false);
 
   return ERR_NONE;
+}
+
+void PIServer::CtlThread(void)
+{
+  uint64_t user;
+  uint64_t nice;
+  uint64_t sys;
+  uint64_t idle;
+  uint64_t totaluse;
+  uint64_t total;
+  uint64_t oldtotaluse;
+  uint64_t oldtotal;
+  FILE *fp;
+
+  //Initialize old counts
+  oldtotaluse = 0;
+  oldtotal = 0;
+
+  //Go forever
+  while(true)
+  {
+    //Sleep one second
+    ThreadSleep(1000000);
+
+    //Open processor stats file and check for success
+    if((fp = fopen("/proc/stat", "r")) != NULL)
+    {
+      //Read in stats and check for success
+      if(fscanf(fp, "%*s %" SCNu64 " %" SCNu64 " %" SCNu64 " %" SCNu64, &user, &nice, &sys, &idle) == 4)
+      {
+        //Calculate totals
+        totaluse = user + nice + sys;
+        total = totaluse + idle;
+
+        //Don't do this on the first iteration
+        if(oldtotal != 0)
+          FToU((double)(totaluse - oldtotaluse)/(double)(total - oldtotal)*100.0, _cpuutilization);
+
+        //These are now the old stats
+        oldtotaluse = totaluse;
+        oldtotal = total;
+      }
+
+      //Close processor stats file
+      fclose(fp);
+    }
+  }
 }

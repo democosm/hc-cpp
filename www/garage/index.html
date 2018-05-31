@@ -2,20 +2,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 <html>
-<head>
-  <link rel="stylesheet" type="text/css" href="garage-opener.css">
-  <title>Garage Opener</title>
-</head>
-<body>
-  <header>
-    <h1 class="center">Garage Opener</h1>
-  </header>
+  <head>
+    <link rel="stylesheet" type="text/css" href="garage-opener.css">
+    <title>Garage Opener</title>
+  </head>
+  <body>
+    <button class="center bigbutton" id="door1 button">Door 1</button>
+    <button class="center bigbutton" id="door2 button">Door 2</button>
+    <div id="temperature"></div>
+    <div id="cpuutilization"></div>
+    <br>
+    <div>
+      <img class="imgborder" id="capture img" src="http://10.0.0.100:8081" width=320 height=240>
+    </div>
 
-  <button class="center bigbutton" id="door1 button">Door 1</button>
-  <button class="center bigbutton" id="door2 button">Door 2</button>
-  <button class="center bigbutton" id="door3 button">Door 3</button>
-  <div class="center" id="temperature"></div>
-
-  <script src="garage-opener.js"></script>
-</body>
+    <script src="garage-opener.js"></script>
+  </body>
 </html>

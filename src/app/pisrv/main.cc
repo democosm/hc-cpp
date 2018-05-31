@@ -28,6 +28,7 @@
 #include "hccall.hh"
 #include "hcconsole.hh"
 #include "hccontainer.hh"
+#include "hcinteger.hh"
 #include "hcparameter.hh"
 #include "hcserver.hh"
 #include "hcfloatingpoint.hh"
@@ -129,6 +130,9 @@ int main(int argc, char **argv)
 
   //Add parameters
   param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
+  topcont->Add(param);
+  srv->Add(param);
+  param = new HCUnsigned8<PIServer>("cpuutilization", pisrv, &PIServer::GetCPUUtilization, 0);
   topcont->Add(param);
   srv->Add(param);
   param = new HCBooleanTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);

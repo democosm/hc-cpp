@@ -27,7 +27,7 @@ function RenderData(data)
   for(var i in data)
   {
     if(data[i][0] == "/temperature")
-      document.getElementById("temperature").innerHTML = "Temperature: " + data[i][1] + " Celcius";
+      document.getElementById("temperature").innerHTML = "Temperature: " + data[i][1] + " C";
     else if(data[i][0] == "/cpuutilization")
       document.getElementById("cpuutilization").innerHTML = "CPU Utilization: " + data[i][1] + "%";
   }

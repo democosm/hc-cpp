@@ -32,7 +32,9 @@
 #include "hcstring.hh"
 #include "udpsocket.hh"
 #include <stdio.h>
-#include <gtest/gtest.h>
+#include <gtest.h>
+
+using namespace std;
 
 Scratch *scratch;
 UDPSocket *srvdev;
@@ -53,6 +55,8 @@ TEST(HC, Blah)
 
 int main(int argc, char **argv)
 {
+  int result;
+
   //Create scratch object
   scratch = new Scratch();
 
@@ -63,7 +67,7 @@ int main(int argc, char **argv)
   topcont = new HCContainer("");
 
   //Create server
-  srv = new HCServer(srvdev, topcont, "Scratch", __DATE__" "__TIME__);
+  srv = new HCServer(srvdev, topcont, "Scratch", __DATE__ " " __TIME__);
 
   //Add parameters
   param = new HCString<Scratch>("string", scratch, &Scratch::GetString, &Scratch::SetString);
@@ -75,11 +79,13 @@ int main(int argc, char **argv)
 
   //Initialize and run all tests
   testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  result = RUN_ALL_TESTS();
 
   //Cleanup
   delete srv;
   delete topcont;
   delete srvdev;
   delete scratch;
+
+  return result;
 }

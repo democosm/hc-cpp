@@ -67,7 +67,7 @@ TLSClient::TLSClient(uint16_t port, const char *srvipaddr, uint16_t srvport, con
   _connfd = -1;
 
   //Create SSL context and check for error
-  sslmethod = TLS_client_method();
+  sslmethod = TLSv1_2_client_method();
   if((_sslctx = SSL_CTX_new(sslmethod)) == NULL)
     cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << endl;
 

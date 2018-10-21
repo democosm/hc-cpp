@@ -1,10 +1,3 @@
-# Library files to link against
-LINKLIBS = \
- bus \
- common \
- drv \
- hc
-
 # Include default make config
 include $(PROJBASEDIR)/src/DefaultConfig
 

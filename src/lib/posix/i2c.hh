@@ -1,4 +1,4 @@
-// Error
+// I2C driver
 //
 // Copyright 2018 Democosm
 // 
@@ -24,35 +24,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ERROR_HH_
-#define _ERROR_HH_
+#ifndef _I2C_HH_
+#define _I2C_HH_
 
-#include <string>
+#include "mutex.hh"
+#include <inttypes.h>
 
-//Definitions
-#define ERR_NONE 0
-#define ERR_UNSPEC -1
-#define ERR_TIMEOUT -2
-#define ERR_OWNER -3
-#define ERR_RESET -4
-#define ERR_DESTROYED -5
-#define ERR_OVERFLOW -6
-#define ERR_TYPE -7
-#define ERR_PATTERN -8
-#define ERR_ACCESS -9
-#define ERR_RANGE -10
-#define ERR_STEP -11
-#define ERR_INVALID -12
-#define ERR_ALIGNMENT -13
-#define ERR_DESER -14
-#define ERR_OPCODE -15
-#define ERR_PID -16
-#define ERR_EID -17
-#define ERR_NOTFOUND -18
-#define ERR_NOIMP -19
-#define ERR_UNKNOWN -20 //Don't use. Must be last
+class I2C
+{
+public:
+  I2C(const char *name);
+  virtual ~I2C();
+  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val);
+  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t val);
 
-//Functions
-const std::string ErrToString(int err);
+private:
+  int _fd;
+  Mutex *_mutex;
+};
 
-#endif //_ERROR_HH_
+#endif //_I2C_HH_

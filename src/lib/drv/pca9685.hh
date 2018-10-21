@@ -1,4 +1,4 @@
-// Error
+// PCA9685 PWM driver
 //
 // Copyright 2018 Democosm
 // 
@@ -24,35 +24,64 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ERROR_HH_
-#define _ERROR_HH_
+#ifndef _PCA9685_HH_
+#define _PCA9685_HH_
 
-#include <string>
+#include "bits.hh"
+#include "bus.hh"
+#include "hccontainer.hh"
+#include "hcinteger.hh"
+#include "hcserver.hh"
+#include "reg.hh"
+#include <inttypes.h>
 
-//Definitions
-#define ERR_NONE 0
-#define ERR_UNSPEC -1
-#define ERR_TIMEOUT -2
-#define ERR_OWNER -3
-#define ERR_RESET -4
-#define ERR_DESTROYED -5
-#define ERR_OVERFLOW -6
-#define ERR_TYPE -7
-#define ERR_PATTERN -8
-#define ERR_ACCESS -9
-#define ERR_RANGE -10
-#define ERR_STEP -11
-#define ERR_INVALID -12
-#define ERR_ALIGNMENT -13
-#define ERR_DESER -14
-#define ERR_OPCODE -15
-#define ERR_PID -16
-#define ERR_EID -17
-#define ERR_NOTFOUND -18
-#define ERR_NOIMP -19
-#define ERR_UNKNOWN -20 //Don't use. Must be last
+class PCA9685
+{
+public:
+  PCA9685(Bus *bus);
+  virtual ~PCA9685();
+  void RegisterInterface(HCContainer *cont, HCServer *srv);
 
-//Functions
-const std::string ErrToString(int err);
+private:
+  struct Mode1
+  {
+    Bits8 *_restart;
+    Bits8 *_extclk;
+    Bits8 *_ai;
+    Bits8 *_sleep;
+    Bits8 *_sub1;
+    Bits8 *_sub2;
+    Bits8 *_sub3;
+    Bits8 *_allcall;
+  };
 
-#endif //_ERROR_HH_
+  struct Mode2
+  {
+    Bits8 *_invrt;
+    Bits8 *_och;
+    Bits8 *_outdrv;
+    Bits8 *_outne;
+  };
+
+  struct LED
+  {
+    Reg8 *_onl;
+    Bits8 *_onfull;
+    Bits8 *_onh;
+    Reg8 *_offl;
+    Bits8 *_offfull;
+    Bits8 *_offh;
+  };
+
+  Mode1 _mode1;
+  Mode2 _mode2;
+  Reg8 *_subadr1;
+  Reg8 *_subadr2;
+  Reg8 *_subadr3;
+  Reg8 *_allcalladr;
+  LED _led[16];
+  LED _ledall;
+  Reg8 *_prescale;
+};
+
+#endif //_PCA9685_HH_

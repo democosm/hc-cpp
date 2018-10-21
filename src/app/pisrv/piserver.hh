@@ -46,7 +46,7 @@ private:
   void CtlThread(void);
 
 private:
-  PIGPIO *m_relay[3];
+  PIGPIO *_relay[3];
   uint8_t _cpuutilization;
   Thread<PIServer> *_ctlthread;
 };

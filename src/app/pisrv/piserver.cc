@@ -24,9 +24,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "error.hh"
 #include "ftoi.hh"
 #include "piserver.hh"
-#include "error.hh"
 #include "thread.hh"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,9 +34,9 @@
 PIServer::PIServer()
 {
   //Create relay GPIO drivers
-  m_relay[0] = new PIGPIO(26, true, true);
-  m_relay[1] = new PIGPIO(20, true, true);
-  m_relay[2] = new PIGPIO(21, true, true);
+  _relay[0] = new PIGPIO(26, true, true);
+  _relay[1] = new PIGPIO(20, true, true);
+  _relay[2] = new PIGPIO(21, true, true);
 
   //Initialize CPU utilization status
   _cpuutilization = 0.0;
@@ -52,9 +52,9 @@ PIServer::~PIServer()
   delete _ctlthread;
 
   //Delete relay GPIO drivers
-  delete m_relay[0];
-  delete m_relay[1];
-  delete m_relay[2];
+  delete _relay[0];
+  delete _relay[1];
+  delete _relay[2];
 }
 
 int PIServer::GetTemperature(float &val)
@@ -94,7 +94,7 @@ int PIServer::GetRelayOn(uint32_t eid, bool &val)
     return ERR_EID;
 
   //Get GPIO value and invert since relays are active low driven
-  retval = m_relay[eid]->GetValue(gpioval);
+  retval = _relay[eid]->GetValue(gpioval);
   val = gpioval ? false : true;
 
   return retval;
@@ -107,7 +107,7 @@ int PIServer::SetRelayOn(uint32_t eid, bool val)
     return ERR_EID;
 
   //Set GPIO value to inverse since relays are active low driven
-  return m_relay[eid]->SetValue(val ? false : true);
+  return _relay[eid]->SetValue(val ? false : true);
 }
 
 int PIServer::PulseRelayHigh(uint32_t eid)

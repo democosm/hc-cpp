@@ -32,6 +32,9 @@
 #include "hcparameter.hh"
 #include "hcserver.hh"
 #include "hcfloatingpoint.hh"
+#include "i2c.hh"
+#include "i2cbus.hh"
+#include "pca9685.hh"
 #include "piserver.hh"
 #include "udpsocket.hh"
 #include <getopt.h>
@@ -97,6 +100,9 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
 
 int main(int argc, char **argv)
 {
+  I2C *i2c;
+  I2CBus *pca9685bus;
+  PCA9685 *pca9685;
   PIServer *pisrv;
   HCContainer *topcont;
   UDPSocket *srvdev;
@@ -116,6 +122,15 @@ int main(int argc, char **argv)
   if(args.daemon)
     daemon(1, 1);
 
+  //Create I2C driver
+  i2c = new I2C("/dev/i2c-1");
+
+  //Create PCA9685 bus
+  pca9685bus = new I2CBus(i2c, 0x6F);
+
+  //Create PCA9685 PWM driver
+  pca9685 = new PCA9685(pca9685bus);
+
   //Create PI server object
   pisrv = new PIServer();
 
@@ -129,6 +144,7 @@ int main(int argc, char **argv)
   srv = new HCServer(srvdev, topcont, "Pi", __DATE__ " " __TIME__);
 
   //Add parameters
+  pca9685->RegisterInterface(topcont, srv);
   param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
   topcont->Add(param);
   srv->Add(param);
@@ -168,6 +184,9 @@ int main(int argc, char **argv)
   delete srvdev;
   delete topcont;
   delete pisrv;
+  delete pca9685;
+  delete pca9685bus;
+  delete i2c;
 
   //Return success
   return 0;

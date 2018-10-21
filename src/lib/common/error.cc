@@ -50,6 +50,7 @@ static const string Errstrings[] =
   "PID",
   "EID",
   "NOTFOUND",
+  "NOIMP"
   "UNKNOWN"
 };
 

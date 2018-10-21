@@ -1,4 +1,4 @@
-// Error
+// Register
 //
 // Copyright 2018 Democosm
 // 
@@ -24,35 +24,52 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ERROR_HH_
-#define _ERROR_HH_
+#ifndef _REG_HH_
+#define _REG_HH_
 
-#include <string>
+#include "bus.hh"
+#include <cassert>
+#include <inttypes.h>
 
-//Definitions
-#define ERR_NONE 0
-#define ERR_UNSPEC -1
-#define ERR_TIMEOUT -2
-#define ERR_OWNER -3
-#define ERR_RESET -4
-#define ERR_DESTROYED -5
-#define ERR_OVERFLOW -6
-#define ERR_TYPE -7
-#define ERR_PATTERN -8
-#define ERR_ACCESS -9
-#define ERR_RANGE -10
-#define ERR_STEP -11
-#define ERR_INVALID -12
-#define ERR_ALIGNMENT -13
-#define ERR_DESER -14
-#define ERR_OPCODE -15
-#define ERR_PID -16
-#define ERR_EID -17
-#define ERR_NOTFOUND -18
-#define ERR_NOIMP -19
-#define ERR_UNKNOWN -20 //Don't use. Must be last
+template <class T>
+class Reg
+{
+public:
+  Reg(Bus *bus, uint32_t addr)
+  {
+    //Assert valid arguments
+    assert(bus != 0);
 
-//Functions
-const std::string ErrToString(int err);
+    //Initialize cache variables
+    _bus = bus;
+    _addr = addr;
+  }
 
-#endif //_ERROR_HH_
+  virtual ~Reg()
+  {
+  }
+
+  int Get(T &val)
+  {
+    //Delegate to bus
+    return _bus->Get(_addr, val);
+  }
+
+  int Set(T val)
+  {
+    //Delegate to bus
+    return _bus->Set(_addr, val);
+  }
+
+private:
+  Bus *_bus;
+  uint32_t _addr;
+};
+
+//Types derived from template
+typedef Reg<uint8_t> Reg8;
+typedef Reg<uint16_t> Reg16;
+typedef Reg<uint32_t> Reg32;
+typedef Reg<uint64_t> Reg64;
+
+#endif //_REG_HH_

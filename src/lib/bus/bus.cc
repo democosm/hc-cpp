@@ -1,4 +1,4 @@
-// Error
+// Bus interface
 //
 // Copyright 2018 Democosm
 // 
@@ -24,35 +24,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ERROR_HH_
-#define _ERROR_HH_
+#include "error.hh"
+#include "bus.hh"
 
-#include <string>
+Bus::Bus()
+{
+}
 
-//Definitions
-#define ERR_NONE 0
-#define ERR_UNSPEC -1
-#define ERR_TIMEOUT -2
-#define ERR_OWNER -3
-#define ERR_RESET -4
-#define ERR_DESTROYED -5
-#define ERR_OVERFLOW -6
-#define ERR_TYPE -7
-#define ERR_PATTERN -8
-#define ERR_ACCESS -9
-#define ERR_RANGE -10
-#define ERR_STEP -11
-#define ERR_INVALID -12
-#define ERR_ALIGNMENT -13
-#define ERR_DESER -14
-#define ERR_OPCODE -15
-#define ERR_PID -16
-#define ERR_EID -17
-#define ERR_NOTFOUND -18
-#define ERR_NOIMP -19
-#define ERR_UNKNOWN -20 //Don't use. Must be last
+Bus::~Bus()
+{
+}
 
-//Functions
-const std::string ErrToString(int err);
+int Bus::Get(uint32_t addr, uint8_t &val)
+{
+  return ERR_NOIMP;
+}
 
-#endif //_ERROR_HH_
+int Bus::Get(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t &val)
+{
+  return ERR_NOIMP;
+}
+
+int Bus::Set(uint32_t addr, uint8_t val)
+{
+  return ERR_NOIMP;
+}
+
+int Bus::Set(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t val)
+{
+  return ERR_NOIMP;
+}

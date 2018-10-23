@@ -66,12 +66,8 @@ private:
 
   struct LED
   {
-    Reg8 *_onl;
-    Bits8 *_onfull;
-    Bits8 *_onh;
-    Reg8 *_offl;
-    Bits8 *_offfull;
-    Bits8 *_offh;
+    LReg16 *_oncnt;
+    LReg16 *_offcnt;
   };
 
   Mode1 _mode1;

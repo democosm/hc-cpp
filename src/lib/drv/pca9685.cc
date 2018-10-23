@@ -64,20 +64,12 @@ PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
 
   for(i=0; i<16; i++)
   {
-    _led[i]._onl = new Reg8(bus, i*4+6);
-    _led[i]._onfull = new Bits8(bus, i*4+7, 0x10);
-    _led[i]._onh = new Bits8(bus, i*4+7, 0x0F);
-    _led[i]._offl = new Reg8(bus, i*4+8);
-    _led[i]._offfull = new Bits8(bus, i*4+9, 0x10);
-    _led[i]._offh = new Bits8(bus, i*4+9, 0x0F);
+    _led[i]._oncnt = new LReg16(bus, i*4+6);
+    _led[i]._offcnt = new LReg16(bus, i*4+8);
   }
 
-  _ledall._onl = new Reg8(bus, 0xFA);
-  _ledall._onfull = new Bits8(bus, 0xFB, 0x10);
-  _ledall._onh = new Bits8(bus, 0xFB, 0x0F);
-  _ledall._offl = new Reg8(bus, 0xFC);
-  _ledall._offfull = new Bits8(bus, 0xFD, 0x10);
-  _ledall._offh = new Bits8(bus, 0xFD, 0x0F);
+  _ledall._oncnt = new LReg16(bus, 0xFA);
+  _ledall._offcnt = new LReg16(bus, 0xFC);
   _prescale = new Reg8(bus, 0xFE);
 
   //Force into sleep mode without restarting (prescale can only be set in sleep mode)
@@ -95,6 +87,9 @@ PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
   ThreadSleep(50000);
   tval = 0x80;
   bus->Set(0, &tval, 1);
+
+  //Ensure address auto increment is set to allow multi-byte register read/write
+  _mode1._ai->Set(1);
 
   //Drive outputs
   _mode2._outdrv->Set(1);
@@ -124,20 +119,12 @@ PCA9685::~PCA9685()
 
   for(i=0; i<16; i++)
   {
-    delete _led[i]._onl;
-    delete _led[i]._onfull;
-    delete _led[i]._onh;
-    delete _led[i]._offl;
-    delete _led[i]._offfull;
-    delete _led[i]._offh;
+    delete _led[i]._oncnt;
+    delete _led[i]._offcnt;
   }
 
-  delete _ledall._onl;
-  delete _ledall._onfull;
-  delete _ledall._onh;
-  delete _ledall._offl;
-  delete _ledall._offfull;
-  delete _ledall._offh;
+  delete _ledall._oncnt;
+  delete _ledall._offcnt;
   delete _prescale;
 }
 
@@ -221,44 +208,20 @@ void PCA9685::RegisterInterface(HCContainer *cont, HCServer *srv)
     tempname << "led" << i;
     namecont = new HCContainer(tempname.str());
     regcont->Add(namecont);
-    param = new HCUnsigned8<Reg8>("onl", _led[i]._onl, &Reg8::Get, &Reg8::Set);
+    param = new HCUnsigned16<LReg16>("oncnt", _led[i]._oncnt, &LReg16::Get, &LReg16::Set);
     namecont->Add(param);
     srv->Add(param);
-    param = new HCUnsigned8<Bits8>("onfull", _led[i]._onfull, &Bits8::Get, &Bits8::Set);
-    namecont->Add(param);
-    srv->Add(param);
-    param = new HCUnsigned8<Bits8>("onh", _led[i]._onh, &Bits8::Get, &Bits8::Set);
-    namecont->Add(param);
-    srv->Add(param);
-    param = new HCUnsigned8<Reg8>("offl", _led[i]._offl, &Reg8::Get, &Reg8::Set);
-    namecont->Add(param);
-    srv->Add(param);
-    param = new HCUnsigned8<Bits8>("offfull", _led[i]._offfull, &Bits8::Get, &Bits8::Set);
-    namecont->Add(param);
-    srv->Add(param);
-    param = new HCUnsigned8<Bits8>("offh", _led[i]._offh, &Bits8::Get, &Bits8::Set);
+    param = new HCUnsigned16<LReg16>("offcnt", _led[i]._offcnt, &LReg16::Get, &LReg16::Set);
     namecont->Add(param);
     srv->Add(param);
   }
 
   namecont = new HCContainer("ledall");
   regcont->Add(namecont);
-  param = new HCUnsigned8<Reg8>("onl", _ledall._onl, 0, &Reg8::Set);
+  param = new HCUnsigned16<LReg16>("oncnt", _ledall._oncnt, 0, &LReg16::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("onfull", _ledall._onfull, 0, &Bits8::Set);
-  namecont->Add(param);
-  srv->Add(param);
-  param = new HCUnsigned8<Bits8>("onh", _ledall._onh, 0, &Bits8::Set);
-  namecont->Add(param);
-  srv->Add(param);
-  param = new HCUnsigned8<Reg8>("offl", _ledall._offl, 0, &Reg8::Set);
-  namecont->Add(param);
-  srv->Add(param);
-  param = new HCUnsigned8<Bits8>("offfull", _ledall._offfull, 0, &Bits8::Set);
-  namecont->Add(param);
-  srv->Add(param);
-  param = new HCUnsigned8<Bits8>("offh", _ledall._offh, 0, &Bits8::Set);
+  param = new HCUnsigned16<LReg16>("offcnt", _ledall._offcnt, 0, &LReg16::Set);
   namecont->Add(param);
   srv->Add(param);
 
@@ -270,8 +233,7 @@ void PCA9685::RegisterInterface(HCContainer *cont, HCServer *srv)
 int PCA9685::GetPWMDutyCycle(uint32_t id, double &val)
 {
   int lerr;
-  uint8_t offh;
-  uint8_t offl;
+  uint16_t offcnt;
 
   //Check for invalid ID
   if(id >= 16)
@@ -280,22 +242,25 @@ int PCA9685::GetPWMDutyCycle(uint32_t id, double &val)
     return ERR_EID;
   }
 
-  //Get off high count value
-  if((lerr = _led[id]._offh->Get(offh)) != ERR_NONE)
+  //Get off count value
+  if((lerr = _led[id]._offcnt->Get(offcnt)) != ERR_NONE)
   {
     val = 0.0;
     return lerr;
   }
 
-  //Get off low count value
-  if((lerr = _led[id]._offl->Get(offl)) != ERR_NONE)
+  //Check for off full set
+  if((offcnt & 0x1000) != 0)
   {
     val = 0.0;
-    return lerr;
+    return ERR_NONE;
   }
 
-  //Calculate PWM duty cycle from total off count
-  val = (double)(((uint16_t)offh << 8) | (uint16_t)offl)/4096.0;
+  //Mask off unused bits (including off full)
+  offcnt &= ~0xF000;
+
+  //Calculate PWM duty cycle from off count
+  val = (double)offcnt/4095.0;
   return ERR_NONE;
 }
 
@@ -314,11 +279,14 @@ int PCA9685::SetPWMDutyCycle(uint32_t id, double val)
   if((val < 0.0) || (val > 1.0))
     return ERR_RANGE;
 
-  //Calculate prescale value
-  if(!FToU(4096.0*val, offcnt))
+  //Check for 0 percent duty cycle desired
+  if(val == 0.0)
+    return _led[id]._offcnt->Set(0x1000);
+
+  //Calculate off count value
+  if(!FToU(4095.0*val, offcnt))
     return ERR_RANGE;
 
-  //Set off high and low count values
-  _led[id]._offh->Set((uint8_t)(offcnt >> 8));
-  return _led[id]._offl->Set((uint8_t)(offcnt & 0x00FF));
+  //Set off count value
+  return _led[id]._offcnt->Set(offcnt);
 }

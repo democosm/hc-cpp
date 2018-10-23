@@ -128,8 +128,8 @@ int main(int argc, char **argv)
   //Create PCA9685 bus
   pca9685bus = new I2CBus(i2c, 0x6F);
 
-  //Create PCA9685 PWM driver
-  pca9685 = new PCA9685(pca9685bus);
+  //Create PCA9685 PWM driver with 50Hz PWM frequency
+  pca9685 = new PCA9685(pca9685bus, 50);
 
   //Create PI server object
   pisrv = new PIServer();

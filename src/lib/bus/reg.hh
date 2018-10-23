@@ -51,14 +51,55 @@ public:
 
   int Get(T &val)
   {
-    //Delegate to bus
-    return _bus->Get(_addr, val);
+    int terr;
+    uint8_t buf[sizeof(T)];
+    uint32_t i;
+    uint32_t j;
+
+    //Reserve bus
+    _bus->Reserve();
+
+    //Get data on bus
+    terr = _bus->Get(_addr, buf, sizeof(T));
+
+    //Release bus
+    _bus->Release();
+
+    //Default value to 0
+    val = 0;
+
+    //Check for error
+    if(terr != ERR_NONE)
+      return terr;
+
+    //Read data from buffer
+    for(i=0, j=(sizeof(T)-1)*8; i<sizeof(T); i++, j-=8)
+      val |= (T)buf[i] << j;
+
+    return ERR_NONE;
   }
 
   int Set(T val)
   {
-    //Delegate to bus
-    return _bus->Set(_addr, val);
+    int terr;
+    uint8_t buf[sizeof(T)];
+    uint32_t i;
+    uint32_t j;
+
+    //Write data to buffer
+    for(i=0, j=(sizeof(T)-1)*8; i<sizeof(T); i++, j-=8)
+      buf[i] = (uint8_t)(val >> j);
+
+    //Reserve bus
+    _bus->Reserve();
+
+    //Set data on bus
+    terr = _bus->Set(_addr, buf, sizeof(T));
+
+    //Release bus
+    _bus->Release();
+
+    return terr;
   }
 
 private:

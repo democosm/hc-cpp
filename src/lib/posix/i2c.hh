@@ -35,8 +35,8 @@ class I2C
 public:
   I2C(const char *name);
   virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t val);
+  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
+  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
 
 private:
   int _fd;

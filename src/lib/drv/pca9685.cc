@@ -25,6 +25,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "error.hh"
+#include "ftoi.hh"
+#include "hcfloatingpoint.hh"
+#include "hcinteger.hh"
 #include "hcparameter.hh"
 #include "pca9685.hh"
 #include <cassert>
@@ -32,12 +35,14 @@
 
 using namespace std;
 
-PCA9685::PCA9685(Bus *bus)
+PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
 {
   uint32_t i;
+  uint8_t prescale;
+  uint8_t tval;
 
   //Assert valid arguments
-  assert(bus != 0);
+  assert((bus != 0) && (pwmfreq >= 24) && (pwmfreq <=1526));
 
   //Initialize registers and bits
   _mode1._restart = new Bits8(bus, 0, 0x80);
@@ -74,6 +79,25 @@ PCA9685::PCA9685(Bus *bus)
   _ledall._offfull = new Bits8(bus, 0xFD, 0x10);
   _ledall._offh = new Bits8(bus, 0xFD, 0x0F);
   _prescale = new Reg8(bus, 0xFE);
+
+  //Force into sleep mode without restarting (prescale can only be set in sleep mode)
+  tval = 0x10;
+  bus->Set(0, &tval, 1);
+
+  //Set prescale value to give us desired PWM frequency
+  FToU(25000000.0/4096.0/(double)pwmfreq, prescale);
+  prescale -= 1;
+  _prescale->Set(prescale);
+
+  //Pull out of sleep mode, wait 50ms and then restart
+  tval = 0x00;
+  bus->Set(0, &tval, 1);
+  ThreadSleep(50000);
+  tval = 0x80;
+  bus->Set(0, &tval, 1);
+
+  //Drive outputs
+  _mode2._outdrv->Set(1);
 }
 
 PCA9685::~PCA9685()
@@ -128,6 +152,10 @@ void PCA9685::RegisterInterface(HCContainer *cont, HCServer *srv)
 
   drvcont = new HCContainer("pca9685");
   cont->Add(drvcont);
+
+  param = new HCDoubleTable<PCA9685>("pwmdutycycle", this, &PCA9685::GetPWMDutyCycle, &PCA9685::SetPWMDutyCycle, 16, 0, 100.0);
+  drvcont->Add(param);
+  srv->Add(param);
 
   regcont = new HCContainer("reg");
   drvcont->Add(regcont);
@@ -237,4 +265,60 @@ void PCA9685::RegisterInterface(HCContainer *cont, HCServer *srv)
   param = new HCUnsigned8<Reg8>("prescale", _prescale, &Reg8::Get, &Reg8::Set);
   regcont->Add(param);
   srv->Add(param);
+}
+
+int PCA9685::GetPWMDutyCycle(uint32_t id, double &val)
+{
+  int lerr;
+  uint8_t offh;
+  uint8_t offl;
+
+  //Check for invalid ID
+  if(id >= 16)
+  {
+    val = 0.0;
+    return ERR_EID;
+  }
+
+  //Get off high count value
+  if((lerr = _led[id]._offh->Get(offh)) != ERR_NONE)
+  {
+    val = 0.0;
+    return lerr;
+  }
+
+  //Get off low count value
+  if((lerr = _led[id]._offl->Get(offl)) != ERR_NONE)
+  {
+    val = 0.0;
+    return lerr;
+  }
+
+  //Calculate PWM duty cycle from total off count
+  val = (double)(((uint16_t)offh << 8) | (uint16_t)offl)/4096.0;
+  return ERR_NONE;
+}
+
+int PCA9685::SetPWMDutyCycle(uint32_t id, double val)
+{
+  uint16_t offcnt;
+
+  //Check for invalid ID
+  if(id >= 16)
+  {
+    val = 0.0;
+    return ERR_EID;
+  }
+
+  //Check for range error
+  if((val < 0.0) || (val > 1.0))
+    return ERR_RANGE;
+
+  //Calculate prescale value
+  if(!FToU(4096.0*val, offcnt))
+    return ERR_RANGE;
+
+  //Set off high and low count values
+  _led[id]._offh->Set((uint8_t)(offcnt >> 8));
+  return _led[id]._offl->Set((uint8_t)(offcnt & 0x00FF));
 }

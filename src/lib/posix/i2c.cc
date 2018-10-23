@@ -26,8 +26,10 @@
 
 #include "error.hh"
 #include "i2c.hh"
+#include <cassert>
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
+#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -35,7 +37,10 @@
 
 I2C::I2C(const char *name)
 {
-  //Open I2C device and check for error
+  //Assert valid arguments
+  assert(name != 0);
+
+  //Open I2C device
   if((_fd = open(name, O_RDWR)) < 0)
     printf("Could not open I2C device `%s`\n", name);
 
@@ -52,12 +57,15 @@ I2C::~I2C()
   close(_fd);
 }
 
-int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val)
+int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)
 {
+  //Assert valid arguments
+  assert((data != 0) && (len > 0) && (len < 1000));
+
   //Begin mutual exclusion
   _mutex->Wait();
 
-  //Set device address and check for error
+  //Set device address
   if(ioctl(_fd, I2C_SLAVE, devaddr) < 0)
   {
     //End mutual exclusion
@@ -66,7 +74,7 @@ int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val)
     return ERR_UNSPEC;
   }
 
-  //Write device address and register address and check for error
+  //Read transactions start with a write transaction
   if(write(_fd, &regaddr, 1) != 1)
   {
     //End mutual exclusion
@@ -75,8 +83,8 @@ int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val)
     return ERR_UNSPEC;
   }
 
-  //Read register value and check for error
-  if(read(_fd, &val, 1) != 1)
+  //Perform read transaction
+  if(read(_fd, data, len) != (ssize_t)len)
   {
     //End mutual exclusion
     _mutex->Give();
@@ -90,14 +98,17 @@ int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t &val)
   return ERR_NONE;
 }
 
-int I2C::Set(uint8_t devaddr, uint8_t regaddr, uint8_t val)
+int I2C::Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)
 {
-  uint8_t buf[2];
+  uint8_t buf[len+1];
+
+  //Assert valid arguments
+  assert((data != 0) && (len > 0) && (len < 1000));
 
   //Begin mutual exclusion
   _mutex->Wait();
 
-  //Set device address and check for error
+  //Set device address
   if(ioctl(_fd, I2C_SLAVE, devaddr) < 0)
   {
     //End mutual exclusion
@@ -106,10 +117,14 @@ int I2C::Set(uint8_t devaddr, uint8_t regaddr, uint8_t val)
     return ERR_UNSPEC;
   }
 
-  //Write device address, register address and register value and check for error
+  //Write register address to buffer
   buf[0] = regaddr;
-  buf[1] = val;
-  if(write(_fd, buf, 2) != 2)
+
+  //Write data to buffer
+  memcpy(buf+1, data, len);
+
+  //Perform write transaction
+  if(write(_fd, buf, len+1) != (ssize_t)(len+1))
   {
     //End mutual exclusion
     _mutex->Give();

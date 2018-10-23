@@ -30,7 +30,6 @@
 #include "bits.hh"
 #include "bus.hh"
 #include "hccontainer.hh"
-#include "hcinteger.hh"
 #include "hcserver.hh"
 #include "reg.hh"
 #include <inttypes.h>
@@ -38,9 +37,11 @@
 class PCA9685
 {
 public:
-  PCA9685(Bus *bus);
+  PCA9685(Bus *bus, uint32_t pwmfreq);
   virtual ~PCA9685();
   void RegisterInterface(HCContainer *cont, HCServer *srv);
+  int GetPWMDutyCycle(uint32_t id, double &val);
+  int SetPWMDutyCycle(uint32_t id, double val);
 
 private:
   struct Mode1

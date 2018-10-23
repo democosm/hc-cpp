@@ -33,100 +33,18 @@ I2CBus::I2CBus(I2C *i2c, uint8_t devaddr)
   //Initialize cache variables
   _i2c = i2c;
   _devaddr = devaddr;
-
-  //Create mutex
-  _mutex = new Mutex();
 }
 
 I2CBus::~I2CBus()
 {
-  //Delete mutex
-  delete _mutex;
 }
 
-int I2CBus::Get(uint32_t addr, uint8_t &val)
+int I2CBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
 {
-  int terr;
-
-  //Begin mutual exclusion
-  _mutex->Wait();
-
-  //Delegate to I2C driver
-  terr = _i2c->Get(_devaddr, addr, val);
-
-  //End mutual exclusion
-  _mutex->Give();
-
-  return terr;
+  return _i2c->Get(_devaddr, addr, data, len);
 }
 
-int I2CBus::Get(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t &val)
+int I2CBus::Set(uint32_t addr, uint8_t *data, uint32_t len)
 {
-  int terr;
-  uint8_t tval;
-
-  //Begin mutual exclusion
-  _mutex->Wait();
-
-  //Get value and check for error
-  if((terr = _i2c->Get(_devaddr, addr, tval)) != ERR_NONE)
-  {
-    //End mutual exclusion
-    _mutex->Give();
-
-    return terr;
-  }
-
-  //Mask, shift and return
-  val = (tval & mask) >> shift;
-
-  //End mutual exclusion
-  _mutex->Give();
-
-  return ERR_NONE;
-}
-
-int I2CBus::Set(uint32_t addr, uint8_t val)
-{
-  int terr;
-
-  //Begin mutual exclusion
-  _mutex->Wait();
-
-  //Delegate to I2C driver
-  terr = _i2c->Set(_devaddr, addr, val);
-
-  //End mutual exclusion
-  _mutex->Give();
-
-  return terr;
-}
-
-int I2CBus::Set(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t val)
-{
-  int terr;
-  uint8_t tval;
-
-  //Begin mutual exclusion
-  _mutex->Wait();
-
-  //Get value and check for error
-  if((terr = _i2c->Get(_devaddr, addr, tval)) != ERR_NONE)
-  {
-    //End mutual exclusion
-    _mutex->Give();
-
-    return terr;
-  }
-
-  //Mask and shift in new value
-  tval = (tval & ~mask) | ((val << shift) & mask);
-
-  //Set new value
-  terr = _i2c->Set(_devaddr, addr, tval);
-
-  //End mutual exclusion
-  _mutex->Give();
-
-  return terr;
+  return _i2c->Set(_devaddr, addr, data, len);
 }

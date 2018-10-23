@@ -57,14 +57,74 @@ public:
 
   int Get(T &val)
   {
-    //Delegate to bus
-    return _bus->Get(_addr, _mask, _shift, val);
+    int terr;
+    uint8_t buf[sizeof(T)];
+    uint32_t i;
+    uint32_t j;
+
+    //Reserve bus
+    _bus->Reserve();
+
+    //Get data on bus
+    terr = _bus->Get(_addr, buf, sizeof(T));
+
+    //Release bus
+    _bus->Release();
+
+    //Default value to 0
+    val = 0;
+
+    //Check for error
+    if(terr != ERR_NONE)
+      return terr;
+
+    //Read data from buffer
+    for(i=0, j=(sizeof(T)-1)*8; i<sizeof(T); i++, j-=8)
+      val |= (T)buf[i] << j;
+
+    //Shift and mask
+    val = (val & _mask) >> _shift;
+
+    return ERR_NONE;
   }
 
   int Set(T val)
   {
-    //Delegate to bus
-    return _bus->Set(_addr, _mask, _shift, val);
+    int terr;
+    uint8_t buf[sizeof(T)];
+    uint32_t i;
+    uint32_t j;
+    T tval;
+
+    //Reserve bus
+    _bus->Reserve();
+
+    //Get data on bus
+    terr = _bus->Get(_addr, buf, sizeof(T));
+
+    //Check for error
+    if(terr != ERR_NONE)
+      return terr;
+
+    //Read data from buffer
+    tval = 0;
+    for(i=0, j=(sizeof(T)-1)*8; i<sizeof(T); i++, j-=8)
+      tval |= (T)buf[i] << j;
+
+    //Shift and mask new value
+    val = (tval & ~_mask) | (val << _shift);
+
+    //Write data to buffer
+    for(i=0, j=(sizeof(T)-1)*8; i<sizeof(T); i++, j-=8)
+      buf[i] = (uint8_t)(val >> j);
+
+    //Set data on bus
+    terr = _bus->Set(_addr, buf, sizeof(T));
+
+    //Release bus
+    _bus->Release();
+
+    return terr;
   }
 
 private:

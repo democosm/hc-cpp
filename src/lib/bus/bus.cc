@@ -29,28 +29,34 @@
 
 Bus::Bus()
 {
+  //Create mutex
+  _mutex = new Mutex();
 }
 
 Bus::~Bus()
 {
+  //Delete mutex
+  delete _mutex;
 }
 
-int Bus::Get(uint32_t addr, uint8_t &val)
+int Bus::Get(uint32_t addr, uint8_t *data, uint32_t len)
 {
   return ERR_NOIMP;
 }
 
-int Bus::Get(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t &val)
+int Bus::Set(uint32_t addr, uint8_t *data, uint32_t len)
 {
   return ERR_NOIMP;
 }
 
-int Bus::Set(uint32_t addr, uint8_t val)
+void Bus::Reserve(void)
 {
-  return ERR_NOIMP;
+  //Begin mutual exclusion
+  _mutex->Wait();
 }
 
-int Bus::Set(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t val)
+void Bus::Release(void)
 {
-  return ERR_NOIMP;
+  //End mutual exclusion
+  _mutex->Give();
 }

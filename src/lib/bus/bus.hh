@@ -27,6 +27,7 @@
 #ifndef _BUS_HH_
 #define _BUS_HH_
 
+#include "mutex.hh"
 #include <inttypes.h>
 
 class Bus
@@ -34,10 +35,13 @@ class Bus
 public:
   Bus();
   virtual ~Bus();
-  virtual int Get(uint32_t addr, uint8_t &val);
-  virtual int Get(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t &val);
-  virtual int Set(uint32_t addr, uint8_t val);
-  virtual int Set(uint32_t addr, uint8_t mask, uint8_t shift, uint8_t val);
+  virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
+  virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  void Reserve(void);
+  void Release(void);
+
+private:
+  Mutex *_mutex;
 };
 
 #endif //_BUS_HH_

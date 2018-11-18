@@ -128,24 +128,24 @@ PCA9685::~PCA9685()
   delete _prescale;
 }
 
-void PCA9685::RegisterInterface(HCContainer *cont, HCServer *srv)
+void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv)
 {
-  HCContainer *drvcont;
+  HCContainer *cont;
   HCContainer *regcont;
   HCContainer *namecont;
   HCParameter *param;
   uint32_t i;
   ostringstream tempname;
 
-  drvcont = new HCContainer("pca9685");
-  cont->Add(drvcont);
+  cont = new HCContainer(contname);
+  pcont->Add(cont);
 
   param = new HCDoubleTable<PCA9685>("pwmdutycycle", this, &PCA9685::GetPWMDutyCycle, &PCA9685::SetPWMDutyCycle, 16, 0, 100.0);
-  drvcont->Add(param);
+  cont->Add(param);
   srv->Add(param);
 
   regcont = new HCContainer("reg");
-  drvcont->Add(regcont);
+  cont->Add(regcont);
 
   namecont = new HCContainer("mode1");
   regcont->Add(namecont);

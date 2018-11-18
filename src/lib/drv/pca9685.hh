@@ -39,7 +39,7 @@ class PCA9685
 public:
   PCA9685(Bus *bus, uint32_t pwmfreq);
   virtual ~PCA9685();
-  void RegisterInterface(HCContainer *cont, HCServer *srv);
+  void RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv);
   int GetPWMDutyCycle(uint32_t id, double &val);
   int SetPWMDutyCycle(uint32_t id, double val);
 

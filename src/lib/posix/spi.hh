@@ -1,4 +1,4 @@
-// I2C driver
+// SPI driver
 //
 // Copyright 2018 Democosm
 // 
@@ -24,23 +24,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2C_HH_
-#define _I2C_HH_
+#ifndef _SPI_HH_
+#define _SPI_HH_
 
 #include "mutex.hh"
 #include <inttypes.h>
 
-class I2C
+class SPI
 {
 public:
-  I2C(const char *name);
-  virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
+  SPI(const char *name, uint32_t speed=1000000);
+  virtual ~SPI();
+  uint32_t Transfer(uint8_t *wdata, uint8_t *rdata, uint32_t len);
 
 private:
   Mutex *_mutex;
   int _fd;
+  uint32_t _speed;
 };
 
-#endif //_I2C_HH_
+#endif //_SPI_HH_

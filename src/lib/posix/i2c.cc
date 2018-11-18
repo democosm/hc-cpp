@@ -40,21 +40,21 @@ I2C::I2C(const char *name)
   //Assert valid arguments
   assert(name != 0);
 
-  //Open I2C device
-  if((_fd = open(name, O_RDWR)) < 0)
-    printf("Could not open I2C device `%s`\n", name);
-
   //Create mutex
   _mutex = new Mutex();
+
+  //Open device
+  if((_fd = open(name, O_RDWR)) < 0)
+    printf("Could not open I2C device `%s`\n", name);
 }
 
 I2C::~I2C()
 {
+  //Close device
+  close(_fd);
+
   //Delete mutex
   delete _mutex;
-
-  //Close I2C device
-  close(_fd);
 }
 
 int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)

@@ -1,4 +1,4 @@
-// I2C driver
+// Constants
 //
 // Copyright 2018 Democosm
 // 
@@ -24,23 +24,6 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2C_HH_
-#define _I2C_HH_
-
-#include "mutex.hh"
-#include <inttypes.h>
-
-class I2C
-{
-public:
-  I2C(const char *name);
-  virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-
-private:
-  Mutex *_mutex;
-  int _fd;
-};
-
-#endif //_I2C_HH_
+#define PI 3.14159265359
+#define TWOPI 6.28318530718
+#define HALFPI 1.5707963268

@@ -35,6 +35,7 @@
 #include "i2c.hh"
 #include "i2cbus.hh"
 #include "pca9685.hh"
+#include "pca9685servo.hh"
 #include "piserver.hh"
 #include "udpsocket.hh"
 #include <getopt.h>
@@ -103,6 +104,10 @@ int main(int argc, char **argv)
   I2C *i2c;
   I2CBus *pca9685bus;
   PCA9685 *pca9685;
+  PCA9685Servo *frontdoor;
+  PCA9685Servo *leftwindow;
+  PCA9685Servo *rightwindow;
+  PCA9685Servo *cellardoor;
   PIServer *pisrv;
   HCContainer *topcont;
   UDPSocket *srvdev;
@@ -131,6 +136,12 @@ int main(int argc, char **argv)
   //Create PCA9685 PWM driver with 50Hz PWM frequency
   pca9685 = new PCA9685(pca9685bus, 50);
 
+  //Create PCA9685 servos
+  frontdoor = new PCA9685Servo(pca9685, 0, 0.027, 0.127);
+  leftwindow = new PCA9685Servo(pca9685, 1, 0.027, 0.127);
+  rightwindow = new PCA9685Servo(pca9685, 14, 0.027, 0.127);
+  cellardoor = new PCA9685Servo(pca9685, 15, 0.027, 0.127);
+
   //Create PI server object
   pisrv = new PIServer();
 
@@ -144,7 +155,11 @@ int main(int argc, char **argv)
   srv = new HCServer(srvdev, topcont, "Pi", __DATE__ " " __TIME__);
 
   //Add parameters
-  pca9685->RegisterInterface(topcont, srv);
+  pca9685->RegisterInterface("pca9685", topcont, srv);
+  frontdoor->RegisterInterface("frontdoor", topcont, srv);
+  leftwindow->RegisterInterface("leftwindow", topcont, srv);
+  rightwindow->RegisterInterface("rightwindow", topcont, srv);
+  cellardoor->RegisterInterface("cellardoor", topcont, srv);
   param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
   topcont->Add(param);
   srv->Add(param);
@@ -184,6 +199,10 @@ int main(int argc, char **argv)
   delete srvdev;
   delete topcont;
   delete pisrv;
+  delete cellardoor;
+  delete rightwindow;
+  delete leftwindow;
+  delete frontdoor;
   delete pca9685;
   delete pca9685bus;
   delete i2c;

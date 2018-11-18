@@ -1,4 +1,4 @@
-// I2C driver
+// WS2812 LED strip driver
 //
 // Copyright 2018 Democosm
 // 
@@ -24,23 +24,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2C_HH_
-#define _I2C_HH_
+#ifndef _WS2812STRIP_HH_
+#define _WS2812STRIP_HH_
 
-#include "mutex.hh"
+#include "spi.hh"
 #include <inttypes.h>
 
-class I2C
+class WS2812Strip
 {
 public:
-  I2C(const char *name);
-  virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
+  WS2812Strip(SPI *spi, uint32_t count);
+  ~WS2812Strip();
+  int GetColor(uint32_t id, uint32_t &val);
+  int SetColor(uint32_t id, uint32_t val);
+  int Update(void);
 
 private:
-  Mutex *_mutex;
-  int _fd;
+  SPI *_spi;
+  uint32_t _count;
+  uint8_t *_colorbuf;
 };
 
-#endif //_I2C_HH_
+#endif //_WS2812STRIP_HH_

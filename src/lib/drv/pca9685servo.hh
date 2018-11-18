@@ -1,4 +1,4 @@
-// I2C driver
+// PCA9685 servo driver
 //
 // Copyright 2018 Democosm
 // 
@@ -24,23 +24,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2C_HH_
-#define _I2C_HH_
+#ifndef _PCA9685SERVO_HH_
+#define _PCA9685SERVO_HH_
 
-#include "mutex.hh"
+#include "pca9685.hh"
+#include "hccontainer.hh"
+#include "hcserver.hh"
 #include <inttypes.h>
 
-class I2C
+class PCA9685Servo
 {
 public:
-  I2C(const char *name);
-  virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
+  PCA9685Servo(PCA9685 *pca9685, uint32_t chanid, double dutymin, double dutymax);
+  virtual ~PCA9685Servo();
+  void RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv);
+  int GetAngle(double &val);
+  int SetAngle(double val);
+  int SlewTest(void);
 
 private:
-  Mutex *_mutex;
-  int _fd;
+  PCA9685 *_pca9685;
+  uint32_t _chanid;
+  double _dutymin;
+  double _dutymax;
 };
 
-#endif //_I2C_HH_
+#endif //_PCA9685SERVO_HH_

@@ -51,7 +51,6 @@ ifeq ($(TGTPROC), $(shell uname -m))
   -I$(PROJBASEDIR)/src/lib/bus \
   -I$(PROJBASEDIR)/src/lib/common \
   -I$(PROJBASEDIR)/src/lib/drv \
-  -I$(PROJBASEDIR)/src/lib/gtest \
   -I$(PROJBASEDIR)/src/lib/hc \
   -I$(PROJBASEDIR)/src/lib/$(TGTOS)
  CXXFLAGS = $(CFLAGS)

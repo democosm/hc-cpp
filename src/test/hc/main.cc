@@ -31,8 +31,8 @@
 #include "hcserver.hh"
 #include "hcstring.hh"
 #include "udpsocket.hh"
+#include "gtest.h"
 #include <stdio.h>
-#include <gtest.h>
 
 using namespace std;
 

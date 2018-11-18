@@ -11,7 +11,6 @@ LIBLIST = $(sort $(dir $(wildcard $(PROJBASEDIR)/src/lib/*/)))
 default:: $(APPLIST)
 	@echo "Building app $<"
 	@cd $< && $(MAKE)
-	@cd $(PROJBASEDIR)/src/lib && $(MAKE) install
 
 clean::
 	@$(foreach dir,$(APPLIST),$(MAKE) -C $(dir) clean;)

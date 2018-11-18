@@ -61,7 +61,7 @@ $(BINDSTDIR)/test_$(PKGNAME): $(OBJLIST) $(ARLIST)
 ifeq ($(UNAME_S),Darwin)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJLIST) $(LIBLIST) $(STDLIBLIST) -o $@
 else
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -lgtest -Wl,--end-group $(STDLIBLIST) -o $@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -Wl,--end-group $(STDLIBLIST) -o $@
 endif
 	@echo ""
 

@@ -58,6 +58,12 @@ bool HCNode::IsNamed(const string &name)
   return _name == name;
 }
 
+bool HCNode::NameStartsWith(const string &name)
+{
+  //Check for name starts with
+  return _name.rfind(name, 0) == 0 ? true : false;
+}
+
 bool HCNode::NameMatchesExpression(const string &expression)
 {
   //Check for name matching expression

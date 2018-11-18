@@ -120,7 +120,7 @@ private:
   void HomeProc(void);
   void EndProc(void);
   void BackspaceProc(void);
-  void TabProc(void);
+  void TabProc(uint32_t recurlevel);
   void EnterProc(void);
   void DeleteProc(void);
   void DefaultProc(char ch);
@@ -137,8 +137,8 @@ private:
   bool GetNextCommonChar(const std::string &name, HCContainer *startcont, char &ch, size_t index=0);
   void ShowListing(const std::string &name, HCContainer *startcont, size_t index=0);
   void ShowInfo(const std::string &name, HCContainer *startcont, size_t index=0);
+  void ShowNames(const std::string &name, HCContainer *startcont, size_t index=0);
   void ShowFinds(const std::string &name, HCContainer *cont);
-  void ShowPath(HCContainer *cont);
 
 private:
   //Maximum counts

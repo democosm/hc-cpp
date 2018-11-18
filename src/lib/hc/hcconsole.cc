@@ -34,6 +34,25 @@
 #include <string>
 #include <unistd.h>
 
+//Terminal codes
+#define TC_RESET "\033[0m"
+#define TC_BLACK "\033[30m"
+#define TC_RED "\033[31m"
+#define TC_GREEN "\033[32m"
+#define TC_YELLOW "\033[33m"
+#define TC_BLUE "\033[34m"
+#define TC_MAGENTA "\033[35m"
+#define TC_CYAN "\033[36m"
+#define TC_WHITE "\033[37m"
+#define TC_BRIGHT "\033[1m"
+#define TC_UNDERLINE "\033[4m"
+#define TC_INVERSE "\033[7m"
+#define TC_NOBRIGHT "\033[21m"
+#define TC_NOUNDERLINE "\033[24m"
+#define TC_NOINVERSE "\033[27m"
+#define TC_RIGHT "\033[C"
+#define TC_LEFT "\033[D"
+
 using namespace std;
 
 //Command
@@ -463,7 +482,7 @@ void HCConsole::Run(void)
       BackspaceProc();
       break;
     case KEY_TAB:
-      TabProc();
+      TabProc(0);
       break;
     case KEY_ENTER:
       EnterProc();
@@ -666,7 +685,7 @@ void HCConsole::LeftProc(void)
   }
 
   //Move cursor left
-  cout << "\033[D";
+  cout << TC_LEFT;
 }
 
 void HCConsole::RightProc(void)
@@ -680,7 +699,7 @@ void HCConsole::RightProc(void)
   }
 
   //Move cursor right
-  cout << "\033[C";
+  cout << TC_RIGHT;
 }
 
 void HCConsole::HomeProc(void)
@@ -689,7 +708,7 @@ void HCConsole::HomeProc(void)
   while(_cmd.Left())
   {
     //Move cursor left
-    cout << "\033[D";
+    cout << TC_LEFT;
   }
 }
 
@@ -699,7 +718,7 @@ void HCConsole::EndProc(void)
   while(_cmd.Right())
   {
     //Move cursor right
-    cout << "\033[C";
+    cout << TC_RIGHT;
   }
 }
 
@@ -718,7 +737,7 @@ void HCConsole::BackspaceProc(void)
   }
 
   //Move cursor left
-  cout << "\033[D";
+  cout << TC_LEFT;
 
   //Delete character at this location and check for error
   _cmd.Delete();
@@ -730,13 +749,17 @@ void HCConsole::BackspaceProc(void)
   //Move cursor back
   count = temp.length() + 1;
   for(i=0; i<count; i++)
-    cout << "\033[D";
+    cout << TC_LEFT;
 }
 
-void HCConsole::TabProc(void)
+void HCConsole::TabProc(uint32_t recurlevel)
 {
   HCContainer *startcont;
   char nextchar;
+
+  //Check for max recursion
+  if(recurlevel > 100)
+    return;
 
   //Don't do anything if command ends in whitespace
   if(isspace((int)_cmd.EndChar()) != 0)
@@ -759,10 +782,24 @@ void HCConsole::TabProc(void)
     else
       startcont = _workcont;
 
-    //get next common character and check for not found
+    //Get next common character and check for not found
     if(!GetNextCommonChar(_tokens[_tokens.size() - 1], startcont, nextchar))
     {
-      cout << '\a';
+      //If first call, then print names of elements starting with token
+      if(recurlevel == 0)
+      {
+        //Start new line
+        cout << endl;
+
+        //Show names of elements matching name
+        ShowNames(_tokens[_tokens.size() - 1], startcont);
+
+        //Show prompt again
+        Prompt();
+
+        //Show command string again
+        cout << _cmd.GetStr();
+      }
     }
     else
     {
@@ -771,8 +808,19 @@ void HCConsole::TabProc(void)
 
       //Recurse if exact container or parameter not found
       if((nextchar != '/') && (nextchar != ' '))
-        TabProc();
+        TabProc(recurlevel+1);
     }
+  }
+  else
+  {
+    //Start new line
+    cout << endl;
+
+    //Show names of elements matching name in working container
+    ShowNames("", _workcont);
+
+    //Show prompt again
+    Prompt();
   }
 }
 
@@ -855,7 +903,7 @@ void HCConsole::DeleteProc(void)
   //Move cursor back
   count = temp.length() + 1;
   for(i=0; i<count; i++)
-    cout << "\033[D";
+    cout << TC_LEFT;
 }
 
 void HCConsole::DefaultProc(char ch)
@@ -877,7 +925,7 @@ void HCConsole::DefaultProc(char ch)
   //Move cursor back
   count = temp.length();
   for(i=0; i<count; i++)
-    cout << "\033[D";
+    cout << TC_LEFT;
 }
 
 void HCConsole::HelpCmdProc(uint32_t tokcnt)
@@ -1099,6 +1147,14 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     startcont = _top;
   else
     startcont = _workcont;
+
+  //Show listing of matching parameters and containers if only one token
+  if(_tokens.size() == 1)
+  {
+    //Show listing of matching parameters and containers
+    ShowListing(_tokens[0], startcont);
+    return;
+  }
 
   //Get parameter with specified name and check for not found
   if((param = HCUtility::GetParam(_tokens[0], startcont)) == 0)
@@ -1612,6 +1668,70 @@ void HCConsole::ShowInfo(const string &name, HCContainer *startcont, size_t inde
       cout << "\n";
     }
   }
+}
+
+void HCConsole::ShowNames(const string &name, HCContainer *startcont, size_t index)
+{
+  string nodename;
+  size_t nextindex;
+  HCContainer *cont;
+  HCParameter *param;
+
+  //Assert valid arguments
+  assert(startcont != 0);
+
+  //Loop through directory names in path
+  while((nextindex = name.find('/', index)) != string::npos)
+  {
+    //Extract node name
+    nodename = name.substr(index, nextindex-index);
+
+    //Update index
+    index = nextindex+1;
+
+    //Check for special strings first
+    if((nodename == "") || (nodename == "."))
+    {
+      //Continue to next iteration
+      continue;
+    }
+    else if(nodename == "..")
+    {
+      //If no parent, then continue to next iteration
+      if(startcont->GetParent() == 0)
+      {
+        //Continue to next iteration
+        continue;
+      }
+
+      //Recurse
+      ShowNames(name, startcont->GetParent(), index);
+      return;
+    }
+    else
+    {
+      //Loop through all containers
+      for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
+        if(cont->IsNamed(nodename))
+          ShowNames(name, cont, index);
+    }
+
+    //Done
+    return;
+  }
+
+  //Extract node name
+  nodename = name.substr(index, name.length()-index);
+
+  //List parameters with matching name
+  for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
+    if(param->NameStartsWith(nodename))
+      cout << TC_CYAN << param->GetName() << TC_RESET << endl;
+
+  //List containers with matching name (expressions allowed)
+  for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
+    if(cont->NameStartsWith(nodename))
+      cout << TC_CYAN << cont->GetName() << '/' << TC_RESET << endl;
 }
 
 void HCConsole::ShowFinds(const string &name, HCContainer *startcont)

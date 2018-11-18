@@ -38,6 +38,7 @@ public:
   const std::string GetName(void);
   void GetName(const std::string &name);
   bool IsNamed(const std::string &name);
+  bool NameStartsWith(const std::string &name);
   bool NameMatchesExpression(const std::string &expression);
 
 protected:

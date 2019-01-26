@@ -54,12 +54,11 @@ mkposd
 ```
 
 
-### Libraries for HC
+## Libraries for HC
 
 Before you can build, you will need to install the openssl libs and headers.
 
-To download the openssl development package, the command should be either
-sudo apt-get install libssl-dev OR sudo apt-get install openssl-dev.
+To download the openssl development package, the command should be either ```sudo apt-get install libssl-dev``` OR ```sudo apt-get install openssl-dev```.
 
 Disclaimer for openssl (an excerpt from the openssl website):
 

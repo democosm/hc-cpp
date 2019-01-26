@@ -58,11 +58,10 @@ mkposd
 
 Before you can build, you will need to install the openssl libs and headers.
 
-To download openssl development package on Ubuntu, the command is:
-sudo apt-get install openssl-dev
-
-To download openssl development package on Raspberry Pi3, the command is:
+To download the openssl development package, the command should be either
 sudo apt-get install libssl-dev
+OR
+sudo apt-get install openssl-dev
 
 Disclaimer for openssl (an excerpt from the openssl website):
 

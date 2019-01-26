@@ -99,8 +99,8 @@ uint32_t SPI::Transfer(uint8_t *wdata, uint8_t *rdata, uint32_t len)
   for(i=0; i<len; i++)
   {
     memset(&xfer[i], 0, sizeof(struct spi_ioc_transfer));
-    xfer[i].tx_buf = (uint32_t)(wdata + i);
-    xfer[i].rx_buf = (uint32_t)(rdata + i);
+    xfer[i].tx_buf = (uint64_t)(wdata + i);
+    xfer[i].rx_buf = (uint64_t)(rdata + i);
     xfer[i].len = 1;
     xfer[i].delay_usecs = 0;
     xfer[i].bits_per_word = 8;

@@ -9,6 +9,7 @@ We want to help embedded system designers succeed, so we've created some very po
 - HC provides a simple way to remotely control your application from a console or GUI
 - HC allows aggregation of server capabilities and chaining multiple applications together
 - HC is application layer code, so it's easy to create multiple servers and clients on the same machine
+- HC provides a built-in way to make a web based REST API for your embedded application
 
 ---
 

@@ -116,7 +116,7 @@ public:
   virtual bool HasValEnums(void);
   virtual void PrintVal(void);
   virtual void PrintInfo(std::ostream &st=std::cout);
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid);
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid);
   virtual int Call(void);
   virtual int CallTbl(uint32_t eid);
   virtual int GetBool(bool &val);

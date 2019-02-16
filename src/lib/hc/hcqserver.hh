@@ -1,4 +1,4 @@
-// HC message
+// HC query server
 //
 // Copyright 2018 Democosm
 // 
@@ -24,40 +24,44 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCMESSAGE_HH_
-#define _HCMESSAGE_HH_
+#ifndef _HCQSERVER_HH_
+#define _HCQSERVER_HH_
 
 #include "device.hh"
-#include "hccell.hh"
-#include <inttypes.h>
-#include <string>
+#include "hccontainer.hh"
+#include "thread.hh"
 
-class HCMessage
+class HCQServer
 {
 public:
-  //Message overhead
-  static const uint32_t OVERHEAD = 1;
-
-  //Maximum payload size (see cell payload max)
-  static const uint32_t PAYLOAD_MAX = 1400;
-
-public:
-  HCMessage();
-  ~HCMessage();
-  void Reset(uint8_t transaction);
-  uint8_t GetTransaction(void);
-  int Send(Device *dev);
-  int Recv(Device *dev);
-  bool Read(HCCell *val);
-  bool Write(HCCell *val);
-  void Print(const std::string &extra);
+  HCQServer(Device *lowdev, HCContainer *top);
+  ~HCQServer();
 
 private:
-  uint8_t *_buffer;
-  uint8_t *_payload;
-  uint32_t _readindex;
-  uint32_t _payloadlength;
-  uint8_t _transaction;
+  bool ReadField(char termchar, char *field, uint32_t fieldsize);
+  bool WriteChar(char ch);
+  bool WriteString(const char *str);
+  bool ProcessCallCell(void);
+  bool ProcessGetCell(void);
+  bool ProcessSetCell(void);
+  bool ProcessICallCell(void);
+  bool ProcessIGetCell(void);
+  bool ProcessISetCell(void);
+  bool ProcessAddCell(void);
+  bool ProcessSubCell(void);
+  bool ProcessCell(void);
+  bool ProcessMessage(void);
+  void CtlThread(void);
+
+private:
+  Device *_lowdev;
+  HCContainer *_top;
+  uint32_t _readcount;
+  char _readbuf[65536];
+  uint32_t _readind;
+  char _writebuf[65536];
+  uint32_t _writeind;
+  Thread<HCQServer> *_ctlthread;
 };
 
-#endif //_HCMESSAGE_HH_
+#endif //_HCQSERVER_HH_

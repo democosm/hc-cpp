@@ -66,7 +66,6 @@ public:
   ~HCCell();
   void Reset(uint8_t opcode);
   uint8_t GetOpCode(void);
-  uint32_t GetPayloadLength(void);
   uint32_t Serialize(uint8_t *serbuf, uint32_t maxlen);
   uint32_t Deserialize(uint8_t *serbuf, uint32_t len);
   bool Read(int8_t &val);

@@ -124,16 +124,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     //Check for null method
@@ -155,7 +145,7 @@ public:
     st << "\n  Access: " << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W");
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<file>" << std::endl;

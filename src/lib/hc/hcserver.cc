@@ -180,7 +180,7 @@ void HCServer::Add(HCParameter *param)
 void HCServer::Start(void)
 {
   //Save to XML file
-  SaveXML();
+  SaveInfo();
 
   //Save to NLD file
   SaveNLD();
@@ -262,7 +262,7 @@ int HCServer::SetDebug(bool val)
 
 int HCServer::GetSendErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _senderrcnt;
 
   return ERR_NONE;
@@ -270,7 +270,7 @@ int HCServer::GetSendErrCnt(uint32_t &val)
 
 int HCServer::GetRecvErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _recverrcnt;
 
   return ERR_NONE;
@@ -278,7 +278,7 @@ int HCServer::GetRecvErrCnt(uint32_t &val)
 
 int HCServer::GetDesErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _deserrcnt;
 
   return ERR_NONE;
@@ -286,7 +286,7 @@ int HCServer::GetDesErrCnt(uint32_t &val)
 
 int HCServer::GetCellErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _cellerrcnt;
 
   return ERR_NONE;
@@ -294,7 +294,7 @@ int HCServer::GetCellErrCnt(uint32_t &val)
 
 int HCServer::GetOpCodeErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _opcodeerrcnt;
 
   return ERR_NONE;
@@ -302,7 +302,7 @@ int HCServer::GetOpCodeErrCnt(uint32_t &val)
 
 int HCServer::GetPIDErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _piderrcnt;
 
   return ERR_NONE;
@@ -310,7 +310,7 @@ int HCServer::GetPIDErrCnt(uint32_t &val)
 
 int HCServer::GetIntErrCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _interrcnt;
 
   return ERR_NONE;
@@ -318,13 +318,13 @@ int HCServer::GetIntErrCnt(uint32_t &val)
 
 int HCServer::GetGoodXactCnt(uint32_t &val)
 {
-  //Get the count value
+  //Get count value
   val = _goodxactcnt;
 
   return ERR_NONE;
 }
 
-void HCServer::SaveXML(void)
+void HCServer::SaveInfo(void)
 {
   ofstream file;
   HCParameter *param;
@@ -349,11 +349,11 @@ void HCServer::SaveXML(void)
   //Save child parameters if contained in PID table
   for(param=_top->GetFirstSubParam(); param!=0; param=param->GetNext())
     if(ParamToPID(param, &pid))
-      param->SaveXML(file, 2, pid);
+      param->SaveInfo(file, 2, pid);
 
   //Save child containers
   for(cont=_top->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
-    SaveXML(file, 2, cont);
+    SaveInfo(file, 2, cont);
 
   //Footer
   file << "</server>" << endl;
@@ -362,7 +362,7 @@ void HCServer::SaveXML(void)
   file.close();
 }
 
-void HCServer::SaveXML(ofstream &file, uint32_t indent, HCContainer *startcont)
+void HCServer::SaveInfo(ofstream &file, uint32_t indent, HCContainer *startcont)
 {
   HCParameter *param;
   HCContainer *cont;
@@ -378,11 +378,11 @@ void HCServer::SaveXML(ofstream &file, uint32_t indent, HCContainer *startcont)
   //Save child parameters if contained in PID table
   for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
     if(ParamToPID(param, &pid))
-      param->SaveXML(file, indent + 2, pid);
+      param->SaveInfo(file, indent + 2, pid);
 
   //Save child containers
   for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
-    SaveXML(file, indent + 2, cont);
+    SaveInfo(file, indent + 2, cont);
 
   //Footer
   file << string(indent, ' ') << "</cont>" << endl;
@@ -490,7 +490,7 @@ void HCServer::CallCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_CALL_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -500,7 +500,7 @@ void HCServer::CallCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -553,7 +553,7 @@ void HCServer::GetCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_GET_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -563,7 +563,7 @@ void HCServer::GetCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -616,7 +616,7 @@ void HCServer::SetCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_SET_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -626,7 +626,7 @@ void HCServer::SetCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -680,7 +680,7 @@ void HCServer::ICallCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_ICALL_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -690,7 +690,7 @@ void HCServer::ICallCmdHandler(void)
     return;
   }
 
-  //Read the EID from the inbound cell and check for error
+  //Read EID from inbound cell and check for error
   if(!_icell->Read(eid))
   {
     //Increment deserialization error count
@@ -700,7 +700,7 @@ void HCServer::ICallCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -768,7 +768,7 @@ void HCServer::IGetCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_IGET_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -778,7 +778,7 @@ void HCServer::IGetCmdHandler(void)
     return;
   }
 
-  //Read the EID from the inbound cell and check for error
+  //Read EID from inbound cell and check for error
   if(!_icell->Read(eid))
   {
     //Increment deserialization error count
@@ -788,7 +788,7 @@ void HCServer::IGetCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -856,7 +856,7 @@ void HCServer::ISetCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_ISET_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -866,7 +866,7 @@ void HCServer::ISetCmdHandler(void)
     return;
   }
 
-  //Read the EID from the inbound cell and check for error
+  //Read EID from inbound cell and check for error
   if(!_icell->Read(eid))
   {
     //Increment deserialization error count
@@ -876,7 +876,7 @@ void HCServer::ISetCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -943,7 +943,7 @@ void HCServer::AddCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_ADD_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -953,7 +953,7 @@ void HCServer::AddCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -1006,7 +1006,7 @@ void HCServer::SubCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_SUB_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -1016,7 +1016,7 @@ void HCServer::SubCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -1071,7 +1071,7 @@ void HCServer::ReadCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_READ_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -1081,7 +1081,7 @@ void HCServer::ReadCmdHandler(void)
     return;
   }
 
-  //Read the offset from the inbound cell and check for error
+  //Read offset from inbound cell and check for error
   if(!_icell->Read(offset))
   {
     //Increment deserialization error count
@@ -1091,7 +1091,7 @@ void HCServer::ReadCmdHandler(void)
     return;
   }
 
-  //Read the maximum length from the inbound cell and check for error
+  //Read maximum length from inbound cell and check for error
   if(!_icell->Read(maxlen))
   {
     //Increment deserialization error count
@@ -1101,7 +1101,7 @@ void HCServer::ReadCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count
@@ -1169,7 +1169,7 @@ void HCServer::WriteCmdHandler(void)
   //Reset outbound cell
   _ocell->Reset(HCCell::OPCODE_WRITE_STS);
 
-  //Read the PID from the inbound cell and check for error
+  //Read PID from inbound cell and check for error
   if(!_icell->Read(pid))
   {
     //Increment deserialization error count
@@ -1179,7 +1179,7 @@ void HCServer::WriteCmdHandler(void)
     return;
   }
 
-  //Read offset from the inbound cell and check for error
+  //Read offset from inbound cell and check for error
   if(!_icell->Read(offset))
   {
     //Increment deserialization error count
@@ -1189,7 +1189,7 @@ void HCServer::WriteCmdHandler(void)
     return;
   }
 
-  //Get a pointer to the parameter and check for error
+  //Get a pointer to parameter and check for error
   if((pid >= _pidmax) || ((param = _params[pid]) == 0))
   {
     //Increment PID error count

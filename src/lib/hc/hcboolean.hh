@@ -153,16 +153,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual bool HasValEnums(void)
   {
     if(_valenums == 0)
@@ -231,7 +221,7 @@ public:
     }
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -555,11 +545,6 @@ public:
     return true;
   }
 
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual bool HasValEnums(void)
   {
     if(_valenums == 0)
@@ -699,7 +684,7 @@ public:
     }
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 

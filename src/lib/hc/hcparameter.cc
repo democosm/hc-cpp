@@ -535,13 +535,11 @@ bool HCParameter::IsWritable(void)
 
 bool HCParameter::IsATable(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
   return false;
 }
 
 bool HCParameter::IsAList(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
   return false;
 }
 
@@ -560,7 +558,7 @@ void HCParameter::PrintInfo(ostream &st)
   st << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m";
 }
 
-void HCParameter::SaveXML(ofstream &, uint32_t, uint16_t)
+void HCParameter::SaveInfo(ofstream &, uint32_t, uint16_t)
 {
   cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
 }

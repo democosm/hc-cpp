@@ -32,6 +32,7 @@
 #include "hcconsole.hh"
 #include "hccontainer.hh"
 #include "hcfile.hh"
+#include "hcqserver.hh"
 #include "hcserver.hh"
 #include "hcstring.hh"
 #include "hcfloatingpoint.hh"
@@ -56,7 +57,7 @@ using namespace std;
 #define LIST_MAX_SIZE 10
 
 //Description strings
-static const char *Appversion = "1.0.0 " __DATE__ " " __TIME__;
+static const char *Appversion = "1.1.0 " __DATE__ " " __TIME__;
 static const char *Appbugaddress = "<democosm@gmail.com>";
 static const char Appdoc[] = "Creates a scratch pad HC server that contains all basic HC types.";
 
@@ -275,6 +276,8 @@ int main(int argc, char **argv)
   TLSServer *tlssrv;
   HCServer *srv;
   HCConsole *hccons;
+  Device *qsrvdev;
+  HCQServer *qsrv;
   struct Args args;
 
   //Set argument default values
@@ -552,6 +555,10 @@ int main(int argc, char **argv)
   //Start HC server
   srv->Start();
 
+  //Create query server
+  qsrvdev = new UDPSocket(5555);
+  qsrv = new HCQServer(qsrvdev, topcont);
+
   //Just loop if in daemon mode otherwise run console
   if(args.daemon)
   {
@@ -571,6 +578,8 @@ int main(int argc, char **argv)
   }
 
   //Cleanup
+  delete qsrv;
+  delete qsrvdev;
   delete srv;
   delete srvdev;
   delete topcont;

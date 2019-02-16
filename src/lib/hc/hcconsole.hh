@@ -28,9 +28,7 @@
 #define _HCCONSOLE_HH_
 
 #include "device.hh"
-#include "hccell.hh"
 #include "hccontainer.hh"
-#include "hcmessage.hh"
 #include <inttypes.h>
 #include <termios.h>
 #include <string>
@@ -139,11 +137,6 @@ private:
   void ShowInfo(const std::string &name, HCContainer *startcont, size_t index=0);
   void ShowNames(const std::string &name, HCContainer *startcont, size_t index=0);
   void ShowFinds(const std::string &name, HCContainer *cont);
-
-private:
-  //Maximum counts
-  static const unsigned long TOK_CNT_MAX = 12;
-  static const unsigned long TOK_SIZ_MAX = 80;
 
 private:
   struct termios _oldopts;

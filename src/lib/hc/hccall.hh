@@ -113,16 +113,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     std::cout << _name << "()" << std::endl;
@@ -134,7 +124,7 @@ public:
     st << "\n  Type: call";
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<call>" << std::endl;
@@ -233,11 +223,6 @@ public:
     return true;
   }
 
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     std::cout << _name << "(0-" << (_size-1) << ')' << std::endl;
@@ -261,7 +246,7 @@ public:
     }
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 

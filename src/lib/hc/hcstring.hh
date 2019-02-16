@@ -144,16 +144,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     std::string val;
@@ -181,7 +171,7 @@ public:
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<str>" << std::endl;
@@ -384,11 +374,6 @@ public:
     return true;
   }
 
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     std::string val;
@@ -455,7 +440,7 @@ public:
     }
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -727,11 +712,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
   virtual bool IsAList(void)
   {
     return true;
@@ -777,7 +757,7 @@ public:
     st << "\n  Max Size: " << _maxsize;
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<strl>" << std::endl;

@@ -71,8 +71,8 @@ public:
   int GetGoodXactCnt(uint32_t &val);
 
 private:
-  void SaveXML(void);
-  void SaveXML(std::ofstream &file, uint32_t indent, HCContainer *startcont);
+  void SaveInfo(void);
+  void SaveInfo(std::ofstream &file, uint32_t indent, HCContainer *startcont);
   void SaveNLD(void);
   uint32_t SaveNLD(std::ofstream &file, HCContainer *startcont);
   bool ParamToPID(HCParameter *param, uint16_t *pid);

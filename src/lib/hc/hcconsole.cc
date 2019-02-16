@@ -31,7 +31,6 @@
 #include <ctype.h>
 #include <cassert>
 #include <iostream>
-#include <string>
 #include <unistd.h>
 
 //Terminal codes
@@ -191,7 +190,7 @@ void HCCommand::Tokenize(vector<string> &toks)
   //Clear tokens
   toks.clear();
 
-  //Reset high level variables
+  //Initialize to non-literal mode
   literalmode = false;
 
   //Clear token

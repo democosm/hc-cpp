@@ -66,11 +66,6 @@ uint8_t HCCell::GetOpCode(void)
   return _opcode;
 }
 
-uint32_t HCCell::GetPayloadLength(void)
-{
-  return _payloadlength;
-}
-
 uint32_t HCCell::Serialize(uint8_t *serbuf, uint32_t maxlen)
 {
   uint32_t i;

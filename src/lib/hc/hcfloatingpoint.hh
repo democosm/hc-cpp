@@ -140,16 +140,6 @@ public:
     return true;
   }
 
-  virtual bool IsATable(void)
-  {
-    return false;
-  }
-
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     T val;
@@ -181,7 +171,7 @@ public:
     st << "\n  Scale: " << _scale;
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
 
@@ -424,11 +414,6 @@ public:
     return true;
   }
 
-  virtual bool IsAList(void)
-  {
-    return false;
-  }
-
   virtual void PrintVal(void)
   {
     T val;
@@ -499,7 +484,7 @@ public:
     }
   }
 
-  virtual void SaveXML(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;

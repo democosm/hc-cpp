@@ -66,11 +66,6 @@ uint8_t HCMessage::GetTransaction(void)
   return _transaction;
 }
 
-uint32_t HCMessage::GetPayloadLength(void)
-{
-  return _payloadlength;
-}
-
 int HCMessage::Send(Device *dev)
 {
   uint32_t i;

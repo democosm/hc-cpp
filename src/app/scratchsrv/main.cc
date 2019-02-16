@@ -275,9 +275,9 @@ int main(int argc, char **argv)
   TCPServer *tcpsrv;
   TLSServer *tlssrv;
   HCServer *srv;
-  HCConsole *hccons;
   Device *qsrvdev;
   HCQServer *qsrv;
+  HCConsole *hccons;
   struct Args args;
 
   //Set argument default values

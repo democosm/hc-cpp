@@ -125,7 +125,7 @@ uint32_t Pipe::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   return amtread;
 }
 
-uint32_t Pipe::Write(void *buf, uint32_t len, uint32_t usecs)
+uint32_t Pipe::Write(const void *buf, uint32_t len, uint32_t usecs)
 {
   uint32_t i, empty;
 

@@ -182,7 +182,7 @@ uint32_t SerDev::Read(void *buf, uint32_t maxlen)
   return (uint32_t)rlen;
 }
 
-uint32_t SerDev::Write(void *buf, uint32_t len)
+uint32_t SerDev::Write(const void *buf, uint32_t len)
 {
   ssize_t wlen;
 

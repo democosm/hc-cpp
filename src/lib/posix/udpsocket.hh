@@ -38,7 +38,7 @@ public:
   UDPSocket(uint16_t port, const char *destipaddr=0, uint16_t destport=0);
   virtual ~UDPSocket();
   uint32_t Read(void *buf, uint32_t maxlen);
-  uint32_t Write(void *buf, uint32_t len);
+  uint32_t Write(const void *buf, uint32_t len);
 
 private:
   Mutex *_mutex;

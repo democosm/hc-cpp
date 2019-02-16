@@ -39,7 +39,7 @@ uint32_t Device::Read(void *, uint32_t)
   return 0;
 }
 
-uint32_t Device::Write(void *, uint32_t)
+uint32_t Device::Write(const void *, uint32_t)
 {
   return 0;
 }

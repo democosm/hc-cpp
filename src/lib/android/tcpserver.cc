@@ -103,7 +103,7 @@ uint32_t TCPServer::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TCPServer::Write(void *buf, uint32_t len)
+uint32_t TCPServer::Write(const void *buf, uint32_t len)
 {
   int connfd;
   ssize_t wlen;

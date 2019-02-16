@@ -38,7 +38,7 @@ public:
   ~Pipe();
   void Reset(void);
   uint32_t Read(void *buf, uint32_t maxlen, uint32_t usecs);
-  uint32_t Write(void *buf, uint32_t len, uint32_t usecs);
+  uint32_t Write(const void *buf, uint32_t len, uint32_t usecs);
 
 private:
   Mutex *_mutex;

@@ -72,7 +72,7 @@ uint32_t QueueBuffer::Read(void *buf, uint32_t maxlen)
   return i;
 }
 
-uint32_t QueueBuffer::Write(void *buf, uint32_t len)
+uint32_t QueueBuffer::Write(const void *buf, uint32_t len)
 {
   uint32_t i;
 
@@ -186,7 +186,7 @@ uint32_t Queue::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   return retval;
 }
 
-uint32_t Queue::Write(void *buf, uint32_t len, uint32_t usecs)
+uint32_t Queue::Write(const void *buf, uint32_t len, uint32_t usecs)
 {
   uint32_t retval;
 

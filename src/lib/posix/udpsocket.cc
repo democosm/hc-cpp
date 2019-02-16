@@ -125,7 +125,7 @@ uint32_t UDPSocket::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t UDPSocket::Write(void *buf, uint32_t len)
+uint32_t UDPSocket::Write(const void *buf, uint32_t len)
 {
   struct sockaddr_in dest;
 

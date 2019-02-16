@@ -118,7 +118,7 @@ uint32_t TLSClient::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TLSClient::Write(void *buf, uint32_t len)
+uint32_t TLSClient::Write(const void *buf, uint32_t len)
 {
   SSL *ssl;
   ssize_t wlen;

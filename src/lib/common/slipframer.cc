@@ -143,7 +143,7 @@ uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
   return rbufind;
 }
 
-uint32_t SLIPFramer::Write(void *buf, uint32_t len)
+uint32_t SLIPFramer::Write(const void *buf, uint32_t len)
 {
   uint32_t i;
   uint32_t byteind;

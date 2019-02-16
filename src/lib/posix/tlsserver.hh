@@ -40,7 +40,7 @@ public:
   TLSServer(uint16_t port, const char *certfile, const char *keyfile, uint32_t authcode);
   virtual ~TLSServer();
   virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(void *buf, uint32_t len);
+  virtual uint32_t Write(const void *buf, uint32_t len);
 
 private:
   void CloseConnection(void);

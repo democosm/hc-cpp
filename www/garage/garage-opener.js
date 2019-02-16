@@ -5,20 +5,17 @@ document.getElementById("door2 button").addEventListener("click", OnClickDoor2Bu
 
 function OnClickDoor1Button()
 {
-  var params = [["/pulserelayhigh",0]];
-  HCICall(params);
+  HCICall(0);
 }
 
 function OnClickDoor2Button()
 {
-  var params = [["/pulserelayhigh",1]];
-  HCICall(params);
+  HCICall(1);
 }
 
 function PollStatus()
 {
-  var params = ["/temperature", "/cpuutilization"];
-  HCGet(params);
+  HCGet();
   setTimeout("PollStatus();", 5000);
 }
 
@@ -26,17 +23,17 @@ function RenderData(data)
 {
   for(var i in data)
   {
-    if(data[i][0] == "/temperature")
-      document.getElementById("temperature").innerHTML = "Temperature: " + data[i][1] + " C";
-    else if(data[i][0] == "/cpuutilization")
-      document.getElementById("cpuutilization").innerHTML = "CPU Utilization: " + data[i][1] + "%";
+    if(data[i][1] == "/temperature")
+      document.getElementById("temperature").innerHTML = "Temperature: " + data[i][2] + " C";
+    else if(data[i][1] == "/cpuutilization")
+      document.getElementById("cpuutilization").innerHTML = "CPU Utilization: " + data[i][2] + "%";
   }
 }
 
-function HCGet(params)
+function HCGet()
 {
   var req = new XMLHttpRequest();
-  req.open("GET", "hcget.php?params=" + JSON.stringify(params), true);
+  req.open("GET", "hcquery.php?cmd=[00,[ge,/temperature],[ge,/cpuutilization]]", true);
   req.onload = OnLoad;
   req.send(null);
 
@@ -47,16 +44,9 @@ function HCGet(params)
   }
 }
 
-function HCCall(params)
+function HCICall(relay)
 {
   var req = new XMLHttpRequest();
-  req.open("GET", "hccall.php?params=" + JSON.stringify(params), true);
-  req.send(null);
-}
-
-function HCICall(params)
-{
-  var req = new XMLHttpRequest();
-  req.open("GET", "hcicall.php?params=" + JSON.stringify(params), true);
+  req.open("GET", "hcquery.php?cmd=[00,[ca,/pulserelayhigh," + relay + "]]", true);
   req.send(null);
 }

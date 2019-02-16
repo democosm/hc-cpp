@@ -5,19 +5,46 @@ HC — Host Control
 
 We want to help embedded system designers succeed, so we've created some very powerful source code to help. It's called Host Control (HC). It's easy to understand, easy to use, and doesn't require you to pollute your code with ours.
 
-- HC provides a simple way to locally control your application from a console
-- HC provides a simple way to remotely control your application
-- HC protcol allows chaining multiple applications together
+- HC provides a simple way to locally control your application from a console or GUI
+- HC provides a simple way to remotely control your application from a console or GUI
+- HC allows aggregation of server capabilities and chaining multiple applications together
+- HC is application layer code, so it's easy to create multiple servers and clients on the same machine
+- HC provides a built-in way to make a web based REST API for your embedded application
 
 ---
 
-## Download
+## Server Aggregation
 
-Pre-built binaries aren't currently created. The source can be downloaded from here: [Releases](https://github.com/democosm/hc-cpp).
+HC allows multiple server applications to be controlled from a single client application. This client application can aggregate the capabilities of each of the server applications into a single unified server application. The diagram below depicts this (the <HC> symbol denotes HC inter-process communications).
+
+`ClientA <HC> ServerA AGGREGATE(ClientB <HC> ServerB, ClientC <HC> ServerC)`
+
+In this example, there are 4 processes:
+1. ClientA
+2. ServerA + ClientB + ClientC
+3. ServerB
+4. ServerC
+
+ClientA would provide proxy control of ServerB and ServerC similar to the way NFS works.
+
+## Chaining
+
+Since HC allows a client application to "re-serve" its controls, a chain of clients and servers can be created. This is depicted below (the <HC> symbol denotes HC inter-process communications).
+
+`ClientA <HC> ServerA AGGREGATE(ClientB <HC> ServerB AGGREGATE(ClientC <HC> ServerC ...))`
+
+In this example, there are 4 processes:
+   1. ClientA
+   2. ServerA + ClientB
+   3. ServerB + ClientC
+   4. ServerC
+
+ClientA would provide proxy control of ServerB and ServerC similar to the way NFS works.
 
 ## Implemented Features
 
-* Many basic types, such as uint8, uint32, string and double
+* Basic types (int8 to int64, uint8 to uint64, float, double, bool, string)
+* Data-less "call" type
 * Console interface to application
 * Property tree discovery
 
@@ -54,15 +81,11 @@ mkposd
 ```
 
 
-### Libraries for HC
+## Libraries for HC
 
 Before you can build, you will need to install the openssl libs and headers.
 
-To download openssl development package on Ubuntu, the command is:
-sudo apt-get install openssl-dev
-
-To download openssl development package on Raspberry Pi3, the command is:
-sudo apt-get install libssl-dev
+To download the openssl development package, use ```sudo apt-get install libssl-dev``` or ```sudo apt-get install openssl-dev```.
 
 Disclaimer for openssl (an excerpt from the openssl website):
 

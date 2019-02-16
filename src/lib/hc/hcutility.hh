@@ -39,8 +39,6 @@ class HCUtility
 public:
   static HCContainer *GetCont(const std::string &name, HCContainer *startcont, size_t index=0);
   static HCParameter *GetParam(const std::string &name, HCContainer *startcont, size_t index=0);
-  static bool NLDReadString(char *val, FILE *file);
-  static bool NLDLookup(FILE *nldfile, const std::string &name, uint16_t &pid, uint8_t &type, size_t index=0);
 };
 
 #endif //_HCUTILITY_HH_

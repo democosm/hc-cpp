@@ -491,30 +491,6 @@ void HCParameter::SetNext(HCParameter *next)
   _next = next;
 }
 
-uint32_t HCParameter::SaveNLD(ofstream &file, uint16_t pid)
-{
-  uint8_t namelen;
-  uint8_t type;
-  uint32_t datalen;
-
-  //Write name to file
-  namelen = _name.length();
-  file.write((const char *)&namelen, sizeof(namelen));
-  file.write(_name.c_str(), namelen);
-
-  //Write data length to file
-  datalen = sizeof(pid) + sizeof(type);
-  file.write((const char *)&datalen, sizeof(datalen));
-
-  //Write PID and type to file
-  file.write((const char *)&pid, sizeof(pid));
-  type = GetType();
-  file.write((const char *)&type, sizeof(type));
-
-  //Return number of bytes written
-  return 1 + namelen + sizeof(datalen) + datalen;
-}
-
 uint8_t HCParameter::GetType(void)
 {
   cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;

@@ -73,8 +73,6 @@ public:
 private:
   void SaveInfo(void);
   void SaveInfo(std::ofstream &file, uint32_t indent, HCContainer *startcont);
-  void SaveNLD(void);
-  uint32_t SaveNLD(std::ofstream &file, HCContainer *startcont);
   bool ParamToPID(HCParameter *param, uint16_t *pid);
   void CallCmdHandler(void);
   void GetCmdHandler(void);
@@ -94,7 +92,6 @@ private:
   std::string _name;
   std::string _version;
   std::string _infofilename;
-  std::string _nldfilename;
   uint32_t _pidtop;
   uint32_t _pidmax;
   HCParameter **_params;

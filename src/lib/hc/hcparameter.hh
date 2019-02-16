@@ -107,7 +107,6 @@ public:
   bool GetNextCharInName(const std::string &name, char &nextchar);
   HCParameter *GetNext(void);
   void SetNext(HCParameter *node);
-  uint32_t  SaveNLD(std::ofstream &file, uint16_t pid);
   virtual uint8_t GetType(void);
   virtual bool IsReadable(void);
   virtual bool IsWritable(void);

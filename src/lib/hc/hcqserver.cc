@@ -89,7 +89,7 @@ bool HCQServer::ReadField(char termchar, char *field, uint32_t fieldsize)
   //Leave space for null terminator
   maxchars = fieldsize - 1;
 
-  //Read parameter name
+  //Read field
   for(i=0; i<maxchars; i++)
   {
     //Check for overflow
@@ -108,7 +108,15 @@ bool HCQServer::ReadField(char termchar, char *field, uint32_t fieldsize)
     field[i+1] = '\0';
   }
 
-  //No terminal character before max characters read
+  //Check for overflow
+  if(_readind >= _readcount)
+    return false;
+
+  //Check for terminal character
+  if(_readbuf[_readind++] == termchar)
+    return true;
+
+  //No terminal character found
   return false;
 }
 
@@ -576,10 +584,6 @@ bool HCQServer::ProcessCell(void)
 {
   char opcode[3];
 
-  //Check for next read character not cell opening bracket
-  if(!NextReadCharEquals('['))
-    return false;
-
   //Check for next read character not opcode opening quote
   if(!NextReadCharEquals('"'))
     return false;
@@ -640,17 +644,25 @@ bool HCQServer::ProcessMessage(void)
   if(!ReadField(',', xactstr, sizeof(xactstr)))
     return false;
 
-  //Write to outbound message
-  if(!WriteChar('[') || !WriteString(xactstr) || !WriteChar(','))
-    return false;
-
   //Convert transaction number string to a number (ensure it's an actual number)
   if(!StringConvert(xactstr, xact))
+    return false;
+
+  //Write to outbound message
+  if(!WriteChar('[') || !WriteString(xactstr) || !WriteChar(','))
     return false;
 
   //Process all cells
   while(true)
   {
+    //Check for next read character not cell opening bracket
+    if(!NextReadCharEquals('['))
+      return false;
+
+    //Process cell
+    if(!ProcessCell())
+      return false;
+
     //Check for overflow
     if(_readind >= _readcount)
       return false;
@@ -668,10 +680,6 @@ bool HCQServer::ProcessMessage(void)
 
     //Write to outbound message
     if(!WriteChar(','))
-      return false;
-
-    //Process cell
-    if(!ProcessCell())
       return false;
   }
 
@@ -704,8 +712,6 @@ void HCQServer::CtlThread(void)
 
     //Ensure null termination
     _readbuf[_readcount] = '\0';
-
-printf("Query String: '%s'\n", _readbuf);
 
     //Process message
     if(!ProcessMessage())

@@ -67,6 +67,7 @@ static struct option Longopts[] =
   { "tcp", 0, NULL, 't' },
   { "tls", 0, NULL, 's' },
   { "port", required_argument, NULL, 'p' },
+  { "qport", required_argument, NULL, 'q' },
   { "daemon", 0, NULL, 'd' },
   { NULL, 0, NULL, 0 }
 };
@@ -77,6 +78,7 @@ struct Args
   bool tcp;
   bool tls;
   uint16_t port;
+  uint16_t qport;
   bool daemon;
 };
 
@@ -90,6 +92,7 @@ void Usage()
   cout << "[-t, --tcp] Use TCP for transport protocol" << endl;
   cout << "[-s, --tls] Use TLS for transport protocol" << endl;
   cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << endl;
+  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 1501)" << endl;
   cout << "[-d, --daemon] Spawn in background mode" << endl;
 }
 
@@ -116,6 +119,17 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
       {
         valid = false;
         cout << "Invalid port number (" << optarg << ")" << endl;
+        Usage();
+        break;
+      }
+
+      break;
+    case 'q':
+      //Convert port number and check for error
+      if(!StringConvert(optarg, args->qport))
+      {
+        valid = false;
+        cout << "Invalid query port number (" << optarg << ")" << endl;
         Usage();
         break;
       }
@@ -284,6 +298,7 @@ int main(int argc, char **argv)
   args.tcp = false;
   args.tls = false;
   args.port = 1500;
+  args.qport = 1501;
   args.daemon = false;
 
   //Parse arguments
@@ -556,7 +571,7 @@ int main(int argc, char **argv)
   srv->Start();
 
   //Create query server
-  qsrvdev = new UDPSocket(5555);
+  qsrvdev = new UDPSocket(args.qport);
   qsrv = new HCQServer(qsrvdev, topcont);
 
   //Just loop if in daemon mode otherwise run console

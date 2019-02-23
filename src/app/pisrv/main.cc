@@ -180,7 +180,7 @@ int main(int argc, char **argv)
   srv->Start();
 
   //Create query server
-  qsrvdev = new UDPSocket(5555);
+  qsrvdev = new UDPSocket(1501);
   qsrv = new HCQServer(qsrvdev, topcont);
 
   //Just loop if in daemon mode otherwise run console

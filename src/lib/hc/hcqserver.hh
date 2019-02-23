@@ -38,9 +38,11 @@ public:
   ~HCQServer();
 
 private:
+  bool NextReadCharEquals(char ch);
   bool ReadField(char termchar, char *field, uint32_t fieldsize);
   bool WriteChar(char ch);
   bool WriteString(const char *str);
+  bool WriteStringQuote(const char *str);
   bool ProcessCallCell(void);
   bool ProcessGetCell(void);
   bool ProcessSetCell(void);

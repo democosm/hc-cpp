@@ -112,6 +112,7 @@ int PIServer::SetRelayOn(uint32_t eid, bool val)
 
 int PIServer::PulseRelayHigh(uint32_t eid)
 {
+  printf("%s(%d)\n", __FUNCTION__, eid);
   //Turn relay on, sleep and set turn relay off
   SetRelayOn(eid, true);
   ThreadSleep(500000);

@@ -67,9 +67,19 @@ public:
     //Get length of query string
     len = strlen(_querystring);
 
+    //Check for bad query string length
+    if(len < 3)
+    {
+      cout << "Bad query string length (" << len << ")" << endl;
+      return;
+    }
+
     //Write query string to device
     if(_dev->Write(_querystring, len) != len)
+    {
       cout << "Error sending query string" << endl;
+      return;
+    }
 
     //Wait for event
     if(_event->Wait(1000000) != ERR_NONE)
@@ -81,6 +91,7 @@ private:
   {
     char readbuf[65536];
     uint32_t readcount;
+    uint32_t i;
 
     //Go forever
     while(true)
@@ -93,14 +104,17 @@ private:
       }
 
       //Check for transaction match
-      if(strncmp(_querystring, readbuf, 3) == 0)
+      for(i=1; i<4; i++)
       {
-        //Null terminate read data and print
-        readbuf[readcount] = '\0';
-        cout << readbuf << endl;
+        if((_querystring[i] == readbuf[i]) && (readbuf[i] == ','))
+	{
+          //Null terminate read data and print
+          readbuf[readcount] = '\0';
+          cout << readbuf << endl;
 
-        //Signal event
-        _event->Signal();
+          //Signal event
+          _event->Signal();
+	}
       }
     }
   }

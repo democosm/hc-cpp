@@ -47,6 +47,9 @@ function HCGet()
 function HCICall(relay)
 {
   var req = new XMLHttpRequest();
-  req.open("GET", "hcquery.php?cmd=[00,[ca,/pulserelayhigh," + relay + "]]", true);
+
+  let cmd = [0,["ic","/pulserelayhigh",relay]];
+
+  req.open("GET", "hcquery.php?cmd=" + JSON.stringify(cmd), true);
   req.send(null);
 }

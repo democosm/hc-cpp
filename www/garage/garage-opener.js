@@ -33,7 +33,10 @@ function RenderData(data)
 function HCGet()
 {
   var req = new XMLHttpRequest();
-  req.open("GET", "hcquery.php?cmd=[00,[ge,/temperature],[ge,/cpuutilization]]", true);
+
+  let cmd = [0,["ge","/temperature"],["ge","/cpuutilization"]];
+
+  req.open("GET", "hcquery.php?cmd=" + JSON.stringify(cmd), true);
   req.onload = OnLoad;
   req.send(null);
 

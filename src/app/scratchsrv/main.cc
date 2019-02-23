@@ -248,9 +248,9 @@ static const HCBooleanEnum Boolenums[] =
 
 static const HCEIDEnum Eidenums[] =
 {
-  HCEIDEnum(0, "Chris"),
-  HCEIDEnum(1, "Aaron"),
-  HCEIDEnum(2, "Mark"),
+  HCEIDEnum(0, "Zero"),
+  HCEIDEnum(1, "One"),
+  HCEIDEnum(2, "Two"),
   HCEIDEnum()
 };
 

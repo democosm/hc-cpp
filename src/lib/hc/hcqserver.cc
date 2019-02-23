@@ -202,20 +202,20 @@ bool HCQServer::ProcessCallCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
-  //Check for next character not cell closing bracket
-  if(!NextReadCharEquals(']'))
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
     return false;
 
   //Get parameter
   if((param = HCUtility::GetParam(pname, _top)) == 0)
     return false;
 
+  //Check for next character not cell closing bracket
+  if(!NextReadCharEquals(']'))
+    return false;
+
   //Call parameter
   err = param->Call();
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -240,20 +240,20 @@ bool HCQServer::ProcessGetCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
-  //Check for next character not cell closing bracket
-  if(!NextReadCharEquals(']'))
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
     return false;
 
   //Get parameter
   if((param = HCUtility::GetParam(pname, _top)) == 0)
     return false;
 
+  //Check for next character not cell closing bracket
+  if(!NextReadCharEquals(']'))
+    return false;
+
   //Get parameter value string
   err = param->GetStr(pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(pval.c_str()) || !WriteChar(',') || !WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -278,6 +278,14 @@ bool HCQServer::ProcessSetCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
+    return false;
+
+  //Get parameter
+  if((param = HCUtility::GetParam(pname, _top)) == 0)
+    return false;
+
   //Check for next character not comma
   if(!NextReadCharEquals(','))
     return false;
@@ -294,16 +302,8 @@ bool HCQServer::ProcessSetCell(void)
   if(!NextReadCharEquals(']'))
     return false;
 
-  //Get parameter
-  if((param = HCUtility::GetParam(pname, _top)) == 0)
-    return false;
-
   //Set parameter value string
   err = param->SetStr(pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -329,32 +329,57 @@ bool HCQServer::ProcessICallCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
-  //Check for next character not comma
-  if(!NextReadCharEquals(','))
-    return false;
-
-  //Read element identifier
-  if(!ReadField(']', eidstr, sizeof(eidstr)))
-    return false;
-
-  //Convert element identifier to a number
-  if(!StringConvert(eidstr, eid))
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
     return false;
 
   //Get parameter
   if((param = HCUtility::GetParam(pname, _top)) == 0)
     return false;
 
+  //Check for next character not comma
+  if(!NextReadCharEquals(','))
+    return false;
+
+  //Check for next character element identifier enumeration opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
+
+    //Read element identifier
+    if(!ReadField('"', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteStringQuote(eidstr) || !WriteChar(','))
+      return false;
+
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
+
+    //Convert element identifier enumeration to a number
+    if(!param->EIDStrToNum(eidstr, eid))
+      return false;
+  }
+  else
+  {
+    //Read element identifier
+    if(!ReadField(']', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteString(eidstr) || !WriteChar(','))
+      return false;
+
+    //Convert element identifier to a number
+    if(!StringConvert(eidstr, eid))
+      return false;
+  }
+
   //ICall parameter
   err = param->CallTbl(eid);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
-
-  //Write element identifier to outbound message
-  if(!WriteString(eidstr) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -381,32 +406,57 @@ bool HCQServer::ProcessIGetCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
-  //Check for next character not comma
-  if(!NextReadCharEquals(','))
-    return false;
-
-  //Read element identifier
-  if(!ReadField(']', eidstr, sizeof(eidstr)))
-    return false;
-
-  //Convert element identifier to a number
-  if(!StringConvert(eidstr, eid))
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
     return false;
 
   //Get parameter
   if((param = HCUtility::GetParam(pname, _top)) == 0)
     return false;
 
+  //Check for next character not comma
+  if(!NextReadCharEquals(','))
+    return false;
+
+  //Check for next character element identifier enumeration opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
+
+    //Read element identifier
+    if(!ReadField('"', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteStringQuote(eidstr) || !WriteChar(','))
+      return false;
+
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
+
+    //Convert element identifier enumeration to a number
+    if(!param->EIDStrToNum(eidstr, eid))
+      return false;
+  }
+  else
+  {
+    //Read element identifier
+    if(!ReadField(']', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteString(eidstr) || !WriteChar(','))
+      return false;
+
+    //Convert element identifier to a number
+    if(!StringConvert(eidstr, eid))
+      return false;
+  }
+
   //Get parameter table string value
   err = param->GetStrTbl(eid, pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
-
-  //Write element identifier to outbound message
-  if(!WriteString(eidstr) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(pval.c_str()) || !WriteChar(',') || !WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -433,17 +483,54 @@ bool HCQServer::ProcessISetCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
+    return false;
+
+  //Get parameter
+  if((param = HCUtility::GetParam(pname, _top)) == 0)
+    return false;
+
   //Check for next character not comma
   if(!NextReadCharEquals(','))
     return false;
 
-  //Read element identifier
-  if(!ReadField(',', eidstr, sizeof(eidstr)))
-    return false;
+  //Check for next character element identifier enumeration opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
 
-  //Convert element identifier to a number
-  if(!StringConvert(eidstr, eid))
-    return false;
+    //Read element identifier
+    if(!ReadField('"', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteStringQuote(eidstr) || !WriteChar(','))
+      return false;
+
+    //Check for next character not comma
+    if(!NextReadCharEquals(','))
+      return false;
+
+    //Convert element identifier enumeration to a number
+    if(!param->EIDStrToNum(eidstr, eid))
+      return false;
+  }
+  else
+  {
+    //Read element identifier
+    if(!ReadField(',', eidstr, sizeof(eidstr)))
+      return false;
+
+    //Write element identifier to outbound message
+    if(!WriteString(eidstr) || !WriteChar(','))
+      return false;
+
+    //Convert element identifier to a number
+    if(!StringConvert(eidstr, eid))
+      return false;
+  }
 
   //Check for next character not parameter value opening quote
   if(!NextReadCharEquals('"'))
@@ -457,20 +544,8 @@ bool HCQServer::ProcessISetCell(void)
   if(!NextReadCharEquals(']'))
     return false;
 
-  //Get parameter
-  if((param = HCUtility::GetParam(pname, _top)) == 0)
-    return false;
-
   //Set parameter table string value
   err = param->SetStrTbl(eid, pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
-
-  //Write element identifier to outbound message
-  if(!WriteString(eidstr) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -495,6 +570,14 @@ bool HCQServer::ProcessAddCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
+    return false;
+
+  //Get parameter
+  if((param = HCUtility::GetParam(pname, _top)) == 0)
+    return false;
+
   //Check for next character not comma
   if(!NextReadCharEquals(','))
     return false;
@@ -511,16 +594,8 @@ bool HCQServer::ProcessAddCell(void)
   if(!NextReadCharEquals(']'))
     return false;
 
-  //Get parameter
-  if((param = HCUtility::GetParam(pname, _top)) == 0)
-    return false;
-
   //Add parameter value string
   err = param->AddStr(pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -545,6 +620,14 @@ bool HCQServer::ProcessSubCell(void)
   if(!ReadField('"', pname, sizeof(pname)))
     return false;
 
+  //Write parameter name to outbound message
+  if(!WriteStringQuote(pname) || !WriteChar(','))
+    return false;
+
+  //Get parameter
+  if((param = HCUtility::GetParam(pname, _top)) == 0)
+    return false;
+
   //Check for next character not comma
   if(!NextReadCharEquals(','))
     return false;
@@ -561,16 +644,8 @@ bool HCQServer::ProcessSubCell(void)
   if(!NextReadCharEquals(']'))
     return false;
 
-  //Get parameter
-  if((param = HCUtility::GetParam(pname, _top)) == 0)
-    return false;
-
   //Subtract parameter value string
   err = param->SubStr(pval);
-
-  //Write parameter name to outbound message
-  if(!WriteStringQuote(pname) || !WriteChar(','))
-    return false;
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -715,7 +790,14 @@ void HCQServer::CtlThread(void)
 
     //Process message
     if(!ProcessMessage())
+    {
+      cout << "Error processing query string:" << endl;
+      cout << _readbuf << endl;
+      cout << "At index " << _readind << endl;
+      cout << "Write buffer is:" << endl;
+      cout << _writebuf << endl;
       continue;
+    }
 
     //Write outbound message to device
     _lowdev->Write(_writebuf, _writeind);

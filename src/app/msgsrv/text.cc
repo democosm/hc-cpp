@@ -54,7 +54,7 @@ int Text::SetMessage(const string &val)
   _message = val;
 
   //Print the message
-  cout << _message << endl;
+  cout << _message << "\n";
 
   return ERR_NONE;
 }

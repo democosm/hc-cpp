@@ -24,6 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "const.hh"
 #include "error.hh"
 #include "hcconsole.hh"
 #include "hcutility.hh"
@@ -32,25 +33,6 @@
 #include <cassert>
 #include <iostream>
 #include <unistd.h>
-
-//Terminal codes
-#define TC_RESET "\033[0m"
-#define TC_BLACK "\033[30m"
-#define TC_RED "\033[31m"
-#define TC_GREEN "\033[32m"
-#define TC_YELLOW "\033[33m"
-#define TC_BLUE "\033[34m"
-#define TC_MAGENTA "\033[35m"
-#define TC_CYAN "\033[36m"
-#define TC_WHITE "\033[37m"
-#define TC_BRIGHT "\033[1m"
-#define TC_UNDERLINE "\033[4m"
-#define TC_INVERSE "\033[7m"
-#define TC_NOBRIGHT "\033[21m"
-#define TC_NOUNDERLINE "\033[24m"
-#define TC_NOINVERSE "\033[27m"
-#define TC_RIGHT "\033[C"
-#define TC_LEFT "\033[D"
 
 using namespace std;
 
@@ -383,7 +365,7 @@ void HCHistory::Show(void)
 
   //Print each command except newest
   for(i=_oldest, j=0; i != _newest; i=NextIndex(i), j++)
-    cout << j << " - " << _cmd[i].GetStr() << endl;
+    cout << j << " - " << _cmd[i].GetStr() << "\n";
 }
 
 uint32_t HCHistory::NextIndex(uint32_t curindex)
@@ -444,10 +426,10 @@ void HCConsole::Run(void)
   int key;
 
   //Display command prompt
-  cout << endl;
-  cout << "Control Console" << endl;
-  cout << "Type h, help, or ? for help" << endl;
-  cout << endl;
+  cout << "\n";
+  cout << "Control Console" << "\n";
+  cout << "Type h, help, or ? for help" << "\n";
+  cout << "\n";
   Prompt();
 
   //Main processing loop
@@ -496,7 +478,7 @@ void HCConsole::Run(void)
   }
 
   //Indicate exit
-  cout << "Exiting" << endl;
+  cout << "Exiting" << "\n";
 }
 
 int HCConsole::WaitKey(void)
@@ -788,7 +770,7 @@ void HCConsole::TabProc(uint32_t recurlevel)
       if(recurlevel == 0)
       {
         //Start new line
-        cout << endl;
+        cout << "\n";
 
         //Show names of elements matching name
         ShowNames(_tokens[_tokens.size() - 1], startcont);
@@ -813,7 +795,7 @@ void HCConsole::TabProc(uint32_t recurlevel)
   else
   {
     //Start new line
-    cout << endl;
+    cout << "\n";
 
     //Show names of elements matching name in working container
     ShowNames("", _workcont);
@@ -826,7 +808,7 @@ void HCConsole::TabProc(uint32_t recurlevel)
 void HCConsole::EnterProc(void)
 {
   //Move to a clean line
-  cout << endl;
+  cout << "\n";
 
   //Trim whitespace from command
   _cmd.Trim();
@@ -932,34 +914,34 @@ void HCConsole::HelpCmdProc(uint32_t tokcnt)
   //Check for invalid argument count
   if(tokcnt != 1)
   {
-    cout << "Syntax: " << _tokens[0] << endl;
+    cout << "Syntax: " << _tokens[0] << "\n";
     return;
   }
 
   //Show help information
-  cout << "help|h|?        = Show this help information" << endl;
-  cout << "hist            = Show command history" << endl;
-  cout << "chdir|cd C      = Change working container to container C" << endl;
-  cout << "list|ls E       = Show values of parameters or containers matching expression E" << endl;
-  cout << "info|i E        = Show information for parameters or containers matching expression E" << endl;
-  cout << "find E          = Show all parameters and containers matching expression E" << endl;
-  cout << "exit|x          = Exit application" << endl;
-  cout << "call P          = Call parameter P" << endl;
-  cout << "P()             = Call parameter P" << endl;
-  cout << "P(I)            = ICall parameter P with EID of I" << endl;
-  cout << "P(\"E\")          = ICall parameter P with EID of enum E" << endl;
-  cout << "P=N             = Set parameter P to value N" << endl;
-  cout << "P=\"S\"           = Set parameter P to string or enum S" << endl;
-  cout << "P[I]=N          = ISet parameter P with EID of I to value N" << endl;
-  cout << "P[I]=\"S\"        = ISet parameter P with EID of I to string or enum S" << endl;
-  cout << "P[\"E\"]=N        = ISet parameter P with EID of enum E to value N" << endl;
-  cout << "P[\"E\"]=\"S\"      = ISet parameter P with EID of E to string or enum S" << endl;
-  cout << "P<N             = Add value N to parameter P list" << endl;
-  cout << "P>N             = Subtract value N from parameter P list" << endl;
-  cout << "P<\"S\"           = Add string or enum S to parameter P list" << endl;
-  cout << "P>\"S\"           = Subtract string or enum S from parameter P list" << endl;
-  cout << "P@\"S\"           = Upload parameter P from local file S" << endl;
-  cout << "P#\"S\"           = Download parameter P to local file S" << endl;
+  cout << "help|h|?        = Show this help information" << "\n";
+  cout << "hist            = Show command history" << "\n";
+  cout << "chdir|cd C      = Change working container to container C" << "\n";
+  cout << "list|ls E       = Show values of parameters or containers matching expression E" << "\n";
+  cout << "info|i E        = Show information for parameters or containers matching expression E" << "\n";
+  cout << "find E          = Show all parameters and containers matching expression E" << "\n";
+  cout << "exit|x          = Exit application" << "\n";
+  cout << "call P          = Call parameter P" << "\n";
+  cout << "P()             = Call parameter P" << "\n";
+  cout << "P(I)            = ICall parameter P with EID of I" << "\n";
+  cout << "P(\"E\")          = ICall parameter P with EID of enum E" << "\n";
+  cout << "P=N             = Set parameter P to value N" << "\n";
+  cout << "P=\"S\"           = Set parameter P to string or enum S" << "\n";
+  cout << "P[I]=N          = ISet parameter P with EID of I to value N" << "\n";
+  cout << "P[I]=\"S\"        = ISet parameter P with EID of I to string or enum S" << "\n";
+  cout << "P[\"E\"]=N        = ISet parameter P with EID of enum E to value N" << "\n";
+  cout << "P[\"E\"]=\"S\"      = ISet parameter P with EID of E to string or enum S" << "\n";
+  cout << "P<N             = Add value N to parameter P list" << "\n";
+  cout << "P>N             = Subtract value N from parameter P list" << "\n";
+  cout << "P<\"S\"           = Add string or enum S to parameter P list" << "\n";
+  cout << "P>\"S\"           = Subtract string or enum S from parameter P list" << "\n";
+  cout << "P@\"S\"           = Upload parameter P from local file S" << "\n";
+  cout << "P#\"S\"           = Download parameter P to local file S" << "\n";
 }
 
 void HCConsole::HistCmdProc(uint32_t tokcnt)
@@ -967,7 +949,7 @@ void HCConsole::HistCmdProc(uint32_t tokcnt)
   //Check for invalid argument count
   if(tokcnt != 1)
   {
-    cout << "Syntax: " << _tokens[0] << endl;
+    cout << "Syntax: " << _tokens[0] << "\n";
     return;
   }
 
@@ -983,7 +965,7 @@ void HCConsole::ChdirCmdProc(uint32_t tokcnt)
   //Check for invalid argument count
   if(tokcnt != 2)
   {
-    cout << "Syntax: " << _tokens[0] << " <CONTAINER NAME>" << endl;
+    cout << "Syntax: " << _tokens[0] << " <CONTAINER NAME>" << "\n";
     return;
   }
 
@@ -1003,9 +985,9 @@ void HCConsole::ChdirCmdProc(uint32_t tokcnt)
   {
     //See if there is a parameter with that name
     if(HCUtility::GetParam(_tokens[1], startcont) != 0)
-      cout << _tokens[1] << ": Not a container" << endl;
+      cout << _tokens[1] << ": Not a container" << "\n";
     else
-      cout << _tokens[1] << ": No such container" << endl;
+      cout << _tokens[1] << ": No such container" << "\n";
   }
 }
 
@@ -1072,7 +1054,7 @@ void HCConsole::FindCmdProc(uint32_t tokcnt)
   //Check for invalid argument count
   if(tokcnt < 2)
   {
-    cout << "Syntax: " << _tokens[0] << " <EXPRESSION(s)>" << endl;
+    cout << "Syntax: " << _tokens[0] << " <EXPRESSION(s)>" << "\n";
     return;
   }
 
@@ -1089,7 +1071,7 @@ void HCConsole::ExitCmdProc(uint32_t tokcnt)
   //Check for invalid argument count
   if(tokcnt != 1)
   {
-    cout << "Syntax: " << _tokens[0] << endl;
+    cout << "Syntax: " << _tokens[0] << "\n";
     return;
   }
 
@@ -1107,7 +1089,7 @@ void HCConsole::CallCmdProc(uint32_t tokcnt)
   //Check invalid number of arguments
   if(tokcnt < 2)
   {
-    cout << "Syntax: " << _tokens[0] << " <CALL PARAM LIST>" << endl;
+    cout << "Syntax: " << _tokens[0] << " <CALL PARAM LIST>" << "\n";
     return;
   }
 
@@ -1125,11 +1107,11 @@ void HCConsole::CallCmdProc(uint32_t tokcnt)
     {
       //Call parameter and check for error
       if((ierr = param->Call()) != ERR_NONE)
-        cout << "Error (" << ErrToString(ierr) << ')' << endl;
+        cout << "Error (" << ErrToString(ierr) << ')' << "\n";
     }
     else
     {
-      cout << _tokens[i] << ": No such parameter" << endl;
+      cout << _tokens[i] << ": No such parameter" << "\n";
     }
   }
 }
@@ -1158,7 +1140,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   //Get parameter with specified name and check for not found
   if((param = HCUtility::GetParam(_tokens[0], startcont)) == 0)
   {
-    cout << _tokens[0] << ": No such parameter" << endl;
+    cout << _tokens[0] << ": No such parameter" << "\n";
     return;
   }
 
@@ -1167,7 +1149,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Set parameter value using string and check for error
     if((ierr = param->SetStr(_tokens[2])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1177,7 +1159,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Add value to parameter using string and check for error
     if((ierr = param->AddStr(_tokens[2])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1187,7 +1169,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Subtract native value string and check for error
     if((ierr = param->SubStr(_tokens[2])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1197,7 +1179,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Call parameter and check for error
     if((ierr = param->Call()) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1207,7 +1189,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Set parameter value to empty string and check for error
     if((ierr = param->SetStrLit("")) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1217,7 +1199,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Add empty string and check for error
     if((ierr = param->AddStrLit("")) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1227,7 +1209,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Subtract empty string and check for error
     if((ierr = param->SubStrLit("")) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1238,13 +1220,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Call parameter and check for error
     if((ierr = param->CallTbl(eid)) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1254,7 +1236,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Set parameter value to literal string and check for error
     if((ierr = param->SetStrLit(_tokens[3])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1264,7 +1246,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Add literal string and check for error
     if((ierr = param->AddStrLit(_tokens[3])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1274,7 +1256,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Subtract literal string and check for error
     if((ierr = param->SubStrLit(_tokens[3])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1284,7 +1266,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Execute file upload
     if((ierr = param->Upload(_tokens[3])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1294,7 +1276,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   {
     //Execute file download
     if((ierr = param->Download(_tokens[3])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1305,13 +1287,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to native value string and check for error
     if((ierr = param->SetStrTbl(eid, _tokens[5])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1322,13 +1304,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Call parameter and check for error
     if((ierr = param->CallTbl(eid)) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1339,13 +1321,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to empty string and check for error
     if((ierr = param->SetStrLitTbl(eid, "")) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1356,13 +1338,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to literal string and check for error
     if((ierr = param->SetStrLitTbl(eid, _tokens[6])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1373,13 +1355,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to native value string and check for error
     if((ierr = param->SetStrTbl(eid, _tokens[7])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1390,13 +1372,13 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to empty string and check for error
     if((ierr = param->SetStrTbl(eid, "")) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
@@ -1407,19 +1389,19 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
     {
-      cout << "Error (" << ErrToString(ERR_EID) << ')' << endl;
+      cout << "Error (" << ErrToString(ERR_EID) << ')' << "\n";
       return;
     }
 
     //Set parameter value to literal string and check for error
     if((ierr = param->SetStrLitTbl(eid, _tokens[8])) != ERR_NONE)
-      cout << "Error (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error (" << ErrToString(ierr) << ')' << "\n";
 
     return;
   }
 
   //No pattern recognized
-  cout << "Unrecognized command" << endl;
+  cout << "Unrecognized command" << "\n";
 }
 
 void HCConsole::Prompt(void)
@@ -1592,7 +1574,7 @@ void HCConsole::ShowListing(const string &name, HCContainer *startcont, size_t i
   //List containers with matching name (expressions allowed)
   for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
     if(cont->NameMatchesExpression(nodename))
-      cout << cont->GetName() << endl;
+      cout << cont->GetName() << "\n";
 }
 
 void HCConsole::ShowInfo(const string &name, HCContainer *startcont, size_t index)
@@ -1725,12 +1707,12 @@ void HCConsole::ShowNames(const string &name, HCContainer *startcont, size_t ind
   //List parameters with matching name
   for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
     if(param->NameStartsWith(nodename))
-      cout << TC_CYAN << param->GetName() << TC_RESET << endl;
+      cout << TC_CYAN << param->GetName() << TC_RESET << "\n";
 
   //List containers with matching name (expressions allowed)
   for(cont=startcont->GetFirstSubCont(); cont!=0; cont=cont->GetNext())
     if(cont->NameStartsWith(nodename))
-      cout << TC_CYAN << cont->GetName() << '/' << TC_RESET << endl;
+      cout << TC_CYAN << cont->GetName() << '/' << TC_RESET << "\n";
 }
 
 void HCConsole::ShowFinds(const string &name, HCContainer *startcont)
@@ -1747,7 +1729,7 @@ void HCConsole::ShowFinds(const string &name, HCContainer *startcont)
     if(param->NameMatchesExpression(name))
     {
       startcont->PrintPath();
-      cout << param->GetName() << endl;
+      cout << param->GetName() << "\n";
     }
   }
 
@@ -1757,7 +1739,7 @@ void HCConsole::ShowFinds(const string &name, HCContainer *startcont)
     if(cont->NameMatchesExpression(name))
     {
       startcont->PrintPath();
-      cout << cont->GetName() << '/' << endl;
+      cout << cont->GetName() << '/' << "\n";
     }
 
     //Recurse

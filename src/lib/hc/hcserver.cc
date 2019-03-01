@@ -146,7 +146,7 @@ HCParameter *HCServer::GetParam(uint16_t pid)
   //Check for parameter id out of bounds
   if(pid >= _pidmax)
   {
-    cout << __FILE__ << ' ' << __LINE__ << " - Parameter id out of bounds (" << pid << " >= " << _pidmax << ')' << endl;
+    cout << __FILE__ << ' ' << __LINE__ << " - Parameter id out of bounds (" << pid << " >= " << _pidmax << ')' << "\n";
     return 0;
   }
 
@@ -162,7 +162,7 @@ void HCServer::Add(HCParameter *param)
   //Check for parameter array full
   if(_pidtop >= _pidmax)
   {
-    cout << __FILE__ << ' ' << __LINE__ << " - Parameter top (" << _pidtop << ") is at max (" << _pidmax << ')' << endl;
+    cout << __FILE__ << ' ' << __LINE__ << " - Parameter top (" << _pidtop << ") is at max (" << _pidmax << ')' << "\n";
     return;
   }
 
@@ -331,14 +331,14 @@ void HCServer::SaveInfo(void)
   //Check for error
   if(!file.is_open())
   {
-    cout << __FILE__ << ' ' << __LINE__ << " - Error opening file (" << _infofilename << ')' << endl;
+    cout << __FILE__ << ' ' << __LINE__ << " - Error opening file (" << _infofilename << ')' << "\n";
     return;
   }
 
   //Header
-  file << "<server>" << endl;
-  file << "  <name>" << _name << "</name>" << endl;
-  file << "  <version>" << _version << "</version>" << endl;
+  file << "<server>" << "\n";
+  file << "  <name>" << _name << "</name>" << "\n";
+  file << "  <version>" << _version << "</version>" << "\n";
 
   //Save child parameters if contained in PID table
   for(param=_top->GetFirstSubParam(); param!=0; param=param->GetNext())
@@ -350,7 +350,7 @@ void HCServer::SaveInfo(void)
     SaveInfo(file, 2, cont);
 
   //Footer
-  file << "</server>" << endl;
+  file << "</server>" << "\n";
 
   //Close information file
   file.close();
@@ -366,8 +366,8 @@ void HCServer::SaveInfo(ofstream &file, uint32_t indent, HCContainer *startcont)
   assert(startcont != 0);
 
   //Header
-  file << string(indent, ' ') << "<cont>" << endl;
-  file << string(indent, ' ') << "  <name>" << startcont->GetName() << "</name>" << endl;
+  file << string(indent, ' ') << "<cont>" << "\n";
+  file << string(indent, ' ') << "  <name>" << startcont->GetName() << "</name>" << "\n";
 
   //Save child parameters if contained in PID table
   for(param=startcont->GetFirstSubParam(); param!=0; param=param->GetNext())
@@ -379,7 +379,7 @@ void HCServer::SaveInfo(ofstream &file, uint32_t indent, HCContainer *startcont)
     SaveInfo(file, indent + 2, cont);
 
   //Footer
-  file << string(indent, ' ') << "</cont>" << endl;
+  file << string(indent, ' ') << "</cont>" << "\n";
 }
 
 bool HCServer::ParamToPID(HCParameter *param, uint16_t *pid)

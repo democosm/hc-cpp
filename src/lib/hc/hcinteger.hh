@@ -27,6 +27,7 @@
 #ifndef _HCINTEGER_HH_
 #define _HCINTEGER_HH_
 
+#include "const.hh"
 #include "error.hh"
 #include "hcclient.hh"
 #include "hcparameter.hh"
@@ -251,8 +252,9 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
 
@@ -263,7 +265,14 @@ public:
     if(_valenums == 0)
     {
       //Print value
-      std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
+      std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+      std::cout << " = ";
+      std::cout << PrintCast(val);
+      std::cout << " = ";
+      std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+      std::cout << " !" << ErrToString(lerr);
+      std::cout << TC_RESET << "\n";
+
       return;
     }
 
@@ -274,13 +283,32 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
-        std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
+        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+        std::cout << _name;
+        std::cout << " = ";
+        std::cout << PrintCast(val);
+        std::cout << " = ";
+        std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+        std::cout << " = ";
+        std::cout << "\"" << _valenums[i]._str << "\"";
+        std::cout << " !" << ErrToString(lerr);
+        std::cout << TC_RESET << "\n";
+
         return;
       }
     }
 
     //Print value indicate that no enum found
-    std::cout << _name << " = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+    std::cout << _name;
+    std::cout << " = ";
+    std::cout << PrintCast(val);
+    std::cout << " = ";
+    std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+    std::cout << " = ";
+    std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+    std::cout << " !" << ErrToString(lerr);
+    std::cout << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -723,13 +751,11 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
-
-    //Print name
-    std::cout << _name << "\n";
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -744,7 +770,14 @@ public:
         if(_eidenums == 0)
         {
           //Print value
-          std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
+          std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+          std::cout << "[" << eid << "]";
+          std::cout << " = ";
+          std::cout << PrintCast(val);
+          std::cout << " = ";
+          std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+          std::cout << " !" << ErrToString(lerr);
+          std::cout << TC_RESET << "\n";
         }
         else
         {
@@ -752,12 +785,26 @@ public:
           if(!EIDNumToStr(eid, eidstr))
           {
             //Print value (indicate no EID enum string found)
-            std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+            std::cout << " = ";
+            std::cout << PrintCast(val);
+            std::cout << " = ";
+            std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
           else
           {
             //Print value (show EID enum string)
-            std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[\"" << eidstr << "\"]";
+            std::cout << " = ";
+            std::cout << PrintCast(val);
+            std::cout << " = ";
+            std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
         }
       }
@@ -770,12 +817,30 @@ public:
           if(!ValNumToStr(val, valstr))
           {
             //Print value (indicate no value enum string found)
-            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << eid << "]";
+            std::cout << " = ";
+            std::cout << PrintCast(val);
+            std::cout << " = ";
+            std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+            std::cout << " = ";
+            std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
           else
           {
             //Print value (show value enum string)
-            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << eid << "]";
+            std::cout << " = ";
+            std::cout << PrintCast(val);
+            std::cout << " = ";
+            std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+            std::cout << " = ";
+            std::cout << "\"" << valstr << "\"";
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
         }
         else
@@ -787,12 +852,30 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no value or EID enum string found)
-              std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+              std::cout << " = ";
+              std::cout << PrintCast(val);
+              std::cout << " = ";
+              std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+              std::cout << " = ";
+              std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
             else
             {
               //Print value (show EID enum string, indicate no value enum string found)
-              std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[\"" << eidstr << "\"]";
+              std::cout << " = ";
+              std::cout << PrintCast(val);
+              std::cout << " = ";
+              std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+              std::cout << " = ";
+              std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
           }
           else
@@ -801,12 +884,30 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no EID enum string found, show value enum string)
-              std::cout << " [\e[31m" << eid << "\e[0m] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+              std::cout << " = ";
+              std::cout << PrintCast(val);
+              std::cout << " = ";
+              std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+              std::cout << " = ";
+              std::cout << "\"" << valstr << "\"";
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
             else
             {
               //Print value (show EID enum string and value enum string)
-              std::cout << " [\"" << eidstr << "\"] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << valstr << "\" !" << ErrToString(lerr) << "\n";
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[\"" << eidstr << "\"]";
+              std::cout << " = ";
+              std::cout << PrintCast(val);
+              std::cout << " = ";
+              std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+              std::cout << " = ";
+              std::cout << "\"" << valstr << "\"";
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
           }
         }
@@ -1368,13 +1469,11 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << "\n";
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
-
-    //Print name
-    std::cout << _name << "\n";
 
     //Loop through all elements
     for(eid=0; eid<_maxsize; eid++)
@@ -1390,7 +1489,14 @@ public:
       if(_valenums == 0)
       {
         //Print value
-        std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " !" << ErrToString(lerr) << "\n";
+        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+        std::cout << "[" << eid << "]";
+        std::cout << " = ";
+        std::cout << PrintCast(val);
+        std::cout << " = ";
+        std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+        std::cout << " !" << ErrToString(lerr);
+        std::cout << TC_RESET << "\n";
       }
       else
       {
@@ -1401,15 +1507,44 @@ public:
           if(_valenums[i]._num == val)
           {
             //Print value
-            std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << "\n";
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << eid << "]";
+            std::cout << " = ";
+            std::cout << PrintCast(val);
+            std::cout << " = ";
+            std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+            std::cout << " = ";
+            std::cout << "\"" << _valenums[i]._str << "\"";
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
+
             break;
           }
         }
 
         //Print value indicate that no enum found
         if(_valenums[i]._str.length() == 0)
-          std::cout << " [" << eid << "] = " << PrintCast(val) << " = 0x" << std::hex << PrintCast(val) << std::dec << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << "\n";
+        {
+          std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+          std::cout << "[" << eid << "]";
+          std::cout << " = ";
+          std::cout << PrintCast(val);
+          std::cout << " = ";
+          std::cout << "0x" << std::hex << PrintCast(val) << std::dec;
+          std::cout << " = ";
+          std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+          std::cout << " !" << ErrToString(lerr);
+          std::cout << TC_RESET << "\n";
+        }
       }
+    }
+
+    //Check for no values in list
+    if(eid == 0)
+    {
+      std::cout << TC_GREEN << _name;
+      std::cout << "[]";
+      std::cout << TC_RESET << "\n";
     }
   }
 

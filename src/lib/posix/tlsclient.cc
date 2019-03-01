@@ -57,7 +57,7 @@ TLSClient::TLSClient(uint16_t port, const char *srvipaddr, uint16_t srvport, con
   //Convert server IP address string to integer and check for error
   if(srvipaddr != 0)
     if(inet_pton(AF_INET, srvipaddr, &(addr.sin_addr)) != 1)
-      cout << __FILE__ << ":" << __LINE__ << " - Error converting server IP address" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error converting server IP address" << "\n";
 
   //Remember server IP address and port
   _srvipaddr = addr.sin_addr.s_addr;
@@ -69,7 +69,7 @@ TLSClient::TLSClient(uint16_t port, const char *srvipaddr, uint16_t srvport, con
   //Create SSL context and check for error
   sslmethod = TLSv1_2_client_method();
   if((_sslctx = SSL_CTX_new(sslmethod)) == NULL)
-    cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << "\n";
 
   //Initialize SSL wrapper to indicate not connected
   _ssl = NULL;
@@ -175,7 +175,7 @@ SSL *TLSClient::WaitForConnection(void)
     //Create connection socket
     if((_connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error creating connection socket" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error creating connection socket" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -188,7 +188,7 @@ SSL *TLSClient::WaitForConnection(void)
     if(bind(_connfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
     {
       close(_connfd);
-      cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -198,7 +198,7 @@ SSL *TLSClient::WaitForConnection(void)
     if(setsockopt(_connfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
     {
       close(_connfd);
-      cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -211,7 +211,7 @@ SSL *TLSClient::WaitForConnection(void)
     if(connect(_connfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
     {
       close(_connfd);
-      cout << __FILE__ << ":" << __LINE__ << " - Error connecting" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error connecting" << "\n";
       ThreadSleep(1000000);
       continue;
     }

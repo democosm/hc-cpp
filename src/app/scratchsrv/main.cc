@@ -85,15 +85,15 @@ struct Args
 void Usage()
 {
   //Print usage information
-  cout << "Example HC server" << endl;
-  cout << "Version: " << Appversion << endl;
-  cout << "Report bugs to: " << Appbugaddress << endl;
-  cout << Appdoc << endl;
-  cout << "[-t, --tcp] Use TCP for transport protocol" << endl;
-  cout << "[-s, --tls] Use TLS for transport protocol" << endl;
-  cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << endl;
-  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 1501)" << endl;
-  cout << "[-d, --daemon] Spawn in background mode" << endl;
+  cout << "Example HC server" << "\n";
+  cout << "Version: " << Appversion << "\n";
+  cout << "Report bugs to: " << Appbugaddress << "\n";
+  cout << Appdoc << "\n";
+  cout << "[-t, --tcp] Use TCP for transport protocol" << "\n";
+  cout << "[-s, --tls] Use TLS for transport protocol" << "\n";
+  cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << "\n";
+  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 1501)" << "\n";
+  cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 
 bool ParseOptions(int argc, char **argv, struct Args* args)
@@ -118,7 +118,7 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
       if(!StringConvert(optarg, args->port))
       {
         valid = false;
-        cout << "Invalid port number (" << optarg << ")" << endl;
+        cout << "Invalid port number (" << optarg << ")" << "\n";
         Usage();
         break;
       }
@@ -129,7 +129,7 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
       if(!StringConvert(optarg, args->qport))
       {
         valid = false;
-        cout << "Invalid query port number (" << optarg << ")" << endl;
+        cout << "Invalid query port number (" << optarg << ")" << "\n";
         Usage();
         break;
       }

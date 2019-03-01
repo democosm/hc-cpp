@@ -27,6 +27,7 @@
 #ifndef _HCCALL_HH_
 #define _HCCALL_HH_
 
+#include "const.hh"
 #include "error.hh"
 #include "hcclient.hh"
 #include "hcparameter.hh"
@@ -115,7 +116,7 @@ public:
 
   virtual void PrintVal(void)
   {
-    std::cout << _name << "()" << std::endl;
+    std::cout << TC_GREEN << _name << "()" << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -127,10 +128,10 @@ public:
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << std::string(indent, ' ') << "<call>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "</call>" << std::endl;
+    file << std::string(indent, ' ') << "<call>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "</call>" << "\n";
   }
 
   virtual int Call(void)
@@ -225,7 +226,7 @@ public:
 
   virtual void PrintVal(void)
   {
-    std::cout << _name << "(0-" << (_size-1) << ')' << std::endl;
+    std::cout << TC_GREEN << _name << "(0-" << (_size-1) << ')' << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -251,22 +252,22 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<callt>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
+    file << std::string(indent, ' ') << "<callt>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
 
     if(_eidenums != 0)
     {
-      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << "\n";
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << "\n";
 
-      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</callt>" << std::endl;
+    file << std::string(indent, ' ') << "</callt>" << "\n";
   }
 
   virtual int CallTbl(uint32_t eid)

@@ -47,7 +47,7 @@ TCPServer::TCPServer(uint16_t port)
 
   //Create the listening socket
   if((_listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error creating listening socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error creating listening socket" << "\n";
 
   //Bind listening socket to specified port
   memset(&addr, 0, sizeof(addr));
@@ -55,12 +55,12 @@ TCPServer::TCPServer(uint16_t port)
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
   if(bind(_listenfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << "\n";
 
   //Set listening socket to reuseable
   optval = 1;
   if(setsockopt(_listenfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting listening socket reuse" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting listening socket reuse" << "\n";
 }
 
 TCPServer::~TCPServer()
@@ -153,7 +153,7 @@ int TCPServer::WaitForConnection(void)
     //Listen
     if(listen(_listenfd, 1024) != 0)
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error listening" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error listening" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -162,7 +162,7 @@ int TCPServer::WaitForConnection(void)
     caddrsiz = sizeof(caddr);
     if((_connfd = accept(_listenfd, (struct sockaddr *)&caddr, &caddrsiz)) < 0)
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << "\n";
       ThreadSleep(1000000);
       continue;
     }

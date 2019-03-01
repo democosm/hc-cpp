@@ -27,6 +27,7 @@
 #ifndef _HCBOOLEAN_HH_
 #define _HCBOOLEAN_HH_
 
+#include "const.hh"
 #include "error.hh"
 #include "hcclient.hh"
 #include "hcparameter.hh"
@@ -170,8 +171,9 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
 
@@ -182,7 +184,12 @@ public:
     if(_valenums == 0)
     {
       //Print value
-      std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
+      std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+      std::cout << " = ";
+      std::cout << std::boolalpha << val << std::noboolalpha;
+      std::cout << " !" << ErrToString(lerr);
+      std::cout << TC_RESET << "\n";
+
       return;
     }
 
@@ -193,13 +200,28 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
-        std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << " = \"" << _valenums[i]._str << "\" !" << ErrToString(lerr) << std::endl;
+        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+        std::cout << _name;
+        std::cout << " = ";
+        std::cout << std::boolalpha << val << std::noboolalpha;
+        std::cout << " = ";
+        std::cout << "\"" << _valenums[i]._str << "\"";
+        std::cout << " !" << ErrToString(lerr);
+        std::cout << TC_RESET << "\n";
+  
         return;
       }
     }
 
     //Print value indicate that no value enum found
-    std::cout << _name << " = " << std::boolalpha << val << std::noboolalpha << "\e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
+    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+    std::cout << _name;
+    std::cout << " = ";
+    std::cout << std::boolalpha << val << std::noboolalpha;
+    std::cout << " = ";
+    std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+    std::cout << " !" << ErrToString(lerr);
+    std::cout << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -226,22 +248,22 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<bool>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
+    file << std::string(indent, ' ') << "<bool>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
 
     if(_valenums != 0)
     {
-      file << std::string(indent, ' ') << "  <valenums>" << std::endl;
+      file << std::string(indent, ' ') << "  <valenums>" << "\n";
 
       for(i=0; _valenums[i]._str.length() != 0; i++)
-        file << std::string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << std::endl;
+        file << std::string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << "\n";
 
-      file << std::string(indent, ' ') << "  </valenums>" << std::endl;
+      file << std::string(indent, ' ') << "  </valenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</bool>" << std::endl;
+    file << std::string(indent, ' ') << "</bool>" << "\n";
   }
 
   virtual int GetBool(bool &val)
@@ -564,13 +586,11 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
-
-    //Print name
-    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -585,7 +605,12 @@ public:
         if(_eidenums == 0)
         {
           //Print value
-          std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
+          std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+          std::cout << "[" << eid << "]";
+          std::cout << " = ";
+          std::cout << std::boolalpha << val << std::noboolalpha;
+          std::cout << " !" << ErrToString(lerr);
+          std::cout << TC_RESET << "\n";
         }
         else
         {
@@ -593,12 +618,22 @@ public:
           if(!EIDNumToStr(eid, eidstr))
           {
             //Print value (indicate no EID enum string found)
-            std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+            std::cout << " = ";
+            std::cout << std::boolalpha << val << std::noboolalpha;
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
           else
           {
             //Print value (show EID enum string)
-            std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " !" << ErrToString(lerr) << std::endl;
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[\"" << eidstr << "\"]";
+            std::cout << " = ";
+            std::cout << std::boolalpha << val << std::noboolalpha;
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
         }
       }
@@ -611,12 +646,26 @@ public:
           if(!ValToEnumStr(val, valstr))
           {
             //Print value (indicate no value enum string found)
-            std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m" << " !" << ErrToString(lerr) << std::endl;
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << eid << "]";
+            std::cout << " = ";
+            std::cout << std::boolalpha << val << std::noboolalpha;
+            std::cout << " = ";
+            std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
           else
           {
             //Print value (show value enum string)
-            std::cout << " [" << eid << "] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
+            std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+            std::cout << "[" << eid << "]";
+            std::cout << " = ";
+            std::cout << std::boolalpha << val << std::noboolalpha;
+            std::cout << " = ";
+            std::cout << "\"" << valstr << "\"";
+            std::cout << " !" << ErrToString(lerr);
+            std::cout << TC_RESET << "\n";
           }
         }
         else
@@ -628,12 +677,26 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no value or EID enum string found)
-              std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+              std::cout << " = ";
+              std::cout << std::boolalpha << val << std::noboolalpha;
+              std::cout << " = ";
+              std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
             else
             {
               //Print value (show EID enum string, indicate no value enum string found)
-              std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " = \e[31m\"\"\e[0m !" << ErrToString(lerr) << std::endl;
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[\"" << eidstr << "\"]";
+              std::cout << " = ";
+              std::cout << std::boolalpha << val << std::noboolalpha;
+              std::cout << " = ";
+              std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
           }
           else
@@ -642,12 +705,26 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no EID enum string found, show value enum string)
-              std::cout << " [\e[31m" << eid << "\e[0m] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+              std::cout << " = ";
+              std::cout << std::boolalpha << val << std::noboolalpha;
+              std::cout << " = ";
+              std::cout << "\"" << valstr << "\"";
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
             else
             {
               //Print value (show EID enum string and value enum string)
-              std::cout << " [\"" << eidstr << "\"] = " << std::boolalpha << val << std::noboolalpha << " = \"" << valstr << "\" !" << ErrToString(lerr) << std::endl;
+              std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+              std::cout << "[\"" << eidstr << "\"]";
+              std::cout << " = ";
+              std::cout << std::boolalpha << val << std::noboolalpha;
+              std::cout << " = ";
+              std::cout << "\"" << valstr << "\"";
+              std::cout << " !" << ErrToString(lerr);
+              std::cout << TC_RESET << "\n";
             }
           }
         }
@@ -689,33 +766,33 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<boolt>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
-    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
+    file << std::string(indent, ' ') << "<boolt>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
 
     if(_eidenums != 0)
     {
-      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << "\n";
 
       for(i=0; _eidenums[i]._str[0] != '\0'; i++)
-        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << "\n";
 
-      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << "\n";
     }
 
     if(_valenums != 0)
     {
-      file << std::string(indent, ' ') << "  <valenums>" << std::endl;
+      file << std::string(indent, ' ') << "  <valenums>" << "\n";
 
       for(i=0; _valenums[i]._str[0] != '\0'; i++)
-        file << std::string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << std::endl;
+        file << std::string(indent, ' ') << "    <eq>" << _valenums[i]._num << "," << _valenums[i]._str << "</eq>" << "\n";
 
-      file << std::string(indent, ' ') << "  </valenums>" << std::endl;
+      file << std::string(indent, ' ') << "  </valenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</boolt>" << std::endl;
+    file << std::string(indent, ' ') << "</boolt>" << "\n";
   }
 
   virtual int GetBoolTbl(uint32_t eid, bool &val)

@@ -51,14 +51,14 @@ HCAggregator::HCAggregator(const string &filename)
   //Parse file and check for error
   if((doc.LoadFile(filename.c_str())) != 0)
   {
-    cout << __FILE__ << ' ' << __LINE__ << " - Error parsing file (" << filename << ')' << endl;
+    cout << __FILE__ << ' ' << __LINE__ << " - Error parsing file (" << filename << ')' << "\n";
     return;
   }
 
   //Parse server from DOM and check for error
   if((_srv = ParseServer(doc.FirstChildElement("server"))) == 0)
   {
-    cout << __FILE__ << ' ' << __LINE__ << " - Error parsing server from DOM" << endl;
+    cout << __FILE__ << ' ' << __LINE__ << " - Error parsing server from DOM" << "\n";
     return;
   }
 

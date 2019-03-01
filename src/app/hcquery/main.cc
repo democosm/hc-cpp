@@ -70,20 +70,20 @@ public:
     //Check for bad query string length
     if(len < 3)
     {
-      cout << "Bad query string length (" << len << ")" << endl;
+      cout << "Bad query string length (" << len << ")" << "\n";
       return;
     }
 
     //Write query string to device
     if(_dev->Write(_querystring, len) != len)
     {
-      cout << "Error sending query string" << endl;
+      cout << "Error sending query string" << "\n";
       return;
     }
 
     //Wait for event
     if(_event->Wait(1000000) != ERR_NONE)
-      cout << "Timed out waiting for response" << endl;
+      cout << "Timed out waiting for response" << "\n";
   }
 
 private:
@@ -110,7 +110,7 @@ private:
 	{
           //Null terminate read data and print
           readbuf[readcount] = '\0';
-          cout << readbuf << endl;
+          cout << readbuf << "\n";
 
           //Signal event
           _event->Signal();
@@ -128,7 +128,7 @@ private:
 
 void Usage(const char *appname)
 {
-  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <QUERY STRING>" << endl;
+  cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <QUERY STRING>" << "\n";
 }
 
 int main(int argc, char **argv)
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
   //Convert server port number to integer and check for error
   if(!StringConvert(argv[2], port))
   {
-    cout << "Invalid port number " << argv[2] << endl;
+    cout << "Invalid port number " << argv[2] << "\n";
     Usage(argv[0]);
     return -1;
   }

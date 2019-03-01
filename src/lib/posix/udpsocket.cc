@@ -47,7 +47,7 @@ UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
 
   //Create the socket
   if((_socketfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error creating socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error creating socket" << "\n";
 
   //Bind socket to specified port
   memset(&addr, 0, sizeof(addr));
@@ -55,17 +55,17 @@ UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
   if(bind(_socketfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
 
   //Set socket to reuseable
   optval = 1;
   if(setsockopt(_socketfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << "\n";
 
   //Set TTL
   optval = 10;
   if(setsockopt(_socketfd, IPPROTO_IP, IP_MULTICAST_TTL, &optval, sizeof(optval)) < 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting TTL" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting TTL" << "\n";
 
   //Zero destination information
   memset(&_dest, 0, sizeof(_dest));
@@ -76,7 +76,7 @@ UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
   //Convert destination IP address string to integer and check for error
   if(destipaddr != 0)
     if(inet_pton(AF_INET, destipaddr, &(_dest.sin_addr)) != 1)
-      cout << __FILE__ << ":" << __LINE__ << " - Error converting destination IP address" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error converting destination IP address" << "\n";
 
   //Set destination port
   _dest.sin_port = htons(destport);

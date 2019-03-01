@@ -27,6 +27,7 @@
 #ifndef _HCSTRING_HH_
 #define _HCSTRING_HH_
 
+#include "const.hh"
 #include "error.hh"
 #include "hcclient.hh"
 #include "hcparameter.hh"
@@ -152,8 +153,9 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
 
@@ -161,7 +163,11 @@ public:
     lerr = (_object->*_getmethod)(val);
 
     //Print value
-    std::cout << _name << " = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
+    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+    std::cout << " = ";
+    std::cout << "\"" << val << "\"";
+    std::cout << " !" << ErrToString(lerr);
+    std::cout << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -174,11 +180,11 @@ public:
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << std::string(indent, ' ') << "<str>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
-    file << std::string(indent, ' ') << "</str>" << std::endl;
+    file << std::string(indent, ' ') << "<str>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "</str>" << "\n";
   }
 
   virtual int GetStr(std::string &val)
@@ -384,13 +390,11 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
-
-    //Print name
-    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_size; eid++)
@@ -402,7 +406,12 @@ public:
       if(_eidenums == 0)
       {
         //Print value
-        std::cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
+        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+        std::cout << "[" << eid << "]";
+        std::cout << " = ";
+        std::cout << "\"" << val << "\"";
+        std::cout << " !" << ErrToString(lerr);
+        std::cout << TC_RESET << "\n";
       }
       else
       {
@@ -410,12 +419,22 @@ public:
         if(!EIDNumToStr(eid, eidstr))
         {
           //Print value (indicate no EID enum string found)
-          std::cout << " [\e[31m" << eid << "\e[0m] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
+          std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+          std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
+          std::cout << " = ";
+          std::cout << "\"" << val << "\"";
+          std::cout << " !" << ErrToString(lerr);
+          std::cout << TC_RESET << "\n";
         }
         else
         {
           //Print value (show EID enum string)
-          std::cout << " [\"" << eidstr << "\"] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
+          std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+          std::cout << "[\"" << eidstr << "\"]";
+          std::cout << " = ";
+          std::cout << "\"" << val << "\"";
+          std::cout << " !" << ErrToString(lerr);
+          std::cout << TC_RESET << "\n";
         }
       }
     }
@@ -445,23 +464,23 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<strt>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << std::endl;
-    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << std::endl;
+    file << std::string(indent, ' ') << "<strt>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
 
     if(_eidenums != 0)
     {
-      file << std::string(indent, ' ') << "  <eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  <eidenums>" << "\n";
 
       for(i=0; _eidenums[i]._str.length() != 0; i++)
-        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << std::endl;
+        file << std::string(indent, ' ') << "    <eq>" << _eidenums[i]._num << "," << _eidenums[i]._str << "</eq>" << "\n";
 
-      file << std::string(indent, ' ') << "  </eidenums>" << std::endl;
+      file << std::string(indent, ' ') << "  </eidenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</strt>" << std::endl;
+    file << std::string(indent, ' ') << "</strt>" << "\n";
   }
 
   virtual int GetStrTbl(uint32_t eid, std::string &val)
@@ -726,13 +745,11 @@ public:
     //Check for null method
     if(_getmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
-
-    //Print name
-    std::cout << _name << std::endl;
 
     //Loop through all elements
     for(eid=0; eid<_maxsize; eid++)
@@ -745,7 +762,20 @@ public:
         break;
 
       //Print value
-      std::cout << " [" << eid << "] = \"" << val << "\" !" << ErrToString(lerr) << std::endl;
+      std::cout << TC_GREEN << _name;
+      std::cout << "[" << eid << "]";
+      std::cout << " = ";
+      std::cout << "\"" << val << "\"";
+      std::cout << " !" << ErrToString(lerr);
+      std::cout << TC_RESET << "\n";
+    }
+
+    //Check for no values in list
+    if(eid == 0)
+    {
+      std::cout << TC_GREEN << _name;
+      std::cout << "[]";
+      std::cout << TC_RESET << "\n";
     }
   }
 
@@ -760,12 +790,12 @@ public:
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << std::string(indent, ' ') << "<strl>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>" << std::endl;
-    file << std::string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>" << std::endl;
-    file << std::string(indent, ' ') << "</strl>" << std::endl;
+    file << std::string(indent, ' ') << "<strl>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>" << "\n";
+    file << std::string(indent, ' ') << "</strl>" << "\n";
   }
 
   virtual int GetStrTbl(uint32_t eid, std::string &val)

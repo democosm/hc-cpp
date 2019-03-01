@@ -27,6 +27,7 @@
 #ifndef _HCFILE_HH_
 #define _HCFILE_HH_
 
+#include "const.hh"
 #include "error.hh"
 #include "hcclient.hh"
 #include "hcparameter.hh"
@@ -129,13 +130,14 @@ public:
     //Check for null method
     if(_readmethod == 0)
     {
-      //Print value
-      std::cout << _name << " !" << ErrToString(ERR_ACCESS) << std::endl;
+      //Print value as not readable
+      PrintNotReadable();
+
       return;
     }
 
     //Print value
-    std::cout << _name << " = FILETYPE" << std::endl;
+    std::cout << TC_GREEN << _name << " = FILETYPE" << TC_RESET << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -148,11 +150,11 @@ public:
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << std::string(indent, ' ') << "<file>" << std::endl;
-    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << std::endl;
-    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << std::endl;
-    file << std::string(indent, ' ') << "  <acc>" << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W") << "</acc>" << std::endl;
-    file << std::string(indent, ' ') << "</file>" << std::endl;
+    file << std::string(indent, ' ') << "<file>" << "\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "</file>" << "\n";
   }
 
   virtual int Upload(const std::string &val)

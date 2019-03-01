@@ -791,11 +791,11 @@ void HCQServer::CtlThread(void)
     //Process message
     if(!ProcessMessage())
     {
-      cout << "Error processing query string:" << endl;
-      cout << _readbuf << endl;
-      cout << "At index " << _readind << endl;
-      cout << "Write buffer is:" << endl;
-      cout << _writebuf << endl;
+      cout << "Error processing query string:" << "\n";
+      cout << _readbuf << "\n";
+      cout << "At index " << _readind << "\n";
+      cout << "Write buffer is:" << "\n";
+      cout << _writebuf << "\n";
       continue;
     }
 

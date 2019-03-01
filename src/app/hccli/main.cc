@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   //Check for wrong number of arguments
   if(argc != 2)
   {
-    cout << "Usage: " << argv[0] << " <AGGREGATOR FILE NAME>" << endl;
+    cout << "Usage: " << argv[0] << " <AGGREGATOR FILE NAME>" << "\n";
     return -1;
   }
 

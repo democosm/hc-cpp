@@ -24,6 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "const.hh"
 #include "hcparameter.hh"
 #include "error.hh"
 #include <cassert>
@@ -491,21 +492,28 @@ void HCParameter::SetNext(HCParameter *next)
   _next = next;
 }
 
+void HCParameter::PrintNotReadable(void)
+{
+  std::cout << TC_YELLOW << _name;
+  std::cout << " is not readable";
+  std::cout << TC_RESET << "\n";
+}
+
 uint8_t HCParameter::GetType(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return TYPE_CALL;
 }
 
 bool HCParameter::IsReadable(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::IsWritable(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
@@ -526,220 +534,220 @@ bool HCParameter::HasValEnums(void)
 
 void HCParameter::PrintVal(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
 }
 
 void HCParameter::PrintInfo(ostream &st)
 {
-  st << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m";
+  st << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET;
 }
 
 void HCParameter::SaveInfo(ofstream &, uint32_t, uint16_t)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
 }
 
 int HCParameter::Call(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::CallTbl(uint32_t)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::GetBool(bool &val)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val = false;
   return ERR_TYPE;
 }
 
 int HCParameter::SetBool(bool)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::GetBoolTbl(uint32_t, bool &val)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val = false;
   return ERR_TYPE;
 }
 
 int HCParameter::SetBoolTbl(uint32_t, bool)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::GetStr(string &val)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val.clear();
   return ERR_TYPE;
 }
 
 int HCParameter::SetStr(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::SetStrLit(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::GetStrTbl(uint32_t, string &val)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val.clear();
   return ERR_TYPE;
 }
 
 int HCParameter::SetStrTbl(uint32_t, const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::SetStrLitTbl(uint32_t, const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::AddStr(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::AddStrLit(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::SubStr(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::SubStrLit(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::Upload(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 int HCParameter::Download(const string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
 bool HCParameter::CallCell(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::CallCellTbl(uint32_t, HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::GetCell(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::SetCell(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::GetCellTbl(uint32_t, HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::SetCellTbl(uint32_t, HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::GetCellLst(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::AddCell(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::SubCell(HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::ReadCell(uint32_t, uint16_t, HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 bool HCParameter::WriteCell(uint32_t, HCCell *, HCCell *)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
 uint32_t HCParameter::GetNumEIDs(void)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return 0;
 }
 
 bool HCParameter::EIDStrToNum(const string &, uint32_t &num)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   num = 0;
   return false;
 }
 
 bool HCParameter::EIDNumToStr(uint32_t, string &str)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   str.clear();
   return false;
 }
 
 bool HCParameter::GetValEnumStr(uint32_t, string &)
 {
-  cout << "\e[31m" << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'\e[0m" << endl;
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 

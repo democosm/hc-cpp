@@ -66,32 +66,32 @@ HCConnection::HCConnection(Device *dev, HCContainer *pcont, const string &contna
   //Get server name and check for error
   if((ierr = _cli->Get(HCServer::PID_NAME, srvname)) != ERR_NONE)
   {
-    cout << "Error getting server name (" << ErrToString(ierr) << ')' << endl;
+    cout << "Error getting server name (" << ErrToString(ierr) << ')' << "\n";
     return;
   }
 
   //Print info
-  cout << "Server name: " << srvname << endl;
+  cout << "Server name: " << srvname << "\n";
 
   //Get server version and check for error
   if((ierr = _cli->Get(HCServer::PID_VERSION, srvvers)) != ERR_NONE)
   {
-    cout << "Error getting server version (" << ErrToString(ierr) << ')' << endl;
+    cout << "Error getting server version (" << ErrToString(ierr) << ')' << "\n";
     return;
   }
 
   //Print info
-  cout << "Server version: " << srvvers << endl;
+  cout << "Server version: " << srvvers << "\n";
 
   //Get server information file CRC and check for error
   if((ierr = _cli->Get(HCServer::PID_INFOFILECRC, srvinfocrc)) != ERR_NONE)
   {
-    cout << "Error getting server information file CRC (" << ErrToString(ierr) << ')' << endl;
+    cout << "Error getting server information file CRC (" << ErrToString(ierr) << ')' << "\n";
     return;
   }
 
   //Print info
-  cout << "Server information file CRC: " << srvinfocrc << endl;
+  cout << "Server information file CRC: " << srvinfocrc << "\n";
 
   //Check for no server information file name specified
   if(sifname == "")
@@ -111,18 +111,18 @@ HCConnection::HCConnection(Device *dev, HCContainer *pcont, const string &contna
   lsifcrc = CRC32File(lsifname.c_str());
 
   //Print info
-  cout << "Local server information file CRC: " << lsifcrc << endl;
+  cout << "Local server information file CRC: " << lsifcrc << "\n";
 
   //Check for difference in CRCs
   if(lsifcrc != srvinfocrc)
   {
     //Print info
-    cout << "Downloading server information file" << endl;
+    cout << "Downloading server information file" << "\n";
 
     //Get server information file from server and check for error
     if((ierr = _cli->DownloadSIF(HCServer::PID_INFOFILE, lsifname.c_str())) != ERR_NONE)
     {
-      cout << "Error getting server information file (" << ErrToString(ierr) << ')' << endl;
+      cout << "Error getting server information file (" << ErrToString(ierr) << ')' << "\n";
       return;
     }
   }
@@ -130,7 +130,7 @@ HCConnection::HCConnection(Device *dev, HCContainer *pcont, const string &contna
   //Parse file and check for error
   if((doc.LoadFile(lsifname.c_str())) != 0)
   {
-    cout << "Error parsing file (" << lsifname << ')' << endl;
+    cout << "Error parsing file (" << lsifname << ')' << "\n";
     return;
   }
 

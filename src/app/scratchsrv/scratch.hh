@@ -56,14 +56,14 @@ public:
   int Print(void)
   {
     //Print value
-    std::cout << "Value = \"" << _val << "\"" << std::endl;
+    std::cout << "Value = \"" << _val << "\"" << "\n";
     return ERR_NONE;
   }
 
   int TablePrint(uint32_t eid)
   {
     //Print something
-    std::cout << "Table[" << eid << "] = " << _table[eid] << std::endl;
+    std::cout << "Table[" << eid << "] = " << _table[eid] << "\n";
     return ERR_NONE;
   }
 

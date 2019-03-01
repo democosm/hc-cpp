@@ -165,5 +165,5 @@ void HCMessage::Print(const string &extra)
   cout << ", Payload=";
   for(i=0; i<_payloadlength; i++)
     cout << hex << setw(2) << setfill('0') << (uint16_t)_payload[i] << dec << " ";
-  cout << endl;
+  cout << "\n";
 }

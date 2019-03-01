@@ -66,11 +66,11 @@ struct Args
 void Usage()
 {
   //Print usage information
-  cout << "Raspberry Pi HC server" << endl;
-  cout << "Version: " << Appversion << endl;
-  cout << "Report bugs to: " << Appbugaddress << endl;
-  cout << Appdoc << endl;
-  cout << "[-d, --daemon] Spawn in background mode" << endl;
+  cout << "Raspberry Pi HC server" << "\n";
+  cout << "Version: " << Appversion << "\n";
+  cout << "Report bugs to: " << Appbugaddress << "\n";
+  cout << Appdoc << "\n";
+  cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 
 bool ParseOptions(int argc, char **argv, struct Args* args)

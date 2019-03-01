@@ -57,7 +57,7 @@ int main(int argc, char **argv)
   //Check for invalid number of arguments
   if(argc > 2)
   {
-    cout << "Usage: " << argv[0] << " <UDP PORT NUMBER (defaults to 1500)>" << endl;
+    cout << "Usage: " << argv[0] << " <UDP PORT NUMBER (defaults to 1500)>" << "\n";
     return -1;
   }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     //Convert port to integer and check for error
     if(!StringConvert(argv[1], port))
     {
-      cout << "Error converting port number (" << argv[1] << ")" << endl;
+      cout << "Error converting port number (" << argv[1] << ")" << "\n";
       return -1;
     }
   }

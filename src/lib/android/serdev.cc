@@ -47,7 +47,7 @@ SerDev::SerDev(const char *name, uint32_t baud, int hwflowctl)
 
   //Open the serial device
   if((_fd = open(name, O_RDWR | O_NOCTTY)) < 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error opening " << name << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error opening " << name << "\n";
 
   //Remember old options
   tcgetattr(_fd, &_oldopts);
@@ -145,7 +145,7 @@ SerDev::SerDev(const char *name, uint32_t baud, int hwflowctl)
     cfsetospeed(&opts, B230400);
     break;
   default:
-    cout << __FILE__ << ":" << __LINE__ << " - Unsupported baud rate (" << baud << ")" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Unsupported baud rate (" << baud << ")" << "\n";
     break;
   }
 

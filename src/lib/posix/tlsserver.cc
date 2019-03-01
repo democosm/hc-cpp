@@ -55,7 +55,7 @@ TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, u
 
   //Create the listening socket
   if((_listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error creating listening socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error creating listening socket" << "\n";
 
   //Bind listening socket to specified port
   memset(&addr, 0, sizeof(addr));
@@ -63,12 +63,12 @@ TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, u
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
   if(bind(_listenfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << "\n";
 
   //Set listening socket to reuseable
   optval = 1;
   if(setsockopt(_listenfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting listening socket reuse" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting listening socket reuse" << "\n";
 
   //Create SSL context and check for error
 #if defined(__APPLE__) || defined(__arm__)
@@ -77,15 +77,15 @@ TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, u
   sslmethod = TLS_server_method();
 #endif
   if((_sslctx = SSL_CTX_new(sslmethod)) == NULL)
-    cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error creating SSL context" << "\n";
 
   //Set certificate and check for error
   if(SSL_CTX_use_certificate_file(_sslctx, certfile, SSL_FILETYPE_PEM) <= 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting SSL certificate" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting SSL certificate" << "\n";
 
   //Set key and check for error
   if(SSL_CTX_use_PrivateKey_file(_sslctx, keyfile, SSL_FILETYPE_PEM) <= 0 )
-    cout << __FILE__ << ":" << __LINE__ << " - Error setting SSL private key" << endl;
+    cout << __FILE__ << ":" << __LINE__ << " - Error setting SSL private key" << "\n";
 
   //Initialize SSL wrapper to indicate not connected
   _ssl = NULL;
@@ -194,7 +194,7 @@ SSL *TLSServer::WaitForConnection(void)
     //Listen
     if(listen(_listenfd, 1024) != 0)
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error listening" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error listening" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -203,7 +203,7 @@ SSL *TLSServer::WaitForConnection(void)
     caddrsiz = sizeof(caddr);
     if((_connfd = accept(_listenfd, (struct sockaddr *)&caddr, &caddrsiz)) < 0)
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << "\n";
       ThreadSleep(1000000);
       continue;
     }
@@ -224,7 +224,7 @@ SSL *TLSServer::WaitForConnection(void)
     //Authenticate and check for error
     if(!Authenticate(_ssl))
     {
-      cout << __FILE__ << ":" << __LINE__ << " - Error authenticating" << endl;
+      cout << __FILE__ << ":" << __LINE__ << " - Error authenticating" << "\n";
       CloseConnection();
       ThreadSleep(1000000);
       continue;

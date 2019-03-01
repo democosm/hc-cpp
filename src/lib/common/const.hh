@@ -24,6 +24,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+//Math constants
 #define PI 3.14159265359
 #define TWOPI 6.28318530718
 #define HALFPI 1.5707963268
+
+//Terminal codes
+#define TC_RESET "\033[0m"
+#define TC_BLACK "\033[30m"
+#define TC_RED "\033[31m"
+#define TC_GREEN "\033[32m"
+#define TC_YELLOW "\033[33m"
+#define TC_BLUE "\033[34m"
+#define TC_MAGENTA "\033[35m"
+#define TC_CYAN "\033[36m"
+#define TC_WHITE "\033[37m"
+#define TC_BRIGHT "\033[1m"
+#define TC_UNDERLINE "\033[4m"
+#define TC_INVERSE "\033[7m"
+#define TC_NOBRIGHT "\033[21m"
+#define TC_NOUNDERLINE "\033[24m"
+#define TC_NOINVERSE "\033[27m"
+#define TC_RIGHT "\033[C"
+#define TC_LEFT "\033[D"

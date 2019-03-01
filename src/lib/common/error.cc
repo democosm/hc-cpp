@@ -31,27 +31,27 @@ using namespace std;
 //Error strings
 static const string Errstrings[] =
 {
-  "NONE",
-  "UNSPEC",
-  "TIMEOUT",
-  "OWNER",
-  "RESET",
-  "DESTROYED",
-  "OVERFLOW",
-  "TYPE",
-  "PATTERN",
-  "ACCESS",
-  "RANGE",
-  "STEP",
-  "INVALID",
-  "ALIGNMENT",
-  "DESER",
-  "OPCODE",
+  "None",
+  "Unspecified",
+  "Timeout",
+  "Owner",
+  "Reset",
+  "Destroyed",
+  "Overflow",
+  "Type",
+  "Pattern",
+  "Access",
+  "Range",
+  "Step",
+  "Invalid",
+  "Alignment",
+  "Deserialize",
+  "OpCode",
   "PID",
   "EID",
-  "NOTFOUND",
-  "NOIMP"
-  "UNKNOWN"
+  "Not Found",
+  "Not Implemented"
+  "Unknown"
 };
 
 const string ErrToString(int err)

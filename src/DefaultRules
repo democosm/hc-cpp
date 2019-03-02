@@ -20,37 +20,37 @@ endif
 
 # Target - Show make system variables
 vars:
-	@echo PROJBASEDIR = $(PROJBASEDIR)
-	@echo TGTPROC = $(TGTPROC)
-	@echo TGTOS = $(TGTOS)
-	@echo TGTBUILD = $(TGTBUILD)
-	@echo PKGNAME = $(PKGNAME)
-	@echo PKGTYPE = $(PKGTYPE)
-	@echo TGTDIR = $(TGTDIR)
-	@echo DEPDSTDIR = $(DEPDSTDIR)
-	@echo OBJDSTDIR = $(OBJDSTDIR)
-	@echo LIBDSTDIR = $(LIBDSTDIR)
-	@echo BINDSTDIR = $(BINDSTDIR)
-	@echo SRCLIST = $(SRCLIST)
-	@echo DEPLIST = $(DEPLIST)
-	@echo OBJLIST = $(OBJLIST)
-	@echo LIBLIST = $(LIBLIST)
-	@echo STDLIBLIST = $(STDLIBLIST)
-	@echo AS = $(AS)
-	@echo CC = $(CC)
-	@echo CXX = $(CXX)
-	@echo AR = $(AR)
-	@echo LD = $(LD)
-	@echo ASFLAGS = $(ASFLAGS)
-	@echo CFLAGS = $(CFLAGS)
-	@echo CXXFLAGS = $(CXXFLAGS)
-	@echo ARFLAGS = $(ARFLAGS)
-	@echo LDFLAGS = $(LDFLAGS)
+	@echo "PROJBASEDIR = $(PROJBASEDIR)"
+	@echo "TGTPROC = $(TGTPROC)"
+	@echo "TGTOS = $(TGTOS)"
+	@echo "TGTBUILD = $(TGTBUILD)"
+	@echo "PKGNAME = $(PKGNAME)"
+	@echo "PKGTYPE = $(PKGTYPE)"
+	@echo "TGTDIR = $(TGTDIR)"
+	@echo "DEPDSTDIR = $(DEPDSTDIR)"
+	@echo "OBJDSTDIR = $(OBJDSTDIR)"
+	@echo "LIBDSTDIR = $(LIBDSTDIR)"
+	@echo "BINDSTDIR = $(BINDSTDIR)"
+	@echo "SRCLIST = $(SRCLIST)"
+	@echo "DEPLIST = $(DEPLIST)"
+	@echo "OBJLIST = $(OBJLIST)"
+	@echo "LIBLIST = $(LIBLIST)"
+	@echo "STDLIBLIST = $(STDLIBLIST)"
+	@echo "AS = $(AS)"
+	@echo "CC = $(CC)"
+	@echo "CXX = $(CXX)"
+	@echo "AR = $(AR)"
+	@echo "LD = $(LD)"
+	@echo "ASFLAGS = $(ASFLAGS)"
+	@echo "CFLAGS = $(CFLAGS)"
+	@echo "CXXFLAGS = $(CXXFLAGS)"
+	@echo "ARFLAGS = $(ARFLAGS)"
+	@echo "LDFLAGS = $(LDFLAGS)"
 
 # Target - Remove intermediate files
 clean::
-	rm -f $(OBJLIST)
-	rm -f $(DEPLIST)
+	@rm -f $(OBJLIST)
+	@rm -f $(DEPLIST)
 	@echo ""
 
 # Target - Application executable
@@ -62,7 +62,7 @@ ifeq ($(UNAME_S),Darwin)
 else
 	@$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -Wl,--end-group $(STDLIBLIST) -o $@
 endif
-	@echo APP: $@
+	@echo "APP: $@"
 
 # Target - Test executable
 $(BINDSTDIR)/test_$(PKGNAME): $(OBJLIST)
@@ -73,7 +73,7 @@ ifeq ($(UNAME_S),Darwin)
 else
 	@$(CXX) $(CXXFLAGS) $(LDFLAGS) -Wl,--start-group $(OBJLIST) $(LIBLIST) -Wl,--end-group $(STDLIBLIST) -o $@
 endif
-	@echo TST: $@
+	@echo "TST: $@"
 
 # Target - Library archive
 $(LIBDSTDIR)/lib$(PKGNAME).a: $(OBJLIST)
@@ -85,33 +85,33 @@ $(LIBDSTDIR)/lib$(PKGNAME).a: $(OBJLIST)
 $(OBJDSTDIR)/%.s.o: %.s
 	@mkdir -p $(OBJDSTDIR)
 	@$(AS) $(ASFLAGS) $< -o $@
-	@echo OBJ: $@
+	@echo "OBJ: $@"
 
 # Rule - Generate object files from C source
 $(OBJDSTDIR)/%.c.o: %.c
 	@mkdir -p $(OBJDSTDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo OBJ: $@
+	@echo "OBJ: $@"
 
 # Rule - Generate object files from C++ source
 $(OBJDSTDIR)/%.cc.o: %.cc
 	@mkdir -p $(OBJDSTDIR)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-	@echo OBJ: $@
+	@echo "OBJ: $@"
 
 # Rule - Generate dependencies files from C source
 $(DEPDSTDIR)/%.c.dep: %.c
 	@mkdir -p $(DEPDSTDIR)
 	@touch $@
 	@$(CC) -M $(CFLAGS) $< | sed -e 's;^\([^ ]\);$$(OBJDSTDIR)/\1;' | sed -e 's;\.o:;\.c\.o:;' > $@
-	@echo DEP: $@
+	@echo "DEP: $@"
 
 # Rule - Generate dependencies files from C++ source
 $(DEPDSTDIR)/%.cc.dep: %.cc
 	@mkdir -p $(DEPDSTDIR)
 	@touch $@
 	@$(CC) -M $(CFLAGS) $< | sed -e 's;^\([^ ]\);$$(OBJDSTDIR)/\1;' | sed -e 's;\.o:;\.cc\.o:;' > $@
-	@echo DEP: $@
+	@echo "DEP: $@"
 
 # Rule - Causes per application libraries to be built (see default targets)
 l-%:

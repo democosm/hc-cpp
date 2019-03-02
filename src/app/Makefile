@@ -6,6 +6,7 @@ default:
 	@cd scratchsrv && $(MAKE)
 	@cd hccli && $(MAKE)
 	@cd hcquery && $(MAKE)
+	@cd hcxml && $(MAKE)
 	@cd msgsrv && $(MAKE)
 	@cd pisrv && $(MAKE)
 

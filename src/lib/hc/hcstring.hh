@@ -170,6 +170,25 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
+  virtual void PrintConfig(std::ostream &st=std::cout)
+  {
+    std::string val;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_setmethod == 0))
+      return;
+
+    //Call get method
+    if((_object->*_getmethod)(val) != ERR_NONE)
+      return;
+
+    //Print value
+    st << _name;
+    st << " = ";
+    st << "\"" << val << "\"";
+    st << "\n";
+  }
+
   virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
@@ -435,6 +454,58 @@ public:
           std::cout << "\"" << val << "\"";
           std::cout << " !" << ErrToString(lerr);
           std::cout << TC_RESET << "\n";
+        }
+      }
+    }
+  }
+
+  virtual void PrintConfig(std::ostream &st=std::cout)
+  {
+    std::string val;
+    uint32_t eid;
+    std::string eidstr;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_setmethod == 0))
+      return;
+
+    //Loop through all elements
+    for(eid=0; eid<_size; eid++)
+    {
+      //Call get method
+      if((_object->*_getmethod)(eid, val) != ERR_NONE)
+        continue;
+
+      //Check for no EID enums
+      if(_eidenums == 0)
+      {
+        //Print value
+        st << _name;
+        st << "[" << eid << "]";
+        st << " = ";
+        st << "\"" << val << "\"";
+        st << "\n";
+      }
+      else
+      {
+        //Convert EID to enum string and check for error
+        if(!EIDNumToStr(eid, eidstr))
+        {
+          //Print value (no EID enum string found)
+          st << _name;
+          st << "[" << eid << "]";
+          st << " = ";
+          st << "\"" << val << "\"";
+          st << "\n";
+        }
+        else
+        {
+          //Print value (show EID enum string)
+          st << _name;
+          st << "[\"" << eidstr << "\"]";
+          st << " = ";
+          st << "\"" << val << "\"";
+          st << "\n";
         }
       }
     }
@@ -776,6 +847,31 @@ public:
       std::cout << TC_GREEN << _name;
       std::cout << "[]";
       std::cout << TC_RESET << "\n";
+    }
+  }
+
+  virtual void PrintConfig(std::ostream &st=std::cout)
+  {
+    std::string val;
+    uint32_t eid;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_addmethod == 0))
+      return;
+
+    //Loop through all elements
+    for(eid=0; eid<_maxsize; eid++)
+    {
+      //Call get method
+      if((_object->*_getmethod)(eid, val) != ERR_NONE)
+        break;
+
+      //Print value
+      st << _name;
+      st << "[" << eid << "]";
+      st << " = ";
+      st << "\"" << val << "\"";
+      st << "\n";
     }
   }
 

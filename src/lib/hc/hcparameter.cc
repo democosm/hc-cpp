@@ -537,6 +537,10 @@ void HCParameter::PrintVal(void)
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
 }
 
+void HCParameter::PrintConfig(ostream &st)
+{
+}
+
 void HCParameter::PrintInfo(ostream &st)
 {
   st << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET;

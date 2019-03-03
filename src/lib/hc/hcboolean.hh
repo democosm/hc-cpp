@@ -200,8 +200,7 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
-        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
-        std::cout << _name;
+        std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
         std::cout << " = ";
         std::cout << std::boolalpha << val << std::noboolalpha;
         std::cout << " = ";
@@ -214,14 +213,61 @@ public:
     }
 
     //Print value indicate that no value enum found
-    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
-    std::cout << _name;
+    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
     std::cout << " = ";
     std::cout << std::boolalpha << val << std::noboolalpha;
     std::cout << " = ";
     std::cout << TC_MAGENTA << "\"\"" << (lerr == ERR_NONE ? TC_GREEN : TC_RED);
     std::cout << " !" << ErrToString(lerr);
     std::cout << TC_RESET << "\n";
+  }
+
+  virtual void PrintConfig(std::ostream &st=std::cout)
+  {
+    bool val;
+    uint32_t i;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_setmethod == 0))
+      return;
+
+    //Call get method
+    if((_object->*_getmethod)(val) != ERR_NONE)
+      return;
+
+    //Check for no value enums
+    if(_valenums == 0)
+    {
+      //Print value
+      st << _name;
+      st << " = ";
+      st << std::boolalpha << val << std::noboolalpha;
+      st << "\n";
+
+      return;
+    }
+
+    //Loop through value enums
+    for(i=0; _valenums[i]._str.length() != 0; i++)
+    {
+      //Check for match
+      if(_valenums[i]._num == val)
+      {
+        //Print value
+        st << _name;
+        st << " = ";
+        st << "\"" << _valenums[i]._str << "\"";
+        st << "\n";
+  
+        return;
+      }
+    }
+
+    //Print value no value enum found
+    st << _name;
+    st << " = ";
+    st << std::boolalpha << val << std::noboolalpha;
+    st << "\n";
   }
 
   virtual void PrintInfo(std::ostream &st=std::cout)
@@ -725,6 +771,137 @@ public:
               std::cout << "\"" << valstr << "\"";
               std::cout << " !" << ErrToString(lerr);
               std::cout << TC_RESET << "\n";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  virtual void PrintConfig(std::ostream &st=std::cout)
+  {
+    bool val;
+    uint32_t eid;
+    std::string valstr;
+    std::string eidstr;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_setmethod == 0))
+      return;
+
+    //Loop through all elements
+    for(eid=0; eid<_size; eid++)
+    {
+      //Call get method
+      if((_object->*_getmethod)(eid, val) != ERR_NONE)
+        continue;
+
+      //Check for no value enums
+      if(_valenums == 0)
+      {
+        //Check for no EID enums
+        if(_eidenums == 0)
+        {
+          //Print value
+          st << _name;
+          st << "[" << eid << "]";
+          st << " = ";
+          st << std::boolalpha << val << std::noboolalpha;
+          st << "\n";
+        }
+        else
+        {
+          //Convert EID to enum string and check for error
+          if(!EIDNumToStr(eid, eidstr))
+          {
+            //Print value no EID enum string found
+            st << _name;
+            st << "[" << eid << "]";
+            st << " = ";
+            st << std::boolalpha << val << std::noboolalpha;
+            st << "\n";
+          }
+          else
+          {
+            //Print value (show EID enum string)
+            st << _name;
+            st << "[\"" << eidstr << "\"]";
+            st << " = ";
+            st << std::boolalpha << val << std::noboolalpha;
+            st << "\n";
+          }
+        }
+      }
+      else
+      {
+        //Check for no EID enums
+        if(_eidenums == 0)
+        {
+          //Convert value to enum string and check for error
+          if(!ValToEnumStr(val, valstr))
+          {
+            //Print value (indicate no value enum string found)
+            st << _name;
+            st << "[" << eid << "]";
+            st << " = ";
+            st << std::boolalpha << val << std::noboolalpha;
+            st << "\n";
+          }
+          else
+          {
+            //Print value (show value enum string)
+            st << _name;
+            st << "[" << eid << "]";
+            st << " = ";
+            st << "\"" << valstr << "\"";
+            st << "\n";
+          }
+        }
+        else
+        {
+          //Convert value to enum string and check for error
+          if(!ValToEnumStr(val, valstr))
+          {
+            //Convert EID to enum string and check for error
+            if(!EIDNumToStr(eid, eidstr))
+            {
+              //Print value (indicate no value or EID enum string found)
+              st << _name;
+              st << "[" << eid << "]";
+              st << " = ";
+              st << std::boolalpha << val << std::noboolalpha;
+              st << "\n";
+            }
+            else
+            {
+              //Print value (show EID enum string, indicate no value enum string found)
+              st << _name;
+              st << "[\"" << eidstr << "\"]";
+              st << " = ";
+              st << std::boolalpha << val << std::noboolalpha;
+              st << "\n";
+            }
+          }
+          else
+          {
+            //Convert EID to enum string and check for error
+            if(!EIDNumToStr(eid, eidstr))
+            {
+              //Print value (indicate no EID enum string found, show value enum string)
+              st << _name;
+              st << "[" << eid << "]";
+              st << " = ";
+              st << "\"" << valstr << "\"";
+              st << "\n";
+            }
+            else
+            {
+              //Print value (show EID enum string and value enum string)
+              st << _name;
+              st << "[\"" << eidstr << "\"]";
+              st << " = ";
+              st << "\"" << valstr << "\"";
+              st << "\n";
             }
           }
         }

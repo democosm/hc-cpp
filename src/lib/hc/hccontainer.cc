@@ -118,6 +118,27 @@ void HCContainer::PrintInfo(ostream &st)
   st << "Type: Cont";
 }
 
+
+void HCContainer::PrintConfig(ostream &st)
+{
+  HCContainer *cont;
+  HCParameter *param;
+
+  //Print command to change to this container
+  st << "cd " << _name << "/" << "\n";
+
+  //Loop through all sub parameters
+  for(param=GetFirstSubParam(); param!=0; param=param->GetNext())
+    param->PrintConfig(st);
+
+  //Loop through all sub containers
+  for(cont=GetFirstSubCont(); cont!=0; cont=cont->GetNext())
+    cont->PrintConfig(st);
+
+  //Print command to change to parent container
+  st << "cd ..\n";
+}
+
 HCContainer *HCContainer::GetParent(void)
 {
   return _parent;

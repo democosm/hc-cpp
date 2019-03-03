@@ -1,8 +1,8 @@
 # Include default make config
-include $(PROJBASEDIR)/src/DefaultConfig
+include $(PROJBASEDIR)/src/config.mk
 
 # Include default make rules
-include $(PROJBASEDIR)/src/DefaultRules
+include $(PROJBASEDIR)/src/rules.mk
 
 # Create a list of all apps
 APPLIST = $(sort $(dir $(wildcard $(PROJBASEDIR)/src/app/*/)))

@@ -839,6 +839,10 @@ void HCConsole::EnterProc(void)
     {
       ListCmdProc(_tokens.size());
     }
+    else if(_tokens[0] == "save")
+    {
+      SaveCmdProc(_tokens.size());
+    }
     else if((_tokens[0] == "info") || (_tokens[0] == "i"))
     {
       InfoCmdProc(_tokens.size());
@@ -1017,6 +1021,34 @@ void HCConsole::ListCmdProc(uint32_t tokcnt)
       ShowListing(_tokens[i], startcont);
     }
   }
+}
+
+void HCConsole::SaveCmdProc(uint32_t tokcnt)
+{
+  ofstream file;
+
+  //Check for arguments
+  if(tokcnt != 1)
+  {
+    cout << "Syntax: " << _tokens[0] << "\n";
+    return;
+  }
+
+  //Open state file
+  file.open("default.state");
+
+  //Check for error
+  if(!file.is_open())
+  {
+    cout << __FILE__ << ' ' << __LINE__ << " - Error opening state file\n";
+    return;
+  }
+
+  //Save state starting at top container
+  _top->PrintConfig(file);
+
+  //Close state file
+  file.close();
 }
 
 void HCConsole::InfoCmdProc(uint32_t tokcnt)

@@ -39,6 +39,7 @@ public:
   bool GetNextCharInName(const std::string &name, char &nextchar);
   void PrintPath(void);
   void PrintInfo(std::ostream &st=std::cout);
+  void PrintConfig(std::ostream &st=std::cout);
   HCContainer *GetParent(void);
   void SetParent(HCContainer *node);
   HCContainer *GetNext(void);

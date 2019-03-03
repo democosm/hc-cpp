@@ -1,5 +1,5 @@
 # Include default make config
-include $(PROJBASEDIR)/src/DefaultConfig
+include $(PROJBASEDIR)/src/config.mk
 
 # Default target
 default:

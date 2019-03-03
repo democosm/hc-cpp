@@ -126,6 +126,7 @@ private:
   void HistCmdProc(uint32_t tokcnt);
   void ChdirCmdProc(uint32_t tokcnt);
   void ListCmdProc(uint32_t tokcnt);
+  void SaveCmdProc(uint32_t tokcnt);
   void InfoCmdProc(uint32_t tokcnt);
   void FindCmdProc(uint32_t tokcnt);
   void ExitCmdProc(uint32_t tokcnt);

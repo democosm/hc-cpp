@@ -29,7 +29,7 @@
 #include "hccall.hh"
 #include "hcconnection.hh"
 #include "hcfile.hh"
-#include "hcfloatingpoint.hh"
+#include "hcfloat.hh"
 #include "hcinteger.hh"
 #include "hcmessage.hh"
 #include "hcstring.hh"
@@ -208,13 +208,13 @@ void HCConnection::ParseServer(XMLElement *pelt, HCContainer *pcont)
     else if(strcmp(elt->Name(), "s64l") == 0)
       ParseIntegerList<int64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "f32") == 0)
-      ParseFloatingPoint<float>(elt, pcont);
+      ParseFloat<float>(elt, pcont);
     else if(strcmp(elt->Name(), "f32t") == 0)
-      ParseFloatingPointTable<float>(elt, pcont);
+      ParseFloatTable<float>(elt, pcont);
     else if(strcmp(elt->Name(), "f64") == 0)
-      ParseFloatingPoint<double>(elt, pcont);
+      ParseFloat<double>(elt, pcont);
     else if(strcmp(elt->Name(), "f64t") == 0)
-      ParseFloatingPointTable<double>(elt, pcont);
+      ParseFloatTable<double>(elt, pcont);
     else if(strcmp(elt->Name(), "bool") == 0)
       ParseBool(elt, pcont);
     else if(strcmp(elt->Name(), "boolt") == 0)
@@ -307,13 +307,13 @@ void HCConnection::ParseCont(XMLElement *pelt, HCContainer *pcont)
     else if(strcmp(elt->Name(), "s64l") == 0)
       ParseIntegerList<int64_t>(elt, cont);
     else if(strcmp(elt->Name(), "f32") == 0)
-      ParseFloatingPoint<float>(elt, cont);
+      ParseFloat<float>(elt, cont);
     else if(strcmp(elt->Name(), "f32t") == 0)
-      ParseFloatingPointTable<float>(elt, cont);
+      ParseFloatTable<float>(elt, cont);
     else if(strcmp(elt->Name(), "f64") == 0)
-      ParseFloatingPoint<double>(elt, cont);
+      ParseFloat<double>(elt, cont);
     else if(strcmp(elt->Name(), "f64t") == 0)
-      ParseFloatingPointTable<double>(elt, cont);
+      ParseFloatTable<double>(elt, cont);
     else if(strcmp(elt->Name(), "bool") == 0)
       ParseBool(elt, cont);
     else if(strcmp(elt->Name(), "boolt") == 0)
@@ -625,13 +625,13 @@ HCEIDEnum *HCConnection::ParseEIDEnum(XMLElement *pelt)
   return enums;
 }
 
-template <typename T> void HCConnection::ParseFloatingPoint(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContainer *pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   T scl;
-  HCFloatingPointCli<T> *stub;
+  HCFloatCli<T> *stub;
   HCParameter *param;
 
   //Check for null parent objects
@@ -655,23 +655,23 @@ template <typename T> void HCConnection::ParseFloatingPoint(XMLElement *pelt, HC
     return;
 
   //Create client stub
-  stub = new HCFloatingPointCli<T>(_cli, pid);
+  stub = new HCFloatCli<T>(_cli, pid);
 
   //Create parameter
   if(acc == "RW")
-    param = new HCFloatingPoint<HCFloatingPointCli<T>, T>(name, stub, &HCFloatingPointCli<T>::Get, &HCFloatingPointCli<T>::Set, scl);
+    param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, &HCFloatCli<T>::Set, scl);
   else if(acc == "R")
-    param = new HCFloatingPoint<HCFloatingPointCli<T>, T>(name, stub, &HCFloatingPointCli<T>::Get, 0, scl);
+    param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, 0, scl);
   else if(acc == "W")
-    param = new HCFloatingPoint<HCFloatingPointCli<T>, T>(name, stub, 0, &HCFloatingPointCli<T>::Set, scl);
+    param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::Set, scl);
   else
-    param = new HCFloatingPoint<HCFloatingPointCli<T>, T>(name, stub, 0, 0, scl);
+    param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, 0, scl);
 
   //Add to parent
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseFloatingPointTable(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCContainer *pcont)
 {
   uint16_t pid;
   string name;
@@ -680,7 +680,7 @@ template <typename T> void HCConnection::ParseFloatingPointTable(XMLElement *pel
   uint32_t size;
   XMLElement *elt;
   HCEIDEnum *eidenums;
-  HCFloatingPointCli<T> *stub;
+  HCFloatCli<T> *stub;
   HCParameter *param;
 
   //Check for null parent objects
@@ -717,17 +717,17 @@ template <typename T> void HCConnection::ParseFloatingPointTable(XMLElement *pel
   }
 
   //Create client stub
-  stub = new HCFloatingPointCli<T>(_cli, pid);
+  stub = new HCFloatCli<T>(_cli, pid);
 
   //Create parameter
   if(acc == "RW")
-    param = new HCFloatingPointTable<HCFloatingPointCli<T>, T>(name, stub, &HCFloatingPointCli<T>::IGet, &HCFloatingPointCli<T>::ISet, size, eidenums, scl);
+    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, &HCFloatCli<T>::ISet, size, eidenums, scl);
   else if(acc == "R")
-    param = new HCFloatingPointTable<HCFloatingPointCli<T>, T>(name, stub, &HCFloatingPointCli<T>::IGet, 0, size, eidenums, scl);
+    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, 0, size, eidenums, scl);
   else if(acc == "W")
-    param = new HCFloatingPointTable<HCFloatingPointCli<T>, T>(name, stub, 0, &HCFloatingPointCli<T>::ISet, size, eidenums, scl);
+    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::ISet, size, eidenums, scl);
   else
-    param = new HCFloatingPointTable<HCFloatingPointCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
+    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
 
   //Add to parent
   pcont->Add(param);

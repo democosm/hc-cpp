@@ -48,8 +48,8 @@ public:
   template <typename T> void ParseIntegerList(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> HCIntegerEnum<T> *ParseIntegerEnum(tinyxml2::XMLElement *pelt);
   HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
-  template <typename T> void ParseFloatingPoint(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseFloatingPointTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseFloat(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseFloatTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBool(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBoolT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   HCBooleanEnum *ParseBoolEnum(tinyxml2::XMLElement *pelt);

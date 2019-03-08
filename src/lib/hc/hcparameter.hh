@@ -111,11 +111,12 @@ public:
   virtual uint8_t GetType(void);
   virtual bool IsReadable(void);
   virtual bool IsWritable(void);
+  virtual bool IsSavable(void);
   virtual bool IsATable(void);
   virtual bool IsAList(void);
   virtual bool HasValEnums(void);
   virtual void PrintVal(void);
-  virtual void PrintConfig(std::ostream &st=std::cout);
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout);
   virtual void PrintInfo(std::ostream &st=std::cout);
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid);
   virtual int Call(void);

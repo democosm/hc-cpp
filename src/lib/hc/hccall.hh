@@ -37,7 +37,9 @@
 #include <iostream>
 #include <string>
 
-//Call client
+//-----------------------------------------------------------------------------
+//Call client stub
+//-----------------------------------------------------------------------------
 class HCCallCli
 {
 public:
@@ -72,7 +74,9 @@ private:
   uint16_t _pid;
 };
 
+//-----------------------------------------------------------------------------
 //Call
+//-----------------------------------------------------------------------------
 template <class C>
 class HCCall : public HCParameter
 {
@@ -175,7 +179,9 @@ private:
   CallMethod _method;
 };
 
+//-----------------------------------------------------------------------------
 //Call table
+//-----------------------------------------------------------------------------
 template <class C>
 class HCCallTable : public HCParameter
 {
@@ -184,8 +190,21 @@ public:
   typedef int (C::*CallMethod)(uint32_t);
 
 public:
-  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums=0)
+  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums)
   : HCParameter(name)
+  {
+    //Delegate to init method
+    Init(name, object, method, size, eidenums);
+  }
+
+  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size)
+  : HCParameter(name)
+  {
+    //Delegate to init method
+    Init(name, object, method, size, 0);
+  }
+
+  void Init(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums)
   {
     //Assert valid arguments
     assert((object != 0) && (method != 0) && (size != 0));

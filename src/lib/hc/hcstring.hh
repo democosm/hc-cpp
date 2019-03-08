@@ -37,7 +37,9 @@
 #include <iostream>
 #include <string>
 
+//-----------------------------------------------------------------------------
 //String client stub
+//-----------------------------------------------------------------------------
 class HCStringCli
 {
 public:
@@ -97,7 +99,9 @@ private:
   uint16_t _pid;
 };
 
-//String
+//-----------------------------------------------------------------------------
+//String template
+//-----------------------------------------------------------------------------
 template <class C>
 class HCString : public HCParameter
 {
@@ -170,7 +174,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     std::string val;
 
@@ -183,6 +187,7 @@ public:
       return;
 
     //Print value
+    st << path;
     st << _name;
     st << " = ";
     st << "\"" << val << "\"";
@@ -344,7 +349,50 @@ private:
   SetMethod _setmethod;
 };
 
-//String table
+//-----------------------------------------------------------------------------
+//String template (savable)
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStringS : public HCString<C>
+{
+public:
+  HCStringS(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  : HCString<C>(name, object, getmethod, setmethod)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from string templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStr : public HCString<C>
+{
+public:
+  HCStr(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  : HCString<C>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCStrS : public HCStringS<C>
+{
+public:
+  HCStrS(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  : HCStringS<C>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+//-----------------------------------------------------------------------------
+//String table template
+//-----------------------------------------------------------------------------
 template <class C>
 class HCStringTable : public HCParameter
 {
@@ -354,7 +402,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const std::string &);
 
 public:
-  HCStringTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0)
+  HCStringTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -459,7 +507,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     std::string val;
     uint32_t eid;
@@ -480,6 +528,7 @@ public:
       if(_eidenums == 0)
       {
         //Print value
+        st << path;
         st << _name;
         st << "[" << eid << "]";
         st << " = ";
@@ -492,6 +541,7 @@ public:
         if(!EIDNumToStr(eid, eidstr))
         {
           //Print value (no EID enum string found)
+          st << path;
           st << _name;
           st << "[" << eid << "]";
           st << " = ";
@@ -501,6 +551,7 @@ public:
         else
         {
           //Print value (show EID enum string)
+          st << path;
           st << _name;
           st << "[\"" << eidstr << "\"]";
           st << " = ";
@@ -751,7 +802,60 @@ private:
   const HCEIDEnum *_eidenums;
 };
 
-//String list
+//-----------------------------------------------------------------------------
+//String table template (savable)
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStringTableS : public HCStringTable<C>
+{
+public:
+  HCStringTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  : HCStringTable<C>(name, object, getmethod, setmethod, size, eidenums)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from string table templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStrTable : public HCStringTable<C>
+{
+public:
+  HCStrTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  : HCStringTable<C>(name, object, getmethod, setmethod, size, eidenums)
+  {
+  }
+
+  HCStrTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size)
+  : HCStringTable<C>(name, object, getmethod, setmethod, size, 0)
+  {
+  }
+};
+
+template <class C>
+class HCStrTableS : public HCStringTableS<C>
+{
+public:
+  HCStrTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  : HCStringTableS<C>(name, object, getmethod, setmethod, size, eidenums)
+  {
+  }
+
+  HCStrTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size)
+  : HCStringTableS<C>(name, object, getmethod, setmethod, size, 0)
+  {
+  }
+};
+
+//-----------------------------------------------------------------------------
+//String list template
+//-----------------------------------------------------------------------------
 template <class C>
 class HCStringList : public HCParameter
 {
@@ -850,7 +954,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     std::string val;
     uint32_t eid;
@@ -867,9 +971,9 @@ public:
         break;
 
       //Print value
+      st << path;
       st << _name;
-      st << "[" << eid << "]";
-      st << " = ";
+      st << " < ";
       st << "\"" << val << "\"";
       st << "\n";
     }
@@ -1106,6 +1210,47 @@ private:
   AddMethod _addmethod;
   SubMethod _submethod;
   uint32_t _maxsize;
+};
+
+//-----------------------------------------------------------------------------
+//String list template (savable)
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStringListS : public HCStringList<C>
+{
+public:
+  HCStringListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  : HCStringList<C>(name, object, getmethod, addmethod, submethod, maxsize)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from string list templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCStrList : public HCStringList<C>
+{
+public:
+  HCStrList(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  : HCStringList<C>(name, object, getmethod, addmethod, submethod, maxsize)
+  {
+  }
+};
+
+template <class C>
+class HCStrListS : public HCStringListS<C>
+{
+public:
+  HCStrListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  : HCStringListS<C>(name, object, getmethod, addmethod, submethod, maxsize)
+  {
+  }
 };
 
 #endif //_HCSTRING_HH_

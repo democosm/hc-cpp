@@ -37,7 +37,8 @@ public:
   HCContainer(const std::string &name);
   virtual ~HCContainer();
   bool GetNextCharInName(const std::string &name, char &nextchar);
-  void PrintPath(void);
+  void GetPath(std::string &path);
+  void PrintPath(std::ostream &st=std::cout);
   void PrintInfo(std::ostream &st=std::cout);
   void PrintConfig(std::ostream &st=std::cout);
   HCContainer *GetParent(void);

@@ -95,21 +95,40 @@ bool HCContainer::GetNextCharInName(const string &name, char &nextchar)
   return false;
 }
 
-void HCContainer::PrintPath(void)
+void HCContainer::GetPath(string &path)
+{
+  //Check for at root of path
+  if(_parent == 0)
+  {
+    //Add this container name and separator
+    path += _name;
+    path += '/';
+    return;
+  }
+
+  //Recurse to parent
+  _parent->GetPath(path);
+
+  //Add this container name and seperator
+  path += _name;
+  path += '/';
+}
+
+void HCContainer::PrintPath(ostream &st)
 {
   //Check for at root of path
   if(_parent == 0)
   {
     //Print name and separator
-    cout << _name << '/';
+    st << _name << '/';
     return;
   }
 
   //Recurse
-  _parent->PrintPath();
+  _parent->PrintPath(st);
 
   //Print name and separator
-  cout << _name << '/';
+  st << _name << '/';
 }
 
 void HCContainer::PrintInfo(ostream &st)
@@ -118,25 +137,28 @@ void HCContainer::PrintInfo(ostream &st)
   st << "Type: Cont";
 }
 
-
 void HCContainer::PrintConfig(ostream &st)
 {
   HCContainer *cont;
   HCParameter *param;
-
-  //Print command to change to this container
-  st << "cd " << _name << "/" << "\n";
+  string path;
 
   //Loop through all sub parameters
   for(param=GetFirstSubParam(); param!=0; param=param->GetNext())
-    param->PrintConfig(st);
+  {
+    //Check for savable
+    if(param->IsSavable())
+    {
+      //Print param config
+      path.clear();
+      GetPath(path);
+      param->PrintConfig(path, st);
+    }
+  }
 
   //Loop through all sub containers
   for(cont=GetFirstSubCont(); cont!=0; cont=cont->GetNext())
     cont->PrintConfig(st);
-
-  //Print command to change to parent container
-  st << "cd ..\n";
 }
 
 HCContainer *HCContainer::GetParent(void)

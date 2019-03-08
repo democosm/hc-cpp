@@ -50,7 +50,7 @@ HCCommand::~HCCommand()
 
 void HCCommand::operator =(const HCCommand &cmd)
 {
-  //Copy from string and set length and index
+  //Copy string and set index
   _str = cmd._str;
   _index = _str.length();
 }
@@ -64,6 +64,13 @@ bool HCCommand::operator ==(const HCCommand &cmd)
 const string HCCommand::GetStr()
 {
   return _str;
+}
+
+void HCCommand::SetStr(const string &str)
+{
+  //Copy string and set index
+  _str = str;
+  _index = _str.length();
 }
 
 void HCCommand::GetEnd(string &str)
@@ -410,6 +417,9 @@ HCConsole::HCConsole(HCContainer *top)
   _workcont = top;
   _hist = new HCHistory();
   _exit = false;
+
+  //Load default state
+  LoadCmdProc(1);
 }
 
 HCConsole::~HCConsole()
@@ -822,47 +832,8 @@ void HCConsole::EnterProc(void)
   //Check for any tokens
   if(_tokens.size() > 0)
   {
-    //Process first token
-    if((_tokens[0] == "help") || (_tokens[0] == "h") || (_tokens[0] == "?"))
-    {
-      HelpCmdProc(_tokens.size());
-    }
-    else if((_tokens[0] == "hist"))
-    {
-      HistCmdProc(_tokens.size());
-    }
-    else if(_tokens[0] == "cd")
-    {
-      ChdirCmdProc(_tokens.size());
-    }
-    else if(_tokens[0] == "ls")
-    {
-      ListCmdProc(_tokens.size());
-    }
-    else if(_tokens[0] == "save")
-    {
-      SaveCmdProc(_tokens.size());
-    }
-    else if((_tokens[0] == "info") || (_tokens[0] == "i"))
-    {
-      InfoCmdProc(_tokens.size());
-    }
-    else if((_tokens[0] == "find"))
-    {
-      FindCmdProc(_tokens.size());
-    }
-    else if((_tokens[0] == "exit") || (_tokens[0] == "x"))
-    {
-      ExitCmdProc(_tokens.size());
-    }
-    else if((_tokens[0] == "call"))
-    {
-      CallCmdProc(_tokens.size());
-    }
-    else
-    {
-      ParamCmdProc(_tokens.size());
-    }
+    //Process command tokens
+    CmdTokensProc();
   }
 
   //Reset command
@@ -870,6 +841,55 @@ void HCConsole::EnterProc(void)
 
   //Display prompt
   Prompt();
+}
+
+void HCConsole::CmdTokensProc(void)
+{
+  //Process first token
+  if((_tokens[0] == "help") || (_tokens[0] == "h") || (_tokens[0] == "?"))
+  {
+    HelpCmdProc(_tokens.size());
+  }
+  else if((_tokens[0] == "hist"))
+  {
+    HistCmdProc(_tokens.size());
+  }
+  else if(_tokens[0] == "cd")
+  {
+    ChdirCmdProc(_tokens.size());
+  }
+  else if(_tokens[0] == "ls")
+  {
+    ListCmdProc(_tokens.size());
+  }
+  else if((_tokens[0] == "info") || (_tokens[0] == "i"))
+  {
+    InfoCmdProc(_tokens.size());
+  }
+  else if((_tokens[0] == "find"))
+  {
+    FindCmdProc(_tokens.size());
+  }
+  else if((_tokens[0] == "exit") || (_tokens[0] == "x"))
+  {
+    ExitCmdProc(_tokens.size());
+  }
+  else if((_tokens[0] == "call"))
+  {
+    CallCmdProc(_tokens.size());
+  }
+  else if(_tokens[0] == "save")
+  {
+    SaveCmdProc(_tokens.size());
+  }
+  else if(_tokens[0] == "load")
+  {
+    LoadCmdProc(_tokens.size());
+  }
+  else
+  {
+    ParamCmdProc(_tokens.size());
+  }
 }
 
 void HCConsole::DeleteProc(void)
@@ -1023,34 +1043,6 @@ void HCConsole::ListCmdProc(uint32_t tokcnt)
   }
 }
 
-void HCConsole::SaveCmdProc(uint32_t tokcnt)
-{
-  ofstream file;
-
-  //Check for arguments
-  if(tokcnt != 1)
-  {
-    cout << "Syntax: " << _tokens[0] << "\n";
-    return;
-  }
-
-  //Open state file
-  file.open("default.state");
-
-  //Check for error
-  if(!file.is_open())
-  {
-    cout << __FILE__ << ' ' << __LINE__ << " - Error opening state file\n";
-    return;
-  }
-
-  //Save state starting at top container
-  _top->PrintConfig(file);
-
-  //Close state file
-  file.close();
-}
-
 void HCConsole::InfoCmdProc(uint32_t tokcnt)
 {
   HCContainer *startcont;
@@ -1146,6 +1138,77 @@ void HCConsole::CallCmdProc(uint32_t tokcnt)
       cout << _tokens[i] << ": No such parameter" << "\n";
     }
   }
+}
+
+void HCConsole::SaveCmdProc(uint32_t tokcnt)
+{
+  ofstream file;
+
+  //Check for arguments
+  if(tokcnt != 1)
+  {
+    cout << "Syntax: " << _tokens[0] << "\n";
+    return;
+  }
+
+  //Open state file
+  file.open("default.state");
+
+  //Check for error
+  if(!file.is_open())
+  {
+    cout << __FILE__ << ' ' << __LINE__ << " - Error opening state file\n";
+    return;
+  }
+
+  //Save state starting at top container
+  _top->PrintConfig(file);
+
+  //Close state file
+  file.close();
+}
+
+void HCConsole::LoadCmdProc(uint32_t tokcnt)
+{
+  ifstream file;
+  string line;
+  HCCommand cmd;
+
+  //Check for arguments
+  if(tokcnt != 1)
+  {
+    cout << "Syntax: " << _tokens[0] << "\n";
+    return;
+  }
+
+  //Open state file
+  file.open("default.state");
+
+  //Check for error
+  if(!file.is_open())
+  {
+    cout << __FILE__ << ' ' << __LINE__ << " - Can't open state file\n";
+    return;
+  }
+
+  //Read and execute all lines of file
+  while(getline(file, line))
+  {
+    //Set command string
+    cmd.SetStr(line);
+
+    //Trim whitespace from command
+    cmd.Trim();
+
+    //Tokenize command
+    cmd.Tokenize(_tokens);
+
+    //Process command tokens
+    CmdTokensProc();
+  }
+
+  //Close state file
+  file.close();
 }
 
 void HCConsole::ParamCmdProc(uint32_t tokcnt)

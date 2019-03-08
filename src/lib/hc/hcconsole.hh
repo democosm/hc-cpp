@@ -43,6 +43,7 @@ public:
   void operator =(const HCCommand &cmd);
   bool operator ==(const HCCommand &cmd);
   const std::string GetStr();
+  void SetStr(const std::string &str);
   void GetEnd(std::string &str);
   uint32_t GetLen();
   uint32_t GetIndex();
@@ -120,17 +121,19 @@ private:
   void BackspaceProc(void);
   void TabProc(uint32_t recurlevel);
   void EnterProc(void);
+  void CmdTokensProc(void);
   void DeleteProc(void);
   void DefaultProc(char ch);
   void HelpCmdProc(uint32_t tokcnt);
   void HistCmdProc(uint32_t tokcnt);
   void ChdirCmdProc(uint32_t tokcnt);
   void ListCmdProc(uint32_t tokcnt);
-  void SaveCmdProc(uint32_t tokcnt);
   void InfoCmdProc(uint32_t tokcnt);
   void FindCmdProc(uint32_t tokcnt);
   void ExitCmdProc(uint32_t tokcnt);
   void CallCmdProc(uint32_t tokcnt);
+  void SaveCmdProc(uint32_t tokcnt);
+  void LoadCmdProc(uint32_t tokcnt);
   void ParamCmdProc(uint32_t tokcnt);
   void Prompt(void);
   bool GetNextCommonChar(const std::string &name, HCContainer *startcont, char &ch, size_t index=0);

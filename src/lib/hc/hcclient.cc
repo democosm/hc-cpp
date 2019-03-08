@@ -81,17 +81,17 @@ HCClient::HCClient(Device *lowdev, HCContainer *parent, uint32_t timeout)
   cont = new HCContainer(".client");
   parent->Add(cont);
   cont->Add(new HCBoolean<HCClient>("debug", this, &HCClient::GetDebug, &HCClient::SetDebug, Offon));
-  cont->Add(new HCUnsigned32<HCClient>("senderrcnt", this, &HCClient::GetSendErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("recverrcnt", this, &HCClient::GetRecvErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("transactionerrcnt", this, &HCClient::GetTransactionErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("cellerrcnt", this, &HCClient::GetCellErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("opcodeerrcnt", this, &HCClient::GetOpCodeErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("timeouterrcnt", this, &HCClient::GetTimeoutErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("piderrcnt", this, &HCClient::GetPIDErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("typeerrcnt", this, &HCClient::GetTypeErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("eiderrcnt", this, &HCClient::GetEIDErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("offseterrcnt", this, &HCClient::GetOffsetErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCClient>("goodxactcnt", this, &HCClient::GetGoodXactCnt, 0));
+  cont->Add(new HCUns32<HCClient>("senderrcnt", this, &HCClient::GetSendErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("recverrcnt", this, &HCClient::GetRecvErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("transactionerrcnt", this, &HCClient::GetTransactionErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("cellerrcnt", this, &HCClient::GetCellErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("opcodeerrcnt", this, &HCClient::GetOpCodeErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("timeouterrcnt", this, &HCClient::GetTimeoutErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("piderrcnt", this, &HCClient::GetPIDErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("typeerrcnt", this, &HCClient::GetTypeErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("eiderrcnt", this, &HCClient::GetEIDErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("offseterrcnt", this, &HCClient::GetOffsetErrCnt, 0));
+  cont->Add(new HCUns32<HCClient>("goodxactcnt", this, &HCClient::GetGoodXactCnt, 0));
 
   //Create and start the read thread
   _readthread = new Thread<HCClient>(this, &HCClient::ReadThread);

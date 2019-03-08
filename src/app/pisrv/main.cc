@@ -32,7 +32,7 @@
 #include "hcparameter.hh"
 #include "hcqserver.hh"
 #include "hcserver.hh"
-#include "hcfloatingpoint.hh"
+#include "hcfloat.hh"
 #include "i2c.hh"
 #include "i2cbus.hh"
 #include "pca9685.hh"
@@ -163,10 +163,10 @@ int main(int argc, char **argv)
 //  leftwindow->RegisterInterface("leftwindow", topcont, srv);
 //  rightwindow->RegisterInterface("rightwindow", topcont, srv);
 //  cellardoor->RegisterInterface("cellardoor", topcont, srv);
-  param = new HCFloat<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
+  param = new HCFlt32<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<PIServer>("cpuutilization", pisrv, &PIServer::GetCPUUtilization, 0);
+  param = new HCUns8<PIServer>("cpuutilization", pisrv, &PIServer::GetCPUUtilization, 0);
   topcont->Add(param);
   srv->Add(param);
   param = new HCBooleanTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);

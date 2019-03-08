@@ -27,7 +27,7 @@
 #include "const.hh"
 #include "error.hh"
 #include "hccall.hh"
-#include "hcfloatingpoint.hh"
+#include "hcfloat.hh"
 #include "hcparameter.hh"
 #include "pca9685servo.hh"
 #include <cassert>
@@ -56,7 +56,7 @@ void PCA9685Servo::RegisterInterface(const char *contname, HCContainer *pcont, H
   cont = new HCContainer(contname);
   pcont->Add(cont);
 
-  param = new HCDouble<PCA9685Servo>("angle", this, &PCA9685Servo::GetAngle, &PCA9685Servo::SetAngle, 180.0/PI);
+  param = new HCFlt64<PCA9685Servo>("angle", this, &PCA9685Servo::GetAngle, &PCA9685Servo::SetAngle, 180.0/PI);
   cont->Add(param);
   srv->Add(param);
   param = new HCCall<PCA9685Servo>("slewtest", this, &PCA9685Servo::SlewTest);

@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCFLOATINGPOINT_HH_
-#define _HCFLOATINGPOINT_HH_
+#ifndef _HCFLOAT_HH_
+#define _HCFLOAT_HH_
 
 #include "const.hh"
 #include "error.hh"
@@ -38,12 +38,14 @@
 #include <iostream>
 #include <string>
 
-//Floating point client stub
+//-----------------------------------------------------------------------------
+//Floating point client stub template
+//-----------------------------------------------------------------------------
 template <class T>
-class HCFloatingPointCli
+class HCFloatCli
 {
 public:
-  HCFloatingPointCli(HCClient *cli, uint16_t pid)
+  HCFloatCli(HCClient *cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -53,7 +55,7 @@ public:
     _pid = pid;
   }
 
-  virtual ~HCFloatingPointCli()
+  virtual ~HCFloatCli()
   {
     //Cleanup
   }
@@ -87,13 +89,17 @@ private:
   uint16_t _pid;
 };
 
-//Types derived from client stub template
-typedef HCFloatingPointCli<float> HCFloatCli;
-typedef HCFloatingPointCli<double> HCDoubleCli;
+//-----------------------------------------------------------------------------
+//Floating point client stubs
+//-----------------------------------------------------------------------------
+typedef HCFloatCli<float> HCFlt32Cli;
+typedef HCFloatCli<double> HCFlt64Cli;
 
-//Floating point
+//-----------------------------------------------------------------------------
+//Floating point template
+//-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloatingPoint : public HCParameter
+class HCFloat : public HCParameter
 {
 public:
   //Method signatures
@@ -101,7 +107,7 @@ public:
   typedef int (C::*SetMethod)(const T);
 
 public:
-  HCFloatingPoint(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale=1.0)
+  HCFloat(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -114,7 +120,7 @@ public:
     _scale = scale;
   }
 
-  virtual ~HCFloatingPoint()
+  virtual ~HCFloat()
   {
     //Cleanup
   }
@@ -167,7 +173,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     T val;
 
@@ -182,6 +188,7 @@ public:
     val *= _scale;
 
     //Print value
+    st << path;
     st << _name;
     st << " = ";
     st << val;
@@ -363,30 +370,92 @@ private:
   T _scale;
 };
 
-//Classes derived from value template
-template <class C>
-class HCFloat : public HCFloatingPoint<C, float>
-{
-public:
-  HCFloat(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale=1.0)
-  : HCFloatingPoint<C, float>(name, object, getmethod, setmethod, scale)
-  {
-  }
-};
-
-template <class C>
-class HCDouble : public HCFloatingPoint<C, double>
-{
-public:
-  HCDouble(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale=1.0)
-  : HCFloatingPoint<C, double>(name, object, getmethod, setmethod, scale)
-  {
-  }
-};
-
-//Floating point table
+//-----------------------------------------------------------------------------
+//Floating point template (savable)
+//-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloatingPointTable : public HCParameter
+class HCFloatS : public HCFloat<C, T>
+{
+public:
+  HCFloatS(const std::string &name, C *object, int (C::*getmethod)(T &), int (C::*setmethod)(const T), T scale)
+  : HCFloat<C, T>(name, object, getmethod, setmethod, scale)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from floating point templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCFlt32 : public HCFloat<C, float>
+{
+public:
+  HCFlt32(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float))
+  : HCFloat<C, float>(name, object, getmethod, setmethod, 1.0)
+  {
+  }
+
+  HCFlt32(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale)
+  : HCFloat<C, float>(name, object, getmethod, setmethod, scale)
+  {
+  }
+};
+
+template <class C>
+class HCFlt32S : public HCFloatS<C, float>
+{
+public:
+  HCFlt32S(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float))
+  : HCFloatS<C, float>(name, object, getmethod, setmethod, 1.0)
+  {
+  }
+
+  HCFlt32S(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale)
+  : HCFloatS<C, float>(name, object, getmethod, setmethod, scale)
+  {
+  }
+};
+
+template <class C>
+class HCFlt64 : public HCFloat<C, double>
+{
+public:
+  HCFlt64(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double))
+  : HCFloat<C, double>(name, object, getmethod, setmethod, 1.0)
+  {
+  }
+
+  HCFlt64(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale)
+  : HCFloat<C, double>(name, object, getmethod, setmethod, scale)
+  {
+  }
+};
+
+template <class C>
+class HCFlt64S : public HCFloatS<C, double>
+{
+public:
+  HCFlt64S(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double))
+  : HCFloatS<C, double>(name, object, getmethod, setmethod, 1.0)
+  {
+  }
+
+  HCFlt64S(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale)
+  : HCFloatS<C, double>(name, object, getmethod, setmethod, scale)
+  {
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Floating point table template
+//-----------------------------------------------------------------------------
+template <class C, class T>
+class HCFloatTable : public HCParameter
 {
 public:
   //Method signatures
@@ -394,7 +463,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const T);
 
 public:
-  HCFloatingPointTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, T scale=1.0)
+  HCFloatTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, T scale)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -409,7 +478,7 @@ public:
     _eidenums = eidenums;
   }
 
-  virtual ~HCFloatingPointTable()
+  virtual ~HCFloatTable()
   {
     //Cleanup
   }
@@ -502,7 +571,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     T val;
     uint32_t eid;
@@ -525,6 +594,7 @@ public:
       if(_eidenums == 0)
       {
         //Print value
+        st << path;
         st << _name;
         st << "[" << eid << "]";
         st << " = ";
@@ -537,6 +607,7 @@ public:
         if(!EIDNumToStr(eid, eidstr))
         {
           //Print value (indicate no EID enum string found)
+          st << path;
           st << _name;
           st << "[" << eid << "]";
           st << " = ";
@@ -546,6 +617,7 @@ public:
         else
         {
           //Print value (show EID enum string)
+          st << path;
           st << _name;
           st << "[\"" << eidstr << "\"]";
           st << " = ";
@@ -814,25 +886,125 @@ private:
   const HCEIDEnum *_eidenums;
 };
 
-//Classes derived from value template
-template <class C>
-class HCFloatTable : public HCFloatingPointTable<C, float>
+//-----------------------------------------------------------------------------
+//Floating point table template (savable)
+//-----------------------------------------------------------------------------
+template <class C, class T>
+class HCFloatTableS : public HCFloatTable<C, T>
 {
 public:
-  HCFloatTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums=0, float scale=1.0)
-  : HCFloatingPointTable<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCFloatTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &), int (C::*setmethod)(uint32_t, const T), uint32_t size, const HCEIDEnum *eidenums, T scale)
+  : HCFloatTable<C, T>(name, object, getmethod, setmethod, size, eidenums, scale)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from floating point table templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCFlt32Table : public HCFloatTable<C, float>
+{
+public:
+  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size)
+  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, 0, 1.0)
+  {
+  }
+
+  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, float scale)
+  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, 0, scale)
+  {
+  }
+
+  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums)
+  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  {
+  }
+
+  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums, float scale)
+  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
   {
   }
 };
 
 template <class C>
-class HCDoubleTable : public HCFloatingPointTable<C, double>
+class HCFlt32TableS : public HCFloatTableS<C, float>
 {
 public:
-  HCDoubleTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums=0, double scale=1.0)
-  : HCFloatingPointTable<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size)
+  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, 0, 1.0)
+  {
+  }
+
+  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, float scale)
+  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, 0, scale)
+  {
+  }
+
+  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums)
+  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  {
+  }
+
+  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums, float scale)
+  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
   {
   }
 };
 
-#endif //_HCFLOATINGPOINT_HH_
+template <class C>
+class HCFlt64Table : public HCFloatTable<C, double>
+{
+public:
+  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size)
+  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, 0, 1.0)
+  {
+  }
+
+  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, double scale)
+  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, 0, scale)
+  {
+  }
+
+  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums)
+  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  {
+  }
+
+  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums, double scale)
+  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
+  {
+  }
+};
+
+template <class C>
+class HCFlt64TableS : public HCFloatTableS<C, double>
+{
+public:
+  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size)
+  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, 0, 1.0)
+  {
+  }
+
+  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, double scale)
+  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, 0, scale)
+  {
+  }
+
+  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums)
+  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  {
+  }
+
+  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums, double scale)
+  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
+  {
+  }
+};
+
+#endif //_HCFLOAT_HH_

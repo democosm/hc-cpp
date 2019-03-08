@@ -102,13 +102,13 @@ HCServer::HCServer(Device *lowdev, HCContainer *top, const string &name, const s
   top->Add(cont);
 
   //Add special parameters to server and container
-  param = new HCString<HCServer>("name", this, &HCServer::GetName, 0);
+  param = new HCStr<HCServer>("name", this, &HCServer::GetName, 0);
   Add(param);
   cont->Add(param);
-  param = new HCString<HCServer>("version", this, &HCServer::GetVersion, 0);
+  param = new HCStr<HCServer>("version", this, &HCServer::GetVersion, 0);
   Add(param);
   cont->Add(param);
-  param = new HCUnsigned32<HCServer>("infofilecrc", this, &HCServer::GetInfoFileCRC, 0);
+  param = new HCUns32<HCServer>("infofilecrc", this, &HCServer::GetInfoFileCRC, 0);
   Add(param);
   cont->Add(param);
   param = new HCFile<HCServer>("infofile", this, &HCServer::ReadInfoFile, 0);
@@ -117,14 +117,14 @@ HCServer::HCServer(Device *lowdev, HCContainer *top, const string &name, const s
 
   //Add parameters to server container
   cont->Add(new HCBoolean<HCServer>("debug", this, &HCServer::GetDebug, &HCServer::SetDebug, Offon));
-  cont->Add(new HCUnsigned32<HCServer>("senderrcnt", this, &HCServer::GetSendErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("recverrcnt", this, &HCServer::GetRecvErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("deserrcnt", this, &HCServer::GetDesErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("cellerrcnt", this, &HCServer::GetCellErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("opcodeerrcnt", this, &HCServer::GetOpCodeErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("piderrcnt", this, &HCServer::GetPIDErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("interrcnt", this, &HCServer::GetIntErrCnt, 0));
-  cont->Add(new HCUnsigned32<HCServer>("goodxactcnt", this, &HCServer::GetGoodXactCnt, 0));
+  cont->Add(new HCUns32<HCServer>("senderrcnt", this, &HCServer::GetSendErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("recverrcnt", this, &HCServer::GetRecvErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("deserrcnt", this, &HCServer::GetDesErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("cellerrcnt", this, &HCServer::GetCellErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("opcodeerrcnt", this, &HCServer::GetOpCodeErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("piderrcnt", this, &HCServer::GetPIDErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("interrcnt", this, &HCServer::GetIntErrCnt, 0));
+  cont->Add(new HCUns32<HCServer>("goodxactcnt", this, &HCServer::GetGoodXactCnt, 0));
 
   //Create control thread
   _ctlthread = new Thread<HCServer>(this, &HCServer::CtlThread);

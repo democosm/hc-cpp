@@ -26,7 +26,7 @@
 
 #include "error.hh"
 #include "ftoi.hh"
-#include "hcfloatingpoint.hh"
+#include "hcfloat.hh"
 #include "hcinteger.hh"
 #include "hcparameter.hh"
 #include "pca9685.hh"
@@ -140,7 +140,7 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
   cont = new HCContainer(contname);
   pcont->Add(cont);
 
-  param = new HCDoubleTable<PCA9685>("pwmdutycycle", this, &PCA9685::GetPWMDutyCycle, &PCA9685::SetPWMDutyCycle, 16, 0, 100.0);
+  param = new HCFlt64Table<PCA9685>("pwmdutycycle", this, &PCA9685::GetPWMDutyCycle, &PCA9685::SetPWMDutyCycle, 16, 0, 100.0);
   cont->Add(param);
   srv->Add(param);
 
@@ -149,56 +149,56 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
 
   namecont = new HCContainer("mode1");
   regcont->Add(namecont);
-  param = new HCUnsigned8<Bits8>("restart", _mode1._restart, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("restart", _mode1._restart, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("extclk", _mode1._extclk, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("extclk", _mode1._extclk, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("ai", _mode1._ai, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("ai", _mode1._ai, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("sleep", _mode1._sleep, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("sleep", _mode1._sleep, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("sub1", _mode1._sub1, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("sub1", _mode1._sub1, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("sub2", _mode1._sub2, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("sub2", _mode1._sub2, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("sub3", _mode1._sub3, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("sub3", _mode1._sub3, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("allcall", _mode1._allcall, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("allcall", _mode1._allcall, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
 
   namecont = new HCContainer("mode2");
   regcont->Add(namecont);
-  param = new HCUnsigned8<Bits8>("invrt", _mode2._invrt, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("invrt", _mode2._invrt, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("och", _mode2._och, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("och", _mode2._och, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("outdrv", _mode2._outdrv, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("outdrv", _mode2._outdrv, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Bits8>("outne", _mode2._outne, &Bits8::Get, &Bits8::Set);
+  param = new HCUns8<Bits8>("outne", _mode2._outne, &Bits8::Get, &Bits8::Set);
   namecont->Add(param);
   srv->Add(param);
 
-  param = new HCUnsigned8<Reg8>("subadr1", _subadr1, &Reg8::Get, 0);
+  param = new HCUns8<Reg8>("subadr1", _subadr1, &Reg8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Reg8>("subadr2", _subadr2, &Reg8::Get, 0);
+  param = new HCUns8<Reg8>("subadr2", _subadr2, &Reg8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Reg8>("subadr3", _subadr3, &Reg8::Get, 0);
+  param = new HCUns8<Reg8>("subadr3", _subadr3, &Reg8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned8<Reg8>("allcalladr", _allcalladr, &Reg8::Get, 0);
+  param = new HCUns8<Reg8>("allcalladr", _allcalladr, &Reg8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
 
@@ -208,24 +208,24 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
     tempname << "led" << i;
     namecont = new HCContainer(tempname.str());
     regcont->Add(namecont);
-    param = new HCUnsigned16<LReg16>("oncnt", _led[i]._oncnt, &LReg16::Get, &LReg16::Set);
+    param = new HCUns16<LReg16>("oncnt", _led[i]._oncnt, &LReg16::Get, &LReg16::Set);
     namecont->Add(param);
     srv->Add(param);
-    param = new HCUnsigned16<LReg16>("offcnt", _led[i]._offcnt, &LReg16::Get, &LReg16::Set);
+    param = new HCUns16<LReg16>("offcnt", _led[i]._offcnt, &LReg16::Get, &LReg16::Set);
     namecont->Add(param);
     srv->Add(param);
   }
 
   namecont = new HCContainer("ledall");
   regcont->Add(namecont);
-  param = new HCUnsigned16<LReg16>("oncnt", _ledall._oncnt, 0, &LReg16::Set);
+  param = new HCUns16<LReg16>("oncnt", _ledall._oncnt, 0, &LReg16::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUnsigned16<LReg16>("offcnt", _ledall._offcnt, 0, &LReg16::Set);
+  param = new HCUns16<LReg16>("offcnt", _ledall._offcnt, 0, &LReg16::Set);
   namecont->Add(param);
   srv->Add(param);
 
-  param = new HCUnsigned8<Reg8>("prescale", _prescale, &Reg8::Get, &Reg8::Set);
+  param = new HCUns8<Reg8>("prescale", _prescale, &Reg8::Get, &Reg8::Set);
   regcont->Add(param);
   srv->Add(param);
 }

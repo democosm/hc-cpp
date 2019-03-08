@@ -38,7 +38,9 @@
 #include <iostream>
 #include <string>
 
+//-----------------------------------------------------------------------------
 //Boolean enumeration
+//-----------------------------------------------------------------------------
 struct HCBooleanEnum
 {
   HCBooleanEnum()
@@ -59,7 +61,9 @@ struct HCBooleanEnum
   std::string _str;
 };
 
+//-----------------------------------------------------------------------------
 //Boolean client stub
+//-----------------------------------------------------------------------------
 class HCBooleanCli
 {
 public:
@@ -106,7 +110,9 @@ private:
   uint16_t _pid;
 };
 
-//Boolean
+//-----------------------------------------------------------------------------
+//Boolean template
+//-----------------------------------------------------------------------------
 template <class C>
 class HCBoolean : public HCParameter
 {
@@ -116,7 +122,7 @@ public:
   typedef int (C::*SetMethod)(const bool);
 
 public:
-  HCBoolean(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum *valenums=0)
+  HCBoolean(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum *valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -222,7 +228,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     bool val;
     uint32_t i;
@@ -239,6 +245,7 @@ public:
     if(_valenums == 0)
     {
       //Print value
+      st << path;
       st << _name;
       st << " = ";
       st << std::boolalpha << val << std::noboolalpha;
@@ -254,6 +261,7 @@ public:
       if(_valenums[i]._num == val)
       {
         //Print value
+        st << path;
         st << _name;
         st << " = ";
         st << "\"" << _valenums[i]._str << "\"";
@@ -264,6 +272,7 @@ public:
     }
 
     //Print value no value enum found
+    st << path;
     st << _name;
     st << " = ";
     st << std::boolalpha << val << std::noboolalpha;
@@ -558,7 +567,60 @@ private:
   const HCBooleanEnum *_valenums;
 };
 
-//Boolean table
+//-----------------------------------------------------------------------------
+//Boolean template (savable)
+//-----------------------------------------------------------------------------
+template <class C>
+class HCBooleanS : public HCBoolean<C>
+{
+public:
+  HCBooleanS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  : HCBoolean<C>(name, object, getmethod, setmethod, valenums)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from boolean templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCBool : public HCBoolean<C>
+{
+public:
+  HCBool(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool))
+  : HCBoolean<C>(name, object, getmethod, setmethod, 0)
+  {
+  }
+
+  HCBool(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  : HCBoolean<C>(name, object, getmethod, setmethod, valenums)
+  {
+  }
+};
+
+template <class C>
+class HCBoolS : public HCBooleanS<C>
+{
+public:
+  HCBoolS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool))
+  : HCBooleanS<C>(name, object, getmethod, setmethod, 0)
+  {
+  }
+
+  HCBoolS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  : HCBooleanS<C>(name, object, getmethod, setmethod, valenums)
+  {
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Boolean table template
+//-----------------------------------------------------------------------------
 template <class C>
 class HCBooleanTable : public HCParameter
 {
@@ -568,7 +630,7 @@ public:
   typedef int (C::*SetMethod)(uint32_t, const bool);
 
 public:
-  HCBooleanTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums=0, const HCBooleanEnum *valenums=0)
+  HCBooleanTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -778,7 +840,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
     bool val;
     uint32_t eid;
@@ -803,6 +865,7 @@ public:
         if(_eidenums == 0)
         {
           //Print value
+          st << path;
           st << _name;
           st << "[" << eid << "]";
           st << " = ";
@@ -815,6 +878,7 @@ public:
           if(!EIDNumToStr(eid, eidstr))
           {
             //Print value no EID enum string found
+            st << path;
             st << _name;
             st << "[" << eid << "]";
             st << " = ";
@@ -824,6 +888,7 @@ public:
           else
           {
             //Print value (show EID enum string)
+            st << path;
             st << _name;
             st << "[\"" << eidstr << "\"]";
             st << " = ";
@@ -841,6 +906,7 @@ public:
           if(!ValToEnumStr(val, valstr))
           {
             //Print value (indicate no value enum string found)
+            st << path;
             st << _name;
             st << "[" << eid << "]";
             st << " = ";
@@ -850,6 +916,7 @@ public:
           else
           {
             //Print value (show value enum string)
+            st << path;
             st << _name;
             st << "[" << eid << "]";
             st << " = ";
@@ -866,6 +933,7 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no value or EID enum string found)
+              st << path;
               st << _name;
               st << "[" << eid << "]";
               st << " = ";
@@ -875,6 +943,7 @@ public:
             else
             {
               //Print value (show EID enum string, indicate no value enum string found)
+              st << path;
               st << _name;
               st << "[\"" << eidstr << "\"]";
               st << " = ";
@@ -888,6 +957,7 @@ public:
             if(!EIDNumToStr(eid, eidstr))
             {
               //Print value (indicate no EID enum string found, show value enum string)
+              st << path;
               st << _name;
               st << "[" << eid << "]";
               st << " = ";
@@ -897,6 +967,7 @@ public:
             else
             {
               //Print value (show EID enum string and value enum string)
+              st << path;
               st << _name;
               st << "[\"" << eidstr << "\"]";
               st << " = ";
@@ -1327,6 +1398,77 @@ private:
   uint32_t _size;
   const HCBooleanEnum *_valenums;
   const HCEIDEnum *_eidenums;
+};
+
+//-----------------------------------------------------------------------------
+//Boolean table template (savable)
+//-----------------------------------------------------------------------------
+template <class C>
+class HCBooleanTableS : public HCBooleanTable<C>
+{
+public:
+  HCBooleanTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from boolean table templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCBoolTable : public HCBooleanTable<C>
+{
+public:
+  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
+  : HCBooleanTable<C>(name, object, getmethod, setmethod, size, 0, 0)
+  {
+  }
+
+  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum *valenums)
+  : HCBooleanTable<C>(name, object, getmethod, setmethod, size, 0, valenums)
+  {
+  }
+
+  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums)
+  : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, 0)
+  {
+  }
+
+  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
+  {
+  }
+};
+
+template <class C>
+class HCBoolTableS : public HCBooleanTableS<C>
+{
+public:
+  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
+  : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, 0, 0)
+  {
+  }
+
+  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum *valenums)
+  : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, 0, valenums)
+  {
+  }
+
+  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums)
+  : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, eidenums, 0)
+  {
+  }
+
+  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
+  {
+  }
 };
 
 #endif //_HCBOOLEAN_HH_

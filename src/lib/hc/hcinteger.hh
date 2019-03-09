@@ -379,6 +379,7 @@ public:
     st << _name;
     st << "\n  Type: " << TypeString(dummy);
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
 
     //Print enum information if it exists
     if(_valenums != 0)
@@ -400,6 +401,7 @@ public:
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
 
     if(_valenums != 0)
     {
@@ -1305,6 +1307,7 @@ public:
     st << _name;
     st << "\n  Type: " << TypeString(dummy) << "t";
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
     st << "\n  Size: " << _size;
 
     //Print EID enumeration information if it exists
@@ -1336,6 +1339,7 @@ public:
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
     file << std::string(indent, ' ') << "  <size>" << _size << "</size>\n";
 
     if(_eidenums != 0)
@@ -2339,6 +2343,7 @@ public:
     st << _name;
     st << "\n  Type: " << TypeString(dummy) << "l";
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << ((_addmethod == 0) && (_submethod == 0) ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
     st << "\n  Max Size: " << _maxsize;
 
     //Print enum information if it exists
@@ -2361,6 +2366,7 @@ public:
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (((_addmethod == 0) || (_submethod == 0)) ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
     file << std::string(indent, ' ') << "  <maxsize>" << _maxsize << "</maxsize>\n";
 
     if(_valenums != 0)

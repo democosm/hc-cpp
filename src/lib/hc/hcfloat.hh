@@ -202,6 +202,7 @@ public:
     st << _name;
     st << "\n  Type: " << TypeString(dummy);
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
     st << "\n  Scale: " << _scale;
   }
 
@@ -214,6 +215,7 @@ public:
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
     file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << "\n";
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << ">" << "\n";
   }
@@ -637,6 +639,7 @@ public:
     st << _name;
     st << "\n  Type: " << TypeString(dummy) << "t";
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
     st << "\n  Scale: " << _scale;
     st << "\n  Size: " << _size;
 
@@ -660,6 +663,7 @@ public:
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
     file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << "\n";
     file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
 

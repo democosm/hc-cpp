@@ -338,6 +338,7 @@ template <typename T> void HCConnection::ParseInteger(XMLElement *pelt, HCContai
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   XMLElement *elt;
   HCIntegerEnum<T> *valenums;
   HCIntegerCli<T> *stub;
@@ -359,6 +360,10 @@ template <typename T> void HCConnection::ParseInteger(XMLElement *pelt, HCContai
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Loop through all children looking for enums
   valenums = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
@@ -372,14 +377,28 @@ template <typename T> void HCConnection::ParseInteger(XMLElement *pelt, HCContai
   stub = new HCIntegerCli<T>(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCInteger<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, &HCIntegerCli<T>::Set, valenums);
-  else if(acc == "R")
-    param = new HCInteger<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, 0, valenums);
-  else if(acc == "W")
-    param = new HCInteger<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Set, valenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCIntegerS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, &HCIntegerCli<T>::Set, valenums);
+    else if(acc == "R")
+      param = new HCIntegerS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, 0, valenums);
+    else if(acc == "W")
+      param = new HCIntegerS<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Set, valenums);
+    else
+      param = new HCIntegerS<HCIntegerCli<T>, T>(name, stub, 0, 0, valenums);
+  }
   else
-    param = new HCInteger<HCIntegerCli<T>, T>(name, stub, 0, 0, valenums);
+  {
+    if(acc == "RW")
+      param = new HCInteger<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, &HCIntegerCli<T>::Set, valenums);
+    else if(acc == "R")
+      param = new HCInteger<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, 0, valenums);
+    else if(acc == "W")
+      param = new HCInteger<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Set, valenums);
+    else
+      param = new HCInteger<HCIntegerCli<T>, T>(name, stub, 0, 0, valenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -390,6 +409,7 @@ template <typename T> void HCConnection::ParseIntegerTable(XMLElement *pelt, HCC
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   uint32_t size;
   XMLElement *elt;
   HCIntegerEnum<T> *valenums;
@@ -413,6 +433,10 @@ template <typename T> void HCConnection::ParseIntegerTable(XMLElement *pelt, HCC
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse size element and check for error
   if(!ParseValue(pelt, "size", size))
     return;
@@ -433,14 +457,28 @@ template <typename T> void HCConnection::ParseIntegerTable(XMLElement *pelt, HCC
   stub = new HCIntegerCli<T>(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
-  else if(acc == "R")
-    param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, size, eidenums, valenums);
-  else if(acc == "W")
-    param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCIntegerTableS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
+    else if(acc == "R")
+      param = new HCIntegerTableS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, size, eidenums, valenums);
+    else if(acc == "W")
+      param = new HCIntegerTableS<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
+    else
+      param = new HCIntegerTableS<HCIntegerCli<T>, T>(name, stub, 0, 0, size, eidenums, valenums);
+  }
   else
-    param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, 0, 0, size, eidenums, valenums);
+  {
+    if(acc == "RW")
+      param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
+    else if(acc == "R")
+      param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, size, eidenums, valenums);
+    else if(acc == "W")
+      param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::ISet, size, eidenums, valenums);
+    else
+      param = new HCIntegerTable<HCIntegerCli<T>, T>(name, stub, 0, 0, size, eidenums, valenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -451,6 +489,7 @@ template <typename T> void HCConnection::ParseIntegerList(XMLElement *pelt, HCCo
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   uint32_t maxsize;
   XMLElement *elt;
   HCIntegerEnum<T> *valenums;
@@ -473,6 +512,10 @@ template <typename T> void HCConnection::ParseIntegerList(XMLElement *pelt, HCCo
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse maxsize element and check for error
   if(!ParseValue(pelt, "maxsize", maxsize))
     return;
@@ -490,14 +533,28 @@ template <typename T> void HCConnection::ParseIntegerList(XMLElement *pelt, HCCo
   stub = new HCIntegerCli<T>(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
-  else if(acc == "R")
-    param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, 0, maxsize, valenums);
-  else if(acc == "W")
-    param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCIntegerListS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
+    else if(acc == "R")
+      param = new HCIntegerListS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, 0, maxsize, valenums);
+    else if(acc == "W")
+      param = new HCIntegerListS<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
+    else
+      param = new HCIntegerListS<HCIntegerCli<T>, T>(name, stub, 0, 0, 0, maxsize, valenums);
+  }
   else
-    param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, 0, 0, maxsize, valenums);
+  {
+    if(acc == "RW")
+      param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
+    else if(acc == "R")
+      param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::IGet, 0, 0, maxsize, valenums);
+    else if(acc == "W")
+      param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
+    else
+      param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, 0, 0, maxsize, valenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -630,6 +687,7 @@ template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContaine
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   T scl;
   HCFloatCli<T> *stub;
   HCParameter *param;
@@ -650,6 +708,10 @@ template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContaine
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse scl element and check for error
   if(!ParseValue(pelt, "scl", scl))
     return;
@@ -658,14 +720,28 @@ template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContaine
   stub = new HCFloatCli<T>(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, &HCFloatCli<T>::Set, scl);
-  else if(acc == "R")
-    param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, 0, scl);
-  else if(acc == "W")
-    param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::Set, scl);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCFloatS<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, &HCFloatCli<T>::Set, scl);
+    else if(acc == "R")
+      param = new HCFloatS<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, 0, scl);
+    else if(acc == "W")
+      param = new HCFloatS<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::Set, scl);
+    else
+      param = new HCFloatS<HCFloatCli<T>, T>(name, stub, 0, 0, scl);
+  }
   else
-    param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, 0, scl);
+  {
+    if(acc == "RW")
+      param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, &HCFloatCli<T>::Set, scl);
+    else if(acc == "R")
+      param = new HCFloat<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::Get, 0, scl);
+    else if(acc == "W")
+      param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::Set, scl);
+    else
+      param = new HCFloat<HCFloatCli<T>, T>(name, stub, 0, 0, scl);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -676,6 +752,7 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   T scl;
   uint32_t size;
   XMLElement *elt;
@@ -697,6 +774,10 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
 
   //Parse acc element and check for error
   if(!ParseValue(pelt, "acc", acc))
+    return;
+
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
     return;
 
   //Parse scl element and check for error
@@ -720,14 +801,28 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
   stub = new HCFloatCli<T>(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, &HCFloatCli<T>::ISet, size, eidenums, scl);
-  else if(acc == "R")
-    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, 0, size, eidenums, scl);
-  else if(acc == "W")
-    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::ISet, size, eidenums, scl);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCFloatTableS<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, &HCFloatCli<T>::ISet, size, eidenums, scl);
+    else if(acc == "R")
+      param = new HCFloatTableS<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, 0, size, eidenums, scl);
+    else if(acc == "W")
+      param = new HCFloatTableS<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::ISet, size, eidenums, scl);
+    else
+      param = new HCFloatTableS<HCFloatCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
+  }
   else
-    param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
+  {
+    if(acc == "RW")
+      param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, &HCFloatCli<T>::ISet, size, eidenums, scl);
+    else if(acc == "R")
+      param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, &HCFloatCli<T>::IGet, 0, size, eidenums, scl);
+    else if(acc == "W")
+      param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::ISet, size, eidenums, scl);
+    else
+      param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -738,6 +833,7 @@ void HCConnection::ParseBool(XMLElement *pelt, HCContainer *pcont)
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   XMLElement *elt;
   HCBooleanEnum *valenums;
   HCBooleanCli *stub;
@@ -759,6 +855,10 @@ void HCConnection::ParseBool(XMLElement *pelt, HCContainer *pcont)
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Loop through all children looking for enums
   valenums = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
@@ -772,14 +872,28 @@ void HCConnection::ParseBool(XMLElement *pelt, HCContainer *pcont)
   stub = new HCBooleanCli(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCBoolean<HCBooleanCli>(name, stub, &HCBooleanCli::Get, &HCBooleanCli::Set, valenums);
-  else if(acc == "R")
-    param = new HCBoolean<HCBooleanCli>(name, stub, &HCBooleanCli::Get, 0, valenums);
-  else if(acc == "W")
-    param = new HCBoolean<HCBooleanCli>(name, stub, 0, &HCBooleanCli::Set, valenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCBooleanS<HCBooleanCli>(name, stub, &HCBooleanCli::Get, &HCBooleanCli::Set, valenums);
+    else if(acc == "R")
+      param = new HCBooleanS<HCBooleanCli>(name, stub, &HCBooleanCli::Get, 0, valenums);
+    else if(acc == "W")
+      param = new HCBooleanS<HCBooleanCli>(name, stub, 0, &HCBooleanCli::Set, valenums);
+    else
+      param = new HCBooleanS<HCBooleanCli>(name, stub, 0, 0, valenums);
+  }
   else
-    param = new HCBoolean<HCBooleanCli>(name, stub, 0, 0, valenums);
+  {
+    if(acc == "RW")
+      param = new HCBoolean<HCBooleanCli>(name, stub, &HCBooleanCli::Get, &HCBooleanCli::Set, valenums);
+    else if(acc == "R")
+      param = new HCBoolean<HCBooleanCli>(name, stub, &HCBooleanCli::Get, 0, valenums);
+    else if(acc == "W")
+      param = new HCBoolean<HCBooleanCli>(name, stub, 0, &HCBooleanCli::Set, valenums);
+    else
+      param = new HCBoolean<HCBooleanCli>(name, stub, 0, 0, valenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -790,6 +904,7 @@ void HCConnection::ParseBoolT(XMLElement *pelt, HCContainer *pcont)
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   uint32_t size;
   XMLElement *elt;
   HCBooleanEnum *valenums;
@@ -813,6 +928,10 @@ void HCConnection::ParseBoolT(XMLElement *pelt, HCContainer *pcont)
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse size element and check for error
   if(!ParseValue(pelt, "size", size))
     return;
@@ -833,14 +952,28 @@ void HCConnection::ParseBoolT(XMLElement *pelt, HCContainer *pcont)
   stub = new HCBooleanCli(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCBooleanTable<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, &HCBooleanCli::ISet, size, eidenums, valenums);
-  else if(acc == "R")
-    param = new HCBooleanTable<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, 0, size, eidenums, valenums);
-  else if(acc == "W")
-    param = new HCBooleanTable<HCBooleanCli>(name, stub, 0, &HCBooleanCli::ISet, size, eidenums, valenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCBooleanTableS<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, &HCBooleanCli::ISet, size, eidenums, valenums);
+    else if(acc == "R")
+      param = new HCBooleanTableS<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, 0, size, eidenums, valenums);
+    else if(acc == "W")
+      param = new HCBooleanTableS<HCBooleanCli>(name, stub, 0, &HCBooleanCli::ISet, size, eidenums, valenums);
+    else
+      param = new HCBooleanTableS<HCBooleanCli>(name, stub, 0, 0, size, eidenums, valenums);
+  }
   else
-    param = new HCBooleanTable<HCBooleanCli>(name, stub, 0, 0, size, eidenums, valenums);
+  {
+    if(acc == "RW")
+      param = new HCBooleanTable<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, &HCBooleanCli::ISet, size, eidenums, valenums);
+    else if(acc == "R")
+      param = new HCBooleanTable<HCBooleanCli>(name, stub, &HCBooleanCli::IGet, 0, size, eidenums, valenums);
+    else if(acc == "W")
+      param = new HCBooleanTable<HCBooleanCli>(name, stub, 0, &HCBooleanCli::ISet, size, eidenums, valenums);
+    else
+      param = new HCBooleanTable<HCBooleanCli>(name, stub, 0, 0, size, eidenums, valenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -912,6 +1045,7 @@ void HCConnection::ParseStr(XMLElement *pelt, HCContainer *pcont)
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   HCStringCli *stub;
   HCParameter *param;
 
@@ -931,18 +1065,36 @@ void HCConnection::ParseStr(XMLElement *pelt, HCContainer *pcont)
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Create client stub
   stub = new HCStringCli(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCString<HCStringCli>(name, stub, &HCStringCli::Get, &HCStringCli::Set);
-  else if(acc == "R")
-    param = new HCString<HCStringCli>(name, stub, &HCStringCli::Get, 0);
-  else if(acc == "W")
-    param = new HCString<HCStringCli>(name, stub, 0, &HCStringCli::Set);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCStringS<HCStringCli>(name, stub, &HCStringCli::Get, &HCStringCli::Set);
+    else if(acc == "R")
+      param = new HCStringS<HCStringCli>(name, stub, &HCStringCli::Get, 0);
+    else if(acc == "W")
+      param = new HCStringS<HCStringCli>(name, stub, 0, &HCStringCli::Set);
+    else
+      param = new HCStringS<HCStringCli>(name, stub, 0, 0);
+  }
   else
-    param = new HCString<HCStringCli>(name, stub, 0, 0);
+  {
+    if(acc == "RW")
+      param = new HCString<HCStringCli>(name, stub, &HCStringCli::Get, &HCStringCli::Set);
+    else if(acc == "R")
+      param = new HCString<HCStringCli>(name, stub, &HCStringCli::Get, 0);
+    else if(acc == "W")
+      param = new HCString<HCStringCli>(name, stub, 0, &HCStringCli::Set);
+    else
+      param = new HCString<HCStringCli>(name, stub, 0, 0);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -953,6 +1105,7 @@ void HCConnection::ParseStrT(XMLElement *pelt, HCContainer *pcont)
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   uint32_t size;
   XMLElement *elt;
   HCEIDEnum *eidenums;
@@ -975,6 +1128,10 @@ void HCConnection::ParseStrT(XMLElement *pelt, HCContainer *pcont)
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse size element and check for error
   if(!ParseValue(pelt, "size", size))
     return;
@@ -992,14 +1149,28 @@ void HCConnection::ParseStrT(XMLElement *pelt, HCContainer *pcont)
   stub = new HCStringCli(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCStringTable<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::ISet, size, eidenums);
-  else if(acc == "R")
-    param = new HCStringTable<HCStringCli>(name, stub, &HCStringCli::IGet, 0, size, eidenums);
-  else if(acc == "W")
-    param = new HCStringTable<HCStringCli>(name, stub, 0, &HCStringCli::ISet, size, eidenums);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCStringTableS<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::ISet, size, eidenums);
+    else if(acc == "R")
+      param = new HCStringTableS<HCStringCli>(name, stub, &HCStringCli::IGet, 0, size, eidenums);
+    else if(acc == "W")
+      param = new HCStringTableS<HCStringCli>(name, stub, 0, &HCStringCli::ISet, size, eidenums);
+    else
+      param = new HCStringTableS<HCStringCli>(name, stub, 0, 0, size, eidenums);
+  }
   else
-    param = new HCStringTable<HCStringCli>(name, stub, 0, 0, size, eidenums);
+  {
+    if(acc == "RW")
+      param = new HCStringTable<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::ISet, size, eidenums);
+    else if(acc == "R")
+      param = new HCStringTable<HCStringCli>(name, stub, &HCStringCli::IGet, 0, size, eidenums);
+    else if(acc == "W")
+      param = new HCStringTable<HCStringCli>(name, stub, 0, &HCStringCli::ISet, size, eidenums);
+    else
+      param = new HCStringTable<HCStringCli>(name, stub, 0, 0, size, eidenums);
+  }
 
   //Add to parent
   pcont->Add(param);
@@ -1010,6 +1181,7 @@ void HCConnection::ParseStrL(XMLElement *pelt, HCContainer *pcont)
   uint16_t pid;
   string name;
   string acc;
+  string sav;
   uint32_t maxsize;
   HCStringCli *stub;
   HCParameter *param;
@@ -1030,6 +1202,10 @@ void HCConnection::ParseStrL(XMLElement *pelt, HCContainer *pcont)
   if(!ParseValue(pelt, "acc", acc))
     return;
 
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
   //Parse maxsize element and check for error
   if(!ParseValue(pelt, "maxsize", maxsize))
     return;
@@ -1038,14 +1214,28 @@ void HCConnection::ParseStrL(XMLElement *pelt, HCContainer *pcont)
   stub = new HCStringCli(_cli, pid);
 
   //Create parameter
-  if(acc == "RW")
-    param = new HCStringList<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
-  else if(acc == "R")
-    param = new HCStringList<HCStringCli>(name, stub, &HCStringCli::IGet, 0, 0, maxsize);
-  else if(acc == "W")
-    param = new HCStringList<HCStringCli>(name, stub, 0, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCStringListS<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
+    else if(acc == "R")
+      param = new HCStringListS<HCStringCli>(name, stub, &HCStringCli::IGet, 0, 0, maxsize);
+    else if(acc == "W")
+      param = new HCStringListS<HCStringCli>(name, stub, 0, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
+    else
+      param = new HCStringListS<HCStringCli>(name, stub, 0, 0, 0, maxsize);
+  }
   else
-    param = new HCStringList<HCStringCli>(name, stub, 0, 0, 0, maxsize);
+  {
+    if(acc == "RW")
+      param = new HCStringList<HCStringCli>(name, stub, &HCStringCli::IGet, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
+    else if(acc == "R")
+      param = new HCStringList<HCStringCli>(name, stub, &HCStringCli::IGet, 0, 0, maxsize);
+    else if(acc == "W")
+      param = new HCStringList<HCStringCli>(name, stub, 0, &HCStringCli::Add, &HCStringCli::Sub, maxsize);
+    else
+      param = new HCStringList<HCStringCli>(name, stub, 0, 0, 0, maxsize);
+  }
 
   //Add to parent
   pcont->Add(param);

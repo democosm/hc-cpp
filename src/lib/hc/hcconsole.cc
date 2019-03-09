@@ -1,6 +1,6 @@
 // HC console
 //
-// Copyright 2018 Democosm
+// Copyright 2019 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:

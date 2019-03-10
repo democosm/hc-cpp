@@ -435,26 +435,17 @@ public:
 
   virtual bool GetCell(HCCell *icell, HCCell *ocell)
   {
-    uint8_t type;
     bool val;
     int lerr;
 
     //Assert valid arguments
     assert((icell != 0) && (ocell != 0));
 
-    //Get type code from inbound cell and check for error
-    if(!icell->Read(type))
-      return false;
-
     //Check for valid method
     if(_getmethod != 0)
     {
       //Call get method
       lerr = (_object->*_getmethod)(val);
-
-      //Check for incorrect type, report this type and value with type error
-      if(type != TypeCode(val))
-        lerr = ERR_TYPE;
     }
     else
     {
@@ -498,10 +489,6 @@ public:
       if(!SkipValue(icell, type))
         return false;
 
-      //Write type code to outbound cell and check for error
-      if(!ocell->Write(TypeCode(val)))
-        return false;
-
       //Write type error code to outbound cell and check for error
       if(!ocell->Write(ERR_TYPE))
         return false;
@@ -524,10 +511,6 @@ public:
       //Access error
       lerr = ERR_ACCESS;
     }
-
-    //Write type code to outbound cell and check for error
-    if(!ocell->Write(TypeCode(val)))
-      return false;
 
     //Write error code to outbound cell and check for error
     if(!ocell->Write((int8_t)lerr))
@@ -1185,26 +1168,17 @@ public:
 
   virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
-    uint8_t type;
     bool val;
     int lerr;
 
     //Assert valid arguments
     assert((icell != 0) && (ocell != 0));
 
-    //Get type code from inbound cell and check for error
-    if(!icell->Read(type))
-      return false;
-
     //Check for valid method
     if(_getmethod != 0)
     {
       //Call get method
       lerr = (_object->*_getmethod)(eid, val);
-
-      //Check for incorrect type, report this type and value with type error
-      if(type != TypeCode(val))
-        lerr = ERR_TYPE;
     }
     else
     {
@@ -1248,10 +1222,6 @@ public:
       if(!SkipValue(icell, type))
         return false;
 
-      //Write type code to outbound cell and check for error
-      if(!ocell->Write(TypeCode(val)))
-        return false;
-
       //Write type error code to outbound cell and check for error
       if(!ocell->Write(ERR_TYPE))
         return false;
@@ -1274,10 +1244,6 @@ public:
       //Access error
       lerr = ERR_ACCESS;
     }
-
-    //Write type code to outbound cell and check for error
-    if(!ocell->Write(TypeCode(val)))
-      return false;
 
     //Write error code to outbound cell and check for error
     if(!ocell->Write((int8_t)lerr))

@@ -313,111 +313,19 @@ void HCParameter::DefaultVal(string &val)
 
 int HCParameter::HandleGetPIDError(HCCell *icell, HCCell *ocell)
 {
-  uint8_t type;
   int8_t i8val;
-  int16_t i16val;
-  int32_t i32val;
-  int64_t i64val;
-  uint8_t u8val;
-  uint16_t u16val;
-  uint32_t u32val;
-  uint64_t u64val;
-  float f32val;
-  double f64val;
-  bool bval;
-  string sval;
 
   //Assert valid arguments
   assert((icell != 0) && (ocell != 0));
 
-  //Get type code from inbound cell and check for error
-  if(!icell->Read(type))
-    return false;
-
   //Write type code to outbound cell and check for error
-  if(!ocell->Write(type))
+  if(!ocell->Write(TYPE_INT8))
     return false;
 
   //Write default value to outbound cell and check for error
-  switch(type)
-  {
-  case TYPE_CALL:
-    break;
-  case TYPE_INT8:
-    DefaultVal(i8val);
-    if(!ocell->Write(i8val))
-      return false;
-
-    break;
-  case TYPE_INT16:
-    DefaultVal(i16val);
-    if(!ocell->Write(i16val))
-      return false;
-
-    break;
-  case TYPE_INT32:
-    DefaultVal(i32val);
-    if(!ocell->Write(i32val))
-      return false;
-
-    break;
-  case TYPE_INT64:
-    DefaultVal(i64val);
-    if(!ocell->Write(i64val))
-      return false;
-
-    break;
-  case TYPE_UINT8:
-    DefaultVal(u8val);
-    if(!ocell->Write(u8val))
-      return false;
-
-    break;
-  case TYPE_UINT16:
-    DefaultVal(u16val);
-    if(!ocell->Write(u16val))
-      return false;
-
-    break;
-  case TYPE_UINT32:
-    DefaultVal(u32val);
-    if(!ocell->Write(u32val))
-      return false;
-
-    break;
-  case TYPE_UINT64:
-    DefaultVal(u64val);
-    if(!ocell->Write(u64val))
-      return false;
-
-    break;
-  case TYPE_FLOAT:
-    DefaultVal(f32val);
-    if(!ocell->Write(f32val))
-      return false;
-
-    break;
-  case TYPE_DOUBLE:
-    DefaultVal(f64val);
-    if(!ocell->Write(f64val))
-      return false;
-
-    break;
-  case TYPE_BOOL:
-    DefaultVal(bval);
-    if(!ocell->Write(bval))
-      return false;
-
-    break;
-  case TYPE_STRING:
-    DefaultVal(sval);
-    if(!ocell->Write(sval))
-      return false;
-
-    break;
-  default:
+  DefaultVal(i8val);
+  if(!ocell->Write(i8val))
     return false;
-  }
 
   //Write PID error code to outbound cell and check for error
   if(!ocell->Write((int8_t)ERR_PID))

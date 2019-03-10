@@ -274,7 +274,7 @@ int HCClient::Read(uint16_t pid, uint32_t offset, uint8_t *val, uint16_t maxlen,
   //Check for no internal error
   if(ierr == ERR_NONE)
   {
-    //Read value and error from inbound cell (already skipped past PID, offset and type)
+    //Read value and error from inbound cell (already skipped past PID, and offset)
     _icell->Read(val, maxlen, len);
     _icell->Read(merr);
     ierr = (int)merr;
@@ -418,7 +418,7 @@ template <typename T> int HCClient::Set(uint16_t pid, const T val)
   _omsg->Write(_ocell);
 
   //Perform set transaction
-  ierr = SetXact(pid, type);
+  ierr = SetXact(pid);
 
   //End mutual exclusion of transaction
   _xactmutex->Give();
@@ -444,7 +444,7 @@ template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T &val)
   //Check for no internal error
   if(ierr == ERR_NONE)
   {
-    //Read value and error from inbound cell (already skipped past PID, EID and type)
+    //Read value and error from inbound cell (already skipped past PID and EID)
     _icell->Read(val);
     _icell->Read(merr);
     ierr = (int)merr;
@@ -482,7 +482,7 @@ template <typename T> int HCClient::ISet(uint16_t pid, uint32_t eid, const T val
   _omsg->Write(_ocell);
 
   //Perform set transaction
-  ierr = ISetXact(pid, eid, type);
+  ierr = ISetXact(pid, eid);
 
   //End mutual exclusion of transaction
   _xactmutex->Give();
@@ -510,7 +510,7 @@ template <typename T> int HCClient::Add(uint16_t pid, const T val)
   _omsg->Write(_ocell);
 
   //Perform add transaction
-  ierr = AddXact(pid, type);
+  ierr = AddXact(pid);
 
   //End mutual exclusion of transaction
   _xactmutex->Give();
@@ -538,7 +538,7 @@ template <typename T> int HCClient::Sub(uint16_t pid, const T val)
   _omsg->Write(_ocell);
 
   //Perform sub transaction
-  ierr = SubXact(pid, type);
+  ierr = SubXact(pid);
 
   //End mutual exclusion of transaction
   _xactmutex->Give();
@@ -716,7 +716,6 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   _omsg->Reset(_transaction++);
   _ocell->Reset(HCCell::OPCODE_GET_CMD);
   _ocell->Write(pid);
-  _ocell->Write(type);
   _omsg->Write(_ocell);
 
   //Print outbound message if requested
@@ -768,7 +767,7 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   //Read parameter type from inbound cell
   _icell->Read(itype);
 
-  //Check for inbound type doesn't match outbound type
+  //Check for inbound type doesn't match expected type
   if(itype != type)
   {
     //Increment type error count
@@ -783,10 +782,9 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   return ERR_NONE;
 }
 
-int HCClient::SetXact(uint16_t pid, uint8_t type)
+int HCClient::SetXact(uint16_t pid)
 {
   uint16_t ipid;
-  uint8_t itype;
   int8_t berr;
 
   //Reset reply event
@@ -843,18 +841,6 @@ int HCClient::SetXact(uint16_t pid, uint8_t type)
     _piderrcnt++;
 
     return ERR_UNSPEC;
-  }
-
-  //Read parameter type from inbound cell
-  _icell->Read(itype);
-
-  //Check for inbound type doesn't match outbound type
-  if(itype != type)
-  {
-    //Increment type error count
-    _typeerrcnt++;
-
-    return ERR_TYPE;
   }
 
   //Read error code from inbound cell
@@ -967,7 +953,6 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   _ocell->Reset(HCCell::OPCODE_IGET_CMD);
   _ocell->Write(pid);
   _ocell->Write(eid);
-  _ocell->Write(type);
   _omsg->Write(_ocell);
 
   //Print outbound message if requested
@@ -1031,7 +1016,7 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   //Read parameter type from inbound cell
   _icell->Read(itype);
 
-  //Check for inbound type doesn't match outbound type
+  //Check for inbound type doesn't match expected type
   if(itype != type)
   {
     //Increment type error count
@@ -1046,11 +1031,10 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   return ERR_NONE;
 }
 
-int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
+int HCClient::ISetXact(uint16_t pid, uint32_t eid)
 {
   uint16_t ipid;
   uint32_t ieid;
-  uint8_t itype;
   int8_t berr;
 
   //Reset reply event
@@ -1121,18 +1105,6 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
     return ERR_UNSPEC;
   }
 
-  //Read parameter type from inbound cell
-  _icell->Read(itype);
-
-  //Check for inbound type doesn't match outbound type
-  if(itype != type)
-  {
-    //Increment type error count
-    _typeerrcnt++;
-
-    return ERR_TYPE;
-  }
-
   //Read error code from inbound cell
   _icell->Read(berr);
 
@@ -1142,10 +1114,9 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid, uint8_t type)
   return (int)berr;
 }
 
-int HCClient::AddXact(uint16_t pid, uint8_t type)
+int HCClient::AddXact(uint16_t pid)
 {
   uint16_t ipid;
-  uint8_t itype;
   int8_t berr;
 
   //Reset reply event
@@ -1204,18 +1175,6 @@ int HCClient::AddXact(uint16_t pid, uint8_t type)
     return ERR_UNSPEC;
   }
 
-  //Read parameter type from inbound cell
-  _icell->Read(itype);
-
-  //Check for inbound type doesn't match outbound type
-  if(itype != type)
-  {
-    //Increment type error count
-    _typeerrcnt++;
-
-    return ERR_TYPE;
-  }
-
   //Read error code from inbound cell
   _icell->Read(berr);
 
@@ -1225,10 +1184,9 @@ int HCClient::AddXact(uint16_t pid, uint8_t type)
   return (int)berr;
 }
 
-int HCClient::SubXact(uint16_t pid, uint8_t type)
+int HCClient::SubXact(uint16_t pid)
 {
   uint16_t ipid;
-  uint8_t itype;
   int8_t berr;
 
   //Reset reply event
@@ -1285,18 +1243,6 @@ int HCClient::SubXact(uint16_t pid, uint8_t type)
     _piderrcnt++;
 
     return ERR_UNSPEC;
-  }
-
-  //Read parameter type from inbound cell
-  _icell->Read(itype);
-
-  //Check for inbound type doesn't match outbound type
-  if(itype != type)
-  {
-    //Increment type error count
-    _typeerrcnt++;
-
-    return ERR_TYPE;
   }
 
   //Read error code from inbound cell

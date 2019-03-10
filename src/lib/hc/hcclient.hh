@@ -70,12 +70,12 @@ public:
 private:
   int CallXact(uint16_t pid);
   int GetXact(uint16_t pid, uint8_t type);
-  int SetXact(uint16_t pid, uint8_t type);
+  int SetXact(uint16_t pid);
   int ICallXact(uint16_t pid, uint32_t eid);
   int IGetXact(uint16_t pid, uint32_t eid, uint8_t type);
-  int ISetXact(uint16_t pid, uint32_t eid, uint8_t type);
-  int AddXact(uint16_t pid, uint8_t type);
-  int SubXact(uint16_t pid, uint8_t type);
+  int ISetXact(uint16_t pid, uint32_t eid);
+  int AddXact(uint16_t pid);
+  int SubXact(uint16_t pid);
   int ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen);
   int WriteXact(uint16_t pid, uint32_t offset);
   void ReadThread(void);

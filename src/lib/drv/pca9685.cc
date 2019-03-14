@@ -57,20 +57,20 @@ PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
   _mode2._och = new Bits8(bus, 1, 0x08);
   _mode2._outdrv = new Bits8(bus, 1, 0x04);
   _mode2._outne = new Bits8(bus, 1, 0x03);
-  _subadr1 = new Reg8(bus, 2);
-  _subadr2 = new Reg8(bus, 3);
-  _subadr3 = new Reg8(bus, 4);
-  _allcalladr = new Reg8(bus, 5);
+  _subadr1 = new Register8(bus, 2);
+  _subadr2 = new Register8(bus, 3);
+  _subadr3 = new Register8(bus, 4);
+  _allcalladr = new Register8(bus, 5);
 
   for(i=0; i<16; i++)
   {
-    _led[i]._oncnt = new LReg16(bus, i*4+6);
-    _led[i]._offcnt = new LReg16(bus, i*4+8);
+    _led[i]._oncnt = new Retsiger16(bus, i*4+6);
+    _led[i]._offcnt = new Retsiger16(bus, i*4+8);
   }
 
-  _ledall._oncnt = new LReg16(bus, 0xFA);
-  _ledall._offcnt = new LReg16(bus, 0xFC);
-  _prescale = new Reg8(bus, 0xFE);
+  _ledall._oncnt = new Retsiger16(bus, 0xFA);
+  _ledall._offcnt = new Retsiger16(bus, 0xFC);
+  _prescale = new Register8(bus, 0xFE);
 
   //Force into sleep mode without restarting (prescale can only be set in sleep mode)
   tval = 0x10;
@@ -189,16 +189,16 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
   namecont->Add(param);
   srv->Add(param);
 
-  param = new HCUns8<Reg8>("subadr1", _subadr1, &Reg8::Get, 0);
+  param = new HCUns8<Register8>("subadr1", _subadr1, &Register8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUns8<Reg8>("subadr2", _subadr2, &Reg8::Get, 0);
+  param = new HCUns8<Register8>("subadr2", _subadr2, &Register8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUns8<Reg8>("subadr3", _subadr3, &Reg8::Get, 0);
+  param = new HCUns8<Register8>("subadr3", _subadr3, &Register8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
-  param = new HCUns8<Reg8>("allcalladr", _allcalladr, &Reg8::Get, 0);
+  param = new HCUns8<Register8>("allcalladr", _allcalladr, &Register8::Get, 0);
   regcont->Add(param);
   srv->Add(param);
 
@@ -208,24 +208,24 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
     tempname << "led" << i;
     namecont = new HCContainer(tempname.str());
     regcont->Add(namecont);
-    param = new HCUns16<LReg16>("oncnt", _led[i]._oncnt, &LReg16::Get, &LReg16::Set);
+    param = new HCUns16<Retsiger16>("oncnt", _led[i]._oncnt, &Retsiger16::Get, &Retsiger16::Set);
     namecont->Add(param);
     srv->Add(param);
-    param = new HCUns16<LReg16>("offcnt", _led[i]._offcnt, &LReg16::Get, &LReg16::Set);
+    param = new HCUns16<Retsiger16>("offcnt", _led[i]._offcnt, &Retsiger16::Get, &Retsiger16::Set);
     namecont->Add(param);
     srv->Add(param);
   }
 
   namecont = new HCContainer("ledall");
   regcont->Add(namecont);
-  param = new HCUns16<LReg16>("oncnt", _ledall._oncnt, 0, &LReg16::Set);
+  param = new HCUns16<Retsiger16>("oncnt", _ledall._oncnt, 0, &Retsiger16::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUns16<LReg16>("offcnt", _ledall._offcnt, 0, &LReg16::Set);
+  param = new HCUns16<Retsiger16>("offcnt", _ledall._offcnt, 0, &Retsiger16::Set);
   namecont->Add(param);
   srv->Add(param);
 
-  param = new HCUns8<Reg8>("prescale", _prescale, &Reg8::Get, &Reg8::Set);
+  param = new HCUns8<Register8>("prescale", _prescale, &Register8::Get, &Register8::Set);
   regcont->Add(param);
   srv->Add(param);
 }

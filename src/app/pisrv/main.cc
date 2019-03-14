@@ -169,7 +169,7 @@ int main(int argc, char **argv)
   param = new HCUns8<PIServer>("cpuutilization", pisrv, &PIServer::GetCPUUtilization, 0);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCBooleanTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);
+  param = new HCBoolTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);
   topcont->Add(param);
   srv->Add(param);
   param = new HCCallTable<PIServer>("pulserelayhigh", pisrv, &PIServer::PulseRelayHigh, 3);

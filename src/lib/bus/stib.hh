@@ -1,4 +1,4 @@
-// Bits
+// Bits with wrong byte ordering
 //
 // Copyright 2019 Democosm
 // 
@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _BITS_HH_
-#define _BITS_HH_
+#ifndef _STIB_HH_
+#define _STIB_HH_
 
 #include "bus.hh"
 #include "order.hh"
@@ -33,10 +33,10 @@
 #include <inttypes.h>
 
 template <class T>
-class Bits
+class Stib
 {
 public:
-  Bits(Bus *bus, uint32_t addr, T mask)
+  Stib(Bus *bus, uint32_t addr, T mask)
   {
     //Assert valid arguments
     assert((bus != 0) && (mask != 0));
@@ -52,7 +52,7 @@ public:
         break;
   }
 
-  virtual ~Bits()
+  virtual ~Stib()
   {
   }
 
@@ -74,7 +74,7 @@ public:
     }
 
     //Read data from buffer
-    val = NetToHost(*((T *)buf));
+    val = WrongToHost(*((T *)buf));
 
     //Mask and right justify
     val = (val & _mask) >> _shift;
@@ -104,13 +104,13 @@ public:
     }
 
     //Read data from buffer
-    tval = NetToHost(*((T *)buf));
+    tval = WrongToHost(*((T *)buf));
 
     //Shift and mask in new value
     val = (tval & ~_mask) | (val << _shift);
 
     //Write data to buffer
-    *((T *)buf) = HostToNet(val);
+    *((T *)buf) = HostToWrong(val);
 
     //Set data using bus
     terr = _bus->Set(_addr, buf, sizeof(T));
@@ -129,9 +129,8 @@ private:
 };
 
 //Types derived from template
-typedef Bits<uint8_t> Bits8;
-typedef Bits<uint16_t> Bits16;
-typedef Bits<uint32_t> Bits32;
-typedef Bits<uint64_t> Bits64;
+typedef Stib<uint16_t> Stib16;
+typedef Stib<uint32_t> Stib32;
+typedef Stib<uint64_t> Stib64;
 
-#endif //_BITS_HH_
+#endif //_STIB_HH_

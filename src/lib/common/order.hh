@@ -1,4 +1,4 @@
-// PCA9685 PWM driver
+// CRC functions
 //
 // Copyright 2019 Democosm
 // 
@@ -24,62 +24,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PCA9685_HH_
-#define _PCA9685_HH_
-
-#include "bits.hh"
-#include "bus.hh"
-#include "hccontainer.hh"
-#include "hcserver.hh"
-#include "register.hh"
-#include "retsiger.hh"
 #include <inttypes.h>
 
-class PCA9685
-{
-public:
-  PCA9685(Bus *bus, uint32_t pwmfreq);
-  virtual ~PCA9685();
-  void RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv);
-  int GetPWMDutyCycle(uint32_t id, double &val);
-  int SetPWMDutyCycle(uint32_t id, double val);
+//Network byte ordering
+uint8_t HostToNet(uint8_t n);
+uint8_t NetToHost(uint8_t n);
+uint16_t HostToNet(uint16_t n);
+uint16_t NetToHost(uint16_t n);
+uint32_t HostToNet(uint32_t n);
+uint32_t NetToHost(uint32_t n);
+uint64_t HostToNet(uint64_t n);
+uint64_t NetToHost(uint64_t n);
 
-private:
-  struct Mode1
-  {
-    Bits8 *_restart;
-    Bits8 *_extclk;
-    Bits8 *_ai;
-    Bits8 *_sleep;
-    Bits8 *_sub1;
-    Bits8 *_sub2;
-    Bits8 *_sub3;
-    Bits8 *_allcall;
-  };
-
-  struct Mode2
-  {
-    Bits8 *_invrt;
-    Bits8 *_och;
-    Bits8 *_outdrv;
-    Bits8 *_outne;
-  };
-
-  struct LED
-  {
-    Retsiger16 *_oncnt;
-    Retsiger16 *_offcnt;
-  };
-
-  Mode1 _mode1;
-  Mode2 _mode2;
-  Register8 *_subadr1;
-  Register8 *_subadr2;
-  Register8 *_subadr3;
-  Register8 *_allcalladr;
-  LED _led[16];
-  LED _ledall;
-  Register8 *_prescale;
-};
-
-#endif //_PCA9685_HH_
+//Wrong byte ordering
+uint16_t HostToWrong(uint16_t n);
+uint16_t WrongToHost(uint16_t n);
+uint32_t HostToWrong(uint32_t n);
+uint32_t WrongToHost(uint32_t n);
+uint64_t HostToWrong(uint64_t n);
+uint64_t WrongToHost(uint64_t n);

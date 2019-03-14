@@ -1,4 +1,4 @@
-// PCA9685 PWM driver
+// Register with wrong byte ordering
 //
 // Copyright 2019 Democosm
 // 
@@ -24,62 +24,79 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PCA9685_HH_
-#define _PCA9685_HH_
+#ifndef _RETSIGER_HH_
+#define _RETSIGER_HH_
 
-#include "bits.hh"
 #include "bus.hh"
-#include "hccontainer.hh"
-#include "hcserver.hh"
-#include "register.hh"
-#include "retsiger.hh"
+#include "order.hh"
+#include <cassert>
 #include <inttypes.h>
 
-class PCA9685
+template <class T>
+class Retsiger
 {
 public:
-  PCA9685(Bus *bus, uint32_t pwmfreq);
-  virtual ~PCA9685();
-  void RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv);
-  int GetPWMDutyCycle(uint32_t id, double &val);
-  int SetPWMDutyCycle(uint32_t id, double val);
+  Retsiger(Bus *bus, uint32_t addr)
+  {
+    //Assert valid arguments
+    assert(bus != 0);
+
+    //Initialize cache variables
+    _bus = bus;
+    _addr = addr;
+  }
+
+  virtual ~Retsiger()
+  {
+  }
+
+  int Get(T &val)
+  {
+    int terr;
+    uint8_t buf[sizeof(T)];
+
+    //Get data using bus
+    _bus->Reserve();
+    terr = _bus->Get(_addr, buf, sizeof(T));
+    _bus->Release();
+
+    //Check for error
+    if(terr != ERR_NONE)
+    {
+      val = 0;
+      return terr;
+    }
+
+    //Read data from buffer
+    val = WrongToHost(*((T *)buf));
+
+    return ERR_NONE;
+  }
+
+  int Set(T val)
+  {
+    int terr;
+    uint8_t buf[sizeof(T)];
+
+    //Write data to buffer
+    *((T *)buf) = HostToWrong(val);
+
+    //Set data using bus
+    _bus->Reserve();
+    terr = _bus->Set(_addr, buf, sizeof(T));
+    _bus->Release();
+
+    return terr;
+  }
 
 private:
-  struct Mode1
-  {
-    Bits8 *_restart;
-    Bits8 *_extclk;
-    Bits8 *_ai;
-    Bits8 *_sleep;
-    Bits8 *_sub1;
-    Bits8 *_sub2;
-    Bits8 *_sub3;
-    Bits8 *_allcall;
-  };
-
-  struct Mode2
-  {
-    Bits8 *_invrt;
-    Bits8 *_och;
-    Bits8 *_outdrv;
-    Bits8 *_outne;
-  };
-
-  struct LED
-  {
-    Retsiger16 *_oncnt;
-    Retsiger16 *_offcnt;
-  };
-
-  Mode1 _mode1;
-  Mode2 _mode2;
-  Register8 *_subadr1;
-  Register8 *_subadr2;
-  Register8 *_subadr3;
-  Register8 *_allcalladr;
-  LED _led[16];
-  LED _ledall;
-  Register8 *_prescale;
+  Bus *_bus;
+  uint32_t _addr;
 };
 
-#endif //_PCA9685_HH_
+//Types derived from template
+typedef Retsiger<uint16_t> Retsiger16;
+typedef Retsiger<uint32_t> Retsiger32;
+typedef Retsiger<uint64_t> Retsiger64;
+
+#endif //_RETSIGER_HH_

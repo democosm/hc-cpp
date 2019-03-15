@@ -53,11 +53,11 @@ public:
   int Get(T &val)
   {
     int terr;
-    uint8_t buf[sizeof(T)];
+    T buf;
 
     //Get data using bus
     _bus->Reserve();
-    terr = _bus->Get(_addr, buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
     _bus->Release();
 
     //Check for error
@@ -68,7 +68,7 @@ public:
     }
 
     //Read data from buffer
-    val = NetToHost(*((T *)buf));
+    val = NetToHost(buf);
 
     return ERR_NONE;
   }
@@ -76,14 +76,14 @@ public:
   int Set(T val)
   {
     int terr;
-    uint8_t buf[sizeof(T)];
+    T buf;
 
     //Write data to buffer
-    *((T *)buf) = HostToNet(val);
+    buf = HostToNet(val);
 
     //Set data using bus
     _bus->Reserve();
-    terr = _bus->Set(_addr, buf, sizeof(T));
+    terr = _bus->Set(_addr, (uint8_t *)&buf, sizeof(T));
     _bus->Release();
 
     return terr;

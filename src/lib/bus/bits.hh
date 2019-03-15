@@ -59,11 +59,11 @@ public:
   int Get(T &val)
   {
     int terr;
-    uint8_t buf[sizeof(T)];
+    T buf;
 
     //Get data using bus
     _bus->Reserve();
-    terr = _bus->Get(_addr, buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
     _bus->Release();
 
     //Check for error
@@ -74,7 +74,7 @@ public:
     }
 
     //Read data from buffer
-    val = NetToHost(*((T *)buf));
+    val = NetToHost(buf);
 
     //Mask and right justify
     val = (val & _mask) >> _shift;
@@ -85,14 +85,14 @@ public:
   int Set(T val)
   {
     int terr;
-    uint8_t buf[sizeof(T)];
+    T buf;
     T tval;
 
     //Reserve bus
     _bus->Reserve();
 
     //Get data using bus
-    terr = _bus->Get(_addr, buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
 
     //Check for error
     if(terr != ERR_NONE)
@@ -104,16 +104,16 @@ public:
     }
 
     //Read data from buffer
-    tval = NetToHost(*((T *)buf));
+    tval = NetToHost(buf);
 
     //Shift and mask in new value
-    val = (tval & ~_mask) | (val << _shift);
+    tval = (tval & ~_mask) | (val << _shift);
 
     //Write data to buffer
-    *((T *)buf) = HostToNet(val);
+    buf = HostToNet(tval);
 
     //Set data using bus
-    terr = _bus->Set(_addr, buf, sizeof(T));
+    terr = _bus->Set(_addr, (uint8_t *)&buf, sizeof(T));
 
     //Release bus
     _bus->Release();

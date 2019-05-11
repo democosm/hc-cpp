@@ -298,7 +298,7 @@ int main(int argc, char **argv)
   args.tcp = false;
   args.tls = false;
   args.port = 1500;
-  args.qport = 1501;
+  args.qport = 5555;
   args.daemon = false;
 
   //Parse arguments

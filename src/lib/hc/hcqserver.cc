@@ -290,20 +290,32 @@ bool HCQServer::ProcessSetCell(void)
   if(!NextReadCharEquals(','))
     return false;
 
-  //Check for next character not parameter value opening quote
-  if(!NextReadCharEquals('"'))
-    return false;
+  //Check for next character parameter value string literal opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
 
-  //Read parameter value
-  if(!ReadField('"', pval, sizeof(pval)))
-    return false;
+    //Read parameter value
+    if(!ReadField('"', pval, sizeof(pval)))
+      return false;
 
-  //Check for next character not cell closing bracket
-  if(!NextReadCharEquals(']'))
-    return false;
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
 
-  //Set parameter value string
-  err = param->SetStr(pval);
+    //Set parameter value string literal
+    err = param->SetStrLit(pval);
+  }
+  else
+  {
+    //Read parameter value
+    if(!ReadField(']', pval, sizeof(pval)))
+      return false;
+
+    //Set parameter value string
+    err = param->SetStr(pval);
+  }
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -532,20 +544,32 @@ bool HCQServer::ProcessISetCell(void)
       return false;
   }
 
-  //Check for next character not parameter value opening quote
-  if(!NextReadCharEquals('"'))
-    return false;
+  //Check for next character parameter value string literal opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
 
-  //Read parameter value
-  if(!ReadField('"', pval, sizeof(pval)))
-    return false;
+    //Read parameter value
+    if(!ReadField('"', pval, sizeof(pval)))
+      return false;
 
-  //Check for next character not cell ending bracket
-  if(!NextReadCharEquals(']'))
-    return false;
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
 
-  //Set parameter table string value
-  err = param->SetStrTbl(eid, pval);
+    //Set parameter table string literal value
+    err = param->SetStrLitTbl(eid, pval);
+  }
+  else
+  {
+    //Read parameter value
+    if(!ReadField(']', pval, sizeof(pval)))
+      return false;
+
+    //Set parameter table string value
+    err = param->SetStrTbl(eid, pval);
+  }
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -582,20 +606,32 @@ bool HCQServer::ProcessAddCell(void)
   if(!NextReadCharEquals(','))
     return false;
 
-  //Check for next character not parameter value opening quote
-  if(!NextReadCharEquals('"'))
-    return false;
+  //Check for next character parameter value string literal opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
 
-  //Read parameter value
-  if(!ReadField('"', pval, sizeof(pval)))
-    return false;
+    //Read parameter value
+    if(!ReadField('"', pval, sizeof(pval)))
+      return false;
 
-  //Check for next character not cell closing bracket
-  if(!NextReadCharEquals(']'))
-    return false;
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
 
-  //Add parameter value string
-  err = param->AddStr(pval);
+    //Add parameter value string literal
+    err = param->AddStrLit(pval);
+  }
+  else
+  {
+    //Read parameter value
+    if(!ReadField(']', pval, sizeof(pval)))
+      return false;
+
+    //Add parameter value string
+    err = param->AddStr(pval);
+  }
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))
@@ -632,20 +668,32 @@ bool HCQServer::ProcessSubCell(void)
   if(!NextReadCharEquals(','))
     return false;
 
-  //Check for next character not parameter value opening quote
-  if(!NextReadCharEquals('"'))
-    return false;
+  //Check for next character parameter value string literal opening quote
+  if(_readbuf[_readind] == '"')
+  {
+    //Advance read index
+    _readind++;
 
-  //Read parameter value
-  if(!ReadField('"', pval, sizeof(pval)))
-    return false;
+    //Read parameter value
+    if(!ReadField('"', pval, sizeof(pval)))
+      return false;
 
-  //Check for next character not cell closing bracket
-  if(!NextReadCharEquals(']'))
-    return false;
+    //Check for next character not cell closing bracket
+    if(!NextReadCharEquals(']'))
+      return false;
 
-  //Subtract parameter value string
-  err = param->SubStr(pval);
+    //Subtract parameter value string literal
+    err = param->SubStrLit(pval);
+  }
+  else
+  {
+    //Read parameter value
+    if(!ReadField(']', pval, sizeof(pval)))
+      return false;
+
+    //Subtract parameter value string
+    err = param->SubStr(pval);
+  }
 
   //Write to outbound message
   if(!WriteStringQuote(ErrToString(err).c_str()) || !WriteChar(']'))

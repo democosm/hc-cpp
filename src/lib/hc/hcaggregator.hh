@@ -30,6 +30,7 @@
 #include "hcconnection.hh"
 #include "hccontainer.hh"
 #include "hcserver.hh"
+#include "hcqserver.hh"
 #include "slipframer.hh"
 #include "tlsclient.hh"
 #include "tcpclient.hh"
@@ -58,6 +59,8 @@ private:
   HCContainer *_topcont;
   HCConnection **_conn;
   uint32_t _conncnt;
+  Device *_qsrvdev;
+  HCQServer *_qsrv;
   UDPSocket *_srvdev;
   HCServer *_srv;
 };

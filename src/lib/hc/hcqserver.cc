@@ -30,6 +30,7 @@
 #include "str.hh"
 #include <cassert>
 #include <inttypes.h>
+#include <iostream>
 #include <string.h>
 #include <string>
 
@@ -703,6 +704,41 @@ bool HCQServer::ProcessSubCell(void)
   return true;
 }
 
+bool HCQServer::ProcessSaveCell(void)
+{
+  ofstream file;
+
+  //Check for next character not cell closing bracket
+  if(!NextReadCharEquals(']'))
+    return false;
+
+  //Open state file
+  file.open("default.state");
+
+  //Check for error
+  if(!file.is_open())
+  {
+    //Write to outbound message
+    if(!WriteStringQuote(ErrToString(ERR_ACCESS).c_str()) || !WriteChar(']'))
+      return false;
+
+    return false;
+  }
+
+  //Save state starting at top container
+  _top->PrintConfig(file);
+
+  //Close state file
+  file.close();
+
+  //Write to outbound message
+  if(!WriteStringQuote(ErrToString(ERR_NONE).c_str()) || !WriteChar(']'))
+    return false;
+
+  //Success
+  return true;
+}
+
 bool HCQServer::ProcessCell(void)
 {
   char opcode[3];
@@ -714,6 +750,10 @@ bool HCQServer::ProcessCell(void)
   //Read opcode
   if(!ReadField('"', opcode, sizeof(opcode)))
     return false;
+
+  //Process opcode only cells
+  if(strcmp(opcode, "sa") == 0)
+    return ProcessSaveCell();
 
   //Check for next read character not comma
   if(!NextReadCharEquals(','))

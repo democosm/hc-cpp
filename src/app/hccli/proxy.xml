@@ -1,6 +1,7 @@
 <server>
   <name>Proxy</name>
   <port>1511</port>
+  <qport>5555</qport>
   <conn>
     <name>agg</name>
     <timeout>100000</timeout>

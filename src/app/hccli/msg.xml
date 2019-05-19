@@ -1,9 +1,9 @@
 <server>
-  <name>Pi</name>
+  <name>agg</name>
   <port>1510</port>
   <qport>5555</qport>
   <conn>
-    <name>pi</name>
+    <name>msg</name>
     <timeout>100000</timeout>
     <udpsocket>
       <port>0</port>

@@ -24,26 +24,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "error.hh"
-#include "str.hh"
 #include "device.hh"
+#include "error.hh"
 #include "hcboolean.hh"
 #include "hccall.hh"
 #include "hcconsole.hh"
 #include "hccontainer.hh"
 #include "hcfile.hh"
+#include "hcfloat.hh"
+#include "hcinteger.hh"
 #include "hcqserver.hh"
 #include "hcserver.hh"
 #include "hcstring.hh"
-#include "hcfloat.hh"
-#include "hcinteger.hh"
 #include "scratch.hh"
 #include "scratchfile.hh"
 #include "scratchstring.hh"
 #include "slipframer.hh"
+#include "str.hh"
+#include "tcpserver.hh"
 #include "thread.hh"
 #include "tlsserver.hh"
-#include "tcpserver.hh"
 #include "udpsocket.hh"
 #include <cassert>
 #include <getopt.h>

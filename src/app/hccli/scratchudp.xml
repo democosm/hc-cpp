@@ -1,6 +1,7 @@
 <server>
   <name>Scratch</name>
   <port>1510</port>
+  <qport>5555</qport>
   <conn>
     <name>scratch</name>
     <timeout>100000</timeout>

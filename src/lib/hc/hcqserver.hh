@@ -51,6 +51,7 @@ private:
   bool ProcessISetCell(void);
   bool ProcessAddCell(void);
   bool ProcessSubCell(void);
+  bool ProcessSaveCell(void);
   bool ProcessCell(void);
   bool ProcessMessage(void);
   void CtlThread(void);

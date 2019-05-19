@@ -44,6 +44,10 @@ HCAggregator::HCAggregator(const string &filename)
   _conn = 0;
   _conncnt = 0;
 
+  //Initialize query server information
+  _qsrvdev = 0;
+  _qsrv = 0;
+
   //Initialize server information
   _srvdev = 0;
   _srv = 0;
@@ -74,6 +78,11 @@ HCAggregator::~HCAggregator()
   uint32_t i;
 
   //Cleanup
+  delete _srv;
+  delete _srvdev;
+  delete _qsrv;
+  delete _qsrvdev;
+
   for(i=0; i<_conncnt; i++)
     if(_conn[i] == 0)
       delete _conn[i];
@@ -111,6 +120,7 @@ HCServer *HCAggregator::ParseServer(XMLElement *pelt)
   XMLElement *elt;
   string name;
   uint16_t port;
+  uint16_t qport;
 
   //Check for null parent element
   if(pelt == 0)
@@ -139,6 +149,16 @@ HCServer *HCAggregator::ParseServer(XMLElement *pelt)
   //Parse port element and check for error
   if(!ParseValue(pelt, "port", port))
     return 0;
+
+  //Check for optional query server
+  if(ParseValue(pelt, "qport", qport))
+  {
+    //Create query server device
+    _qsrvdev = new UDPSocket(qport);
+
+    //Create query server
+    _qsrv = new HCQServer(_qsrvdev, _topcont);
+  }
 
   //Create server device
   _srvdev = new UDPSocket(port);

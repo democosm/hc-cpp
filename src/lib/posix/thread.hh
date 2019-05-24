@@ -68,7 +68,10 @@ public:
   {
     //Stop the thread if it isn't already
     if(_started != 0)
+    {
       pthread_cancel(_threadid);
+      pthread_join(_threadid, NULL);
+    }
 
     //Destroy the mutex
     delete _mutex;
@@ -77,6 +80,7 @@ public:
   int Start(void)
   {
     int result;
+    pthread_attr_t attr;
 
     //Begin mutual exclusion
     _mutex->Wait();
@@ -89,6 +93,10 @@ public:
       return ERR_INVALID;
     }
 
+    //Set thread attributes
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
     //Start the thread
     if((result = pthread_create(&_threadid, NULL, (void *(*)(void *))&Thread<T>::Wrapper, this)) != 0)
     {
@@ -96,6 +104,9 @@ public:
       _mutex->Give();
       return ERR_UNSPEC;
     }
+
+    //Destroy thread attributes (no longer needed)
+    pthread_attr_destroy(&attr);
 
     //Indicate started
     _started = true;

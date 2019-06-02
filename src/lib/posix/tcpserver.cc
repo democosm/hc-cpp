@@ -25,10 +25,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "tcpserver.hh"
-#include <cassert>
-#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <cassert>
 #include <iostream>
+#include <string.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 using namespace std;

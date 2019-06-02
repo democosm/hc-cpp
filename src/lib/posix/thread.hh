@@ -29,15 +29,14 @@
 
 #include "error.hh"
 #include "mutex.hh"
-#include <errno.h>
+#include <cassert>
+#include <inttypes.h>
 #include <pthread.h>
 #include <sched.h>
-#include <string.h>
-#include <time.h>
-#include <inttypes.h>
-#include <cassert>
+#include <stdio.h>
 
 int ThreadSleep(uint32_t usecs);
+uint32_t ThreadNumProcsOnline(void);
 
 template <class T>
 
@@ -48,7 +47,7 @@ public:
   typedef void (T::*ThreadMethod)(void);
 
 public:
-  Thread(T *object, ThreadMethod method)
+  Thread(T *object, ThreadMethod method, int core=-1)
   {
     //Assert valid arguments
     assert((object != 0) && (method != 0));
@@ -56,6 +55,9 @@ public:
     //Initialize object and method pointers
     _object = object;
     _method = method;
+
+    //Initialize core number to be pinned to
+    _core = core;
 
     //Create the mutex
     _mutex = new Mutex();
@@ -119,11 +121,28 @@ public:
 
   static void *Wrapper(Thread<T> *thread)
   {
+    pthread_t tid;
+    cpu_set_t cs;
     int oldstate;
     int oldtype;
 
     //Assert valid arguments
     assert(thread != 0);
+
+    //Check for request to pin this thread to specific core
+    if(thread->_core >= 0)
+    {
+      //Get handle for this thread
+      tid = pthread_self();
+
+      //Set affinity mask to include specified core
+      CPU_ZERO(&cs);
+      CPU_SET(thread->_core, &cs);
+
+      //Set affinity for this thread
+      if(pthread_setaffinity_np(tid, sizeof(cs), &cs) != 0)
+        printf("Error pinning thread to core %d\n", thread->_core);
+    }
 
     //Allow threads to be destroyed immediately
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, &oldstate);
@@ -141,6 +160,7 @@ public:
 private:
   T *_object;
   ThreadMethod _method;
+  int _core;
   Mutex *_mutex;
   bool _started;
   pthread_t _threadid;

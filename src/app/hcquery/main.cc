@@ -24,12 +24,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "str.hh"
 #include "event.hh"
+#include "str.hh"
 #include "thread.hh"
 #include "udpsocket.hh"
 #include <cassert>
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 

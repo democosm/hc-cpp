@@ -25,6 +25,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "thread.hh"
+#include <time.h>
+#include <unistd.h>
 
 int ThreadSleep(uint32_t usecs)
 {
@@ -38,3 +40,13 @@ int ThreadSleep(uint32_t usecs)
   return ERR_NONE;
 }
 
+uint32_t ThreadNumProcsOnline(void)
+{
+  long numcores;
+
+  //Get number of cores online and don't allow negative
+  if((numcores = sysconf(_SC_NPROCESSORS_ONLN)) < 0)
+    return 0;
+
+  return (uint32_t)numcores;
+}

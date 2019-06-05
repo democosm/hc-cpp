@@ -128,7 +128,8 @@ int main(int argc, char **argv)
 
   //Check for daemon mode
   if(args.daemon)
-    daemon(1, 1);
+    if(daemon(1, 1) != 0)
+      return -1;
 
   //Create I2C driver
 //  i2c = new I2C("/dev/i2c-1");

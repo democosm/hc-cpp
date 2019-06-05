@@ -299,8 +299,8 @@ bool HCCell::Read(float &val)
   if(!Read(temp))
     return false;
 
-  //Special cast from integer to floating point
-  val = *(float *)&temp;
+  //Special copy from integer to floating point
+  memcpy(&val, &temp, sizeof(val));
   return true;
 }
 
@@ -308,8 +308,8 @@ bool HCCell::Write(float val)
 {
   uint32_t temp;
 
-  //Special cast from floating point to same size integer
-  temp = *(uint32_t *)&val;
+  //Special copy from floating point to integer
+  memcpy(&temp, &val, sizeof(val));
 
   //Delegate to integer version of this method
   return Write(temp);
@@ -323,8 +323,8 @@ bool HCCell::Read(double &val)
   if(!Read(temp))
     return false;
 
-  //Special cast from integer to floating point
-  val = *(double *)&temp;
+  //Special copy from integer to floating point
+  memcpy(&val, &temp, sizeof(val));
   return true;
 }
 
@@ -332,8 +332,8 @@ bool HCCell::Write(double val)
 {
   uint64_t temp;
 
-  //Special cast from floating point to same size integer
-  temp = *(uint64_t *)&val;
+  //Special copy from floating point to integer
+  memcpy(&temp, &val, sizeof(val));
 
   //Delegate to integer version of this method
   return Write(temp);

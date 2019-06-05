@@ -497,8 +497,9 @@ int HCConsole::WaitKey(void)
   int key;
   int lastkey;
 
-  //Initialize state and return value
+  //Initialize state and last key
   state = 0;
+  lastkey = 0;
 
   //Loop until character input is translated
   while(true)

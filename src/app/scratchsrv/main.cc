@@ -307,7 +307,8 @@ int main(int argc, char **argv)
 
   //Check for daemon mode
   if(args.daemon)
-    daemon(1, 1);
+    if(daemon(1, 1) != 0)
+      return -1;
 
   //Initialize TLS
   SSL_load_error_strings();	

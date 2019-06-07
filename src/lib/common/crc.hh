@@ -24,8 +24,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef _CRC_HH_
+#define _CRC_HH_
+
 #include <inttypes.h>
 #include <string>
 
 uint32_t CRC32(uint32_t crc, const void *buf, uint32_t size);
 uint32_t CRC32File(const std::string &name);
+
+#endif //_CRC_HH_

@@ -92,7 +92,7 @@ void Usage()
   cout << "[-t, --tcp] Use TCP for transport protocol" << "\n";
   cout << "[-s, --tls] Use TLS for transport protocol" << "\n";
   cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << "\n";
-  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 1501)" << "\n";
+  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 5555)" << "\n";
   cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 

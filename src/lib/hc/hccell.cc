@@ -184,7 +184,7 @@ bool HCCell::Write(int64_t val)
 bool HCCell::Read(uint8_t &val)
 {
   //Check for buffer underflow
-  if((_readindex + sizeof(uint8_t) - 1) >= _payloadlength)
+  if((_payloadlength - _readindex) < + sizeof(uint8_t))
     return false;
 
   //Deserialize value from payload
@@ -195,7 +195,7 @@ bool HCCell::Read(uint8_t &val)
 bool HCCell::Write(uint8_t val)
 {
   //Check for buffer overflow
-  if((_payloadlength + sizeof(uint8_t) - 1) >= PAYLOAD_MAX)
+  if((PAYLOAD_MAX - _payloadlength) < sizeof(uint8_t))
     return false;
 
   //Serialize value into payload
@@ -206,7 +206,7 @@ bool HCCell::Write(uint8_t val)
 bool HCCell::Read(uint16_t &val)
 {
   //Check for buffer underflow
-  if((_readindex + sizeof(uint16_t) - 1) >= _payloadlength)
+  if((_payloadlength - _readindex) < + sizeof(uint16_t))
     return false;
 
   //Deserialize value from payload
@@ -218,7 +218,7 @@ bool HCCell::Read(uint16_t &val)
 bool HCCell::Write(uint16_t val)
 {
   //Check for buffer overflow
-  if((_payloadlength + sizeof(uint16_t) - 1) >= PAYLOAD_MAX)
+  if((PAYLOAD_MAX - _payloadlength) < sizeof(uint16_t))
     return false;
 
   //Serialize value into payload
@@ -230,7 +230,7 @@ bool HCCell::Write(uint16_t val)
 bool HCCell::Read(uint32_t &val)
 {
   //Check for buffer underflow
-  if((_readindex + sizeof(uint32_t) - 1) >= _payloadlength)
+  if((_payloadlength - _readindex) < + sizeof(uint32_t))
     return false;
 
   //Deserialize value from payload
@@ -244,7 +244,7 @@ bool HCCell::Read(uint32_t &val)
 bool HCCell::Write(uint32_t val)
 {
   //Check for buffer overflow
-  if((_payloadlength + sizeof(uint32_t) - 1) >= PAYLOAD_MAX)
+  if((PAYLOAD_MAX - _payloadlength) < sizeof(uint32_t))
     return false;
 
   //Serialize value into payload
@@ -258,7 +258,7 @@ bool HCCell::Write(uint32_t val)
 bool HCCell::Read(uint64_t &val)
 {
   //Check for buffer underflow
-  if((_readindex + sizeof(uint64_t) - 1) >= _payloadlength)
+  if((_payloadlength - _readindex) < + sizeof(uint64_t))
     return false;
 
   //Deserialize value from payload
@@ -276,7 +276,7 @@ bool HCCell::Read(uint64_t &val)
 bool HCCell::Write(uint64_t val)
 {
   //Check for buffer overflow
-  if((_payloadlength + sizeof(uint64_t) - 1) >= PAYLOAD_MAX)
+  if((PAYLOAD_MAX - _payloadlength) < sizeof(uint64_t))
     return false;
 
   //Serialize value into payload

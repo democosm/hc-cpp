@@ -226,7 +226,7 @@ UDPSocket *HCAggregator::ParseUDPSocket(XMLElement *pelt)
     return 0;
 
   //Create UDP socket
-  return new UDPSocket(port, destipaddr.c_str(), destport);
+  return new UDPSocket(port, 0, destipaddr.c_str(), destport);
 }
 
 SLIPFramer *HCAggregator::ParseSLIPFramer(XMLElement *pelt)

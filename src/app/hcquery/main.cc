@@ -154,7 +154,7 @@ int main(int argc, char **argv)
   }
 
   //Create device
-  dev = new UDPSocket(0, argv[1], port);
+  dev = new UDPSocket(0, 0, argv[1], port);
 
   //Create transactor and perform transaction
   transactor = new Transactor(dev, argv[3]);

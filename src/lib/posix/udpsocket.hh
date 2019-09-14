@@ -35,7 +35,7 @@
 class UDPSocket : public Device
 {
 public:
-  UDPSocket(uint16_t port, const char *bindif, const char *destipaddr=0, uint16_t destport=0);
+  UDPSocket(uint16_t port, const char *bindif=0, const char *destipaddr=0, uint16_t destport=0);
   virtual ~UDPSocket();
   uint32_t Read(void *buf, uint32_t maxlen);
   uint32_t Write(const void *buf, uint32_t len);

@@ -27,19 +27,22 @@
 #include "udpsocket.hh"
 #include "error.hh"
 #include <arpa/inet.h>
+#include <cassert>
 #include <iostream>
+#include <net/if.h>
 #include <netdb.h>
 #include <string.h>
+#include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <cassert>
 
 using namespace std;
 
-UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
+UDPSocket::UDPSocket(uint16_t port, const char *bindif, const char *destipaddr, uint16_t destport)
 {
   struct sockaddr_in addr;
+  struct ifreq bindreq;
   int optval;
 
   //Create the mutex
@@ -56,6 +59,18 @@ UDPSocket::UDPSocket(uint16_t port, const char *destipaddr, uint16_t destport)
   addr.sin_port = htons(port);
   if(bind(_socketfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
+
+  //Check for desire to bind to an interface
+  if((bindif != 0) && (strlen(bindif) != 0))
+  {
+    //Copy interface name to bind request structure and ensure null termination
+    strncpy(bindreq.ifr_name, bindif, IFNAMSIZ);
+    bindreq.ifr_name[IFNAMSIZ - 1] = '\0';
+
+    //Bind socket to interface
+    if(setsockopt(_socketfd, SOL_SOCKET, SO_BINDTODEVICE, (char *)&bindreq, sizeof(bindreq)) < 0)
+      cout << __FILE__ << ":" << __LINE__ << " - Error binding socket to interface '" << bindif << "'\n";
+  }
 
   //Set socket to reuseable
   optval = 1;

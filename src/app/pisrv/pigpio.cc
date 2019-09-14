@@ -128,7 +128,12 @@ int PIGPIO::GetValue(bool &val)
   }
 
   //Read relay value from file
-  fscanf(file, "%" SCNu8, &valint);
+  if(fscanf(file, "%" SCNu8, &valint) != 1)
+  {
+    //Close file and return error
+    fclose(file);
+    return ERR_UNSPEC;
+  }
 
   //Close file
   fclose(file);

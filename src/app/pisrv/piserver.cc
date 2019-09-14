@@ -67,7 +67,12 @@ int PIServer::GetTemperature(float &val)
     return ERR_ACCESS;
 
   //Read temperature from file
-  fscanf(file, "%" SCNu32, &valint);
+  if(fscanf(file, "%" SCNu32, &valint) != 1)
+  {
+    //Close file and return error
+    fclose(file);
+    return ERR_UNSPEC;
+  }
 
   //Temperature from file is in milli-degC, so convert to degC
   val = (float)valint / 1000.0;

@@ -24,6 +24,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#ifndef _CONST_HH_
+#define _CONST_HH_
+
 //Math constants
 #define PI 3.14159265359
 #define TWOPI 6.28318530718
@@ -47,3 +50,5 @@
 #define TC_NOINVERSE "\033[27m"
 #define TC_RIGHT "\033[C"
 #define TC_LEFT "\033[D"
+
+#endif //_CONST_HH_

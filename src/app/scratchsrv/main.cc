@@ -92,7 +92,7 @@ void Usage()
   cout << "[-t, --tcp] Use TCP for transport protocol" << "\n";
   cout << "[-s, --tls] Use TLS for transport protocol" << "\n";
   cout << "[-p, --port] <PORT> Port number used for server (defaults to 1500)" << "\n";
-  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 1501)" << "\n";
+  cout << "[-q, --qport] <PORT> Port number used for query server (defaults to 5555)" << "\n";
   cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 
@@ -307,7 +307,8 @@ int main(int argc, char **argv)
 
   //Check for daemon mode
   if(args.daemon)
-    daemon(1, 1);
+    if(daemon(1, 1) != 0)
+      return -1;
 
   //Initialize TLS
   SSL_load_error_strings();	

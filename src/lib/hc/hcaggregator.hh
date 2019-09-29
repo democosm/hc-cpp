@@ -35,7 +35,7 @@
 #include "tlsclient.hh"
 #include "tcpclient.hh"
 #include "tinyxml2.hh"
-#include "udpsocket.hh"
+#include "udpdevice.hh"
 #include <string>
 
 class HCAggregator
@@ -47,7 +47,7 @@ public:
   void AddParamsToServer(HCContainer *startcont);
   HCServer *ParseServer(tinyxml2::XMLElement *pelt);
   HCConnection *ParseConn(tinyxml2::XMLElement *pelt);
-  UDPSocket *ParseUDPSocket(tinyxml2::XMLElement *pelt);
+  UDPDevice *ParseUDPSocket(tinyxml2::XMLElement *pelt);
   SLIPFramer *ParseSLIPFramer(tinyxml2::XMLElement *pelt);
   TCPClient *ParseTCPClient(tinyxml2::XMLElement *pelt);
   TLSClient *ParseTLSClient(tinyxml2::XMLElement *pelt);
@@ -61,7 +61,7 @@ private:
   uint32_t _conncnt;
   Device *_qsrvdev;
   HCQServer *_qsrv;
-  UDPSocket *_srvdev;
+  UDPDevice *_srvdev;
   HCServer *_srv;
 };
 

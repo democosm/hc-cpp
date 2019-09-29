@@ -36,15 +36,15 @@
 #include "hcqserver.hh"
 #include "hcserver.hh"
 #include "hcstring.hh"
-#include "scratch.hh"
 #include "scratchfile.hh"
+#include "scratch.hh"
 #include "scratchstring.hh"
 #include "slipframer.hh"
 #include "str.hh"
 #include "tcpserver.hh"
 #include "thread.hh"
 #include "tlsserver.hh"
-#include "udpsocket.hh"
+#include "udpdevice.hh"
 #include <cassert>
 #include <getopt.h>
 #include <inttypes.h>
@@ -348,7 +348,7 @@ int main(int argc, char **argv)
   else
   {
     //Create server device
-    srvdev = new UDPSocket(args.port);
+    srvdev = new UDPDevice(args.port);
   }
 
   //Create server
@@ -572,7 +572,7 @@ int main(int argc, char **argv)
   srv->Start();
 
   //Create query server
-  qsrvdev = new UDPSocket(args.qport);
+  qsrvdev = new UDPDevice(args.qport);
   qsrv = new HCQServer(qsrvdev, topcont);
 
   //Just loop if in daemon mode otherwise run console

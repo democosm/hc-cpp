@@ -33,7 +33,7 @@
 #include "hcparameter.hh"
 #include "hcserver.hh"
 #include "hcstring.hh"
-#include "udpsocket.hh"
+#include "udpdevice.hh"
 #include <getopt.h>
 #include <inttypes.h>
 #include <iostream>
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 {
   Text *text;
   HCContainer *topcont;
-  UDPSocket *srvdev;
+  UDPDevice *srvdev;
   HCServer *srv;
   HCConsole *hccons;
   uint16_t port;
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   topcont = new HCContainer("");
 
   //Create server device
-  srvdev = new UDPSocket(port);
+  srvdev = new UDPDevice(port);
 
   //Create server
   srv = new HCServer(srvdev, topcont, "Msg", __DATE__ " " __TIME__);

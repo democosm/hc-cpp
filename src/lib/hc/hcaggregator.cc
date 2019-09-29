@@ -154,14 +154,14 @@ HCServer *HCAggregator::ParseServer(XMLElement *pelt)
   if(ParseValue(pelt, "qport", qport))
   {
     //Create query server device
-    _qsrvdev = new UDPSocket(qport);
+    _qsrvdev = new UDPDevice(qport);
 
     //Create query server
     _qsrv = new HCQServer(_qsrvdev, _topcont);
   }
 
   //Create server device
-  _srvdev = new UDPSocket(port);
+  _srvdev = new UDPDevice(port);
 
   //Create server
   return new HCServer(_srvdev, _topcont, name, __DATE__ " " __TIME__);
@@ -203,7 +203,7 @@ HCConnection *HCAggregator::ParseConn(XMLElement *pelt)
   return new HCConnection(dev, _topcont, name, timeout);
 }
 
-UDPSocket *HCAggregator::ParseUDPSocket(XMLElement *pelt)
+UDPDevice *HCAggregator::ParseUDPSocket(XMLElement *pelt)
 {
   uint16_t port;
   string destipaddr;
@@ -226,7 +226,7 @@ UDPSocket *HCAggregator::ParseUDPSocket(XMLElement *pelt)
     return 0;
 
   //Create UDP socket
-  return new UDPSocket(port, 0, destipaddr.c_str(), destport);
+  return new UDPDevice(port, 0, destipaddr.c_str(), destport);
 }
 
 SLIPFramer *HCAggregator::ParseSLIPFramer(XMLElement *pelt)

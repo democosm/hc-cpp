@@ -38,7 +38,7 @@
 #include "pca9685.hh"
 #include "pca9685servo.hh"
 #include "piserver.hh"
-#include "udpsocket.hh"
+#include "udpdevice.hh"
 #include <getopt.h>
 #include <inttypes.h>
 #include <unistd.h>
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 //  PCA9685Servo *cellardoor;
   PIServer *pisrv;
   HCContainer *topcont;
-  UDPSocket *srvdev;
+  UDPDevice *srvdev;
   HCServer *srv;
   Device *qsrvdev;
   HCQServer *qsrv;
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
   topcont = new HCContainer("");
 
   //Create server device
-  srvdev = new UDPSocket(1500);
+  srvdev = new UDPDevice(1500);
 
   //Create server
   srv = new HCServer(srvdev, topcont, "Pi", __DATE__ " " __TIME__);
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
   srv->Start();
 
   //Create query server
-  qsrvdev = new UDPSocket(1501);
+  qsrvdev = new UDPDevice(1501);
   qsrv = new HCQServer(qsrvdev, topcont);
 
   //Just loop if in daemon mode otherwise run console

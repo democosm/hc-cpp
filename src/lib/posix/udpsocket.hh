@@ -27,23 +27,18 @@
 #ifndef _UDPSOCKET_H_
 #define _UDPSOCKET_H_
 
-#include "device.hh"
-#include "mutex.hh"
 #include <inttypes.h>
 #include <netinet/in.h>
 
-class UDPSocket : public Device
+class UDPSocket
 {
 public:
-  UDPSocket(uint16_t port, const char *bindif=0, const char *destipaddr=0, uint16_t destport=0);
+  UDPSocket(uint16_t port, const char *bindif=0);
   virtual ~UDPSocket();
-  uint32_t Read(void *buf, uint32_t maxlen);
-  uint32_t Write(const void *buf, uint32_t len);
+  uint32_t RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, uint16_t &srcport);
+  uint32_t SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport);
 
 private:
-  Mutex *_mutex;
-  struct sockaddr_in _dest;
-  bool _setdestonread;
   int _socketfd;
 };
 

@@ -24,13 +24,13 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "udpsocket.hh"
 #include "error.hh"
+#include "udpsocket.hh"
 #include <arpa/inet.h>
 #include <cassert>
 #include <iostream>
-#include <net/if.h>
 #include <netdb.h>
+#include <net/if.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -39,16 +39,13 @@
 
 using namespace std;
 
-UDPSocket::UDPSocket(uint16_t port, const char *bindif, const char *destipaddr, uint16_t destport)
+UDPSocket::UDPSocket(uint16_t port, const char *bindif)
 {
   struct sockaddr_in addr;
   struct ifreq bindreq;
   int optval;
 
-  //Create the mutex
-  _mutex = new Mutex();
-
-  //Create the socket
+  //Create socket
   if((_socketfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error creating socket" << "\n";
 
@@ -81,83 +78,54 @@ UDPSocket::UDPSocket(uint16_t port, const char *bindif, const char *destipaddr, 
   optval = 10;
   if(setsockopt(_socketfd, IPPROTO_IP, IP_MULTICAST_TTL, &optval, sizeof(optval)) < 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error setting TTL" << "\n";
-
-  //Zero destination information
-  memset(&_dest, 0, sizeof(_dest));
-
-  //Set address family to IPv4
-  _dest.sin_family = AF_INET;
-
-  //Convert destination IP address string to integer and check for error
-  if(destipaddr != 0)
-    if(inet_pton(AF_INET, destipaddr, &(_dest.sin_addr)) != 1)
-      cout << __FILE__ << ":" << __LINE__ << " - Error converting destination IP address" << "\n";
-
-  //Set destination port
-  _dest.sin_port = htons(destport);
-
-  //Set destination information on read if zero passed in for dest IP address or port
-  _setdestonread = ((destipaddr == 0) || (destport == 0));
 }
 
 UDPSocket::~UDPSocket()
 {
-  //Close the socket
+  //Close socket
   if(_socketfd != 0)
     close(_socketfd);
-
-  //Destroy the mutex
-  delete _mutex;
 }
 
-uint32_t UDPSocket::Read(void *buf, uint32_t maxlen)
+uint32_t UDPSocket::RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, uint16_t &srcport)
 {
-  struct sockaddr_in source;
-  socklen_t sourcelen;
+  struct sockaddr_in src;
+  socklen_t srclen;
   ssize_t retval;
 
   //Assert valid arguments
   assert((buf != 0) && (maxlen > 0));
 
-  //Read from the socket
-  sourcelen = sizeof(source);
-  if((retval = recvfrom(_socketfd, buf, maxlen, 0, (struct sockaddr *)&source, &sourcelen)) <= 0)
-    return 0;
-
-  //Begin mutual exclusion
-  _mutex->Wait();
-
-  //Check for destination information to be set to source of received packet
-  if(_setdestonread)
+  //Read from socket
+  srclen = sizeof(src);
+  if((retval = recvfrom(_socketfd, buf, maxlen, 0, (struct sockaddr *)&src, &srclen)) <= 0)
   {
-    //Set destination to source of incoming datagram
-    memcpy(&_dest, &source, sourcelen);
+    srcipaddr = 0;
+    srcport = 0;
+    return 0;
   }
 
-  //End mutual exclusion
-  _mutex->Give();
-
+  //Return source information and received UDP payload length
+  srcipaddr = ntohl(src.sin_addr.s_addr);
+  srcport = ntohs(src.sin_port);
   return (uint32_t)retval;
 }
 
-uint32_t UDPSocket::Write(const void *buf, uint32_t len)
+uint32_t UDPSocket::SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport)
 {
-  struct sockaddr_in dest;
+  struct sockaddr_in dst;
 
   //Assert valid arguments
   assert((buf != 0) && (len > 0));
 
-  //Begin mutual exclusion
-  _mutex->Wait();
+  //Populate destination structure
+  memset(&dst, 0, sizeof(dst));
+  dst.sin_family = AF_INET;
+  dst.sin_addr.s_addr = htonl(dstipaddr);
+  dst.sin_port = htons(dstport);
 
-  //Copy destination information to local buffer
-  memcpy(&dest, &_dest, sizeof(_dest));
-
-  //End mutual exclusion
-  _mutex->Give();
-
-  //Write to the socket
-  if(sendto(_socketfd, buf, len, 0, (struct sockaddr *)&dest, sizeof(dest)) <= 0)
+  //Write to socket
+  if(sendto(_socketfd, buf, len, 0, (struct sockaddr *)&dst, sizeof(dst)) <= 0)
     return 0;
 
   return len;

@@ -27,7 +27,7 @@
 #include "event.hh"
 #include "str.hh"
 #include "thread.hh"
-#include "udpsocket.hh"
+#include "udpdevice.hh"
 #include <cassert>
 #include <iostream>
 #include <string.h>
@@ -135,7 +135,7 @@ void Usage(const char *appname)
 int main(int argc, char **argv)
 {
   uint16_t port;
-  UDPSocket *dev;
+  UDPDevice *dev;
   Transactor *transactor;
 
   //Check for wrong number of arguments
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
   }
 
   //Create device
-  dev = new UDPSocket(0, 0, argv[1], port);
+  dev = new UDPDevice(0, 0, argv[1], port);
 
   //Create transactor and perform transaction
   transactor = new Transactor(dev, argv[3]);

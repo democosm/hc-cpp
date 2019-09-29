@@ -38,7 +38,6 @@ ifeq ($(TGTPROC), $(shell uname -m))
   CXX = g++
   AR = ar
   CFLAGS = \
-    -O3 \
     -Wall \
     -I$(PROJBASEDIR)/src/lib/bus \
     -I$(PROJBASEDIR)/src/lib/common \

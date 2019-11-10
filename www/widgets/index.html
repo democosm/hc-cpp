@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scratch Web Interface</title>
+    <link href="top.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <!-- Tab links -->
+    <div class="tab">
+      <button class="tablink active" onclick="OpenTab(event, 'Server')">Server</button>
+      <button class="tablink" onclick="OpenTab(event, 'Bool')">Bool</button>
+      <button class="tablink" onclick="OpenTab(event, 'UInt32')">UInt32</button>
+    </div>
+
+    <!-- Tab panes -->
+    <div id="Server" class="tabpane" style="display: block">
+      <h2>HC Server Information</h2>
+      <p style = "font-family:georgia,garamond,monospace;font-size:16px;font-style:italic;">
+      Name.............: <input id="/.server/name" readonly><br>
+      Version..........: <input id="/.server/version" readonly><br>
+      Info File CRC....: <input id="/.server/infofilecrc" readonly><br>
+      Send Errors......: <input id="/.server/senderrcnt" readonly><br>
+      Recv Errors......: <input id="/.server/recverrcnt" readonly><br>
+      Deser Errors.....: <input id="/.server/deserrcnt" readonly><br>
+      Cell Errors......: <input id="/.server/cellerrcnt" readonly><br>
+      OpCode Errors....: <input id="/.server/opcodeerrcnt" readonly><br>
+      PID Errors.......: <input id="/.server/piderrcnt" readonly><br>
+      Internal Errors..: <input id="/.server/interrcnt" readonly><br>
+      Good Xacts.......: <input id="/.server/goodxactcnt" readonly><br>
+<!--      State............: <input id="SaveState" type="button" value="Save As Default"><br> -->
+      </p>
+    </div>
+
+    <div id="Bool" class="tabpane">
+      <!-- Tab links -->
+      <div class="tab">
+        <button class="tablink" onclick="OpenTab(event, 'Int')">Int</button>
+        <button class="tablink" onclick="OpenTab(event, 'Enum')">Enum</button>
+      </div>
+
+      <!-- Tab panes -->
+      <div id="Int" class="tabpane">
+        <h2>Integer</h2>
+        <p style = "font-family:georgia,garamond,monospace;font-size:16px;font-style:italic;">
+        Value............: <input id="/bool/val" type="checkbox"><br>
+        </p>
+      </div>
+
+      <div id="Enum" class="tabpane">
+        <h2>Enumeration</h2>
+        <p style = "font-family:georgia,garamond,monospace;font-size:16px;font-style:italic;">
+        Enumeration......: <input id="/bool/vale" type="checkbox"><br>
+        </p>
+      </div>
+    </div>
+
+    <div id="UInt32" class="tabpane">
+      <!-- Tab links -->
+      <div class="tab">
+        <button class="tablink" onclick="OpenTab(event, 'Int')">Int</button>
+        <button class="tablink" onclick="OpenTab(event, 'Enum')">Enum</button>
+      </div>
+
+      <!-- Tab panes -->
+      <div id="Int" class="tabpane">
+        <h2>Integer</h2>
+        <p style = "font-family:georgia,garamond,monospace;font-size:16px;font-style:italic;">
+        Value............: <input id="/uint32/val"><br>
+        </p>
+      </div>
+
+      <div id="Enum" class="tabpane">
+        <h2>Enumeration</h2>
+        <p style = "font-family:georgia,garamond,monospace;font-size:16px;font-style:italic;">
+        Enumeration......: <input id="/uint32/vale"><br>
+        </p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tabs.js"></script>
+    <script src="buttonwidget.js"></script>
+    <script src="checkbox.js"></script>
+    <script src="inputwidget.js"></script>
+    <script src="dropdownwidget.js"></script>
+    <script src="savewidget.js"></script>
+    <script src="top.js"></script>
+  </body>
+</html>

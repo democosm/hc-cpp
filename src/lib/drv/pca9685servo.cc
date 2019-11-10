@@ -31,6 +31,7 @@
 #include "hcparameter.hh"
 #include "pca9685servo.hh"
 #include <cassert>
+#include <math.h>
 
 PCA9685Servo::PCA9685Servo(PCA9685 *pca9685, uint32_t chanid, double dutymin, double dutymax)
 {
@@ -56,7 +57,7 @@ void PCA9685Servo::RegisterInterface(const char *contname, HCContainer *pcont, H
   cont = new HCContainer(contname);
   pcont->Add(cont);
 
-  param = new HCFlt64<PCA9685Servo>("angle", this, &PCA9685Servo::GetAngle, &PCA9685Servo::SetAngle, 180.0/PI);
+  param = new HCFlt64<PCA9685Servo>("angle", this, &PCA9685Servo::GetAngle, &PCA9685Servo::SetAngle, 180.0 / M_PI);
   cont->Add(param);
   srv->Add(param);
   param = new HCCall<PCA9685Servo>("slewtest", this, &PCA9685Servo::SlewTest);
@@ -75,11 +76,11 @@ int PCA9685Servo::GetAngle(double &val)
 
   //Convert duty cycle to angle
   if(duty <= _dutymin)
-    val = -HALFPI;
+    val = -M_PI_2;
   else if(duty >= _dutymax)
-    val = HALFPI;
+    val = M_PI_2;
   else
-    val = (duty - _dutymin)/(_dutymax - _dutymin)*PI - HALFPI;
+    val = (duty - _dutymin) / (_dutymax - _dutymin) * M_PI - M_PI_2;
 
   return ERR_NONE;
 }
@@ -89,11 +90,11 @@ int PCA9685Servo::SetAngle(double val)
   double duty;
 
   //Check for range error
-  if((val < -HALFPI) || (val > HALFPI))
+  if((val < -M_PI_2) || (val > M_PI_2))
     return ERR_RANGE;
 
   //Convert angle to duty cycle
-  duty = (val + HALFPI)/PI*(_dutymax - _dutymin) + _dutymin;
+  duty = (val + M_PI_2) / M_PI * (_dutymax - _dutymin) + _dutymin;
 
   //Set duty cycle for servo channel
   return _pca9685->SetPWMDutyCycle(_chanid, duty);
@@ -105,13 +106,13 @@ int PCA9685Servo::SlewTest(void)
 
   for(i=0; i<20; i++)
   {
-    SetAngle(PI*(double)i/19.0 - HALFPI);
+    SetAngle(M_PI * (double)i / 19.0 - M_PI_2);
     ThreadSleep(50000);
   }
 
   for(i=0; i<20; i++)
   {
-    SetAngle(HALFPI - PI*(double)i/19.0);
+    SetAngle(M_PI_2 - M_PI * (double)i / 19.0);
     ThreadSleep(50000);
   }
 

@@ -33,3 +33,4 @@ template <typename T> bool FToI(const double fval, T &ival);
 template <typename T> bool FToU(const double fval, T &ival);
 
 #endif //_FTOI_HH_
+

@@ -184,7 +184,7 @@ bool HCCell::Write(int64_t val)
 bool HCCell::Read(uint8_t &val)
 {
   //Check for buffer underflow
-  if((_payloadlength - _readindex) < + sizeof(uint8_t))
+  if((_payloadlength - _readindex) < sizeof(uint8_t))
     return false;
 
   //Deserialize value from payload
@@ -206,7 +206,7 @@ bool HCCell::Write(uint8_t val)
 bool HCCell::Read(uint16_t &val)
 {
   //Check for buffer underflow
-  if((_payloadlength - _readindex) < + sizeof(uint16_t))
+  if((_payloadlength - _readindex) < sizeof(uint16_t))
     return false;
 
   //Deserialize value from payload
@@ -230,7 +230,7 @@ bool HCCell::Write(uint16_t val)
 bool HCCell::Read(uint32_t &val)
 {
   //Check for buffer underflow
-  if((_payloadlength - _readindex) < + sizeof(uint32_t))
+  if((_payloadlength - _readindex) < sizeof(uint32_t))
     return false;
 
   //Deserialize value from payload
@@ -258,7 +258,7 @@ bool HCCell::Write(uint32_t val)
 bool HCCell::Read(uint64_t &val)
 {
   //Check for buffer underflow
-  if((_payloadlength - _readindex) < + sizeof(uint64_t))
+  if((_payloadlength - _readindex) < sizeof(uint64_t))
     return false;
 
   //Deserialize value from payload

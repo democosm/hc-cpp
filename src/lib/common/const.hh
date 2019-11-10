@@ -27,11 +27,6 @@
 #ifndef _CONST_HH_
 #define _CONST_HH_
 
-//Math constants
-#define PI 3.14159265359
-#define TWOPI 6.28318530718
-#define HALFPI 1.5707963268
-
 //Terminal codes
 #define TC_RESET "\033[0m"
 #define TC_BLACK "\033[30m"

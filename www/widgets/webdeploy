@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#Check for right number of arguments
+if test "$#" -ne 0; then
+  echo "Usage - $(basename $0)"
+  exit 1
+fi
+
+#Indicate what we are doing
+echo "Deploying files to /var/www/html/"
+
+#Deploy web files
+cp * /var/www/html/
+cp ../../dst/x86_64_posix_dbg/bin/hcquery /var/www/html/

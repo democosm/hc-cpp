@@ -44,4 +44,4 @@ private:
   Mutex *_mutex;
 };
 
-#endif //_BUS_HH_
+#endif

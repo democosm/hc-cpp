@@ -82,4 +82,4 @@ private:
   Register8 *_prescale;
 };
 
-#endif //_PCA9685_HH_
+#endif

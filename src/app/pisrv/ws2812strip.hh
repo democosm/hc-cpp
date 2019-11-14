@@ -45,4 +45,4 @@ private:
   uint8_t *_colorbuf;
 };
 
-#endif //_WS2812STRIP_HH_
+#endif

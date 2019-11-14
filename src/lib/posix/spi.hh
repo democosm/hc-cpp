@@ -43,4 +43,4 @@ private:
   uint32_t _speed;
 };
 
-#endif //_SPI_HH_
+#endif

@@ -51,4 +51,4 @@ private:
   Thread<PIServer> *_ctlthread;
 };
 
-#endif //_PISERVER_HH_
+#endif

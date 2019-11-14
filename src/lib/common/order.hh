@@ -47,4 +47,4 @@ uint32_t WrongToHost(uint32_t n);
 uint64_t HostToWrong(uint64_t n);
 uint64_t WrongToHost(uint64_t n);
 
-#endif //_ORDER_HH_
+#endif

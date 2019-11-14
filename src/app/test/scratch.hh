@@ -41,4 +41,4 @@ private:
   std::string _string;
 };
 
-#endif //_SCRATCH_HH_
+#endif

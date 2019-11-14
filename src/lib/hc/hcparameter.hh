@@ -166,4 +166,4 @@ struct HCEIDEnum
   std::string _str;
 };
 
-#endif //_HCPARAM_HH_
+#endif

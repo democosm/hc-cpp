@@ -41,4 +41,4 @@ private:
   uint8_t _num;
 };
 
-#endif //_PIGPIO_HH_
+#endif

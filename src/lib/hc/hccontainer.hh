@@ -57,4 +57,4 @@ private:
   HCParameter *_firstsubparam;
 };
 
-#endif //_HCCONTAINER_HH_
+#endif

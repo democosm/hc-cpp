@@ -112,4 +112,4 @@ private:
   Thread<HCServer> *_ctlthread;
 };
 
-#endif //_HCSERVER_HH_
+#endif

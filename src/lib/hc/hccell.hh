@@ -104,4 +104,4 @@ private:
   uint32_t _payloadlength;
 };
 
-#endif //_HCCELL_HH_
+#endif

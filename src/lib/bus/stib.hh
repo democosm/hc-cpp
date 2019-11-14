@@ -133,4 +133,4 @@ typedef Stib<uint16_t> Stib16;
 typedef Stib<uint32_t> Stib32;
 typedef Stib<uint64_t> Stib64;
 
-#endif //_STIB_HH_
+#endif

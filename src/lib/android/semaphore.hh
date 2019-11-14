@@ -51,5 +51,4 @@ private:
   uint32_t _count;
 };
 
-#endif //_SEMAPHORE_H_
-
+#endif

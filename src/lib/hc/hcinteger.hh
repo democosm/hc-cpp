@@ -2944,4 +2944,4 @@ public:
   }
 };
 
-#endif //_HCINTEGER_HH_
+#endif

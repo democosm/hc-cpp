@@ -977,4 +977,4 @@ public:
   }
 };
 
-#endif //_HCFLOAT_HH_
+#endif

@@ -41,4 +41,4 @@ public:
   static HCParameter *GetParam(const std::string &name, HCContainer *startcont, size_t index=0);
 };
 
-#endif //_HCUTILITY_HH_
+#endif

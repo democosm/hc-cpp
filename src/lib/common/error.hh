@@ -55,4 +55,4 @@
 //Functions
 const std::string ErrToString(int err);
 
-#endif //_ERROR_HH_
+#endif

@@ -45,4 +45,4 @@ protected:
   std::string _name;
 };
 
-#endif //_HCNODE_HH_
+#endif

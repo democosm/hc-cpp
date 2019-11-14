@@ -55,4 +55,4 @@ private:
   uint8_t *_txbuf;
 };
 
-#endif //_SLIPFRAMER_HH_
+#endif

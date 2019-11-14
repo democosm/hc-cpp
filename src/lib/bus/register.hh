@@ -100,4 +100,4 @@ typedef Register<uint16_t> Register16;
 typedef Register<uint32_t> Register32;
 typedef Register<uint64_t> Register64;
 
-#endif //_REGISTER_HH_
+#endif

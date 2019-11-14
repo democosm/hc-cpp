@@ -43,4 +43,4 @@ private:
   int _fd;
 };
 
-#endif //_I2C_HH_
+#endif

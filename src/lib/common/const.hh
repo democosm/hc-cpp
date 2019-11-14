@@ -46,4 +46,4 @@
 #define TC_RIGHT "\033[C"
 #define TC_LEFT "\033[D"
 
-#endif //_CONST_HH_
+#endif

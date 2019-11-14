@@ -128,4 +128,4 @@ private:
   pthread_t _threadid;
 };
 
-#endif //_THREAD_H_
+#endif

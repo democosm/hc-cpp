@@ -67,4 +67,4 @@ private:
   Thread<HCQServer> *_ctlthread;
 };
 
-#endif //_HCQSERVER_HH_
+#endif

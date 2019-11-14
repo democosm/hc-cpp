@@ -153,4 +153,4 @@ private:
   bool _exit;
 };
 
-#endif //_HCCONSOLE_HH_
+#endif

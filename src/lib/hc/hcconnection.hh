@@ -67,4 +67,4 @@ private:
   HCContainer *_cont;
 };
 
-#endif //_HCCONNECTION_HH_
+#endif

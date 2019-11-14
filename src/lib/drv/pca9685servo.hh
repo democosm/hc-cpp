@@ -49,4 +49,4 @@ private:
   double _dutymax;
 };
 
-#endif //_PCA9685SERVO_HH_
+#endif

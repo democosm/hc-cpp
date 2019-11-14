@@ -38,4 +38,4 @@ public:
   virtual uint32_t Write(const void *buf, uint32_t len);
 };
 
-#endif //_DEVICE_HH_
+#endif

@@ -110,4 +110,4 @@ private:
   Thread<HCClient> *_readthread;
 };
 
-#endif //_HCCLIENT_HH_
+#endif

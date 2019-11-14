@@ -1200,4 +1200,4 @@ public:
   }
 };
 
-#endif //_HCSTRING_HH_
+#endif

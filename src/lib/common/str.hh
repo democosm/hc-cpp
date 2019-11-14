@@ -68,5 +68,4 @@ void StringPrint(uint64_t val, std::string &str);
 void StringPrint(float val, std::string &str);
 void StringPrint(double val, std::string &str);
 
-#endif //_STR_HH_
-
+#endif

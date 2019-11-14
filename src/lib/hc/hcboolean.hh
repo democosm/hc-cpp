@@ -1441,4 +1441,4 @@ public:
   }
 };
 
-#endif //_HCBOOLEAN_HH_
+#endif

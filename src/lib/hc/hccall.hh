@@ -393,4 +393,4 @@ private:
   const HCEIDEnum *_eidenums;
 };
 
-#endif //_HCCALL_HH_
+#endif

@@ -43,5 +43,4 @@ private:
   pthread_mutex_t _mutex;
 };
 
-#endif //_MUTEX_H_
-
+#endif

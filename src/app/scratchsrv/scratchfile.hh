@@ -103,4 +103,4 @@ private:
   std::string _filename;
 };
 
-#endif //_SCRATCHFILE_HH_
+#endif

@@ -44,4 +44,4 @@ private:
   struct termios _oldopts;
 };
 
-#endif //_SERDEV_HH_
+#endif

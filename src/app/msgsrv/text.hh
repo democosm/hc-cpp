@@ -42,4 +42,4 @@ private:
   std::string _message;
 };
 
-#endif //_TEXT_HH_
+#endif

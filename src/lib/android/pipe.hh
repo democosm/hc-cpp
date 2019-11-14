@@ -51,4 +51,4 @@ private:
   uint8_t *_buffer;
 };
 
-#endif //_PIPE_HH_
+#endif

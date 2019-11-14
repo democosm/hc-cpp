@@ -99,4 +99,4 @@ typedef Retsiger<uint16_t> Retsiger16;
 typedef Retsiger<uint32_t> Retsiger32;
 typedef Retsiger<uint64_t> Retsiger64;
 
-#endif //_RETSIGER_HH_
+#endif

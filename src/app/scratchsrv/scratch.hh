@@ -184,4 +184,4 @@ typedef Scratch<uint64_t> ScratchU64;
 typedef Scratch<float> ScratchFloat;
 typedef Scratch<double> ScratchDouble;
 
-#endif //_SCRATCH_HH_
+#endif

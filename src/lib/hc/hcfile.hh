@@ -335,4 +335,4 @@ private:
   uint8_t *_buffer;
 };
 
-#endif //_HCFILE_HH_
+#endif

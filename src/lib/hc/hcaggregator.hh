@@ -65,4 +65,4 @@ private:
   HCServer *_srv;
 };
 
-#endif //_HCAGGREGATOR_HH_
+#endif

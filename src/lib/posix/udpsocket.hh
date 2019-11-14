@@ -42,5 +42,4 @@ private:
   int _socketfd;
 };
 
-#endif //_UDPSOCKET_H_
-
+#endif

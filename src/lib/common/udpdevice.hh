@@ -49,5 +49,4 @@ private:
   bool _setdstonread;
 };
 
-#endif //_UDPDEVICE_H_
-
+#endif

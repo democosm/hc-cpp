@@ -172,4 +172,4 @@ private:
   uint32_t _listmaxsize;
 };
 
-#endif //_SCRATCHSTRING_HH_
+#endif

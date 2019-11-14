@@ -60,4 +60,4 @@ private:
   uint8_t _transaction;
 };
 
-#endif //_HCMESSAGE_HH_
+#endif

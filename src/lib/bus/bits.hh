@@ -134,4 +134,4 @@ typedef Bits<uint16_t> Bits16;
 typedef Bits<uint32_t> Bits32;
 typedef Bits<uint64_t> Bits64;
 
-#endif //_BITS_HH_
+#endif

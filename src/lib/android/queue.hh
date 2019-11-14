@@ -68,4 +68,4 @@ private:
   QueueBuffer *_readbuf;
 };
 
-#endif //_QUEUE_HH_
+#endif

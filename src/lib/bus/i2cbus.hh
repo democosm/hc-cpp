@@ -44,4 +44,4 @@ private:
   uint8_t _devaddr;
 };
 
-#endif //_I2CBUS_HH_
+#endif

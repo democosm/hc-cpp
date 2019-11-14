@@ -58,4 +58,4 @@ private:
   uint32_t _authcode;
 };
 
-#endif //_TLSCLIENT_HH_
+#endif

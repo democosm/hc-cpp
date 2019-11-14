@@ -53,4 +53,4 @@ private:
   int _connfd;
 };
 
-#endif //_TCPCLIENT_HH_
+#endif

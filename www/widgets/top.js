@@ -20,11 +20,10 @@ var Widgets =
 
   //Add boolean widgets
   new Checkbox("/bool/val"),
-  new Checkbox("/bool/vale"),
+  new DropdownWidget("/bool/vale"),
 
   //Add uint32 widget
   new InputWidget("/uint32/val"),
-  new InputWidget("/uint32/vale"),
   new DropdownWidget("/uint32/vale"),
 ];
 

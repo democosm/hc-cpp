@@ -26,7 +26,7 @@ Now if the backend c++ designers add two new colors (orange and purple) to the L
 
 ## What is Server Aggregation?
 
-HC allows multiple server applications to be controlled from a single client application. This client application can aggregate the capabilities of each of the server applications into a single unified server application. The diagram below depicts this (the <HC> symbol denotes HC inter-process communications).
+HC allows multiple server applications to be controlled from a single client application. This client application can aggregate the capabilities of each of the server applications into a single unified server application. The diagram below depicts this (the \<HC> symbol denotes HC inter-process communications).
 
 `ClientA <HC> ServerA AGGREGATE(ClientB <HC> ServerB, ClientC <HC> ServerC)`
 
@@ -40,7 +40,7 @@ ClientA would provide proxy control of ServerB and ServerC similar to the way NF
 
 ## What is Application Chaining
 
-Since HC allows a client application to "re-serve" its controls, a chain of clients and servers can be created. This is depicted below (the <HC> symbol denotes HC inter-process communications).
+Since HC allows a client application to "re-serve" its controls, a chain of clients and servers can be created. This is depicted below (the \<HC> symbol denotes HC inter-process communications).
 
 `ClientA <HC> ServerA AGGREGATE(ClientB <HC> ServerB AGGREGATE(ClientC <HC> ServerC ...))`
 

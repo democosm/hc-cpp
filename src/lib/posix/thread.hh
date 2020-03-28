@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _THREAD_H_
-#define _THREAD_H_
+#ifndef _THREAD_HH_
+#define _THREAD_HH_
 
 #include "error.hh"
 #include "mutex.hh"

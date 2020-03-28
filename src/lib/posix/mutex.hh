@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUTEX_H_
-#define _MUTEX_H_
+#ifndef _MUTEX_HH_
+#define _MUTEX_HH_
 
 #include <inttypes.h>
 #include <pthread.h>

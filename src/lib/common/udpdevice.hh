@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _UDPDEVICE_H_
-#define _UDPDEVICE_H_
+#ifndef _UDPDEVICE_HH_
+#define _UDPDEVICE_HH_
 
 #include "device.hh"
 #include "mutex.hh"

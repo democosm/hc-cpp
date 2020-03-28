@@ -1,6 +1,6 @@
-// Mutex
+// System
 //
-// Copyright 2019 Democosm
+// Copyright 2020 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -24,23 +24,45 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUTEX_HH_
-#define _MUTEX_HH_
+#include "system.hh"
+#include <cassert>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <inttypes.h>
-#include <pthread.h>
-
-class Mutex
+int SysCmd(const char *fmt, ...)
 {
-public:
-  Mutex();
-  ~Mutex();
-  int Wait(void);
-  int Give(void);
-  int Reset(void);
+  char cmdstr[1000];
+  int retval;
+  va_list args;
 
-private:
-  pthread_mutex_t _mutex;
-};
+  //Assert valid arguments
+  assert(fmt != 0);
 
-#endif
+  //Start var args
+  va_start(args, fmt);
+
+  //Format command string
+  retval = vsnprintf(cmdstr, sizeof(cmdstr), fmt, args);
+
+  //End var args
+  va_end(args);
+
+  //Check for error formatting command string
+  if(retval <= 0)
+    return -1;
+
+  //Ensure that command string is null terminated
+  cmdstr[sizeof(cmdstr) - 1] = '\0';
+
+  //Execute command through system function
+  retval = system(cmdstr);
+
+  //Check for exiting abnormally
+  if(WIFEXITED(retval) == 0)
+    return -1;
+
+  //Return exit status from command
+  return WEXITSTATUS(retval);
+}

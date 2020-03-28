@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _UDPSOCKET_H_
-#define _UDPSOCKET_H_
+#ifndef _UDPSOCKET_HH_
+#define _UDPSOCKET_HH_
 
 #include <inttypes.h>
 #include <netinet/in.h>

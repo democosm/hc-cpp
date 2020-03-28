@@ -1,6 +1,6 @@
-// Mutex
+// System
 //
-// Copyright 2019 Democosm
+// Copyright 2020 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -24,23 +24,12 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUTEX_HH_
-#define _MUTEX_HH_
+#ifndef _SYSTEM_HH_
+#define _SYSTEM_HH_
 
-#include <inttypes.h>
-#include <pthread.h>
+#define SC_QUIET_BEG "("
+#define SC_QUIET_END ") > /dev/null 2>&1"
 
-class Mutex
-{
-public:
-  Mutex();
-  ~Mutex();
-  int Wait(void);
-  int Give(void);
-  int Reset(void);
-
-private:
-  pthread_mutex_t _mutex;
-};
+int SysCmd(const char *fmt, ...);
 
 #endif

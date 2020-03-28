@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _EVENT_H_
-#define _EVENT_H_
+#ifndef _EVENT_HH_
+#define _EVENT_HH_
 
 #include <inttypes.h>
 #include <pthread.h>

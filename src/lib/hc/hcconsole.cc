@@ -830,12 +830,8 @@ void HCConsole::EnterProc(void)
   //Tokenize command
   _cmd.Tokenize(_tokens);
 
-  //Check for any tokens
-  if(_tokens.size() > 0)
-  {
-    //Process command tokens
-    CmdTokensProc();
-  }
+  //Process command tokens
+  CmdTokensProc();
 
   //Reset command
   _cmd.Reset();
@@ -846,6 +842,10 @@ void HCConsole::EnterProc(void)
 
 void HCConsole::CmdTokensProc(void)
 {
+  //Check for no tokens
+  if(_tokens.size() == 0)
+    return;
+
   //Process first token
   if((_tokens[0] == "help") || (_tokens[0] == "h") || (_tokens[0] == "?"))
   {

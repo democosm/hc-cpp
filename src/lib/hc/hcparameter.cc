@@ -564,6 +564,342 @@ int HCParameter::SubStrLit(const string &)
   return ERR_TYPE;
 }
 
+int HCParameter::GetInt(int8_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(int16_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(int32_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(int64_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(uint8_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(uint16_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(uint32_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetInt(uint64_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const int8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const int16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const int32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const int64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const uint8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const uint16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const uint32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetInt(const uint64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, int8_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, int16_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, int32_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, int64_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, uint8_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, uint16_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, uint32_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetIntTbl(uint32_t eid, uint64_t &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const int8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const int16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const int32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const int64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const uint8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const uint16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const uint32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetIntTbl(uint32_t eid, const uint64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const int8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const int16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const int32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const int64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const uint8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const uint16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const uint32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::AddInt(const uint64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const int8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const int16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const int32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const int64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const uint8_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const uint16_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const uint32_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SubInt(const uint64_t val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetFlt(float &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetFlt(double &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetFlt(const float val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetFlt(const double val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetFltTbl(uint32_t eid, float &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::GetFltTbl(uint32_t eid, double &val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetFltTbl(uint32_t eid, const float val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
+int HCParameter::SetFltTbl(uint32_t eid, const double val)
+{
+  cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
+  return ERR_TYPE;
+}
+
 int HCParameter::Upload(const string &)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";

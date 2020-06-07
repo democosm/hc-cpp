@@ -31,6 +31,7 @@
 #include "hccell.hh"
 #include <fstream>
 #include <string>
+#include <inttypes.h>
 #include <iostream>
 
 class HCParameter : public HCNode
@@ -135,6 +136,62 @@ public:
   virtual int AddStrLit(const std::string &val);
   virtual int SubStr(const std::string &val);
   virtual int SubStrLit(const std::string &val);
+  virtual int GetInt(int8_t &val);
+  virtual int GetInt(int16_t &val);
+  virtual int GetInt(int32_t &val);
+  virtual int GetInt(int64_t &val);
+  virtual int GetInt(uint8_t &val);
+  virtual int GetInt(uint16_t &val);
+  virtual int GetInt(uint32_t &val);
+  virtual int GetInt(uint64_t &val);
+  virtual int SetInt(const int8_t val);
+  virtual int SetInt(const int16_t val);
+  virtual int SetInt(const int32_t val);
+  virtual int SetInt(const int64_t val);
+  virtual int SetInt(const uint8_t val);
+  virtual int SetInt(const uint16_t val);
+  virtual int SetInt(const uint32_t val);
+  virtual int SetInt(const uint64_t val);
+  virtual int GetIntTbl(uint32_t eid, int8_t &val);
+  virtual int GetIntTbl(uint32_t eid, int16_t &val);
+  virtual int GetIntTbl(uint32_t eid, int32_t &val);
+  virtual int GetIntTbl(uint32_t eid, int64_t &val);
+  virtual int GetIntTbl(uint32_t eid, uint8_t &val);
+  virtual int GetIntTbl(uint32_t eid, uint16_t &val);
+  virtual int GetIntTbl(uint32_t eid, uint32_t &val);
+  virtual int GetIntTbl(uint32_t eid, uint64_t &val);
+  virtual int SetIntTbl(uint32_t eid, const int8_t val);
+  virtual int SetIntTbl(uint32_t eid, const int16_t val);
+  virtual int SetIntTbl(uint32_t eid, const int32_t val);
+  virtual int SetIntTbl(uint32_t eid, const int64_t val);
+  virtual int SetIntTbl(uint32_t eid, const uint8_t val);
+  virtual int SetIntTbl(uint32_t eid, const uint16_t val);
+  virtual int SetIntTbl(uint32_t eid, const uint32_t val);
+  virtual int SetIntTbl(uint32_t eid, const uint64_t val);
+  virtual int AddInt(const int8_t val);
+  virtual int AddInt(const int16_t val);
+  virtual int AddInt(const int32_t val);
+  virtual int AddInt(const int64_t val);
+  virtual int AddInt(const uint8_t val);
+  virtual int AddInt(const uint16_t val);
+  virtual int AddInt(const uint32_t val);
+  virtual int AddInt(const uint64_t val);
+  virtual int SubInt(const int8_t val);
+  virtual int SubInt(const int16_t val);
+  virtual int SubInt(const int32_t val);
+  virtual int SubInt(const int64_t val);
+  virtual int SubInt(const uint8_t val);
+  virtual int SubInt(const uint16_t val);
+  virtual int SubInt(const uint32_t val);
+  virtual int SubInt(const uint64_t val);
+  virtual int GetFlt(float &val);
+  virtual int GetFlt(double &val);
+  virtual int SetFlt(const float val);
+  virtual int SetFlt(const double val);
+  virtual int GetFltTbl(uint32_t eid, float &val);
+  virtual int GetFltTbl(uint32_t eid, double &val);
+  virtual int SetFltTbl(uint32_t eid, const float val);
+  virtual int SetFltTbl(uint32_t eid, const double val);
   virtual int Upload(const std::string &val);
   virtual int Download(const std::string &val);
   virtual bool CallCell(HCCell *icell, HCCell *ocell);

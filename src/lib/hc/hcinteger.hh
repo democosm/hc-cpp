@@ -416,6 +416,29 @@ public:
     file << std::string(indent, ' ') << "</" << HCParameter::TypeString(dummy) << ">\n";
   }
 
+  virtual int GetInt(T &val)
+  {
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      DefaultVal(val);
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(val);
+  }
+
+  virtual int SetInt(const T val)
+  {
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Call set method
+    return (_object->*_setmethod)(val);
+  }
+
   virtual int GetStr(std::string &val)
   {
     T nval;
@@ -1348,11 +1371,52 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>\n";
   }
 
+  virtual int GetIntTbl(uint32_t eid, T &val)
+  {
+    //Check for EID out of range
+    if(eid >= _size)
+    {
+      DefaultVal(val);
+      return ERR_EID;
+    }
+
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      DefaultVal(val);
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(eid, val);
+  }
+
+  virtual int SetIntTbl(uint32_t eid, const T val)
+  {
+    //Check for EID out of range
+    if(eid >= _size)
+      return ERR_EID;
+
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Call set method
+    return (_object->*_setmethod)(eid, val);
+  }
+
   virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     T nval;
     int lerr;
     uint32_t i;
+
+    //Check for EID out of range
+    if(eid >= _size)
+    {
+      val.clear();
+      return ERR_EID;
+    }
 
     //Check for null method
     if(_getmethod == 0)
@@ -2346,6 +2410,39 @@ public:
     }
 
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << "l>\n";
+  }
+
+  virtual int GetIntTbl(uint32_t eid, T &val)
+  {
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      DefaultVal(val);
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(eid, val);
+  }
+
+  virtual int AddInt(const T val)
+  {
+    //Check for null method
+    if(_addmethod == 0)
+      return ERR_ACCESS;
+
+    //Call add method
+    return (_object->*_addmethod)(val);
+  }
+
+  virtual int SubInt(const T val)
+  {
+    //Check for null method
+    if(_submethod == 0)
+      return ERR_ACCESS;
+
+    //Call sub method
+    return (_object->*_submethod)(val);
   }
 
   virtual int GetStrTbl(uint32_t eid, std::string &val)

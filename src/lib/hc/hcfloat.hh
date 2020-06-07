@@ -220,6 +220,29 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << ">" << "\n";
   }
 
+  virtual int GetFlt(T &val)
+  {
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      DefaultVal(val);
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(val);
+  }
+
+  virtual int SetFlt(const T val)
+  {
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Call set method
+    return (_object->*_setmethod)(val);
+  }
+
   virtual int GetStr(std::string &val)
   {
     T nval;
@@ -663,10 +686,51 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>" << "\n";
   }
 
+  virtual int GetFltTbl(uint32_t eid, T &val)
+  {
+    //Check for EID out of range
+    if(eid >= _size)
+    {
+      DefaultVal(val);
+      return ERR_EID;
+    }
+
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      DefaultVal(val);
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(eid, val);
+  }
+
+  virtual int SetFltTbl(uint32_t eid, const T val)
+  {
+    //Check for EID out of range
+    if(eid >= _size)
+      return ERR_EID;
+
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Call set method
+    return (_object->*_setmethod)(eid, val);
+  }
+
   virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
     T nval;
     int lerr;
+
+    //Check for EID out of range
+    if(eid >= _size)
+    {
+      val.clear();
+      return ERR_EID;
+    }
 
     //Check for null method
     if(_getmethod == 0)

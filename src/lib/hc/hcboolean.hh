@@ -336,7 +336,7 @@ public:
     return (_object->*_getmethod)(val);
   }
 
-  virtual int SetBool(bool val)
+  virtual int SetBool(const bool val)
   {
     //Check for null method
     if(_setmethod == 0)
@@ -1043,7 +1043,7 @@ public:
     return (_object->*_getmethod)(eid, val);
   }
 
-  virtual int SetBoolTbl(uint32_t eid, bool val)
+  virtual int SetBoolTbl(uint32_t eid, const bool val)
   {
     //Check for null method
     if(_setmethod == 0)

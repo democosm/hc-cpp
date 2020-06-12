@@ -44,6 +44,8 @@ bool StringConvert(const std::string &str, uint64_t &val);
 bool StringConvert(const std::string &str, float &val);
 bool StringConvert(const std::string &str, double &val);
 bool StringConvert(const std::string &str, std::string &val);
+bool StringConvert(const std::string &str, float &val0, float &val1, float &val2);
+bool StringConvert(const std::string &str, double &val0, double &val1, double &val2);
 bool StringConvert(const char *str, bool &val);
 bool StringConvert(const char *str, int8_t &val);
 bool StringConvert(const char *str, int16_t &val);
@@ -56,6 +58,8 @@ bool StringConvert(const char *str, uint64_t &val);
 bool StringConvert(const char *str, float &val);
 bool StringConvert(const char *str, double &val);
 bool StringConvert(const char *str, std::string &val);
+bool StringConvert(const char *str, float &val0, float &val1, float &val2);
+bool StringConvert(const char *str, double &val0, double &val1, double &val2);
 void StringPrint(bool val, std::string &str);
 void StringPrint(int8_t val, std::string &str);
 void StringPrint(int16_t val, std::string &str);
@@ -67,5 +71,7 @@ void StringPrint(uint32_t val, std::string &str);
 void StringPrint(uint64_t val, std::string &str);
 void StringPrint(float val, std::string &str);
 void StringPrint(double val, std::string &str);
+void StringPrint(float val0, float val1, float val2, std::string &str);
+void StringPrint(double val0, double val1, double val2, std::string &str);
 
 #endif

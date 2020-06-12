@@ -33,6 +33,7 @@
 #include "hcinteger.hh"
 #include "hcmessage.hh"
 #include "hcstring.hh"
+#include "hcvector.hh"
 #include "str.hh"
 #include <cassert>
 #include <iostream>
@@ -229,6 +230,14 @@ void HCConnection::ParseServer(XMLElement *pelt, HCContainer *pcont)
       ParseCall(elt, pcont);
     else if(strcmp(elt->Name(), "callt") == 0)
       ParseCallT(elt, pcont);
+    else if(strcmp(elt->Name(), "v32") == 0)
+      ParseVector<float>(elt, pcont);
+    else if(strcmp(elt->Name(), "v32t") == 0)
+      ParseVectorTable<float>(elt, pcont);
+    else if(strcmp(elt->Name(), "v64") == 0)
+      ParseVector<double>(elt, pcont);
+    else if(strcmp(elt->Name(), "v64t") == 0)
+      ParseVectorTable<double>(elt, pcont);
     else if(strcmp(elt->Name(), "file") == 0)
       ParseFile(elt, pcont);
   }
@@ -328,6 +337,14 @@ void HCConnection::ParseCont(XMLElement *pelt, HCContainer *pcont)
       ParseCall(elt, cont);
     else if(strcmp(elt->Name(), "callt") == 0)
       ParseCallT(elt, cont);
+    else if(strcmp(elt->Name(), "v32") == 0)
+      ParseVector<float>(elt, cont);
+    else if(strcmp(elt->Name(), "v32t") == 0)
+      ParseVectorTable<float>(elt, cont);
+    else if(strcmp(elt->Name(), "v64") == 0)
+      ParseVector<double>(elt, cont);
+    else if(strcmp(elt->Name(), "v64t") == 0)
+      ParseVectorTable<double>(elt, cont);
     else if(strcmp(elt->Name(), "file") == 0)
       ParseFile(elt, cont);
   }
@@ -822,6 +839,172 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
       param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, &HCFloatCli<T>::ISet, size, eidenums, scl);
     else
       param = new HCFloatTable<HCFloatCli<T>, T>(name, stub, 0, 0, size, eidenums, scl);
+  }
+
+  //Add to parent
+  pcont->Add(param);
+}
+
+template <typename T> void HCConnection::ParseVector(XMLElement *pelt, HCContainer *pcont)
+{
+  uint16_t pid;
+  string name;
+  string acc;
+  string sav;
+  T scl0;
+  T scl1;
+  T scl2;
+  HCVectorCli<T> *stub;
+  HCParameter *param;
+
+  //Check for null parent objects
+  if((pelt == 0) || (pcont == 0))
+    return;
+
+  //Parse pid element and check for error
+  if(!ParseValue(pelt, "pid", pid))
+    return;
+
+  //Parse name element and check for error
+  if(!ParseValue(pelt, "name", name))
+    return;
+
+  //Parse acc element and check for error
+  if(!ParseValue(pelt, "acc", acc))
+    return;
+
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
+  //Parse scl0 element and check for error
+  if(!ParseValue(pelt, "scl0", scl0))
+    return;
+
+  //Parse scl1 element and check for error
+  if(!ParseValue(pelt, "scl1", scl1))
+    return;
+
+  //Parse scl2 element and check for error
+  if(!ParseValue(pelt, "scl2", scl2))
+    return;
+
+  //Create client stub
+  stub = new HCVectorCli<T>(_cli, pid);
+
+  //Create parameter
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCVectorS<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::Get, &HCVectorCli<T>::Set, scl0, scl1, scl2);
+    else if(acc == "R")
+      param = new HCVectorS<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::Get, 0, scl0, scl1, scl2);
+    else if(acc == "W")
+      param = new HCVectorS<HCVectorCli<T>, T>(name, stub, 0, &HCVectorCli<T>::Set, scl0, scl1, scl2);
+    else
+      param = new HCVectorS<HCVectorCli<T>, T>(name, stub, 0, 0, scl0, scl1, scl2);
+  }
+  else
+  {
+    if(acc == "RW")
+      param = new HCVector<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::Get, &HCVectorCli<T>::Set, scl0, scl1, scl2);
+    else if(acc == "R")
+      param = new HCVector<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::Get, 0, scl0, scl1, scl2);
+    else if(acc == "W")
+      param = new HCVector<HCVectorCli<T>, T>(name, stub, 0, &HCVectorCli<T>::Set, scl0, scl1, scl2);
+    else
+      param = new HCVector<HCVectorCli<T>, T>(name, stub, 0, 0, scl0, scl1, scl2);
+  }
+
+  //Add to parent
+  pcont->Add(param);
+}
+
+template <typename T> void HCConnection::ParseVectorTable(XMLElement *pelt, HCContainer *pcont)
+{
+  uint16_t pid;
+  string name;
+  string acc;
+  string sav;
+  T scl0;
+  T scl1;
+  T scl2;
+  uint32_t size;
+  XMLElement *elt;
+  HCEIDEnum *eidenums;
+  HCVectorCli<T> *stub;
+  HCParameter *param;
+
+  //Check for null parent objects
+  if((pelt == 0) || (pcont == 0))
+    return;
+
+  //Parse pid element and check for error
+  if(!ParseValue(pelt, "pid", pid))
+    return;
+
+  //Parse name element and check for error
+  if(!ParseValue(pelt, "name", name))
+    return;
+
+  //Parse acc element and check for error
+  if(!ParseValue(pelt, "acc", acc))
+    return;
+
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
+  //Parse scl0 element and check for error
+  if(!ParseValue(pelt, "scl0", scl0))
+    return;
+
+  //Parse scl1 element and check for error
+  if(!ParseValue(pelt, "scl1", scl1))
+    return;
+
+  //Parse scl2 element and check for error
+  if(!ParseValue(pelt, "scl2", scl2))
+    return;
+
+  //Parse size element and check for error
+  if(!ParseValue(pelt, "size", size))
+    return;
+
+  //Loop through all children looking for enums
+  eidenums = 0;
+  for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
+  {
+    //Check name of element and process it appropriately
+    if(strcmp(elt->Name(), "eidenums") == 0)
+      eidenums = ParseEIDEnum(elt);
+  }
+
+  //Create client stub
+  stub = new HCVectorCli<T>(_cli, pid);
+
+  //Create parameter
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCVectorTableS<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::IGet, &HCVectorCli<T>::ISet, size, eidenums, scl0, scl1, scl2);
+    else if(acc == "R")
+      param = new HCVectorTableS<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::IGet, 0, size, eidenums, scl0, scl1, scl2);
+    else if(acc == "W")
+      param = new HCVectorTableS<HCVectorCli<T>, T>(name, stub, 0, &HCVectorCli<T>::ISet, size, eidenums, scl0, scl1, scl2);
+    else
+      param = new HCVectorTableS<HCVectorCli<T>, T>(name, stub, 0, 0, size, eidenums, scl0, scl1, scl2);
+  }
+  else
+  {
+    if(acc == "RW")
+      param = new HCVectorTable<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::IGet, &HCVectorCli<T>::ISet, size, eidenums, scl0, scl1, scl2);
+    else if(acc == "R")
+      param = new HCVectorTable<HCVectorCli<T>, T>(name, stub, &HCVectorCli<T>::IGet, 0, size, eidenums, scl0, scl1, scl2);
+    else if(acc == "W")
+      param = new HCVectorTable<HCVectorCli<T>, T>(name, stub, 0, &HCVectorCli<T>::ISet, size, eidenums, scl0, scl1, scl2);
+    else
+      param = new HCVectorTable<HCVectorCli<T>, T>(name, stub, 0, 0, size, eidenums, scl0, scl1, scl2);
   }
 
   //Add to parent

@@ -36,9 +36,11 @@
 #include "hcqserver.hh"
 #include "hcserver.hh"
 #include "hcstring.hh"
+#include "hcvector.hh"
 #include "scratchfile.hh"
 #include "scratch.hh"
 #include "scratchstring.hh"
+#include "scratchvec.hh"
 #include "slipframer.hh"
 #include "str.hh"
 #include "tcpserver.hh"
@@ -282,6 +284,8 @@ int main(int argc, char **argv)
   ScratchFloat *floatscratch;
   ScratchDouble *doublescratch;
   ScratchString *stringscratch;
+  ScratchVecFloat *vecfloatscratch;
+  ScratchVecDouble *vecdoublescratch;
   ScratchFile *filescratch;
   HCContainer *topcont;
   HCContainer *cont;
@@ -327,6 +331,8 @@ int main(int argc, char **argv)
   floatscratch = new ScratchFloat(TABLE_SIZE, LIST_MAX_SIZE);
   doublescratch = new ScratchDouble(TABLE_SIZE, LIST_MAX_SIZE);
   stringscratch = new ScratchString(TABLE_SIZE, LIST_MAX_SIZE);
+  vecfloatscratch = new ScratchVecFloat(TABLE_SIZE);
+  vecdoublescratch = new ScratchVecDouble(TABLE_SIZE);
   filescratch = new ScratchFile("scratchfile");
 
   //Create top container
@@ -564,6 +570,32 @@ int main(int argc, char **argv)
   Add(new HCStrList<ScratchString>("listro", stringscratch, &ScratchString::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCStrList<ScratchString>("listwo", stringscratch, 0, &ScratchString::ListAdd, &ScratchString::ListSub, LIST_MAX_SIZE), cont, srv);
 
+  cont = new HCContainer("vec32");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchVecFloat>("print", vecfloatscratch, &ScratchVecFloat::Print), cont, srv);
+  Add(new HCCallTable<ScratchVecFloat>("printt", vecfloatscratch, &ScratchVecFloat::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchVecFloat>("printtee", vecfloatscratch, &ScratchVecFloat::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCVec32S<ScratchVecFloat>("val", vecfloatscratch, &ScratchVecFloat::Get, &ScratchVecFloat::Set), cont, srv);
+  Add(new HCVec32<ScratchVecFloat>("valro", vecfloatscratch, &ScratchVecFloat::Get, 0), cont, srv);
+  Add(new HCVec32<ScratchVecFloat>("valwo", vecfloatscratch, 0, &ScratchVecFloat::Set), cont, srv);
+  Add(new HCVec32Table<ScratchVecFloat>("table", vecfloatscratch, &ScratchVecFloat::TableGet, &ScratchVecFloat::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCVec32Table<ScratchVecFloat>("tablero", vecfloatscratch, &ScratchVecFloat::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCVec32Table<ScratchVecFloat>("tablewo", vecfloatscratch, 0, &ScratchVecFloat::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCVec32TableS<ScratchVecFloat>("tableee", vecfloatscratch, &ScratchVecFloat::TableGet, &ScratchVecFloat::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+
+  cont = new HCContainer("vec64");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchVecDouble>("print", vecdoublescratch, &ScratchVecDouble::Print), cont, srv);
+  Add(new HCCallTable<ScratchVecDouble>("printt", vecdoublescratch, &ScratchVecDouble::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchVecDouble>("printtee", vecdoublescratch, &ScratchVecDouble::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCVec64S<ScratchVecDouble>("val", vecdoublescratch, &ScratchVecDouble::Get, &ScratchVecDouble::Set), cont, srv);
+  Add(new HCVec64<ScratchVecDouble>("valro", vecdoublescratch, &ScratchVecDouble::Get, 0), cont, srv);
+  Add(new HCVec64<ScratchVecDouble>("valwo", vecdoublescratch, 0, &ScratchVecDouble::Set), cont, srv);
+  Add(new HCVec64Table<ScratchVecDouble>("table", vecdoublescratch, &ScratchVecDouble::TableGet, &ScratchVecDouble::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCVec64Table<ScratchVecDouble>("tablero", vecdoublescratch, &ScratchVecDouble::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCVec64Table<ScratchVecDouble>("tablewo", vecdoublescratch, 0, &ScratchVecDouble::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCVec64TableS<ScratchVecDouble>("tableee", vecdoublescratch, &ScratchVecDouble::TableGet, &ScratchVecDouble::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+
   cont = new HCContainer("file");
   Add(cont, topcont);
   Add(new HCFile<ScratchFile>("scratchfile", filescratch, &ScratchFile::Read, &ScratchFile::Write), cont, srv);
@@ -611,6 +643,9 @@ int main(int argc, char **argv)
   delete floatscratch;
   delete doublescratch;
   delete stringscratch;
+  delete vecfloatscratch;
+  delete vecdoublescratch;
+  delete filescratch;
 
   //Cleanup TLS
   EVP_cleanup();

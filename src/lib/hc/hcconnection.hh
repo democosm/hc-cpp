@@ -50,6 +50,8 @@ public:
   HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
   template <typename T> void ParseFloat(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> void ParseFloatTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVector(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVectorTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBool(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBoolT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   HCBooleanEnum *ParseBoolEnum(tinyxml2::XMLElement *pelt);

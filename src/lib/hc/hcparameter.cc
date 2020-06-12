@@ -85,6 +85,10 @@ bool HCParameter::SkipValue(HCCell *cell, uint8_t type)
     return cell->Read(boolval);
   case TYPE_STRING:
     return cell->Read(strval);
+  case TYPE_VECFLOAT:
+    return cell->Read(f32val, f32val, f32val);
+  case TYPE_VECDOUBLE:
+    return cell->Read(f64val, f64val, f64val);
   }
 
   //Error
@@ -309,6 +313,40 @@ const string HCParameter::TypeString(const string &)
 void HCParameter::DefaultVal(string &val)
 {
   val = "";
+}
+
+uint8_t HCParameter::TypeCode(const float &type0, const float &type1, const float &type2)
+{
+  return HCParameter::TYPE_VECFLOAT;
+}
+
+const std::string HCParameter::TypeString(const float &type0, const float &type1, const float &type2)
+{
+  return "v32";
+}
+
+void HCParameter::DefaultVal(float &val0, float &val1, float &val2)
+{
+  val0 = 0.0;
+  val1 = 0.0;
+  val2 = 0.0;
+}
+
+uint8_t HCParameter::TypeCode(const double &type0, const double &type1, const double &type2)
+{
+  return HCParameter::TYPE_VECDOUBLE;
+}
+
+const std::string HCParameter::TypeString(const double &type0, const double &type1, const double &type2)
+{
+  return "v64";
+}
+
+void HCParameter::DefaultVal(double &val0, double &val1, double &val2)
+{
+  val0 = 0.0;
+  val1 = 0.0;
+  val2 = 0.0;
 }
 
 int HCParameter::HandleGetPIDError(HCCell *icell, HCCell *ocell)

@@ -1,6 +1,6 @@
-// HC floating point
+// HC vector
 //
-// Copyright 2019 Democosm
+// Copyright 2020 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -24,8 +24,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCFLOAT_HH_
-#define _HCFLOAT_HH_
+#ifndef _HCVECTOR_HH_
+#define _HCVECTOR_HH_
 
 #include "const.hh"
 #include "error.hh"
@@ -39,13 +39,13 @@
 #include <string>
 
 //-----------------------------------------------------------------------------
-//Floating point client stub template
+//Vector client stub template
 //-----------------------------------------------------------------------------
 template <class T>
-class HCFloatCli
+class HCVectorCli
 {
 public:
-  HCFloatCli(HCClient *cli, uint16_t pid)
+  HCVectorCli(HCClient *cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -55,33 +55,33 @@ public:
     _pid = pid;
   }
 
-  virtual ~HCFloatCli()
+  virtual ~HCVectorCli()
   {
     //Cleanup
   }
 
-  int Get(T &val)
+  int Get(T &val0, T &val1, T &val2)
   {
     //Delegate to client
-    return _cli->Get(_pid, val);
+    return _cli->Get(_pid, val0, val1, val2);
   }
 
-  int Set(const T val)
+  int Set(const T val0, const T val1, const T val2)
   {
     //Delegate to client
-    return _cli->Set(_pid, val);
+    return _cli->Set(_pid, val0, val1, val2);
   }
 
-  int IGet(uint32_t eid, T &val)
+  int IGet(uint32_t eid, T &val0, T &val1, T &val2)
   {
     //Delegate to client
-    return _cli->IGet(_pid, eid, val);
+    return _cli->IGet(_pid, eid, val0, val1, val2);
   }
 
-  int ISet(uint32_t eid, const T val)
+  int ISet(uint32_t eid, const T val0, const T val1, const T val2)
   {
     //Delegate to client
-    return _cli->ISet(_pid, eid, val);
+    return _cli->ISet(_pid, eid, val0, val1, val2);
   }
 
 private:
@@ -90,24 +90,24 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-//Floating point client stubs
+//Vector client stubs
 //-----------------------------------------------------------------------------
-typedef HCFloatCli<float> HCFlt32Cli;
-typedef HCFloatCli<double> HCFlt64Cli;
+typedef HCVectorCli<float> HCVec32Cli;
+typedef HCVectorCli<double> HCVec64Cli;
 
 //-----------------------------------------------------------------------------
-//Floating point template
+//Vector template
 //-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloat : public HCParameter
+class HCVector : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(T &);
-  typedef int (C::*SetMethod)(const T);
+  typedef int (C::*GetMethod)(T &, T &, T &);
+  typedef int (C::*SetMethod)(const T, const T, const T);
 
 public:
-  HCFloat(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale)
+  HCVector(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale0, T scale1, T scale2)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -117,10 +117,12 @@ public:
     _object = object;
     _getmethod = getmethod;
     _setmethod = setmethod;
-    _scale = scale;
+    _scale0 = scale0;
+    _scale1 = scale1;
+    _scale2 = scale2;
   }
 
-  virtual ~HCFloat()
+  virtual ~HCVector()
   {
     //Cleanup
   }
@@ -128,7 +130,7 @@ public:
   virtual uint8_t GetType(void)
   {
     T val;
-    return TypeCode(val);
+    return TypeCode(val, val, val);
   }
 
   virtual bool IsReadable(void)
@@ -149,7 +151,9 @@ public:
 
   virtual void PrintVal(void)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
 
     //Check for null method
@@ -162,36 +166,42 @@ public:
     }
 
     //Get value
-    lerr = (_object->*_getmethod)(val);
-    val *= _scale;
+    lerr = (_object->*_getmethod)(val0, val1, val2);
+    val0 *= _scale0;
+    val1 *= _scale1;
+    val2 *= _scale2;
 
     //Print value
     std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
     std::cout << " = ";
-    std::cout << val;
+    std::cout << val0 << ", " << val1 << ", " << val2;
     std::cout << " !" << ErrToString(lerr);
     std::cout << TC_RESET << "\n";
   }
 
   virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
 
     //Check for not saveable
     if((_getmethod == 0) || (_setmethod == 0))
       return;
 
     //Get value
-    if((_object->*_getmethod)(val) != ERR_NONE)
+    if((_object->*_getmethod)(val0, val1, val2) != ERR_NONE)
       return;
 
-    val *= _scale;
+    val0 *= _scale0;
+    val1 *= _scale1;
+    val2 *= _scale2;
 
     //Print value
     st << path;
     st << _name;
     st << " = ";
-    st << val;
+    st << val0 << ", " << val1 << ", " << val2;
     st << "\n";
   }
 
@@ -200,10 +210,12 @@ public:
     T dummy;
 
     st << _name;
-    st << "\n  Type: " << TypeString(dummy);
+    st << "\n  Type: " << TypeString(dummy, dummy, dummy);
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
     st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
-    st << "\n  Scale: " << _scale;
+    st << "\n  Scale0: " << _scale0;
+    st << "\n  Scale1: " << _scale1;
+    st << "\n  Scale2: " << _scale2;
   }
 
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
@@ -211,41 +223,45 @@ public:
     T dummy;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<" << TypeString(dummy) << ">" << "\n";
+    file << std::string(indent, ' ') << "<" << TypeString(dummy, dummy, dummy) << ">" << "\n";
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
     file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
-    file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << "\n";
-    file << std::string(indent, ' ') << "</" << TypeString(dummy) << ">" << "\n";
+    file << std::string(indent, ' ') << "  <scl0>" << _scale0 << "</scl0>" << "\n";
+    file << std::string(indent, ' ') << "  <scl1>" << _scale1 << "</scl1>" << "\n";
+    file << std::string(indent, ' ') << "  <scl2>" << _scale2 << "</scl2>" << "\n";
+    file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy, dummy) << ">" << "\n";
   }
 
-  virtual int GetFlt(T &val)
+  virtual int GetVec(T &val0, T &val1, T &val2)
   {
     //Check for null method
     if(_getmethod == 0)
     {
-      DefaultVal(val);
+      DefaultVal(val0, val1, val2);
       return ERR_ACCESS;
     }
 
     //Call get method
-    return (_object->*_getmethod)(val);
+    return (_object->*_getmethod)(val0, val1, val2);
   }
 
-  virtual int SetFlt(const T val)
+  virtual int SetVec(const T val0, const T val1, const T val2)
   {
     //Check for null method
     if(_setmethod == 0)
       return ERR_ACCESS;
 
     //Call set method
-    return (_object->*_setmethod)(val);
+    return (_object->*_setmethod)(val0, val1, val2);
   }
 
   virtual int GetStr(std::string &val)
   {
-    T nval;
+    T nval0;
+    T nval1;
+    T nval2;
     int lerr;
 
     //Check for null method
@@ -256,28 +272,32 @@ public:
     }
 
     //Call get method
-    lerr = (_object->*_getmethod)(nval);
-    nval *= _scale;
+    lerr = (_object->*_getmethod)(nval0, nval1, nval2);
+    nval0 *= _scale0;
+    nval1 *= _scale1;
+    nval2 *= _scale2;
 
     //Convert to string
-    StringPrint(nval, val);
+    StringPrint(nval0, nval1, nval2, val);
     return lerr;
   }
 
   virtual int SetStr(const std::string &val)
   {
-    T nval;
+    T nval0;
+    T nval1;
+    T nval2;
 
     //Check for null method
     if(_setmethod == 0)
       return ERR_ACCESS;
 
     //Convert string value to native value and check for error
-    if(!StringConvert(val, nval))
+    if(!StringConvert(val, nval0, nval1, nval2))
       return ERR_UNSPEC;
 
     //Set value
-    return (_object->*_setmethod)(nval / _scale);
+    return (_object->*_setmethod)(nval0 / _scale0, nval1 / _scale1, nval2 / _scale2);
   }
 
   virtual int SetStrLit(const std::string &val)
@@ -287,7 +307,9 @@ public:
 
   virtual bool GetCell(HCCell *icell, HCCell *ocell)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
 
     //Assert valid arguments
@@ -297,21 +319,21 @@ public:
     if(_getmethod != 0)
     {
       //Call get method
-      lerr = (_object->*_getmethod)(val);
+      lerr = (_object->*_getmethod)(val0, val1, val2);
     }
     else
     {
       //Access error
-      DefaultVal(val);
+      DefaultVal(val0, val1, val2);
       lerr = ERR_ACCESS;
     }
 
     //Write type code to outbound cell and check for error
-    if(!ocell->Write(TypeCode(val)))
+    if(!ocell->Write(TypeCode(val0, val1, val2)))
       return false;
 
     //Write value to outbound cell and check for error
-    if(!ocell->Write(val))
+    if(!ocell->Write(val0, val1, val2))
       return false;
 
     //Write error code to outbound cell and check for error
@@ -324,7 +346,9 @@ public:
   virtual bool SetCell(HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
 
     //Assert valid arguments
@@ -335,7 +359,7 @@ public:
       return false;
 
     //Check for incorrect type
-    if(type != TypeCode(val))
+    if(type != TypeCode(val0, val1, val2))
     {
       //Skip value in inbound cell and check for error
       if(!SkipValue(icell, type))
@@ -349,14 +373,14 @@ public:
     }
 
     //Get value from inbound cell and check for error
-    if(!icell->Read(val))
+    if(!icell->Read(val0, val1, val2))
       return false;
 
     //Check for valid method
     if(_setmethod != 0)
     {
       //Call set method
-      lerr = (_object->*_setmethod)(val);
+      lerr = (_object->*_setmethod)(val0, val1, val2);
     }
     else
     {
@@ -375,18 +399,20 @@ private:
   C *_object;
   GetMethod _getmethod;
   SetMethod _setmethod;
-  T _scale;
+  T _scale0;
+  T _scale1;
+  T _scale2;
 };
 
 //-----------------------------------------------------------------------------
-//Floating point template (savable)
+//Vector template (savable)
 //-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloatS : public HCFloat<C, T>
+class HCVectorS : public HCVector<C, T>
 {
 public:
-  HCFloatS(const std::string &name, C *object, int (C::*getmethod)(T &), int (C::*setmethod)(const T), T scale)
-  : HCFloat<C, T>(name, object, getmethod, setmethod, scale)
+  HCVectorS(const std::string &name, C *object, int (C::*getmethod)(T &, T &, T &), int (C::*setmethod)(const T, const T, const T), T scale0, T scale1, T scale2)
+  : HCVector<C, T>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
 
@@ -397,81 +423,81 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-//Classes derived from floating point templates
+//Classes derived from vector templates
 //-----------------------------------------------------------------------------
 template <class C>
-class HCFlt32 : public HCFloat<C, float>
+class HCVec32 : public HCVector<C, float>
 {
 public:
-  HCFlt32(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float))
-  : HCFloat<C, float>(name, object, getmethod, setmethod, 1.0)
+  HCVec32(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float))
+  : HCVector<C, float>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale)
-  : HCFloat<C, float>(name, object, getmethod, setmethod, scale)
+  HCVec32(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
+  : HCVector<C, float>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt32S : public HCFloatS<C, float>
+class HCVec32S : public HCVectorS<C, float>
 {
 public:
-  HCFlt32S(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float))
-  : HCFloatS<C, float>(name, object, getmethod, setmethod, 1.0)
+  HCVec32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float))
+  : HCVectorS<C, float>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32S(const std::string &name, C *object, int (C::*getmethod)(float &), int (C::*setmethod)(const float), float scale)
-  : HCFloatS<C, float>(name, object, getmethod, setmethod, scale)
+  HCVec32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
+  : HCVectorS<C, float>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt64 : public HCFloat<C, double>
+class HCVec64 : public HCVector<C, double>
 {
 public:
-  HCFlt64(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double))
-  : HCFloat<C, double>(name, object, getmethod, setmethod, 1.0)
+  HCVec64(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double))
+  : HCVector<C, double>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale)
-  : HCFloat<C, double>(name, object, getmethod, setmethod, scale)
+  HCVec64(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
+  : HCVector<C, double>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt64S : public HCFloatS<C, double>
+class HCVec64S : public HCVectorS<C, double>
 {
 public:
-  HCFlt64S(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double))
-  : HCFloatS<C, double>(name, object, getmethod, setmethod, 1.0)
+  HCVec64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double))
+  : HCVectorS<C, double>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64S(const std::string &name, C *object, int (C::*getmethod)(double &), int (C::*setmethod)(const double), double scale)
-  : HCFloatS<C, double>(name, object, getmethod, setmethod, scale)
+  HCVec64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
+  : HCVectorS<C, double>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
 };
 
 //-----------------------------------------------------------------------------
-//Floating point table template
+//Vector table template
 //-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloatTable : public HCParameter
+class HCVectorTable : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, T &);
-  typedef int (C::*SetMethod)(uint32_t, const T);
+  typedef int (C::*GetMethod)(uint32_t, T &, T &, T &);
+  typedef int (C::*SetMethod)(uint32_t, const T, const T, const T);
 
 public:
-  HCFloatTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, T scale)
+  HCVectorTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1, T scale2)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -481,12 +507,14 @@ public:
     _object = object;
     _getmethod = getmethod;
     _setmethod = setmethod;
-    _scale = scale;
+    _scale0 = scale0;
+    _scale1 = scale1;
+    _scale2 = scale2;
     _size = size;
     _eidenums = eidenums;
   }
 
-  virtual ~HCFloatTable()
+  virtual ~HCVectorTable()
   {
     //Cleanup
   }
@@ -494,7 +522,7 @@ public:
   virtual uint8_t GetType(void)
   {
     T val;
-    return TypeCode(val);
+    return TypeCode(val, val, val);
   }
 
   virtual bool IsReadable(void)
@@ -520,7 +548,9 @@ public:
 
   virtual void PrintVal(void)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
     uint32_t eid;
     std::string eidstr;
@@ -538,8 +568,10 @@ public:
     for(eid=0; eid<_size; eid++)
     {
       //Get value
-      lerr = (_object->*_getmethod)(eid, val);
-      val *= _scale;
+      lerr = (_object->*_getmethod)(eid, val0, val1, val2);
+      val0 *= _scale0;
+      val1 *= _scale1;
+      val2 *= _scale2;
 
       //Check for no EID enums
       if(_eidenums == 0)
@@ -548,7 +580,7 @@ public:
         std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
         std::cout << "[" << eid << "]";
         std::cout << " = ";
-        std::cout << val;
+        std::cout << val0 << ", " << val1 << ", " << val2;
         std::cout << " !" << ErrToString(lerr);
         std::cout << TC_RESET << "\n";
       }
@@ -561,7 +593,7 @@ public:
           std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
           std::cout << "[" << TC_MAGENTA << eid << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << "]";
           std::cout << " = ";
-          std::cout << val;
+          std::cout << val0 << ", " << val1 << ", " << val2;
           std::cout << " !" << ErrToString(lerr);
           std::cout << TC_RESET << "\n";
         }
@@ -571,7 +603,7 @@ public:
           std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
           std::cout << "[\"" << eidstr << "\"]";
           std::cout << " = ";
-          std::cout << val;
+          std::cout << val0 << ", " << val1 << ", " << val2;
           std::cout << " !" << ErrToString(lerr);
           std::cout << TC_RESET << "\n";
         }
@@ -581,7 +613,9 @@ public:
 
   virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
     uint32_t eid;
     std::string eidstr;
 
@@ -593,10 +627,12 @@ public:
     for(eid=0; eid<_size; eid++)
     {
       //Get value
-      if((_object->*_getmethod)(eid, val) != ERR_NONE)
+      if((_object->*_getmethod)(eid, val0, val1, val2) != ERR_NONE)
         continue;
 
-      val *= _scale;
+      val0 *= _scale0;
+      val1 *= _scale1;
+      val2 *= _scale2;
 
       //Check for no EID enums
       if(_eidenums == 0)
@@ -606,7 +642,7 @@ public:
         st << _name;
         st << "[" << eid << "]";
         st << " = ";
-        st << val;
+        st << val0 << ", " << val1 << ", " << val2;
         st << "\n";
       }
       else
@@ -619,7 +655,7 @@ public:
           st << _name;
           st << "[" << eid << "]";
           st << " = ";
-          st << val;
+          st << val0 << ", " << val1 << ", " << val2;
           st << "\n";
         }
         else
@@ -629,7 +665,7 @@ public:
           st << _name;
           st << "[\"" << eidstr << "\"]";
           st << " = ";
-          st << val;
+          st << val0 << ", " << val1 << ", " << val2;
           st << "\n";
         }
       }
@@ -643,10 +679,12 @@ public:
 
     //Print information
     st << _name;
-    st << "\n  Type: " << TypeString(dummy) << "t";
+    st << "\n  Type: " << TypeString(dummy, dummy, dummy) << "t";
     st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
     st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
-    st << "\n  Scale: " << _scale;
+    st << "\n  Scale0: " << _scale0;
+    st << "\n  Scale1: " << _scale1;
+    st << "\n  Scale2: " << _scale2;
     st << "\n  Size: " << _size;
 
     //Print EID enumeration information if it exists
@@ -665,12 +703,14 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<" << TypeString(dummy) << "t>" << "\n";
+    file << std::string(indent, ' ') << "<" << TypeString(dummy, dummy, dummy) << "t>" << "\n";
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
     file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>" << "\n";
     file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
-    file << std::string(indent, ' ') << "  <scl>" << _scale << "</scl>" << "\n";
+    file << std::string(indent, ' ') << "  <scl0>" << _scale0 << "</scl0>" << "\n";
+    file << std::string(indent, ' ') << "  <scl1>" << _scale1 << "</scl1>" << "\n";
+    file << std::string(indent, ' ') << "  <scl2>" << _scale2 << "</scl2>" << "\n";
     file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
 
     if(_eidenums != 0)
@@ -683,30 +723,30 @@ public:
       file << std::string(indent, ' ') << "  </eidenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>" << "\n";
+    file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy, dummy) << "t>" << "\n";
   }
 
-  virtual int GetFltTbl(uint32_t eid, T &val)
+  virtual int GetVecTbl(uint32_t eid, T &val0, T &val1, T &val2)
   {
     //Check for EID out of range
     if(eid >= _size)
     {
-      DefaultVal(val);
+      DefaultVal(val0, val1, val2);
       return ERR_EID;
     }
 
     //Check for null method
     if(_getmethod == 0)
     {
-      DefaultVal(val);
+      DefaultVal(val0, val1, val2);
       return ERR_ACCESS;
     }
 
     //Call get method
-    return (_object->*_getmethod)(eid, val);
+    return (_object->*_getmethod)(eid, val0, val1, val2);
   }
 
-  virtual int SetFltTbl(uint32_t eid, const T val)
+  virtual int SetVecTbl(uint32_t eid, const T val0, const T val1, const T val2)
   {
     //Check for EID out of range
     if(eid >= _size)
@@ -717,12 +757,14 @@ public:
       return ERR_ACCESS;
 
     //Call set method
-    return (_object->*_setmethod)(eid, val);
+    return (_object->*_setmethod)(eid, val0, val1, val2);
   }
 
   virtual int GetStrTbl(uint32_t eid, std::string &val)
   {
-    T nval;
+    T nval0;
+    T nval1;
+    T nval2;
     int lerr;
 
     //Check for EID out of range
@@ -740,17 +782,21 @@ public:
     }
 
     //Call get method
-    lerr = (_object->*_getmethod)(eid, nval);
-    nval *= _scale;
+    lerr = (_object->*_getmethod)(eid, nval0, nval1, nval2);
+    nval0 *= _scale0;
+    nval1 *= _scale1;
+    nval2 *= _scale2;
 
     //Convert to string
-    StringPrint(nval, val);
+    StringPrint(nval0, nval1, nval2, val);
     return lerr;
   }
 
   virtual int SetStrTbl(uint32_t eid, const std::string &val)
   {
-    T nval;
+    T nval0;
+    T nval1;
+    T nval2;
 
     //Check for EID out of range
     if(eid >= _size)
@@ -761,11 +807,11 @@ public:
       return ERR_ACCESS;
 
     //Convert string value to native value and check for error
-    if(!StringConvert(val, nval))
+    if(!StringConvert(val, nval0, nval1, nval2))
       return ERR_UNSPEC;
 
     //Set value
-    return (_object->*_setmethod)(eid, nval / _scale);
+    return (_object->*_setmethod)(eid, nval0 / _scale0, nval1 / _scale1, nval2 / _scale2);
   }
 
   virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
@@ -775,7 +821,9 @@ public:
 
   virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
 
     //Assert valid arguments
@@ -785,21 +833,21 @@ public:
     if(_getmethod != 0)
     {
       //Call get method
-      lerr = (_object->*_getmethod)(eid, val);
+      lerr = (_object->*_getmethod)(eid, val0, val1, val2);
     }
     else
     {
       //Access error
-      DefaultVal(val);
+      DefaultVal(val0, val1, val2);
       lerr = ERR_ACCESS;
     }
 
     //Write type code to outbound cell and check for error
-    if(!ocell->Write(TypeCode(val)))
+    if(!ocell->Write(TypeCode(val0, val1, val2)))
       return false;
 
     //Write value to outbound cell and check for error
-    if(!ocell->Write(val))
+    if(!ocell->Write(val0, val1, val2))
       return false;
 
     //Write error code to outbound cell and check for error
@@ -812,7 +860,9 @@ public:
   virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
   {
     uint8_t type;
-    T val;
+    T val0;
+    T val1;
+    T val2;
     int lerr;
 
     //Assert valid arguments
@@ -823,7 +873,7 @@ public:
       return false;
 
     //Check for incorrect type
-    if(type != TypeCode(val))
+    if(type != TypeCode(val0, val1, val2))
     {
       //Skip value in inbound cell and check for error
       if(!SkipValue(icell, type))
@@ -837,14 +887,14 @@ public:
     }
 
     //Get value from inbound cell and check for error
-    if(!icell->Read(val))
+    if(!icell->Read(val0, val1, val2))
       return false;
 
     //Check for valid method
     if(_setmethod != 0)
     {
       //Call set method
-      lerr = (_object->*_setmethod)(eid, val);
+      lerr = (_object->*_setmethod)(eid, val0, val1, val2);
     }
     else
     {
@@ -920,20 +970,22 @@ private:
   C *_object;
   GetMethod _getmethod;
   SetMethod _setmethod;
-  T _scale;
+  T _scale0;
+  T _scale1;
+  T _scale2;
   uint32_t _size;
   const HCEIDEnum *_eidenums;
 };
 
 //-----------------------------------------------------------------------------
-//Floating point table template (savable)
+//Vector table template (savable)
 //-----------------------------------------------------------------------------
 template <class C, class T>
-class HCFloatTableS : public HCFloatTable<C, T>
+class HCVectorTableS : public HCVectorTable<C, T>
 {
 public:
-  HCFloatTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &), int (C::*setmethod)(uint32_t, const T), uint32_t size, const HCEIDEnum *eidenums, T scale)
-  : HCFloatTable<C, T>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCVectorTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &, T &, T &), int (C::*setmethod)(uint32_t, const T, const T, const T), uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1, T scale2)
+  : HCVectorTable<C, T>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
 
@@ -944,104 +996,104 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-//Classes derived from floating point table templates
+//Classes derived from vector table templates
 //-----------------------------------------------------------------------------
 template <class C>
-class HCFlt32Table : public HCFloatTable<C, float>
+class HCVec32Table : public HCVectorTable<C, float>
 {
 public:
-  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size)
-  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, 0, 1.0)
+  HCVec32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
+  : HCVectorTable<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, float scale)
-  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, 0, scale)
+  HCVec32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
+  : HCVectorTable<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums)
-  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  HCVec32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  : HCVectorTable<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums, float scale)
-  : HCFloatTable<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCVec32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1, float scale2)
+  : HCVectorTable<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt32TableS : public HCFloatTableS<C, float>
+class HCVec32TableS : public HCVectorTableS<C, float>
 {
 public:
-  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size)
-  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, 0, 1.0)
+  HCVec32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
+  : HCVectorTableS<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, float scale)
-  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, 0, scale)
+  HCVec32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
+  : HCVectorTableS<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums)
-  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  HCVec32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  : HCVectorTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &), int (C::*setmethod)(uint32_t, const float), uint32_t size, const HCEIDEnum *eidenums, float scale)
-  : HCFloatTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCVec32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1, float scale2)
+  : HCVectorTableS<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt64Table : public HCFloatTable<C, double>
+class HCVec64Table : public HCVectorTable<C, double>
 {
 public:
-  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size)
-  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, 0, 1.0)
+  HCVec64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
+  : HCVectorTable<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, double scale)
-  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, 0, scale)
+  HCVec64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
+  : HCVectorTable<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums)
-  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  HCVec64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  : HCVectorTable<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums, double scale)
-  : HCFloatTable<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCVec64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1, double scale2)
+  : HCVectorTable<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
 };
 
 template <class C>
-class HCFlt64TableS : public HCFloatTableS<C, double>
+class HCVec64TableS : public HCVectorTableS<C, double>
 {
 public:
-  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size)
-  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, 0, 1.0)
+  HCVec64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
+  : HCVectorTableS<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, double scale)
-  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, 0, scale)
+  HCVec64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
+  : HCVectorTableS<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums)
-  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0)
+  HCVec64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  : HCVectorTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCFlt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &), int (C::*setmethod)(uint32_t, const double), uint32_t size, const HCEIDEnum *eidenums, double scale)
-  : HCFloatTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, scale)
+  HCVec64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1, double scale2)
+  : HCVectorTableS<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
 };

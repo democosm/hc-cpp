@@ -414,6 +414,100 @@ bool HCCell::Write(const string &val)
   return true;
 }
 
+bool HCCell::Read(float &val0, float &val1, float &val2)
+{
+  uint32_t temp0;
+  uint32_t temp1;
+  uint32_t temp2;
+
+  //Deserialize as same size integer and check for error
+  if(!Read(temp0))
+    return false;
+
+  if(!Read(temp1))
+    return false;
+
+  if(!Read(temp2))
+    return false;
+
+  //Special copy from integer to floating point
+  memcpy(&val0, &temp0, sizeof(val0));
+  memcpy(&val1, &temp1, sizeof(val1));
+  memcpy(&val2, &temp2, sizeof(val2));
+  return true;
+}
+
+bool HCCell::Write(float val0, float val1, float val2)
+{
+  uint32_t temp0;
+  uint32_t temp1;
+  uint32_t temp2;
+
+  //Special copy from floating point to integer
+  memcpy(&temp0, &val0, sizeof(val0));
+  memcpy(&temp1, &val1, sizeof(val1));
+  memcpy(&temp2, &val2, sizeof(val2));
+
+  //Delegate to integer version of this method
+  if(!Write(temp0))
+    return false;
+
+  if(!Write(temp1))
+    return false;
+
+  if(!Write(temp2))
+    return false;
+
+  return true;
+}
+
+bool HCCell::Read(double &val0, double &val1, double &val2)
+{
+  uint64_t temp0;
+  uint64_t temp1;
+  uint64_t temp2;
+
+  //Deserialize as same size integer and check for error
+  if(!Read(temp0))
+    return false;
+
+  if(!Read(temp1))
+    return false;
+
+  if(!Read(temp2))
+    return false;
+
+  //Special copy from integer to floating point
+  memcpy(&val0, &temp0, sizeof(val0));
+  memcpy(&val1, &temp1, sizeof(val1));
+  memcpy(&val2, &temp2, sizeof(val2));
+  return true;
+}
+
+bool HCCell::Write(double val0, double val1, double val2)
+{
+  uint64_t temp0;
+  uint64_t temp1;
+  uint64_t temp2;
+
+  //Special copy from floating point to integer
+  memcpy(&temp0, &val0, sizeof(val0));
+  memcpy(&temp1, &val1, sizeof(val1));
+  memcpy(&temp2, &val2, sizeof(val2));
+
+  //Delegate to integer version of this method
+  if(!Write(temp0))
+    return false;
+
+  if(!Write(temp1))
+    return false;
+
+  if(!Write(temp2))
+    return false;
+
+  return true;
+}
+
 bool HCCell::Read(uint8_t *val, uint32_t maxlen, uint16_t &len)
 {
   uint32_t i;

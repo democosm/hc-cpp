@@ -51,7 +51,9 @@ public:
   static const uint8_t TYPE_DOUBLE = 0x33;
   static const uint8_t TYPE_BOOL = 0x40;
   static const uint8_t TYPE_STRING = 0x50;
-  static const uint8_t TYPE_FILE = 0x60;
+  static const uint8_t TYPE_VECFLOAT = 0x62;
+  static const uint8_t TYPE_VECDOUBLE = 0x63;
+  static const uint8_t TYPE_FILE = 0x70;
 
 public:
   static bool SkipValue(HCCell *cell, uint8_t type);
@@ -99,6 +101,12 @@ public:
   static uint8_t TypeCode(const std::string &type);
   static const std::string TypeString(const std::string &type);
   static void DefaultVal(std::string &val);
+  static uint8_t TypeCode(const float &type0, const float &type1, const float &type2);
+  static const std::string TypeString(const float &type0, const float &type1, const float &type2);
+  static void DefaultVal(float &val0, float &val1, float &val2);
+  static uint8_t TypeCode(const double &type0, const double &type1, const double &type2);
+  static const std::string TypeString(const double &type0, const double &type1, const double &type2);
+  static void DefaultVal(double &val0, double &val1, double &val2);
   static int HandleGetPIDError(HCCell *icell, HCCell *ocell);
   static int HandleSetPIDError(HCCell *icell, HCCell *ocell);
 

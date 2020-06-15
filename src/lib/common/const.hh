@@ -29,6 +29,7 @@
 
 //Terminal codes
 #define TC_RESET "\033[0m"
+#define TC_BLINK "\033[5m"
 #define TC_BLACK "\033[30m"
 #define TC_RED "\033[31m"
 #define TC_GREEN "\033[32m"

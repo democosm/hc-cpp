@@ -58,4 +58,6 @@ endif
 # Special options for special builds
 ifeq ($(TGTBUILD), dbg)
   CFLAGS += -g -DDEBUG
+else
+  CFLAGS += -O3
 endif

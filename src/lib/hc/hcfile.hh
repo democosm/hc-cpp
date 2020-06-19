@@ -106,7 +106,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_FILE;
+    return T_FILE;
   }
 
   virtual bool IsReadable(void)

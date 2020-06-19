@@ -130,7 +130,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_STRING;
+    return T_STR;
   }
 
   virtual bool IsReadable(void)
@@ -408,7 +408,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_STRING;
+    return T_STR;
   }
 
   virtual bool IsReadable(void)
@@ -857,7 +857,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_STRING;
+    return T_STR;
   }
 
   virtual bool IsReadable(void)

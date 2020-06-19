@@ -102,7 +102,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_CALL;
+    return TypeCode();
   }
 
   virtual bool IsReadable(void)
@@ -126,16 +126,16 @@ public:
   virtual void PrintInfo(std::ostream &st=std::cout)
   {
     st << _name;
-    st << "\n  Type: call";
+    st << "\n  Type: " << TypeString();
   }
 
   virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
-    file << std::string(indent, ' ') << "<call>" << "\n";
+    file << std::string(indent, ' ') << "<" << TypeString() << ">\n";
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
-    file << std::string(indent, ' ') << "</call>" << "\n";
+    file << std::string(indent, ' ') << "</" << TypeString() << ">\n";
   }
 
   virtual int Call(void)
@@ -222,7 +222,7 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_CALL;
+    return TypeCode();
   }
 
   virtual bool IsReadable(void)
@@ -253,7 +253,7 @@ public:
     uint32_t i;
 
     st << _name;
-    st << "\n  Type: callt";
+    st << "\n  Type: " << TypeString() << "t";
     st << "\n  Size: " << _size;
 
     //Print EID enumeration information if it exists
@@ -271,7 +271,7 @@ public:
     uint32_t i;
 
     //Generate XML information
-    file << std::string(indent, ' ') << "<callt>" << "\n";
+    file << std::string(indent, ' ') << "<" << TypeString() << "t>\n";
     file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>" << "\n";
     file << std::string(indent, ' ') << "  <name>" << _name << "</name>" << "\n";
     file << std::string(indent, ' ') << "  <size>" << _size << "</size>" << "\n";
@@ -286,7 +286,7 @@ public:
       file << std::string(indent, ' ') << "  </eidenums>" << "\n";
     }
 
-    file << std::string(indent, ' ') << "</callt>" << "\n";
+    file << std::string(indent, ' ') << "</" << TypeString() << "t>\n";
   }
 
   virtual int CallTbl(uint32_t eid)

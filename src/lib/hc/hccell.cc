@@ -133,6 +133,132 @@ uint32_t HCCell::Deserialize(uint8_t *serbuf, uint32_t maxlen)
   return _payloadlength + i;
 }
 
+bool HCCell::Read(bool &val)
+{
+  uint8_t temp;
+
+  //Deserialize as same size integer and check for error
+  if(!Read(temp))
+    return false;
+
+  //Special cast from integer to boolean
+  val = (temp == 0 ? false : true);
+  return true;
+}
+
+bool HCCell::Write(bool val)
+{
+  uint8_t temp;
+
+  //Special cast from boolean to same size integer
+  temp = val ? 1 : 0;
+
+  //Delegate to integer version of this method
+  return Write(temp);
+}
+
+bool HCCell::Read(string &val)
+{
+  uint32_t i;
+  char ch;
+
+  //Clear string
+  val.clear();
+
+  //Check for buffer underflow
+  if(_readindex >= _payloadlength)
+    return false;
+
+  //Copy one character at a time
+  for(i=0; _readindex<_payloadlength; i++)
+  {
+    //Get character at current read index
+    ch = (char)_payload[_readindex++];
+
+    //Check for null terminator
+    if(ch == '\0')
+      return true;
+
+    //Copy character to value
+    val += ch;
+  }
+
+  //This is an error case
+  return false;
+}
+
+bool HCCell::Write(const string &val)
+{
+  uint32_t len;
+  uint32_t i;
+
+  //Determine length of string and terminator
+  len = val.length();
+
+  //Check for buffer overflow
+  if((_payloadlength + len + 1) >= PAYLOAD_MAX)
+    return false;
+
+  //Copy characters
+  for(i=0; i<len; i++)
+    _payload[_payloadlength++] = (uint8_t)val.at(i);
+
+  //Null terminate
+  _payload[_payloadlength++] = (uint8_t)'\0';
+  return true;
+}
+
+bool HCCell::Read(uint8_t *val, uint32_t maxlen, uint16_t &len)
+{
+  uint32_t i;
+
+  //Assert valid arguments
+  assert((val != 0) && (maxlen != 0));
+
+  //Read length and check for error
+  if(!Read(len))
+    return false;
+
+  //Check for buffer underflow
+  if((_readindex + len) > _payloadlength)
+    return false;
+
+  //Copy bytes
+  for(i=0; i<len; i++)
+  {
+    //Check for max length reached
+    if(i >= maxlen)
+      return true;
+
+    //Copy a character
+    val[i] = _payload[_readindex++];
+  }
+
+  return true;
+}
+
+bool HCCell::Write(uint8_t *val, uint16_t len)
+{
+  uint32_t i;
+
+  //Assert valid arguments
+  assert(val != 0);
+
+  //Write length and check for error
+  if(!Write(len))
+    return false;
+
+  //Check for buffer overflow
+  if((_payloadlength + len) > PAYLOAD_MAX)
+    return false;
+
+  //Copy bytes
+  for(i=0; i<len; i++)
+    _payload[_payloadlength++] = val[i];
+
+  return true;
+}
+
 bool HCCell::Read(int8_t &val)
 {
   //Delegate to unsigned version of this method
@@ -339,78 +465,77 @@ bool HCCell::Write(double val)
   return Write(temp);
 }
 
-bool HCCell::Read(bool &val)
+bool HCCell::Read(float &val0, float &val1)
 {
-  uint8_t temp;
+  uint32_t temp0;
+  uint32_t temp1;
 
   //Deserialize as same size integer and check for error
-  if(!Read(temp))
+  if(!Read(temp0))
     return false;
 
-  //Special cast from integer to boolean
-  val = (temp == 0 ? false : true);
+  if(!Read(temp1))
+    return false;
+
+  //Special copy from integer to floating point
+  memcpy(&val0, &temp0, sizeof(val0));
+  memcpy(&val1, &temp1, sizeof(val1));
   return true;
 }
 
-bool HCCell::Write(bool val)
+bool HCCell::Write(float val0, float val1)
 {
-  uint8_t temp;
+  uint32_t temp0;
+  uint32_t temp1;
 
-  //Special cast from boolean to same size integer
-  temp = val ? 1 : 0;
+  //Special copy from floating point to integer
+  memcpy(&temp0, &val0, sizeof(val0));
+  memcpy(&temp1, &val1, sizeof(val1));
 
   //Delegate to integer version of this method
-  return Write(temp);
-}
-
-bool HCCell::Read(string &val)
-{
-  uint32_t i;
-  char ch;
-
-  //Clear string
-  val.clear();
-
-  //Check for buffer underflow
-  if(_readindex >= _payloadlength)
+  if(!Write(temp0))
     return false;
 
-  //Copy one character at a time
-  for(i=0; _readindex<_payloadlength; i++)
-  {
-    //Get character at current read index
-    ch = (char)_payload[_readindex++];
-
-    //Check for null terminator
-    if(ch == '\0')
-      return true;
-
-    //Copy character to value
-    val += ch;
-  }
-
-  //This is an error case
-  return false;
-}
-
-bool HCCell::Write(const string &val)
-{
-  uint32_t len;
-  uint32_t i;
-
-  //Determine length of string and terminator
-  len = val.length();
-
-  //Check for buffer overflow
-  if((_payloadlength + len + 1) >= PAYLOAD_MAX)
+  if(!Write(temp1))
     return false;
 
-  //Copy characters
-  for(i=0; i<len; i++)
-    _payload[_payloadlength++] = (uint8_t)val.at(i);
+  return true;
+}
 
-  //Null terminate
-  _payload[_payloadlength++] = (uint8_t)'\0';
+bool HCCell::Read(double &val0, double &val1)
+{
+  uint64_t temp0;
+  uint64_t temp1;
+
+  //Deserialize as same size integer and check for error
+  if(!Read(temp0))
+    return false;
+
+  if(!Read(temp1))
+    return false;
+
+  //Special copy from integer to floating point
+  memcpy(&val0, &temp0, sizeof(val0));
+  memcpy(&val1, &temp1, sizeof(val1));
+  return true;
+}
+
+bool HCCell::Write(double val0, double val1)
+{
+  uint64_t temp0;
+  uint64_t temp1;
+
+  //Special copy from floating point to integer
+  memcpy(&temp0, &val0, sizeof(val0));
+  memcpy(&temp1, &val1, sizeof(val1));
+
+  //Delegate to integer version of this method
+  if(!Write(temp0))
+    return false;
+
+  if(!Write(temp1))
+    return false;
+
   return true;
 }
 
@@ -504,57 +629,6 @@ bool HCCell::Write(double val0, double val1, double val2)
 
   if(!Write(temp2))
     return false;
-
-  return true;
-}
-
-bool HCCell::Read(uint8_t *val, uint32_t maxlen, uint16_t &len)
-{
-  uint32_t i;
-
-  //Assert valid arguments
-  assert((val != 0) && (maxlen != 0));
-
-  //Read length and check for error
-  if(!Read(len))
-    return false;
-
-  //Check for buffer underflow
-  if((_readindex + len) > _payloadlength)
-    return false;
-
-  //Copy bytes
-  for(i=0; i<len; i++)
-  {
-    //Check for max length reached
-    if(i >= maxlen)
-      return true;
-
-    //Copy a character
-    val[i] = _payload[_readindex++];
-  }
-
-  return true;
-}
-
-bool HCCell::Write(uint8_t *val, uint16_t len)
-{
-  uint32_t i;
-
-  //Assert valid arguments
-  assert(val != 0);
-
-  //Write length and check for error
-  if(!Write(len))
-    return false;
-
-  //Check for buffer overflow
-  if((_payloadlength + len) > PAYLOAD_MAX)
-    return false;
-
-  //Copy bytes
-  for(i=0; i<len; i++)
-    _payload[_payloadlength++] = val[i];
 
   return true;
 }

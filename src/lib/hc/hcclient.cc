@@ -546,6 +546,20 @@ template <typename T> int HCClient::Sub(uint16_t pid, const T val)
   return ierr;
 }
 
+template int HCClient::Get<bool>(uint16_t pid, bool &val);
+template int HCClient::Set<bool>(uint16_t pid, const bool val);
+template int HCClient::IGet<bool>(uint16_t pid, uint32_t eid, bool &val);
+template int HCClient::ISet<bool>(uint16_t pid, uint32_t eid, const bool val);
+template int HCClient::Add<bool>(uint16_t pid, const bool val);
+template int HCClient::Sub<bool>(uint16_t pid, const bool val);
+
+template int HCClient::Get<string>(uint16_t pid, string &val);
+template int HCClient::Set<string>(uint16_t pid, const string val);
+template int HCClient::IGet<string>(uint16_t pid, uint32_t eid, string &val);
+template int HCClient::ISet<string>(uint16_t pid, uint32_t eid, const string val);
+template int HCClient::Add<string>(uint16_t pid, const string val);
+template int HCClient::Sub<string>(uint16_t pid, const string val);
+
 template int HCClient::Get<int8_t>(uint16_t pid, int8_t &val);
 template int HCClient::Set<int8_t>(uint16_t pid, const int8_t val);
 template int HCClient::IGet<int8_t>(uint16_t pid, uint32_t eid, int8_t &val);
@@ -616,19 +630,146 @@ template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val
 template int HCClient::Add<double>(uint16_t pid, const double val);
 template int HCClient::Sub<double>(uint16_t pid, const double val);
 
-template int HCClient::Get<bool>(uint16_t pid, bool &val);
-template int HCClient::Set<bool>(uint16_t pid, const bool val);
-template int HCClient::IGet<bool>(uint16_t pid, uint32_t eid, bool &val);
-template int HCClient::ISet<bool>(uint16_t pid, uint32_t eid, const bool val);
-template int HCClient::Add<bool>(uint16_t pid, const bool val);
-template int HCClient::Sub<bool>(uint16_t pid, const bool val);
+template <typename T> int HCClient::Get(uint16_t pid, T &val0, T &val1)
+{
+  uint8_t type;
+  int8_t merr;
+  int ierr;
 
-template int HCClient::Get<string>(uint16_t pid, string &val);
-template int HCClient::Set<string>(uint16_t pid, const string val);
-template int HCClient::IGet<string>(uint16_t pid, uint32_t eid, string &val);
-template int HCClient::ISet<string>(uint16_t pid, uint32_t eid, const string val);
-template int HCClient::Add<string>(uint16_t pid, const string val);
-template int HCClient::Sub<string>(uint16_t pid, const string val);
+  //Determine type code
+  type = HCParameter::TypeCode(val0, val1);
+
+  //Take the transaction mutex
+  _xactmutex->Wait();
+
+  //Perform get transaction
+  ierr = GetXact(pid, type);
+
+  //Check for no internal error
+  if(ierr == ERR_NONE)
+  {
+    //Read values and error from inbound cell (already skipped past PID and type)
+    _icell->Read(val0);
+    _icell->Read(val1);
+    _icell->Read(merr);
+    ierr = (int)merr;
+  }
+  else
+  {
+    //Set to default value
+    HCParameter::DefaultVal(val0, val1);
+  }
+
+  //Give the transaction mutex
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template <typename T> int HCClient::Set(uint16_t pid, const T val0, const T val1)
+{
+  uint8_t type;
+  int ierr;
+
+  //Determine type code
+  type = HCParameter::TypeCode(val0, val1);
+
+  //Begin mutual exclusion of transaction
+  _xactmutex->Wait();
+
+  //Format outbound message
+  _omsg->Reset(_transaction);
+  _ocell->Reset(HCCell::OPCODE_SET_CMD);
+  _ocell->Write(pid);
+  _ocell->Write(type);
+  _ocell->Write(val0);
+  _ocell->Write(val1);
+  _omsg->Write(_ocell);
+
+  //Perform set transaction
+  ierr = SetXact(pid);
+
+  //End mutual exclusion of transaction
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T &val0, T &val1)
+{
+  uint8_t type;
+  int8_t merr;
+  int ierr;
+
+  //Determine type code
+  type = HCParameter::TypeCode(val0, val1);
+
+  //Take the transaction mutex
+  _xactmutex->Wait();
+
+  //Perform get transaction
+  ierr = IGetXact(pid, eid, type);
+
+  //Check for no internal error
+  if(ierr == ERR_NONE)
+  {
+    //Read values and error from inbound cell (already skipped past PID and EID)
+    _icell->Read(val0);
+    _icell->Read(val1);
+    _icell->Read(merr);
+    ierr = (int)merr;
+  }
+  else
+  {
+    //Set to default value
+    HCParameter::DefaultVal(val0, val1);
+  }
+
+  //Give the transaction mutex
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template <typename T> int HCClient::ISet(uint16_t pid, uint32_t eid, const T val0, const T val1)
+{
+  uint8_t type;
+  int ierr;
+
+  //Determine type code
+  type = HCParameter::TypeCode(val0, val1);
+
+  //Begin mutual exclusion of transaction
+  _xactmutex->Wait();
+
+  //Format outbound message
+  _omsg->Reset(_transaction);
+  _ocell->Reset(HCCell::OPCODE_ISET_CMD);
+  _ocell->Write(pid);
+  _ocell->Write(eid);
+  _ocell->Write(type);
+  _ocell->Write(val0);
+  _ocell->Write(val1);
+  _omsg->Write(_ocell);
+
+  //Perform set transaction
+  ierr = ISetXact(pid, eid);
+
+  //End mutual exclusion of transaction
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template int HCClient::Get<float>(uint16_t pid, float &val0, float &val1);
+template int HCClient::Set<float>(uint16_t pid, const float val0, const float val1);
+template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float &val0, float &val1);
+template int HCClient::ISet<float>(uint16_t pid, uint32_t eid, const float val0, const float val1);
+
+template int HCClient::Get<double>(uint16_t pid, double &val0, double &val1);
+template int HCClient::Set<double>(uint16_t pid, const double val0, const double val1);
+template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double &val0, double &val1);
+template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val0, const double val1);
 
 template <typename T> int HCClient::Get(uint16_t pid, T &val0, T &val1, T &val2)
 {

@@ -41,26 +41,30 @@ class HCConnection
 public:
   HCConnection(Device *dev, HCContainer *pcont, const std::string &contname, uint32_t timeout, const std::string &sifname="");
   virtual ~HCConnection();
+
+private:
   void ParseServer(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseCont(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseInteger(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseIntegerTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseIntegerList(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> HCIntegerEnum<T> *ParseIntegerEnum(tinyxml2::XMLElement *pelt);
-  HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
-  template <typename T> void ParseFloat(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseFloatTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseVector(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  template <typename T> void ParseVectorTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseCall(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  void ParseCallT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBool(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseBoolT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   HCBooleanEnum *ParseBoolEnum(tinyxml2::XMLElement *pelt);
   void ParseStr(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseStrT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseStrL(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  void ParseCall(tinyxml2::XMLElement *pelt, HCContainer *pcont);
-  void ParseCallT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   void ParseFile(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseInt(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseIntT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseIntL(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> HCIntegerEnum<T> *ParseIntEnum(tinyxml2::XMLElement *pelt);
+  HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
+  template <typename T> void ParseFloat(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseFloatTable(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVec2(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVec2T(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVec3(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseVec3T(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, T &val);
 
 private:

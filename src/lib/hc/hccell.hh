@@ -68,6 +68,12 @@ public:
   uint8_t GetOpCode(void);
   uint32_t Serialize(uint8_t *serbuf, uint32_t maxlen);
   uint32_t Deserialize(uint8_t *serbuf, uint32_t len);
+  bool Read(bool &val);
+  bool Write(bool val);
+  bool Read(std::string &val);
+  bool Write(const std::string &val);
+  bool Read(uint8_t *val, uint32_t maxlen, uint16_t &len);
+  bool Write(uint8_t *val, uint16_t len);
   bool Read(int8_t &val);
   bool Write(int8_t val);
   bool Read(int16_t &val);
@@ -88,16 +94,14 @@ public:
   bool Write(float val);
   bool Read(double &val);
   bool Write(double val);
-  bool Read(bool &val);
-  bool Write(bool val);
-  bool Read(std::string &val);
-  bool Write(const std::string &val);
+  bool Read(float &val0, float &val1);
+  bool Write(float val0, float val1);
+  bool Read(double &val0, double &val1);
+  bool Write(double val0, double val1);
   bool Read(float &val0, float &val1, float &val2);
   bool Write(float val0, float val1, float val2);
   bool Read(double &val0, double &val1, double &val2);
   bool Write(double val0, double val1, double val2);
-  bool Read(uint8_t *val, uint32_t maxlen, uint16_t &len);
-  bool Write(uint8_t *val, uint16_t len);
   void Print(const std::string &extra);
 
 private:

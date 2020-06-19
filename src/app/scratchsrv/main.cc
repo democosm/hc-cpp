@@ -284,8 +284,10 @@ int main(int argc, char **argv)
   ScratchFloat *floatscratch;
   ScratchDouble *doublescratch;
   ScratchString *stringscratch;
-  ScratchVecFloat *vecfloatscratch;
-  ScratchVecDouble *vecdoublescratch;
+  ScratchV2F32 *v2f32scratch;
+  ScratchV2F64 *v2f64scratch;
+  ScratchV3F32 *v3f32scratch;
+  ScratchV3F64 *v3f64scratch;
   ScratchFile *filescratch;
   HCContainer *topcont;
   HCContainer *cont;
@@ -331,8 +333,10 @@ int main(int argc, char **argv)
   floatscratch = new ScratchFloat(TABLE_SIZE, LIST_MAX_SIZE);
   doublescratch = new ScratchDouble(TABLE_SIZE, LIST_MAX_SIZE);
   stringscratch = new ScratchString(TABLE_SIZE, LIST_MAX_SIZE);
-  vecfloatscratch = new ScratchVecFloat(TABLE_SIZE);
-  vecdoublescratch = new ScratchVecDouble(TABLE_SIZE);
+  v2f32scratch = new ScratchV2F32(TABLE_SIZE);
+  v2f64scratch = new ScratchV2F64(TABLE_SIZE);
+  v3f32scratch = new ScratchV3F32(TABLE_SIZE);
+  v3f64scratch = new ScratchV3F64(TABLE_SIZE);
   filescratch = new ScratchFile("scratchfile");
 
   //Create top container
@@ -361,83 +365,7 @@ int main(int argc, char **argv)
   srv = new HCServer(srvdev, topcont, "Scratch", __DATE__ " " __TIME__);
 
   //Add parameters
-  cont = new HCContainer("uint8");
-  Add(cont, topcont);
-  Add(new HCCall<ScratchU8>("print", u8scratch, &ScratchU8::Print), cont, srv);
-  Add(new HCCallTable<ScratchU8>("printt", u8scratch, &ScratchU8::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchU8>("printtee", u8scratch, &ScratchU8::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCUns8<ScratchU8>("val", u8scratch, &ScratchU8::Get, &ScratchU8::Set), cont, srv);
-  Add(new HCUns8<ScratchU8>("valro", u8scratch, &ScratchU8::Get, 0), cont, srv);
-  Add(new HCUns8<ScratchU8>("valwo", u8scratch, 0, &ScratchU8::Set), cont, srv);
-  Add(new HCUns8S<ScratchU8>("vale", u8scratch, &ScratchU8::Get, &ScratchU8::Set, U8enums), cont, srv);
-  Add(new HCUns8Table<ScratchU8>("table", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns8Table<ScratchU8>("tablero", u8scratch, &ScratchU8::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCUns8Table<ScratchU8>("tablewo", u8scratch, 0, &ScratchU8::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns8Table<ScratchU8>("tableve", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE, 0, U8enums), cont, srv);
-  Add(new HCUns8TableS<ScratchU8>("tableeeve", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE, Eidenums, U8enums), cont, srv);
-  Add(new HCUns8List<ScratchU8>("list", u8scratch, &ScratchU8::ListGet, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns8List<ScratchU8>("listro", u8scratch, &ScratchU8::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns8List<ScratchU8>("listwo", u8scratch, 0, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns8ListS<ScratchU8>("listve", u8scratch, &ScratchU8::ListGet, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE, U8enums), cont, srv);
-
-  cont = new HCContainer("uint16");
-  Add(cont, topcont);
-  Add(new HCCall<ScratchU16>("print", u16scratch, &ScratchU16::Print), cont, srv);
-  Add(new HCCallTable<ScratchU16>("printt", u16scratch, &ScratchU16::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchU16>("printtee", u16scratch, &ScratchU16::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCUns16<ScratchU16>("val", u16scratch, &ScratchU16::Get, &ScratchU16::Set), cont, srv);
-  Add(new HCUns16<ScratchU16>("valro", u16scratch, &ScratchU16::Get, 0), cont, srv);
-  Add(new HCUns16<ScratchU16>("valwo", u16scratch, 0, &ScratchU16::Set), cont, srv);
-  Add(new HCUns16S<ScratchU16>("vale", u16scratch, &ScratchU16::Get, &ScratchU16::Set, U16enums), cont, srv);
-  Add(new HCUns16Table<ScratchU16>("table", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns16Table<ScratchU16>("tablero", u16scratch, &ScratchU16::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCUns16Table<ScratchU16>("tablewo", u16scratch, 0, &ScratchU16::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns16Table<ScratchU16>("tableve", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE, 0, U16enums), cont, srv);
-  Add(new HCUns16TableS<ScratchU16>("tableeeve", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE, Eidenums, U16enums), cont, srv);
-  Add(new HCUns16List<ScratchU16>("list", u16scratch, &ScratchU16::ListGet, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns16List<ScratchU16>("listro", u16scratch, &ScratchU16::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns16List<ScratchU16>("listwo", u16scratch, 0, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns16ListS<ScratchU16>("listve", u16scratch, &ScratchU16::ListGet, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE, U16enums), cont, srv);
-
-  cont = new HCContainer("uint32");
-  Add(cont, topcont);
-  Add(new HCCall<ScratchU32>("print", u32scratch, &ScratchU32::Print), cont, srv);
-  Add(new HCCallTable<ScratchU32>("printt", u32scratch, &ScratchU32::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchU32>("printtee", u32scratch, &ScratchU32::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCUns32<ScratchU32>("val", u32scratch, &ScratchU32::Get, &ScratchU32::Set), cont, srv);
-  Add(new HCUns32<ScratchU32>("valro", u32scratch, &ScratchU32::Get, 0), cont, srv);
-  Add(new HCUns32<ScratchU32>("valwo", u32scratch, 0, &ScratchU32::Set), cont, srv);
-  Add(new HCUns32S<ScratchU32>("vale", u32scratch, &ScratchU32::Get, &ScratchU32::Set, U32enums), cont, srv);
-  Add(new HCUns32Table<ScratchU32>("table", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns32Table<ScratchU32>("tablero", u32scratch, &ScratchU32::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCUns32Table<ScratchU32>("tablewo", u32scratch, 0, &ScratchU32::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns32Table<ScratchU32>("tableve", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE, 0, U32enums), cont, srv);
-  Add(new HCUns32TableS<ScratchU32>("tableeeve", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE, Eidenums, U32enums), cont, srv);
-  Add(new HCUns32List<ScratchU32>("list", u32scratch, &ScratchU32::ListGet, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns32List<ScratchU32>("listro", u32scratch, &ScratchU32::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns32List<ScratchU32>("listwo", u32scratch, 0, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns32ListS<ScratchU32>("listve", u32scratch, &ScratchU32::ListGet, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE, U32enums), cont, srv);
-
-  cont = new HCContainer("uint64");
-  Add(cont, topcont);
-  Add(new HCCall<ScratchU64>("print", u64scratch, &ScratchU64::Print), cont, srv);
-  Add(new HCCallTable<ScratchU64>("printt", u64scratch, &ScratchU64::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchU64>("printtee", u64scratch, &ScratchU64::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCUns64<ScratchU64>("val", u64scratch, &ScratchU64::Get, &ScratchU64::Set), cont, srv);
-  Add(new HCUns64<ScratchU64>("valro", u64scratch, &ScratchU64::Get, 0), cont, srv);
-  Add(new HCUns64<ScratchU64>("valwo", u64scratch, 0, &ScratchU64::Set), cont, srv);
-  Add(new HCUns64S<ScratchU64>("vale", u64scratch, &ScratchU64::Get, &ScratchU64::Set, U64enums), cont, srv);
-  Add(new HCUns64TableS<ScratchU64>("table", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns64Table<ScratchU64>("tablero", u64scratch, &ScratchU64::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCUns64Table<ScratchU64>("tablewo", u64scratch, 0, &ScratchU64::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCUns64Table<ScratchU64>("tableve", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE, 0, U64enums), cont, srv);
-  Add(new HCUns64Table<ScratchU64>("tableeeve", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE, Eidenums, U64enums), cont, srv);
-  Add(new HCUns64List<ScratchU64>("list", u64scratch, &ScratchU64::ListGet, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns64List<ScratchU64>("listro", u64scratch, &ScratchU64::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns64List<ScratchU64>("listwo", u64scratch, 0, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE), cont, srv);
-  Add(new HCUns64ListS<ScratchU64>("listve", u64scratch, &ScratchU64::ListGet, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE, U64enums), cont, srv);
-
-  cont = new HCContainer("int8");
+  cont = new HCContainer("i8");
   Add(cont, topcont);
   Add(new HCCall<ScratchS8>("print", s8scratch, &ScratchS8::Print), cont, srv);
   Add(new HCCallTable<ScratchS8>("printt", s8scratch, &ScratchS8::TablePrint, TABLE_SIZE), cont, srv);
@@ -456,7 +384,7 @@ int main(int argc, char **argv)
   Add(new HCInt8List<ScratchS8>("listwo", s8scratch, 0, &ScratchS8::ListAdd, &ScratchS8::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt8ListS<ScratchS8>("listve", s8scratch, &ScratchS8::ListGet, &ScratchS8::ListAdd, &ScratchS8::ListSub, LIST_MAX_SIZE, S8enums), cont, srv);
 
-  cont = new HCContainer("int16");
+  cont = new HCContainer("i16");
   Add(cont, topcont);
   Add(new HCCall<ScratchS16>("print", s16scratch, &ScratchS16::Print), cont, srv);
   Add(new HCCallTable<ScratchS16>("printt", s16scratch, &ScratchS16::TablePrint, TABLE_SIZE), cont, srv);
@@ -475,7 +403,7 @@ int main(int argc, char **argv)
   Add(new HCInt16List<ScratchS16>("listwo", s16scratch, 0, &ScratchS16::ListAdd, &ScratchS16::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt16ListS<ScratchS16>("listve", s16scratch, &ScratchS16::ListGet, &ScratchS16::ListAdd, &ScratchS16::ListSub, LIST_MAX_SIZE, S16enums), cont, srv);
 
-  cont = new HCContainer("int32");
+  cont = new HCContainer("i32");
   Add(cont, topcont);
   Add(new HCCall<ScratchS32>("print", s32scratch, &ScratchS32::Print), cont, srv);
   Add(new HCCallTable<ScratchS32>("printt", s32scratch, &ScratchS32::TablePrint, TABLE_SIZE), cont, srv);
@@ -494,7 +422,7 @@ int main(int argc, char **argv)
   Add(new HCInt32List<ScratchS32>("listwo", s32scratch, 0, &ScratchS32::ListAdd, &ScratchS32::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt32ListS<ScratchS32>("listve", s32scratch, &ScratchS32::ListGet, &ScratchS32::ListAdd, &ScratchS32::ListSub, LIST_MAX_SIZE, S32enums), cont, srv);
 
-  cont = new HCContainer("int64");
+  cont = new HCContainer("i64");
   Add(cont, topcont);
   Add(new HCCall<ScratchS64>("print", s64scratch, &ScratchS64::Print), cont, srv);
   Add(new HCCallTable<ScratchS64>("printt", s64scratch, &ScratchS64::TablePrint, TABLE_SIZE), cont, srv);
@@ -512,6 +440,82 @@ int main(int argc, char **argv)
   Add(new HCInt64List<ScratchS64>("listro", s64scratch, &ScratchS64::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt64List<ScratchS64>("listwo", s64scratch, 0, &ScratchS64::ListAdd, &ScratchS64::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt64ListS<ScratchS64>("listve", s64scratch, &ScratchS64::ListGet, &ScratchS64::ListAdd, &ScratchS64::ListSub, LIST_MAX_SIZE, S64enums), cont, srv);
+
+  cont = new HCContainer("u8");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchU8>("print", u8scratch, &ScratchU8::Print), cont, srv);
+  Add(new HCCallTable<ScratchU8>("printt", u8scratch, &ScratchU8::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchU8>("printtee", u8scratch, &ScratchU8::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCUns8<ScratchU8>("val", u8scratch, &ScratchU8::Get, &ScratchU8::Set), cont, srv);
+  Add(new HCUns8<ScratchU8>("valro", u8scratch, &ScratchU8::Get, 0), cont, srv);
+  Add(new HCUns8<ScratchU8>("valwo", u8scratch, 0, &ScratchU8::Set), cont, srv);
+  Add(new HCUns8S<ScratchU8>("vale", u8scratch, &ScratchU8::Get, &ScratchU8::Set, U8enums), cont, srv);
+  Add(new HCUns8Table<ScratchU8>("table", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns8Table<ScratchU8>("tablero", u8scratch, &ScratchU8::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCUns8Table<ScratchU8>("tablewo", u8scratch, 0, &ScratchU8::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns8Table<ScratchU8>("tableve", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE, 0, U8enums), cont, srv);
+  Add(new HCUns8TableS<ScratchU8>("tableeeve", u8scratch, &ScratchU8::TableGet, &ScratchU8::TableSet, TABLE_SIZE, Eidenums, U8enums), cont, srv);
+  Add(new HCUns8List<ScratchU8>("list", u8scratch, &ScratchU8::ListGet, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns8List<ScratchU8>("listro", u8scratch, &ScratchU8::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns8List<ScratchU8>("listwo", u8scratch, 0, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns8ListS<ScratchU8>("listve", u8scratch, &ScratchU8::ListGet, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE, U8enums), cont, srv);
+
+  cont = new HCContainer("u16");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchU16>("print", u16scratch, &ScratchU16::Print), cont, srv);
+  Add(new HCCallTable<ScratchU16>("printt", u16scratch, &ScratchU16::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchU16>("printtee", u16scratch, &ScratchU16::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCUns16<ScratchU16>("val", u16scratch, &ScratchU16::Get, &ScratchU16::Set), cont, srv);
+  Add(new HCUns16<ScratchU16>("valro", u16scratch, &ScratchU16::Get, 0), cont, srv);
+  Add(new HCUns16<ScratchU16>("valwo", u16scratch, 0, &ScratchU16::Set), cont, srv);
+  Add(new HCUns16S<ScratchU16>("vale", u16scratch, &ScratchU16::Get, &ScratchU16::Set, U16enums), cont, srv);
+  Add(new HCUns16Table<ScratchU16>("table", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns16Table<ScratchU16>("tablero", u16scratch, &ScratchU16::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCUns16Table<ScratchU16>("tablewo", u16scratch, 0, &ScratchU16::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns16Table<ScratchU16>("tableve", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE, 0, U16enums), cont, srv);
+  Add(new HCUns16TableS<ScratchU16>("tableeeve", u16scratch, &ScratchU16::TableGet, &ScratchU16::TableSet, TABLE_SIZE, Eidenums, U16enums), cont, srv);
+  Add(new HCUns16List<ScratchU16>("list", u16scratch, &ScratchU16::ListGet, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns16List<ScratchU16>("listro", u16scratch, &ScratchU16::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns16List<ScratchU16>("listwo", u16scratch, 0, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns16ListS<ScratchU16>("listve", u16scratch, &ScratchU16::ListGet, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE, U16enums), cont, srv);
+
+  cont = new HCContainer("u32");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchU32>("print", u32scratch, &ScratchU32::Print), cont, srv);
+  Add(new HCCallTable<ScratchU32>("printt", u32scratch, &ScratchU32::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchU32>("printtee", u32scratch, &ScratchU32::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCUns32<ScratchU32>("val", u32scratch, &ScratchU32::Get, &ScratchU32::Set), cont, srv);
+  Add(new HCUns32<ScratchU32>("valro", u32scratch, &ScratchU32::Get, 0), cont, srv);
+  Add(new HCUns32<ScratchU32>("valwo", u32scratch, 0, &ScratchU32::Set), cont, srv);
+  Add(new HCUns32S<ScratchU32>("vale", u32scratch, &ScratchU32::Get, &ScratchU32::Set, U32enums), cont, srv);
+  Add(new HCUns32Table<ScratchU32>("table", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns32Table<ScratchU32>("tablero", u32scratch, &ScratchU32::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCUns32Table<ScratchU32>("tablewo", u32scratch, 0, &ScratchU32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns32Table<ScratchU32>("tableve", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE, 0, U32enums), cont, srv);
+  Add(new HCUns32TableS<ScratchU32>("tableeeve", u32scratch, &ScratchU32::TableGet, &ScratchU32::TableSet, TABLE_SIZE, Eidenums, U32enums), cont, srv);
+  Add(new HCUns32List<ScratchU32>("list", u32scratch, &ScratchU32::ListGet, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns32List<ScratchU32>("listro", u32scratch, &ScratchU32::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns32List<ScratchU32>("listwo", u32scratch, 0, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns32ListS<ScratchU32>("listve", u32scratch, &ScratchU32::ListGet, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE, U32enums), cont, srv);
+
+  cont = new HCContainer("u64");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchU64>("print", u64scratch, &ScratchU64::Print), cont, srv);
+  Add(new HCCallTable<ScratchU64>("printt", u64scratch, &ScratchU64::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchU64>("printtee", u64scratch, &ScratchU64::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCUns64<ScratchU64>("val", u64scratch, &ScratchU64::Get, &ScratchU64::Set), cont, srv);
+  Add(new HCUns64<ScratchU64>("valro", u64scratch, &ScratchU64::Get, 0), cont, srv);
+  Add(new HCUns64<ScratchU64>("valwo", u64scratch, 0, &ScratchU64::Set), cont, srv);
+  Add(new HCUns64S<ScratchU64>("vale", u64scratch, &ScratchU64::Get, &ScratchU64::Set, U64enums), cont, srv);
+  Add(new HCUns64TableS<ScratchU64>("table", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns64Table<ScratchU64>("tablero", u64scratch, &ScratchU64::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCUns64Table<ScratchU64>("tablewo", u64scratch, 0, &ScratchU64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCUns64Table<ScratchU64>("tableve", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE, 0, U64enums), cont, srv);
+  Add(new HCUns64Table<ScratchU64>("tableeeve", u64scratch, &ScratchU64::TableGet, &ScratchU64::TableSet, TABLE_SIZE, Eidenums, U64enums), cont, srv);
+  Add(new HCUns64List<ScratchU64>("list", u64scratch, &ScratchU64::ListGet, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns64List<ScratchU64>("listro", u64scratch, &ScratchU64::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns64List<ScratchU64>("listwo", u64scratch, 0, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE), cont, srv);
+  Add(new HCUns64ListS<ScratchU64>("listve", u64scratch, &ScratchU64::ListGet, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE, U64enums), cont, srv);
 
   cont = new HCContainer("bool");
   Add(cont, topcont);
@@ -554,7 +558,7 @@ int main(int argc, char **argv)
   Add(new HCFlt64Table<ScratchDouble>("tablewo", doublescratch, 0, &ScratchDouble::TableSet, TABLE_SIZE), cont, srv);
   Add(new HCFlt64TableS<ScratchDouble>("tableee", doublescratch, &ScratchDouble::TableGet, &ScratchDouble::TableSet, TABLE_SIZE, Eidenums), cont, srv);
 
-  cont = new HCContainer("string");
+  cont = new HCContainer("str");
   Add(cont, topcont);
   Add(new HCCall<ScratchString>("print", stringscratch, &ScratchString::Print), cont, srv);
   Add(new HCCallTable<ScratchString>("printt", stringscratch, &ScratchString::TablePrint, TABLE_SIZE), cont, srv);
@@ -570,31 +574,57 @@ int main(int argc, char **argv)
   Add(new HCStrList<ScratchString>("listro", stringscratch, &ScratchString::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCStrList<ScratchString>("listwo", stringscratch, 0, &ScratchString::ListAdd, &ScratchString::ListSub, LIST_MAX_SIZE), cont, srv);
 
-  cont = new HCContainer("vec32");
+  cont = new HCContainer("v2f32");
   Add(cont, topcont);
-  Add(new HCCall<ScratchVecFloat>("print", vecfloatscratch, &ScratchVecFloat::Print), cont, srv);
-  Add(new HCCallTable<ScratchVecFloat>("printt", vecfloatscratch, &ScratchVecFloat::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchVecFloat>("printtee", vecfloatscratch, &ScratchVecFloat::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCVec32S<ScratchVecFloat>("val", vecfloatscratch, &ScratchVecFloat::Get, &ScratchVecFloat::Set), cont, srv);
-  Add(new HCVec32<ScratchVecFloat>("valro", vecfloatscratch, &ScratchVecFloat::Get, 0), cont, srv);
-  Add(new HCVec32<ScratchVecFloat>("valwo", vecfloatscratch, 0, &ScratchVecFloat::Set), cont, srv);
-  Add(new HCVec32Table<ScratchVecFloat>("table", vecfloatscratch, &ScratchVecFloat::TableGet, &ScratchVecFloat::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCVec32Table<ScratchVecFloat>("tablero", vecfloatscratch, &ScratchVecFloat::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCVec32Table<ScratchVecFloat>("tablewo", vecfloatscratch, 0, &ScratchVecFloat::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCVec32TableS<ScratchVecFloat>("tableee", vecfloatscratch, &ScratchVecFloat::TableGet, &ScratchVecFloat::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCCall<ScratchV2F32>("print", v2f32scratch, &ScratchV2F32::Print), cont, srv);
+  Add(new HCCallTable<ScratchV2F32>("printt", v2f32scratch, &ScratchV2F32::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchV2F32>("printtee", v2f32scratch, &ScratchV2F32::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCV2F32S<ScratchV2F32>("val", v2f32scratch, &ScratchV2F32::Get, &ScratchV2F32::Set), cont, srv);
+  Add(new HCV2F32<ScratchV2F32>("valro", v2f32scratch, &ScratchV2F32::Get, 0), cont, srv);
+  Add(new HCV2F32<ScratchV2F32>("valwo", v2f32scratch, 0, &ScratchV2F32::Set), cont, srv);
+  Add(new HCV2F32Table<ScratchV2F32>("table", v2f32scratch, &ScratchV2F32::TableGet, &ScratchV2F32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV2F32Table<ScratchV2F32>("tablero", v2f32scratch, &ScratchV2F32::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCV2F32Table<ScratchV2F32>("tablewo", v2f32scratch, 0, &ScratchV2F32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV2F32TableS<ScratchV2F32>("tableee", v2f32scratch, &ScratchV2F32::TableGet, &ScratchV2F32::TableSet, TABLE_SIZE, Eidenums), cont, srv);
 
-  cont = new HCContainer("vec64");
+  cont = new HCContainer("v2f64");
   Add(cont, topcont);
-  Add(new HCCall<ScratchVecDouble>("print", vecdoublescratch, &ScratchVecDouble::Print), cont, srv);
-  Add(new HCCallTable<ScratchVecDouble>("printt", vecdoublescratch, &ScratchVecDouble::TablePrint, TABLE_SIZE), cont, srv);
-  Add(new HCCallTable<ScratchVecDouble>("printtee", vecdoublescratch, &ScratchVecDouble::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
-  Add(new HCVec64S<ScratchVecDouble>("val", vecdoublescratch, &ScratchVecDouble::Get, &ScratchVecDouble::Set), cont, srv);
-  Add(new HCVec64<ScratchVecDouble>("valro", vecdoublescratch, &ScratchVecDouble::Get, 0), cont, srv);
-  Add(new HCVec64<ScratchVecDouble>("valwo", vecdoublescratch, 0, &ScratchVecDouble::Set), cont, srv);
-  Add(new HCVec64Table<ScratchVecDouble>("table", vecdoublescratch, &ScratchVecDouble::TableGet, &ScratchVecDouble::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCVec64Table<ScratchVecDouble>("tablero", vecdoublescratch, &ScratchVecDouble::TableGet, 0, TABLE_SIZE), cont, srv);
-  Add(new HCVec64Table<ScratchVecDouble>("tablewo", vecdoublescratch, 0, &ScratchVecDouble::TableSet, TABLE_SIZE), cont, srv);
-  Add(new HCVec64TableS<ScratchVecDouble>("tableee", vecdoublescratch, &ScratchVecDouble::TableGet, &ScratchVecDouble::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCCall<ScratchV2F64>("print", v2f64scratch, &ScratchV2F64::Print), cont, srv);
+  Add(new HCCallTable<ScratchV2F64>("printt", v2f64scratch, &ScratchV2F64::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchV2F64>("printtee", v2f64scratch, &ScratchV2F64::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCV2F64S<ScratchV2F64>("val", v2f64scratch, &ScratchV2F64::Get, &ScratchV2F64::Set), cont, srv);
+  Add(new HCV2F64<ScratchV2F64>("valro", v2f64scratch, &ScratchV2F64::Get, 0), cont, srv);
+  Add(new HCV2F64<ScratchV2F64>("valwo", v2f64scratch, 0, &ScratchV2F64::Set), cont, srv);
+  Add(new HCV2F64Table<ScratchV2F64>("table", v2f64scratch, &ScratchV2F64::TableGet, &ScratchV2F64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV2F64Table<ScratchV2F64>("tablero", v2f64scratch, &ScratchV2F64::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCV2F64Table<ScratchV2F64>("tablewo", v2f64scratch, 0, &ScratchV2F64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV2F64TableS<ScratchV2F64>("tableee", v2f64scratch, &ScratchV2F64::TableGet, &ScratchV2F64::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+
+  cont = new HCContainer("v3f32");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchV3F32>("print", v3f32scratch, &ScratchV3F32::Print), cont, srv);
+  Add(new HCCallTable<ScratchV3F32>("printt", v3f32scratch, &ScratchV3F32::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchV3F32>("printtee", v3f32scratch, &ScratchV3F32::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCV3F32S<ScratchV3F32>("val", v3f32scratch, &ScratchV3F32::Get, &ScratchV3F32::Set), cont, srv);
+  Add(new HCV3F32<ScratchV3F32>("valro", v3f32scratch, &ScratchV3F32::Get, 0), cont, srv);
+  Add(new HCV3F32<ScratchV3F32>("valwo", v3f32scratch, 0, &ScratchV3F32::Set), cont, srv);
+  Add(new HCV3F32Table<ScratchV3F32>("table", v3f32scratch, &ScratchV3F32::TableGet, &ScratchV3F32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV3F32Table<ScratchV3F32>("tablero", v3f32scratch, &ScratchV3F32::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCV3F32Table<ScratchV3F32>("tablewo", v3f32scratch, 0, &ScratchV3F32::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV3F32TableS<ScratchV3F32>("tableee", v3f32scratch, &ScratchV3F32::TableGet, &ScratchV3F32::TableSet, TABLE_SIZE, Eidenums), cont, srv);
+
+  cont = new HCContainer("v3f64");
+  Add(cont, topcont);
+  Add(new HCCall<ScratchV3F64>("print", v3f64scratch, &ScratchV3F64::Print), cont, srv);
+  Add(new HCCallTable<ScratchV3F64>("printt", v3f64scratch, &ScratchV3F64::TablePrint, TABLE_SIZE), cont, srv);
+  Add(new HCCallTable<ScratchV3F64>("printtee", v3f64scratch, &ScratchV3F64::TablePrint, TABLE_SIZE, Eidenums), cont, srv);
+  Add(new HCV3F64S<ScratchV3F64>("val", v3f64scratch, &ScratchV3F64::Get, &ScratchV3F64::Set), cont, srv);
+  Add(new HCV3F64<ScratchV3F64>("valro", v3f64scratch, &ScratchV3F64::Get, 0), cont, srv);
+  Add(new HCV3F64<ScratchV3F64>("valwo", v3f64scratch, 0, &ScratchV3F64::Set), cont, srv);
+  Add(new HCV3F64Table<ScratchV3F64>("table", v3f64scratch, &ScratchV3F64::TableGet, &ScratchV3F64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV3F64Table<ScratchV3F64>("tablero", v3f64scratch, &ScratchV3F64::TableGet, 0, TABLE_SIZE), cont, srv);
+  Add(new HCV3F64Table<ScratchV3F64>("tablewo", v3f64scratch, 0, &ScratchV3F64::TableSet, TABLE_SIZE), cont, srv);
+  Add(new HCV3F64TableS<ScratchV3F64>("tableee", v3f64scratch, &ScratchV3F64::TableGet, &ScratchV3F64::TableSet, TABLE_SIZE, Eidenums), cont, srv);
 
   cont = new HCContainer("file");
   Add(cont, topcont);
@@ -643,8 +673,10 @@ int main(int argc, char **argv)
   delete floatscratch;
   delete doublescratch;
   delete stringscratch;
-  delete vecfloatscratch;
-  delete vecdoublescratch;
+  delete v2f32scratch;
+  delete v2f64scratch;
+  delete v3f32scratch;
+  delete v3f64scratch;
   delete filescratch;
 
   //Cleanup TLS

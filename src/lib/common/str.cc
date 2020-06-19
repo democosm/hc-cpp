@@ -367,6 +367,24 @@ bool StringConvert(const string &str, string &val)
   return true;
 }
 
+bool StringConvert(const string &str, float &val0, float &val1)
+{
+  //Convert the value and check for error
+  if(sscanf(str.c_str(), " %f , %f ", &val0, &val1) != 2)
+    return false;
+
+  return true;
+}
+
+bool StringConvert(const string &str, double &val0, double &val1)
+{
+  //Convert the value and check for error
+  if(sscanf(str.c_str(), " %lf , %lf ", &val0, &val1) != 2)
+    return false;
+
+  return true;
+}
+
 bool StringConvert(const string &str, float &val0, float &val1, float &val2)
 {
   //Convert the value and check for error
@@ -457,6 +475,18 @@ bool StringConvert(const char *str, string &val)
   return true;
 }
 
+bool StringConvert(const char *str, float &val0, float &val1)
+{
+  string temp = str;
+  return StringConvert(temp, val0, val1);
+}
+
+bool StringConvert(const char *str, double &val0, double &val1)
+{
+  string temp = str;
+  return StringConvert(temp, val0, val1);
+}
+
 bool StringConvert(const char *str, float &val0, float &val1, float &val2)
 {
   string temp = str;
@@ -541,6 +571,20 @@ void StringPrint(double val, string &str)
 {
   stringstream ss;
   ss << val;
+  str = ss.str();
+}
+
+void StringPrint(float val0, float val1, string &str)
+{
+  stringstream ss;
+  ss << val0 << ", " << val1;
+  str = ss.str();
+}
+
+void StringPrint(double val0, double val1, string &str)
+{
+  stringstream ss;
+  ss << val0 << ", " << val1;
   str = ss.str();
 }
 

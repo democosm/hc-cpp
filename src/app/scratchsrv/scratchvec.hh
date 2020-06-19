@@ -33,10 +33,100 @@
 #include <vector>
 
 template <typename T>
-class ScratchVec
+class ScratchVec2
 {
 public:
-  ScratchVec(const uint32_t tablesize)
+  ScratchVec2(const uint32_t tablesize)
+  {
+    uint32_t eid;
+
+    //Initialize member variables
+    HCParameter::DefaultVal(_val0);
+    HCParameter::DefaultVal(_val1);
+
+    for(eid=0; eid<tablesize; eid++)
+    {
+      _table0.push_back(_val0);
+      _table1.push_back(_val1);
+    }
+  }
+
+  ~ScratchVec2()
+  {
+  }
+
+  int Print(void)
+  {
+    //Print value
+    std::cout << "Value = \"" << _val0 << ", " << _val1 << "\"" << "\n";
+    return ERR_NONE;
+  }
+
+  int TablePrint(uint32_t eid)
+  {
+    //Print something
+    std::cout << "Table[" << eid << "] = " << _table0[eid] << ", " << _table1[eid] << "\n";
+    return ERR_NONE;
+  }
+
+  int Get(T &val0, T &val1)
+  {
+    //Get value
+    val0 = _val0;
+    val1 = _val1;
+    return ERR_NONE;
+  }
+
+  int Set(const T val0, const T val1)
+  {
+    //Set value
+    _val0 = val0;
+    _val1 = val1;
+    return ERR_NONE;
+  }
+
+  int TableGet(uint32_t eid, T &val0, T &val1)
+  {
+    //Check for EID out of range
+    if(eid >= _table0.size())
+    {
+      HCParameter::DefaultVal(val0, val1);
+      return ERR_EID;
+    }
+
+    //Get value
+    val0 = _table0[eid];
+    val1 = _table1[eid];
+    return ERR_NONE;
+  }
+
+  int TableSet(uint32_t eid, const T val0, const T val1)
+  {
+    //Check for EID out of range
+    if(eid >= _table0.size())
+      return ERR_EID;
+
+    //Set value
+    _table0[eid] = val0;
+    _table1[eid] = val1;
+    return ERR_NONE;
+  }
+
+private:
+  T _val0;
+  T _val1;
+  std::vector<T> _table0;
+  std::vector<T> _table1;
+};
+
+typedef ScratchVec2<float> ScratchV2F32;
+typedef ScratchVec2<double> ScratchV2F64;
+
+template <typename T>
+class ScratchVec3
+{
+public:
+  ScratchVec3(const uint32_t tablesize)
   {
     uint32_t eid;
 
@@ -53,7 +143,7 @@ public:
     }
   }
 
-  ~ScratchVec()
+  ~ScratchVec3()
   {
   }
 
@@ -127,7 +217,7 @@ private:
   std::vector<T> _table2;
 };
 
-typedef ScratchVec<float> ScratchVecFloat;
-typedef ScratchVec<double> ScratchVecDouble;
+typedef ScratchVec3<float> ScratchV3F32;
+typedef ScratchVec3<double> ScratchV3F64;
 
 #endif

@@ -45,6 +45,8 @@ HCParameter::~HCParameter()
 
 bool HCParameter::SkipValue(HCCell *cell, uint8_t type)
 {
+  bool boolval;
+  string strval;
   int8_t i8val;
   int16_t i16val;
   int32_t i32val;
@@ -55,39 +57,41 @@ bool HCParameter::SkipValue(HCCell *cell, uint8_t type)
   uint64_t u64val;
   float f32val;
   double f64val;
-  bool boolval;
-  string strval;
 
   //Read value depending on type
   switch(type)
   {
-  case TYPE_INT8:
-    return cell->Read(i8val);
-  case TYPE_INT16:
-    return cell->Read(i16val);
-  case TYPE_INT32:
-    return cell->Read(i32val);
-  case TYPE_INT64:
-    return cell->Read(i64val);
-  case TYPE_UINT8:
-    return cell->Read(u8val);
-  case TYPE_UINT16:
-    return cell->Read(u16val);
-  case TYPE_UINT32:
-    return cell->Read(u32val);
-  case TYPE_UINT64:
-    return cell->Read(u64val);
-  case TYPE_FLOAT:
-    return cell->Read(f32val);
-  case TYPE_DOUBLE:
-    return cell->Read(f64val);
-  case TYPE_BOOL:
+  case T_BOOL:
     return cell->Read(boolval);
-  case TYPE_STRING:
+  case T_STR:
     return cell->Read(strval);
-  case TYPE_VECFLOAT:
+  case T_I8:
+    return cell->Read(i8val);
+  case T_I16:
+    return cell->Read(i16val);
+  case T_I32:
+    return cell->Read(i32val);
+  case T_I64:
+    return cell->Read(i64val);
+  case T_U8:
+    return cell->Read(u8val);
+  case T_U16:
+    return cell->Read(u16val);
+  case T_U32:
+    return cell->Read(u32val);
+  case T_U64:
+    return cell->Read(u64val);
+  case T_F32:
+    return cell->Read(f32val);
+  case T_F64:
+    return cell->Read(f64val);
+  case T_V2F32:
+    return cell->Read(f32val, f32val);
+  case T_V2F64:
+    return cell->Read(f64val, f64val);
+  case T_V3F32:
     return cell->Read(f32val, f32val, f32val);
-  case TYPE_VECDOUBLE:
+  case T_V3F64:
     return cell->Read(f64val, f64val, f64val);
   }
 
@@ -95,14 +99,54 @@ bool HCParameter::SkipValue(HCCell *cell, uint8_t type)
   return false;
 }
 
+uint8_t HCParameter::TypeCode(void)
+{
+  return HCParameter::T_CALL;
+}
+
+const string HCParameter::TypeString(void)
+{
+  return "call";
+}
+
+uint8_t HCParameter::TypeCode(const bool &)
+{
+  return HCParameter::T_BOOL;
+}
+
+const string HCParameter::TypeString(const bool &)
+{
+  return "bool";
+}
+
+void HCParameter::DefaultVal(bool &val)
+{
+  val = false;
+}
+
+uint8_t HCParameter::TypeCode(const string &)
+{
+  return HCParameter::T_STR;
+}
+
+const string HCParameter::TypeString(const string &)
+{
+  return "str";
+}
+
+void HCParameter::DefaultVal(string &val)
+{
+  val = "";
+}
+
 uint8_t HCParameter::TypeCode(const int8_t &)
 {
-  return HCParameter::TYPE_INT8;
+  return HCParameter::T_I8;
 }
 
 const string HCParameter::TypeString(const int8_t &)
 {
-  return "s8";
+  return "i8";
 }
 
 void HCParameter::DefaultVal(int8_t &val)
@@ -117,12 +161,12 @@ int16_t HCParameter::PrintCast(const int8_t val)
 
 uint8_t HCParameter::TypeCode(const int16_t &)
 {
-  return HCParameter::TYPE_INT16;
+  return HCParameter::T_I16;
 }
 
 const string HCParameter::TypeString(const int16_t &)
 {
-  return "s16";
+  return "i16";
 }
 
 void HCParameter::DefaultVal(int16_t &val)
@@ -137,12 +181,12 @@ int16_t HCParameter::PrintCast(const int16_t val)
 
 uint8_t HCParameter::TypeCode(const int32_t &)
 {
-  return HCParameter::TYPE_INT32;
+  return HCParameter::T_I32;
 }
 
 const string HCParameter::TypeString(const int32_t &)
 {
-  return "s32";
+  return "i32";
 }
 
 void HCParameter::DefaultVal(int32_t &val)
@@ -157,12 +201,12 @@ int32_t HCParameter::PrintCast(const int32_t val)
 
 uint8_t HCParameter::TypeCode(const int64_t &)
 {
-  return HCParameter::TYPE_INT64;
+  return HCParameter::T_I64;
 }
 
 const string HCParameter::TypeString(const int64_t &)
 {
-  return "s64";
+  return "i64";
 }
 
 void HCParameter::DefaultVal(int64_t &val)
@@ -177,7 +221,7 @@ int64_t HCParameter::PrintCast(const int64_t val)
 
 uint8_t HCParameter::TypeCode(const uint8_t &)
 {
-  return HCParameter::TYPE_UINT8;
+  return HCParameter::T_U8;
 }
 
 const string HCParameter::TypeString(const uint8_t &)
@@ -197,7 +241,7 @@ uint16_t HCParameter::PrintCast(const uint8_t val)
 
 uint8_t HCParameter::TypeCode(const uint16_t &)
 {
-  return HCParameter::TYPE_UINT16;
+  return HCParameter::T_U16;
 }
 
 const string HCParameter::TypeString(const uint16_t &)
@@ -217,7 +261,7 @@ uint16_t HCParameter::PrintCast(const uint16_t val)
 
 uint8_t HCParameter::TypeCode(const uint32_t &)
 {
-  return HCParameter::TYPE_UINT32;
+  return HCParameter::T_U32;
 }
 
 const string HCParameter::TypeString(const uint32_t &)
@@ -237,7 +281,7 @@ uint32_t HCParameter::PrintCast(const uint32_t val)
 
 uint8_t HCParameter::TypeCode(const uint64_t &)
 {
-  return HCParameter::TYPE_UINT64;
+  return HCParameter::T_U64;
 }
 
 const string HCParameter::TypeString(const uint64_t &)
@@ -257,7 +301,7 @@ uint64_t HCParameter::PrintCast(const uint64_t val)
 
 uint8_t HCParameter::TypeCode(const float &)
 {
-  return HCParameter::TYPE_FLOAT;
+  return HCParameter::T_F32;
 }
 
 const string HCParameter::TypeString(const float &)
@@ -272,7 +316,7 @@ void HCParameter::DefaultVal(float &val)
 
 uint8_t HCParameter::TypeCode(const double &)
 {
-  return HCParameter::TYPE_DOUBLE;
+  return HCParameter::T_F64;
 }
 
 const string HCParameter::TypeString(const double &)
@@ -285,44 +329,46 @@ void HCParameter::DefaultVal(double &val)
   val = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const bool &)
+uint8_t HCParameter::TypeCode(const float &type0, const float &type1)
 {
-  return HCParameter::TYPE_BOOL;
+  return HCParameter::T_V2F32;
 }
 
-const string HCParameter::TypeString(const bool &)
+const std::string HCParameter::TypeString(const float &type0, const float &type1)
 {
-  return "bool";
+  return "v2f32";
 }
 
-void HCParameter::DefaultVal(bool &val)
+void HCParameter::DefaultVal(float &val0, float &val1)
 {
-  val = false;
+  val0 = 0.0;
+  val1 = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const string &)
+uint8_t HCParameter::TypeCode(const double &type0, const double &type1)
 {
-  return HCParameter::TYPE_STRING;
+  return HCParameter::T_V2F64;
 }
 
-const string HCParameter::TypeString(const string &)
+const std::string HCParameter::TypeString(const double &type0, const double &type1)
 {
-  return "str";
+  return "v2f64";
 }
 
-void HCParameter::DefaultVal(string &val)
+void HCParameter::DefaultVal(double &val0, double &val1)
 {
-  val = "";
+  val0 = 0.0;
+  val1 = 0.0;
 }
 
 uint8_t HCParameter::TypeCode(const float &type0, const float &type1, const float &type2)
 {
-  return HCParameter::TYPE_VECFLOAT;
+  return HCParameter::T_V3F32;
 }
 
 const std::string HCParameter::TypeString(const float &type0, const float &type1, const float &type2)
 {
-  return "v32";
+  return "v3f32";
 }
 
 void HCParameter::DefaultVal(float &val0, float &val1, float &val2)
@@ -334,12 +380,12 @@ void HCParameter::DefaultVal(float &val0, float &val1, float &val2)
 
 uint8_t HCParameter::TypeCode(const double &type0, const double &type1, const double &type2)
 {
-  return HCParameter::TYPE_VECDOUBLE;
+  return HCParameter::T_V3F64;
 }
 
 const std::string HCParameter::TypeString(const double &type0, const double &type1, const double &type2)
 {
-  return "v64";
+  return "v3f64";
 }
 
 void HCParameter::DefaultVal(double &val0, double &val1, double &val2)
@@ -357,7 +403,7 @@ int HCParameter::HandleGetPIDError(HCCell *icell, HCCell *ocell)
   assert((icell != 0) && (ocell != 0));
 
   //Write type code to outbound cell and check for error
-  if(!ocell->Write(TYPE_INT8))
+  if(!ocell->Write(T_I8))
     return false;
 
   //Write default value to outbound cell and check for error
@@ -448,7 +494,7 @@ void HCParameter::PrintNotReadable(void)
 uint8_t HCParameter::GetType(void)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
-  return TYPE_CALL;
+  return T_CALL;
 }
 
 bool HCParameter::IsReadable(void)

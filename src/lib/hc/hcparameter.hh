@@ -38,25 +38,35 @@ class HCParameter : public HCNode
 {
 public:
   //Type codes
-  static const uint8_t TYPE_CALL = 0x00;
-  static const uint8_t TYPE_INT8 = 0x10;
-  static const uint8_t TYPE_INT16 = 0x11;
-  static const uint8_t TYPE_INT32 = 0x12;
-  static const uint8_t TYPE_INT64 = 0x13;
-  static const uint8_t TYPE_UINT8 = 0x20;
-  static const uint8_t TYPE_UINT16 = 0x21;
-  static const uint8_t TYPE_UINT32 = 0x22;
-  static const uint8_t TYPE_UINT64 = 0x23;
-  static const uint8_t TYPE_FLOAT = 0x32;
-  static const uint8_t TYPE_DOUBLE = 0x33;
-  static const uint8_t TYPE_BOOL = 0x40;
-  static const uint8_t TYPE_STRING = 0x50;
-  static const uint8_t TYPE_VECFLOAT = 0x62;
-  static const uint8_t TYPE_VECDOUBLE = 0x63;
-  static const uint8_t TYPE_FILE = 0x70;
+  static const uint8_t T_CALL = 0x00;
+  static const uint8_t T_BOOL = 0x01;
+  static const uint8_t T_STR = 0x02;
+  static const uint8_t T_FILE = 0x03;
+  static const uint8_t T_I8 = 0x08;
+  static const uint8_t T_I16 = 0x09;
+  static const uint8_t T_I32 = 0x0A;
+  static const uint8_t T_I64 = 0x0B;
+  static const uint8_t T_U8 = 0x10;
+  static const uint8_t T_U16 = 0x11;
+  static const uint8_t T_U32 = 0x12;
+  static const uint8_t T_U64 = 0x13;
+  static const uint8_t T_F32 = 0x1A;
+  static const uint8_t T_F64 = 0x1B;
+  static const uint8_t T_V2F32 = 0x22;
+  static const uint8_t T_V2F64 = 0x23;
+  static const uint8_t T_V3F32 = 0x2A;
+  static const uint8_t T_V3F64 = 0x2B;
 
 public:
   static bool SkipValue(HCCell *cell, uint8_t type);
+  static uint8_t TypeCode(void);
+  static const std::string TypeString(void);
+  static uint8_t TypeCode(const bool &type);
+  static const std::string TypeString(const bool &type);
+  static void DefaultVal(bool &val);
+  static uint8_t TypeCode(const std::string &type);
+  static const std::string TypeString(const std::string &type);
+  static void DefaultVal(std::string &val);
   static uint8_t TypeCode(const int8_t &type);
   static const std::string TypeString(const int8_t &type);
   static void DefaultVal(int8_t &val);
@@ -95,12 +105,12 @@ public:
   static uint8_t TypeCode(const double &type);
   static const std::string TypeString(const double &type);
   static void DefaultVal(double &val);
-  static uint8_t TypeCode(const bool &type);
-  static const std::string TypeString(const bool &type);
-  static void DefaultVal(bool &val);
-  static uint8_t TypeCode(const std::string &type);
-  static const std::string TypeString(const std::string &type);
-  static void DefaultVal(std::string &val);
+  static uint8_t TypeCode(const float &type0, const float &type1);
+  static const std::string TypeString(const float &type0, const float &type1);
+  static void DefaultVal(float &val0, float &val1);
+  static uint8_t TypeCode(const double &type0, const double &type1);
+  static const std::string TypeString(const double &type0, const double &type1);
+  static void DefaultVal(double &val0, double &val1);
   static uint8_t TypeCode(const float &type0, const float &type1, const float &type2);
   static const std::string TypeString(const float &type0, const float &type1, const float &type2);
   static void DefaultVal(float &val0, float &val1, float &val2);

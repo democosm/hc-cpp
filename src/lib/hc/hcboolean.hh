@@ -141,7 +141,8 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_BOOL;
+    bool val;
+    return TypeCode(val);
   }
 
   virtual bool IsReadable(void)
@@ -636,7 +637,8 @@ public:
 
   virtual uint8_t GetType(void)
   {
-    return TYPE_BOOL;
+    bool val;
+    return TypeCode(val);
   }
 
   virtual bool IsReadable(void)

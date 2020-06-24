@@ -173,15 +173,15 @@ private:
 };
 
 typedef Scratch<bool> ScratchBool;
-typedef Scratch<int8_t> ScratchS8;
-typedef Scratch<int16_t> ScratchS16;
-typedef Scratch<int32_t> ScratchS32;
-typedef Scratch<int64_t> ScratchS64;
+typedef Scratch<int8_t> ScratchI8;
+typedef Scratch<int16_t> ScratchI16;
+typedef Scratch<int32_t> ScratchI32;
+typedef Scratch<int64_t> ScratchI64;
 typedef Scratch<uint8_t> ScratchU8;
 typedef Scratch<uint16_t> ScratchU16;
 typedef Scratch<uint32_t> ScratchU32;
 typedef Scratch<uint64_t> ScratchU64;
-typedef Scratch<float> ScratchFloat;
-typedef Scratch<double> ScratchDouble;
+typedef Scratch<float> ScratchF32;
+typedef Scratch<double> ScratchF64;
 
 #endif

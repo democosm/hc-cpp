@@ -2,3 +2,4 @@ dst
 .client*
 .server*
 default.state
+activate

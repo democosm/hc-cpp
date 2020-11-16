@@ -57,6 +57,7 @@ private:
   template <typename T> void ParseInt(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> void ParseIntT(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> void ParseIntL(tinyxml2::XMLElement *pelt, HCContainer *pcont);
+  template <typename T> void ParseIntA(tinyxml2::XMLElement *pelt, HCContainer *pcont);
   template <typename T> HCIntegerEnum<T> *ParseIntEnum(tinyxml2::XMLElement *pelt);
   HCEIDEnum *ParseEIDEnum(tinyxml2::XMLElement *pelt);
   template <typename T> void ParseFloat(tinyxml2::XMLElement *pelt, HCContainer *pcont);

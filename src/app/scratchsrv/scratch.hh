@@ -47,6 +47,9 @@ public:
       _table.push_back(_val);
 
     _listmaxsize = listmaxsize;
+
+    memset(_array, 0, sizeof(_array)/sizeof(T));
+    _arraylen = 0;
   }
 
   ~Scratch()
@@ -165,11 +168,48 @@ public:
     return ERR_NOTFOUND;
   }
 
+  int ArrayGet(T* val, uint16_t maxlen, uint16_t &len)
+  {
+    uint32_t i;
+
+    //Check for overflow
+    if(_arraylen > maxlen)
+    {
+      len = 0;
+      return ERR_OVERFLOW;
+    }
+  
+    //Get value
+    for(i = 0; i < _arraylen; i++)
+      val[i] = _array[i];
+
+    len = _arraylen;
+    return ERR_NONE;
+  }
+
+  int ArraySet(const T* val, uint16_t len)
+  {
+    uint32_t i;
+
+    //Check for overflow
+    if(len > sizeof(_array)/sizeof(T))
+      return ERR_OVERFLOW;
+  
+    //Set value
+    for(i = 0; i < len; i++)
+      _array[i] = val[i];
+
+    _arraylen = len;
+    return ERR_NONE;
+  }
+
 private:
   T _val;
   std::vector<T> _table;
   std::vector<T> _list;
   uint32_t _listmaxsize;
+  T _array[10];
+  uint16_t _arraylen;
 };
 
 typedef Scratch<bool> ScratchBool;

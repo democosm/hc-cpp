@@ -53,16 +53,16 @@ public:
     _str = "";
   }
 
-  HCIntegerEnum(T num, const std::string &str)
+  HCIntegerEnum(T num, const std::string& str)
   {
     //Initialize member variables
     _num = num;
     _str = str;
   }
 
-  HCIntegerEnum(tinyxml2::XMLElement *pelt)
+  HCIntegerEnum(tinyxml2::XMLElement* pelt)
   {
-    tinyxml2::XMLElement *elt;
+    tinyxml2::XMLElement* elt;
     std::string numstr;
     std::string eqstr;
     size_t seppos;
@@ -127,7 +127,7 @@ template <class T>
 class HCIntegerCli
 {
 public:
-  HCIntegerCli(HCClient *cli, uint16_t pid)
+  HCIntegerCli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -141,7 +141,7 @@ public:
   {
   }
 
-  int Get(T &val)
+  int Get(T& val)
   {
     //Delegate to client
     return _cli->Get(_pid, val);
@@ -165,7 +165,7 @@ public:
     return _cli->Sub(_pid, val);
   }
 
-  int IGet(uint32_t eid, T &val)
+  int IGet(uint32_t eid, T& val)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val);
@@ -177,8 +177,20 @@ public:
     return _cli->ISet(_pid, eid, val);
   }
 
+  int Get(T* val, uint16_t maxlen, uint16_t& len)
+  {
+    //Delegate to client
+    return _cli->Get(_pid, val, maxlen, len);
+  }
+
+  int Set(const T* val, uint16_t len)
+  {
+    //Delegate to client
+    return _cli->Set(_pid, val, len);
+  }
+
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -202,11 +214,11 @@ class HCInteger : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(T &);
+  typedef int (C::*GetMethod)(T&);
   typedef int (C::*SetMethod)(const T);
 
 public:
-  HCInteger(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCIntegerEnum<T> *valenums)
+  HCInteger(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, const HCIntegerEnum<T>* valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -319,7 +331,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val;
     uint32_t i;
@@ -370,7 +382,7 @@ public:
     st << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -391,7 +403,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -416,7 +428,7 @@ public:
     file << std::string(indent, ' ') << "</" << HCParameter::TypeString(dummy) << ">\n";
   }
 
-  virtual int GetInt(T &val)
+  virtual int GetInt(T& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -439,7 +451,7 @@ public:
     return (_object->*_setmethod)(val);
   }
 
-  virtual int GetStr(std::string &val)
+  virtual int GetStr(std::string& val)
   {
     T nval;
     int lerr;
@@ -483,7 +495,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStr(const std::string &val)
+  virtual int SetStr(const std::string& val)
   {
     T nval;
     uint32_t i;
@@ -517,7 +529,7 @@ public:
     return (_object->*_setmethod)(nval);
   }
 
-  virtual int SetStrLit(const std::string &val)
+  virtual int SetStrLit(const std::string& val)
   {
     uint32_t i;
 
@@ -543,7 +555,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual bool GetCell(HCCell *icell, HCCell *ocell)
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
   {
     T val;
     int lerr;
@@ -579,7 +591,7 @@ public:
     return true;
   }
 
-  virtual bool SetCell(HCCell *icell, HCCell *ocell)
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val;
@@ -629,7 +641,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string& str)
   {
     uint32_t i;
 
@@ -656,10 +668,10 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
-  const HCIntegerEnum<T> *_valenums;
+  const HCIntegerEnum<T>* _valenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -669,7 +681,7 @@ template <class C, class T>
 class HCIntegerS : public HCInteger<C, T>
 {
 public:
-  HCIntegerS(const std::string &name, C *object, int (C::*getmethod)(T &), int (C::*setmethod)(const T), const HCIntegerEnum<T> *valenums)
+  HCIntegerS(const std::string& name, C* object, int (C::*getmethod)(T&), int (C::*setmethod)(const T), const HCIntegerEnum<T>* valenums)
   : HCInteger<C, T>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -687,12 +699,12 @@ template <class C>
 class HCInt8 : public HCInteger<C, int8_t>
 {
 public:
-  HCInt8(const std::string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t), const HCInt8Enum *valenums)
+  HCInt8(const std::string& name, C* object, int (C::*getmethod)(int8_t&), int (C::*setmethod)(const int8_t), const HCInt8Enum* valenums)
   : HCInteger<C, int8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt8(const std::string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t))
+  HCInt8(const std::string& name, C* object, int (C::*getmethod)(int8_t&), int (C::*setmethod)(const int8_t))
   : HCInteger<C, int8_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -702,12 +714,12 @@ template <class C>
 class HCInt8S : public HCIntegerS<C, int8_t>
 {
 public:
-  HCInt8S(const std::string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t), const HCInt8Enum *valenums)
+  HCInt8S(const std::string& name, C* object, int (C::*getmethod)(int8_t&), int (C::*setmethod)(const int8_t), const HCInt8Enum* valenums)
   : HCIntegerS<C, int8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt8S(const std::string &name, C *object, int (C::*getmethod)(int8_t &), int (C::*setmethod)(const int8_t))
+  HCInt8S(const std::string& name, C* object, int (C::*getmethod)(int8_t&), int (C::*setmethod)(const int8_t))
   : HCIntegerS<C, int8_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -717,12 +729,12 @@ template <class C>
 class HCInt16 : public HCInteger<C, int16_t>
 {
 public:
-  HCInt16(const std::string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t), const HCInt16Enum *valenums)
+  HCInt16(const std::string& name, C* object, int (C::*getmethod)(int16_t&), int (C::*setmethod)(const int16_t), const HCInt16Enum* valenums)
   : HCInteger<C, int16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt16(const std::string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t))
+  HCInt16(const std::string& name, C* object, int (C::*getmethod)(int16_t&), int (C::*setmethod)(const int16_t))
   : HCInteger<C, int16_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -732,12 +744,12 @@ template <class C>
 class HCInt16S : public HCIntegerS<C, int16_t>
 {
 public:
-  HCInt16S(const std::string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t), const HCInt16Enum *valenums)
+  HCInt16S(const std::string& name, C* object, int (C::*getmethod)(int16_t&), int (C::*setmethod)(const int16_t), const HCInt16Enum* valenums)
   : HCIntegerS<C, int16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt16S(const std::string &name, C *object, int (C::*getmethod)(int16_t &), int (C::*setmethod)(const int16_t))
+  HCInt16S(const std::string& name, C* object, int (C::*getmethod)(int16_t&), int (C::*setmethod)(const int16_t))
   : HCIntegerS<C, int16_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -747,12 +759,12 @@ template <class C>
 class HCInt32 : public HCInteger<C, int32_t>
 {
 public:
-  HCInt32(const std::string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t), const HCInt32Enum *valenums)
+  HCInt32(const std::string& name, C* object, int (C::*getmethod)(int32_t&), int (C::*setmethod)(const int32_t), const HCInt32Enum* valenums)
   : HCInteger<C, int32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt32(const std::string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t))
+  HCInt32(const std::string& name, C* object, int (C::*getmethod)(int32_t&), int (C::*setmethod)(const int32_t))
   : HCInteger<C, int32_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -762,12 +774,12 @@ template <class C>
 class HCInt32S : public HCIntegerS<C, int32_t>
 {
 public:
-  HCInt32S(const std::string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t), const HCInt32Enum *valenums)
+  HCInt32S(const std::string& name, C* object, int (C::*getmethod)(int32_t&), int (C::*setmethod)(const int32_t), const HCInt32Enum* valenums)
   : HCIntegerS<C, int32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt32S(const std::string &name, C *object, int (C::*getmethod)(int32_t &), int (C::*setmethod)(const int32_t))
+  HCInt32S(const std::string& name, C* object, int (C::*getmethod)(int32_t&), int (C::*setmethod)(const int32_t))
   : HCIntegerS<C, int32_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -777,12 +789,12 @@ template <class C>
 class HCInt64 : public HCInteger<C, int64_t>
 {
 public:
-  HCInt64(const std::string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t), const HCInt64Enum *valenums)
+  HCInt64(const std::string& name, C* object, int (C::*getmethod)(int64_t&), int (C::*setmethod)(const int64_t), const HCInt64Enum* valenums)
   : HCInteger<C, int64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt64(const std::string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t))
+  HCInt64(const std::string& name, C* object, int (C::*getmethod)(int64_t&), int (C::*setmethod)(const int64_t))
   : HCInteger<C, int64_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -792,12 +804,12 @@ template <class C>
 class HCInt64S : public HCIntegerS<C, int64_t>
 {
 public:
-  HCInt64S(const std::string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t), const HCInt64Enum *valenums)
+  HCInt64S(const std::string& name, C* object, int (C::*getmethod)(int64_t&), int (C::*setmethod)(const int64_t), const HCInt64Enum* valenums)
   : HCIntegerS<C, int64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCInt64S(const std::string &name, C *object, int (C::*getmethod)(int64_t &), int (C::*setmethod)(const int64_t))
+  HCInt64S(const std::string& name, C* object, int (C::*getmethod)(int64_t&), int (C::*setmethod)(const int64_t))
   : HCIntegerS<C, int64_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -807,12 +819,12 @@ template <class C>
 class HCUns8 : public HCInteger<C, uint8_t>
 {
 public:
-  HCUns8(const std::string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t), const HCUns8Enum *valenums)
+  HCUns8(const std::string& name, C* object, int (C::*getmethod)(uint8_t&), int (C::*setmethod)(const uint8_t), const HCUns8Enum* valenums)
   : HCInteger<C, uint8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns8(const std::string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t))
+  HCUns8(const std::string& name, C* object, int (C::*getmethod)(uint8_t&), int (C::*setmethod)(const uint8_t))
   : HCInteger<C, uint8_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -822,12 +834,12 @@ template <class C>
 class HCUns8S : public HCIntegerS<C, uint8_t>
 {
 public:
-  HCUns8S(const std::string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t), const HCUns8Enum *valenums)
+  HCUns8S(const std::string& name, C* object, int (C::*getmethod)(uint8_t&), int (C::*setmethod)(const uint8_t), const HCUns8Enum* valenums)
   : HCIntegerS<C, uint8_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns8S(const std::string &name, C *object, int (C::*getmethod)(uint8_t &), int (C::*setmethod)(const uint8_t))
+  HCUns8S(const std::string& name, C* object, int (C::*getmethod)(uint8_t&), int (C::*setmethod)(const uint8_t))
   : HCIntegerS<C, uint8_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -837,12 +849,12 @@ template <class C>
 class HCUns16 : public HCInteger<C, uint16_t>
 {
 public:
-  HCUns16(const std::string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t), const HCUns16Enum *valenums)
+  HCUns16(const std::string& name, C* object, int (C::*getmethod)(uint16_t&), int (C::*setmethod)(const uint16_t), const HCUns16Enum* valenums)
   : HCInteger<C, uint16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns16(const std::string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t))
+  HCUns16(const std::string& name, C* object, int (C::*getmethod)(uint16_t&), int (C::*setmethod)(const uint16_t))
   : HCInteger<C, uint16_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -852,12 +864,12 @@ template <class C>
 class HCUns16S : public HCIntegerS<C, uint16_t>
 {
 public:
-  HCUns16S(const std::string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t), const HCUns16Enum *valenums)
+  HCUns16S(const std::string& name, C* object, int (C::*getmethod)(uint16_t&), int (C::*setmethod)(const uint16_t), const HCUns16Enum* valenums)
   : HCIntegerS<C, uint16_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns16S(const std::string &name, C *object, int (C::*getmethod)(uint16_t &), int (C::*setmethod)(const uint16_t))
+  HCUns16S(const std::string& name, C* object, int (C::*getmethod)(uint16_t&), int (C::*setmethod)(const uint16_t))
   : HCIntegerS<C, uint16_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -867,12 +879,12 @@ template <class C>
 class HCUns32 : public HCInteger<C, uint32_t>
 {
 public:
-  HCUns32(const std::string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t), const HCUns32Enum *valenums)
+  HCUns32(const std::string& name, C* object, int (C::*getmethod)(uint32_t&), int (C::*setmethod)(const uint32_t), const HCUns32Enum* valenums)
   : HCInteger<C, uint32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns32(const std::string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t))
+  HCUns32(const std::string& name, C* object, int (C::*getmethod)(uint32_t&), int (C::*setmethod)(const uint32_t))
   : HCInteger<C, uint32_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -882,12 +894,12 @@ template <class C>
 class HCUns32S : public HCIntegerS<C, uint32_t>
 {
 public:
-  HCUns32S(const std::string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t), const HCUns32Enum *valenums)
+  HCUns32S(const std::string& name, C* object, int (C::*getmethod)(uint32_t&), int (C::*setmethod)(const uint32_t), const HCUns32Enum* valenums)
   : HCIntegerS<C, uint32_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns32S(const std::string &name, C *object, int (C::*getmethod)(uint32_t &), int (C::*setmethod)(const uint32_t))
+  HCUns32S(const std::string& name, C* object, int (C::*getmethod)(uint32_t&), int (C::*setmethod)(const uint32_t))
   : HCIntegerS<C, uint32_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -897,12 +909,12 @@ template <class C>
 class HCUns64 : public HCInteger<C, uint64_t>
 {
 public:
-  HCUns64(const std::string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t), const HCUns64Enum *valenums)
+  HCUns64(const std::string& name, C* object, int (C::*getmethod)(uint64_t&), int (C::*setmethod)(const uint64_t), const HCUns64Enum* valenums)
   : HCInteger<C, uint64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns64(const std::string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t))
+  HCUns64(const std::string& name, C* object, int (C::*getmethod)(uint64_t&), int (C::*setmethod)(const uint64_t))
   : HCInteger<C, uint64_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -912,12 +924,12 @@ template <class C>
 class HCUns64S : public HCIntegerS<C, uint64_t>
 {
 public:
-  HCUns64S(const std::string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t), const HCUns64Enum *valenums)
+  HCUns64S(const std::string& name, C* object, int (C::*getmethod)(uint64_t&), int (C::*setmethod)(const uint64_t), const HCUns64Enum* valenums)
   : HCIntegerS<C, uint64_t>(name, object, getmethod, setmethod, valenums)
   {
   }
 
-  HCUns64S(const std::string &name, C *object, int (C::*getmethod)(uint64_t &), int (C::*setmethod)(const uint64_t))
+  HCUns64S(const std::string& name, C* object, int (C::*getmethod)(uint64_t&), int (C::*setmethod)(const uint64_t))
   : HCIntegerS<C, uint64_t>(name, object, getmethod, setmethod, 0)
   {
   }
@@ -931,11 +943,11 @@ class HCIntegerTable : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, T &);
+  typedef int (C::*GetMethod)(uint32_t, T&);
   typedef int (C::*SetMethod)(uint32_t, const T);
 
 public:
-  HCIntegerTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, const HCIntegerEnum<T> *valenums)
+  HCIntegerTable(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum* eidenums, const HCIntegerEnum<T>* valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -1164,7 +1176,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val;
     uint32_t eid;
@@ -1304,7 +1316,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -1335,7 +1347,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -1371,7 +1383,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << "t>\n";
   }
 
-  virtual int GetIntTbl(uint32_t eid, T &val)
+  virtual int GetIntTbl(uint32_t eid, T& val)
   {
     //Check for EID out of range
     if(eid >= _size)
@@ -1405,7 +1417,7 @@ public:
     return (_object->*_setmethod)(eid, val);
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     T nval;
     int lerr;
@@ -1457,7 +1469,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string& val)
   {
     T nval;
     uint32_t i;
@@ -1494,7 +1506,7 @@ public:
     return (_object->*_setmethod)(eid, nval);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string& val)
   {
     uint32_t i;
 
@@ -1524,7 +1536,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     T val;
     int lerr;
@@ -1560,7 +1572,7 @@ public:
     return true;
   }
 
-  virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool SetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val;
@@ -1615,7 +1627,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -1641,7 +1653,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -1667,7 +1679,7 @@ public:
     return false;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string& str)
   {
     uint32_t i;
 
@@ -1693,7 +1705,7 @@ public:
     return true;
   }
 
-  bool ValNumToStr(T num, std::string &str)
+  bool ValNumToStr(T num, std::string& str)
   {
     uint32_t i;
 
@@ -1720,12 +1732,12 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   uint32_t _size;
-  const HCIntegerEnum<T> *_valenums;
-  const HCEIDEnum *_eidenums;
+  const HCIntegerEnum<T>* _valenums;
+  const HCEIDEnum* _eidenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -1735,7 +1747,7 @@ template <class C, class T>
 class HCIntegerTableS : public HCIntegerTable<C, T>
 {
 public:
-  HCIntegerTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &), int (C::*setmethod)(uint32_t, const T), uint32_t size, const HCEIDEnum *eidenums, const HCIntegerEnum<T> *valenums)
+  HCIntegerTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, T&), int (C::*setmethod)(uint32_t, const T), uint32_t size, const HCEIDEnum* eidenums, const HCIntegerEnum<T>* valenums)
   : HCIntegerTable<C, T>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1753,22 +1765,22 @@ template <class C>
 class HCInt8Table : public HCIntegerTable<C, int8_t>
 {
 public:
-  HCInt8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size)
+  HCInt8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size)
   : HCIntegerTable<C, int8_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCInt8Enum *valenums)
+  HCInt8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCInt8Enum* valenums)
   : HCIntegerTable<C, int8_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, int8_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt8Enum *valenums)
+  HCInt8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt8Enum* valenums)
   : HCIntegerTable<C, int8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1778,22 +1790,22 @@ template <class C>
 class HCInt8TableS : public HCIntegerTableS<C, int8_t>
 {
 public:
-  HCInt8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size)
+  HCInt8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size)
   : HCIntegerTableS<C, int8_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCInt8Enum *valenums)
+  HCInt8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCInt8Enum* valenums)
   : HCIntegerTableS<C, int8_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, int8_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt8Enum *valenums)
+  HCInt8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*setmethod)(uint32_t, const int8_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt8Enum* valenums)
   : HCIntegerTableS<C, int8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1803,22 +1815,22 @@ template <class C>
 class HCInt16Table : public HCIntegerTable<C, int16_t>
 {
 public:
-  HCInt16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size)
+  HCInt16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size)
   : HCIntegerTable<C, int16_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCInt16Enum *valenums)
+  HCInt16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCInt16Enum* valenums)
   : HCIntegerTable<C, int16_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, int16_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt16Enum *valenums)
+  HCInt16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt16Enum* valenums)
   : HCIntegerTable<C, int16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1828,22 +1840,22 @@ template <class C>
 class HCInt16TableS : public HCIntegerTableS<C, int16_t>
 {
 public:
-  HCInt16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size)
+  HCInt16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size)
   : HCIntegerTableS<C, int16_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCInt16Enum *valenums)
+  HCInt16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCInt16Enum* valenums)
   : HCIntegerTableS<C, int16_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, int16_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt16Enum *valenums)
+  HCInt16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*setmethod)(uint32_t, const int16_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt16Enum* valenums)
   : HCIntegerTableS<C, int16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1853,22 +1865,22 @@ template <class C>
 class HCInt32Table : public HCIntegerTable<C, int32_t>
 {
 public:
-  HCInt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size)
+  HCInt32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size)
   : HCIntegerTable<C, int32_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCInt32Enum *valenums)
+  HCInt32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCInt32Enum* valenums)
   : HCIntegerTable<C, int32_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, int32_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt32Enum *valenums)
+  HCInt32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt32Enum* valenums)
   : HCIntegerTable<C, int32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1878,22 +1890,22 @@ template <class C>
 class HCInt32TableS : public HCIntegerTableS<C, int32_t>
 {
 public:
-  HCInt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size)
+  HCInt32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size)
   : HCIntegerTableS<C, int32_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCInt32Enum *valenums)
+  HCInt32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCInt32Enum* valenums)
   : HCIntegerTableS<C, int32_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, int32_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt32Enum *valenums)
+  HCInt32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*setmethod)(uint32_t, const int32_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt32Enum* valenums)
   : HCIntegerTableS<C, int32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1903,22 +1915,22 @@ template <class C>
 class HCInt64Table : public HCIntegerTable<C, int64_t>
 {
 public:
-  HCInt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size)
+  HCInt64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size)
   : HCIntegerTable<C, int64_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCInt64Enum *valenums)
+  HCInt64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCInt64Enum* valenums)
   : HCIntegerTable<C, int64_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, int64_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt64Enum *valenums)
+  HCInt64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt64Enum* valenums)
   : HCIntegerTable<C, int64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1928,22 +1940,22 @@ template <class C>
 class HCInt64TableS : public HCIntegerTableS<C, int64_t>
 {
 public:
-  HCInt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size)
+  HCInt64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size)
   : HCIntegerTableS<C, int64_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCInt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCInt64Enum *valenums)
+  HCInt64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCInt64Enum* valenums)
   : HCIntegerTableS<C, int64_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCInt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCInt64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, int64_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCInt64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum *eidenums, const HCInt64Enum *valenums)
+  HCInt64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*setmethod)(uint32_t, const int64_t), uint32_t size, const HCEIDEnum* eidenums, const HCInt64Enum* valenums)
   : HCIntegerTableS<C, int64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1953,22 +1965,22 @@ template <class C>
 class HCUns8Table : public HCIntegerTable<C, uint8_t>
 {
 public:
-  HCUns8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size)
+  HCUns8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size)
   : HCIntegerTable<C, uint8_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCUns8Enum *valenums)
+  HCUns8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCUns8Enum* valenums)
   : HCIntegerTable<C, uint8_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, uint8_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns8Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns8Enum *valenums)
+  HCUns8Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns8Enum* valenums)
   : HCIntegerTable<C, uint8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1978,22 +1990,22 @@ template <class C>
 class HCUns8TableS : public HCIntegerTableS<C, uint8_t>
 {
 public:
-  HCUns8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size)
+  HCUns8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size)
   : HCIntegerTableS<C, uint8_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCUns8Enum *valenums)
+  HCUns8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCUns8Enum* valenums)
   : HCIntegerTableS<C, uint8_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, uint8_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns8TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns8Enum *valenums)
+  HCUns8TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*setmethod)(uint32_t, const uint8_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns8Enum* valenums)
   : HCIntegerTableS<C, uint8_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2003,22 +2015,22 @@ template <class C>
 class HCUns16Table : public HCIntegerTable<C, uint16_t>
 {
 public:
-  HCUns16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size)
+  HCUns16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size)
   : HCIntegerTable<C, uint16_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCUns16Enum *valenums)
+  HCUns16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCUns16Enum* valenums)
   : HCIntegerTable<C, uint16_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, uint16_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns16Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns16Enum *valenums)
+  HCUns16Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns16Enum* valenums)
   : HCIntegerTable<C, uint16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2028,22 +2040,22 @@ template <class C>
 class HCUns16TableS : public HCIntegerTableS<C, uint16_t>
 {
 public:
-  HCUns16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size)
+  HCUns16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size)
   : HCIntegerTableS<C, uint16_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCUns16Enum *valenums)
+  HCUns16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCUns16Enum* valenums)
   : HCIntegerTableS<C, uint16_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, uint16_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns16TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns16Enum *valenums)
+  HCUns16TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*setmethod)(uint32_t, const uint16_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns16Enum* valenums)
   : HCIntegerTableS<C, uint16_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2053,22 +2065,22 @@ template <class C>
 class HCUns32Table : public HCIntegerTable<C, uint32_t>
 {
 public:
-  HCUns32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size)
+  HCUns32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size)
   : HCIntegerTable<C, uint32_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCUns32Enum *valenums)
+  HCUns32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCUns32Enum* valenums)
   : HCIntegerTable<C, uint32_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, uint32_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns32Enum *valenums)
+  HCUns32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns32Enum* valenums)
   : HCIntegerTable<C, uint32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2078,22 +2090,22 @@ template <class C>
 class HCUns32TableS : public HCIntegerTableS<C, uint32_t>
 {
 public:
-  HCUns32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size)
+  HCUns32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size)
   : HCIntegerTableS<C, uint32_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCUns32Enum *valenums)
+  HCUns32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCUns32Enum* valenums)
   : HCIntegerTableS<C, uint32_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, uint32_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns32Enum *valenums)
+  HCUns32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*setmethod)(uint32_t, const uint32_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns32Enum* valenums)
   : HCIntegerTableS<C, uint32_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2103,22 +2115,22 @@ template <class C>
 class HCUns64Table : public HCIntegerTable<C, uint64_t>
 {
 public:
-  HCUns64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size)
+  HCUns64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size)
   : HCIntegerTable<C, uint64_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCUns64Enum *valenums)
+  HCUns64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCUns64Enum* valenums)
   : HCIntegerTable<C, uint64_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTable<C, uint64_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns64Enum *valenums)
+  HCUns64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns64Enum* valenums)
   : HCIntegerTable<C, uint64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2128,22 +2140,22 @@ template <class C>
 class HCUns64TableS : public HCIntegerTableS<C, uint64_t>
 {
 public:
-  HCUns64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size)
+  HCUns64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size)
   : HCIntegerTableS<C, uint64_t>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCUns64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCUns64Enum *valenums)
+  HCUns64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCUns64Enum* valenums)
   : HCIntegerTableS<C, uint64_t>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCUns64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums)
+  HCUns64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum* eidenums)
   : HCIntegerTableS<C, uint64_t>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCUns64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum *eidenums, const HCUns64Enum *valenums)
+  HCUns64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*setmethod)(uint32_t, const uint64_t), uint32_t size, const HCEIDEnum* eidenums, const HCUns64Enum* valenums)
   : HCIntegerTableS<C, uint64_t>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -2157,12 +2169,12 @@ class HCIntegerList : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, T &);
+  typedef int (C::*GetMethod)(uint32_t, T&);
   typedef int (C::*AddMethod)(const T);
   typedef int (C::*SubMethod)(const T);
 
 public:
-  HCIntegerList(const std::string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize, const HCIntegerEnum<T> *valenums)
+  HCIntegerList(const std::string& name, C* object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize, const HCIntegerEnum<T>* valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -2305,7 +2317,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val;
     uint32_t i;
@@ -2364,7 +2376,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -2386,7 +2398,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -2412,7 +2424,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy) << "l>\n";
   }
 
-  virtual int GetIntTbl(uint32_t eid, T &val)
+  virtual int GetIntTbl(uint32_t eid, T& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -2445,7 +2457,7 @@ public:
     return (_object->*_submethod)(val);
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     T nval;
     int lerr;
@@ -2489,7 +2501,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int AddStr(const std::string &val)
+  virtual int AddStr(const std::string& val)
   {
     T nval;
     uint32_t i;
@@ -2523,7 +2535,7 @@ public:
     return (_object->*_addmethod)(nval);
   }
 
-  virtual int AddStrLit(const std::string &val)
+  virtual int AddStrLit(const std::string& val)
   {
     uint32_t i;
 
@@ -2549,7 +2561,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual int SubStr(const std::string &val)
+  virtual int SubStr(const std::string& val)
   {
     T nval;
     uint32_t i;
@@ -2583,7 +2595,7 @@ public:
     return (_object->*_submethod)(nval);
   }
 
-  virtual int SubStrLit(const std::string &val)
+  virtual int SubStrLit(const std::string& val)
   {
     uint32_t i;
 
@@ -2609,7 +2621,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     T val;
     int lerr;
@@ -2645,7 +2657,7 @@ public:
     return true;
   }
 
-  virtual bool AddCell(HCCell *icell, HCCell *ocell)
+  virtual bool AddCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val;
@@ -2695,7 +2707,7 @@ public:
     return true;
   }
 
-  virtual bool SubCell(HCCell *icell, HCCell *ocell)
+  virtual bool SubCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val;
@@ -2745,7 +2757,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string& str)
   {
     uint32_t i;
 
@@ -2772,12 +2784,12 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   AddMethod _addmethod;
   SubMethod _submethod;
   uint32_t _maxsize;
-  const HCIntegerEnum<T> *_valenums;
+  const HCIntegerEnum<T>* _valenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -2787,7 +2799,7 @@ template <class C, class T>
 class HCIntegerListS : public HCIntegerList<C, T>
 {
 public:
-  HCIntegerListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &), int (C::*addmethod)(const T), int (C::*submethod)(const T), uint32_t maxsize, const HCIntegerEnum<T> *valenums)
+  HCIntegerListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, T&), int (C::*addmethod)(const T), int (C::*submethod)(const T), uint32_t maxsize, const HCIntegerEnum<T>* valenums)
   : HCIntegerList<C, T>(name, object, getmethod, addmethod, submethod, maxsize, valenums)
   {
   }
@@ -2805,12 +2817,12 @@ template <class C>
 class HCInt8List : public HCIntegerList<C, int8_t>
 {
 public:
-  HCInt8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen)
+  HCInt8List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen)
   : HCIntegerList<C, int8_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCInt8Enum *valenums)
+  HCInt8List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCInt8Enum* valenums)
   : HCIntegerList<C, int8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2820,12 +2832,12 @@ template <class C>
 class HCInt8ListS : public HCIntegerListS<C, int8_t>
 {
 public:
-  HCInt8ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen)
+  HCInt8ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen)
   : HCIntegerListS<C, int8_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt8ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int8_t &), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCInt8Enum *valenums)
+  HCInt8ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int8_t&), int (C::*addmethod)(const int8_t), int (C::*submethod)(const int8_t), uint32_t maxlen, const HCInt8Enum* valenums)
   : HCIntegerListS<C, int8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2835,12 +2847,12 @@ template <class C>
 class HCInt16List : public HCIntegerList<C, int16_t>
 {
 public:
-  HCInt16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen)
+  HCInt16List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen)
   : HCIntegerList<C, int16_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCInt16Enum *valenums)
+  HCInt16List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCInt16Enum* valenums)
   : HCIntegerList<C, int16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2850,12 +2862,12 @@ template <class C>
 class HCInt16ListS : public HCIntegerListS<C, int16_t>
 {
 public:
-  HCInt16ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen)
+  HCInt16ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen)
   : HCIntegerListS<C, int16_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt16ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int16_t &), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCInt16Enum *valenums)
+  HCInt16ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int16_t&), int (C::*addmethod)(const int16_t), int (C::*submethod)(const int16_t), uint32_t maxlen, const HCInt16Enum* valenums)
   : HCIntegerListS<C, int16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2865,12 +2877,12 @@ template <class C>
 class HCInt32List : public HCIntegerList<C, int32_t>
 {
 public:
-  HCInt32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen)
+  HCInt32List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen)
   : HCIntegerList<C, int32_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCInt32Enum *valenums)
+  HCInt32List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCInt32Enum* valenums)
   : HCIntegerList<C, int32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2880,12 +2892,12 @@ template <class C>
 class HCInt32ListS : public HCIntegerListS<C, int32_t>
 {
 public:
-  HCInt32ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen)
+  HCInt32ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen)
   : HCIntegerListS<C, int32_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt32ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int32_t &), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCInt32Enum *valenums)
+  HCInt32ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int32_t&), int (C::*addmethod)(const int32_t), int (C::*submethod)(const int32_t), uint32_t maxlen, const HCInt32Enum* valenums)
   : HCIntegerListS<C, int32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2895,12 +2907,12 @@ template <class C>
 class HCInt64List : public HCIntegerList<C, int64_t>
 {
 public:
-  HCInt64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen)
+  HCInt64List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen)
   : HCIntegerList<C, int64_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCInt64Enum *valenums)
+  HCInt64List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCInt64Enum* valenums)
   : HCIntegerList<C, int64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2910,12 +2922,12 @@ template <class C>
 class HCInt64ListS : public HCIntegerListS<C, int64_t>
 {
 public:
-  HCInt64ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen)
+  HCInt64ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen)
   : HCIntegerListS<C, int64_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCInt64ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, int64_t &), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCInt64Enum *valenums)
+  HCInt64ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, int64_t&), int (C::*addmethod)(const int64_t), int (C::*submethod)(const int64_t), uint32_t maxlen, const HCInt64Enum* valenums)
   : HCIntegerListS<C, int64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2925,12 +2937,12 @@ template <class C>
 class HCUns8List : public HCIntegerList<C, uint8_t>
 {
 public:
-  HCUns8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen)
+  HCUns8List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen)
   : HCIntegerList<C, uint8_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns8List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUns8Enum *valenums)
+  HCUns8List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUns8Enum* valenums)
   : HCIntegerList<C, uint8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2940,12 +2952,12 @@ template <class C>
 class HCUns8ListS : public HCIntegerListS<C, uint8_t>
 {
 public:
-  HCUns8ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen)
+  HCUns8ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen)
   : HCIntegerListS<C, uint8_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns8ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint8_t &), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUns8Enum *valenums)
+  HCUns8ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint8_t&), int (C::*addmethod)(const uint8_t), int (C::*submethod)(const uint8_t), uint32_t maxlen, const HCUns8Enum* valenums)
   : HCIntegerListS<C, uint8_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2955,12 +2967,12 @@ template <class C>
 class HCUns16List : public HCIntegerList<C, uint16_t>
 {
 public:
-  HCUns16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen)
+  HCUns16List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen)
   : HCIntegerList<C, uint16_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns16List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUns16Enum *valenums)
+  HCUns16List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUns16Enum* valenums)
   : HCIntegerList<C, uint16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2970,12 +2982,12 @@ template <class C>
 class HCUns16ListS : public HCIntegerListS<C, uint16_t>
 {
 public:
-  HCUns16ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen)
+  HCUns16ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen)
   : HCIntegerListS<C, uint16_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns16ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint16_t &), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUns16Enum *valenums)
+  HCUns16ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint16_t&), int (C::*addmethod)(const uint16_t), int (C::*submethod)(const uint16_t), uint32_t maxlen, const HCUns16Enum* valenums)
   : HCIntegerListS<C, uint16_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -2985,12 +2997,12 @@ template <class C>
 class HCUns32List : public HCIntegerList<C, uint32_t>
 {
 public:
-  HCUns32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen)
+  HCUns32List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen)
   : HCIntegerList<C, uint32_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns32List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUns32Enum *valenums)
+  HCUns32List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUns32Enum* valenums)
   : HCIntegerList<C, uint32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -3000,12 +3012,12 @@ template <class C>
 class HCUns32ListS : public HCIntegerListS<C, uint32_t>
 {
 public:
-  HCUns32ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen)
+  HCUns32ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen)
   : HCIntegerListS<C, uint32_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns32ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint32_t &), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUns32Enum *valenums)
+  HCUns32ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint32_t&), int (C::*addmethod)(const uint32_t), int (C::*submethod)(const uint32_t), uint32_t maxlen, const HCUns32Enum* valenums)
   : HCIntegerListS<C, uint32_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -3015,12 +3027,12 @@ template <class C>
 class HCUns64List : public HCIntegerList<C, uint64_t>
 {
 public:
-  HCUns64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen)
+  HCUns64List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen)
   : HCIntegerList<C, uint64_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns64List(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUns64Enum *valenums)
+  HCUns64List(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUns64Enum* valenums)
   : HCIntegerList<C, uint64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
   {
   }
@@ -3030,13 +3042,502 @@ template <class C>
 class HCUns64ListS : public HCIntegerListS<C, uint64_t>
 {
 public:
-  HCUns64ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen)
+  HCUns64ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen)
   : HCIntegerListS<C, uint64_t>(name, object, getmethod, addmethod, submethod, maxlen, 0)
   {
   }
 
-  HCUns64ListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, uint64_t &), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUns64Enum *valenums)
+  HCUns64ListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, uint64_t&), int (C::*addmethod)(const uint64_t), int (C::*submethod)(const uint64_t), uint32_t maxlen, const HCUns64Enum* valenums)
   : HCIntegerListS<C, uint64_t>(name, object, getmethod, addmethod, submethod, maxlen, valenums)
+  {
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Integer array template
+//-----------------------------------------------------------------------------
+template <class C, class T>
+class HCIntegerArray : public HCParameter
+{
+public:
+  //Method signatures
+  typedef int (C::* GetMethod)(T*, uint16_t maxlen, uint16_t& len);
+  typedef int (C::* SetMethod)(const T*, uint16_t len);
+
+public:
+  HCIntegerArray(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod)
+  : HCParameter(name)
+  {
+    //Assert valid arguments
+    assert(object != 0);
+
+    //Initialize member variables
+    _object = object;
+    _getmethod = getmethod;
+    _setmethod = setmethod;
+  }
+
+  virtual ~HCIntegerArray()
+  {
+  }
+
+  virtual uint8_t GetType(void)
+  {
+    T* val = 0;
+    return TypeCode(val);
+  }
+
+  virtual bool IsReadable(void)
+  {
+    if(_getmethod == 0)
+      return false;
+
+    return true;
+  }
+
+  virtual bool IsWritable(void)
+  {
+    if(_setmethod == 0)
+      return false;
+
+    return true;
+  }
+
+  virtual void PrintVal(void)
+  {
+    T val[1000];
+    uint16_t len;
+    int lerr;
+    uint16_t i;
+
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      //Print value as not readable
+      PrintNotReadable();
+
+      return;
+    }
+
+    //Get value
+    lerr = (_object->*_getmethod)(val, sizeof(val), len);
+
+    //Print value
+    std::cout << (lerr == ERR_NONE ? TC_GREEN : TC_RED) << _name;
+    std::cout << " = ";
+
+    for(i = 0; i < len; i++)
+    {
+      if(i != 0)
+        std::cout << ',';
+
+      std::cout << PrintCast(val[i]);
+    }
+
+    std::cout << " !" << ErrToString(lerr);
+    std::cout << TC_RESET << "\n";
+  }
+
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
+  {
+    T val[1000];
+    uint16_t len;
+    uint16_t i;
+
+    //Check for not saveable
+    if((_getmethod == 0) || (_setmethod == 0))
+      return;
+
+    //Get value
+    if((_object->*_getmethod)(val, sizeof(val), len) != ERR_NONE)
+      return;
+
+    //Print value
+    st << path;
+    st << _name;
+    st << " = ";
+
+    for(i = 0; i < len; i++)
+    {
+      if(i != 0)
+        st << ',';
+
+      st << PrintCast(val[i]);
+    }
+
+    st << "\n";
+  }
+
+  virtual void PrintInfo(std::ostream& st=std::cout)
+  {
+    T* dummy = 0;
+
+    //Print information
+    st << _name;
+    st << "\n  Type: " << TypeString(dummy);
+    st << "\n  Access: " << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W");
+    st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
+  }
+
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
+  {
+    T* dummy = 0;
+
+    //Generate XML information
+    file << std::string(indent, ' ') << "<" << TypeString(dummy) << ">\n";
+    file << std::string(indent, ' ') << "  <pid>" << pid << "</pid>\n";
+    file << std::string(indent, ' ') << "  <name>" << _name << "</name>\n";
+    file << std::string(indent, ' ') << "  <acc>" << (_getmethod == 0 ? "" : "R") << (_setmethod == 0 ? "" : "W") << "</acc>\n";
+    file << std::string(indent, ' ') << "  <sav>" << (IsSavable() ? "Yes" : "No") << "</sav>" << "\n";
+    file << std::string(indent, ' ') << "</" << TypeString(dummy) << ">\n";
+  }
+
+  virtual int GetIntArr(T* val, uint16_t maxlen, uint16_t& len)
+  {
+    //Assert valid arguments
+    assert((val != 0) && (maxlen != 0));
+
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      len = 0;
+      return ERR_ACCESS;
+    }
+
+    //Call get method
+    return (_object->*_getmethod)(val, maxlen, len);
+  }
+
+  virtual int SetIntArr(const T* val, uint16_t len)
+  {
+    //Assert valid arguments
+    assert(val != 0);
+
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Call set method
+    return (_object->*_setmethod)(val, len);
+  }
+
+  virtual int GetStr(std::string& val)
+  {
+    T nval[1000];
+    uint16_t len;
+    int lerr;
+
+    //Check for null method
+    if(_getmethod == 0)
+    {
+      val.clear();
+      return ERR_ACCESS;
+    }
+
+    //Call get method and check for error
+    if((lerr = (_object->*_getmethod)(nval, sizeof(nval), len)) != ERR_NONE)
+    {
+      val.clear();
+      return lerr;
+    }
+
+    //Convert to string
+    StringPrint(nval, len, val);
+    return ERR_NONE;
+  }
+
+  virtual int SetStr(const std::string& val)
+  {
+    T nval[1000];
+    uint16_t len;
+
+    //Check for null method
+    if(_setmethod == 0)
+      return ERR_ACCESS;
+
+    //Convert string value to native value and check for error
+    if(!StringConvert(val, nval, sizeof(nval), len))
+      return ERR_UNSPEC;
+
+    return (_object->*_setmethod)(nval, len);
+  }
+
+  virtual int SetStrLit(const std::string& val)
+  {
+    return SetStr(val);
+  }
+
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
+  {
+    T val[1000];
+    uint16_t len;
+    int lerr;
+
+    //Assert valid arguments
+    assert((icell != 0) && (ocell != 0));
+
+    //Check for valid method
+    if(_getmethod != 0)
+    {
+      //Call get method
+      lerr = (_object->*_getmethod)(val, sizeof(val), len);
+    }
+    else
+    {
+      //Access error
+      len = 0;
+      lerr = ERR_ACCESS;
+    }
+
+    //Write type code to outbound cell and check for error
+    if(!ocell->Write(TypeCode(val)))
+      return false;
+
+    //Write value to outbound cell and check for error
+    if(!ocell->Write(val, len))
+      return false;
+
+    //Write error code to outbound cell and check for error
+    if(!ocell->Write((int8_t)lerr))
+      return false;
+
+    return true;
+  }
+
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
+  {
+    uint8_t type;
+    T val[1000];
+    uint16_t len;
+    int lerr;
+
+    //Assert valid arguments
+    assert((icell != 0) && (ocell != 0));
+
+    //Get type code from inbound cell and check for error
+    if(!icell->Read(type))
+      return false;
+
+    //Check for incorrect type
+    if(type != TypeCode(val))
+    {
+      //Skip value in inbound cell and check for error
+      if(!SkipValue(icell, type))
+        return false;
+
+      //Write type error code to outbound cell and check for error
+      if(!ocell->Write(ERR_TYPE))
+        return false;
+
+      return true;
+    }
+
+    //Get value from inbound cell and check for error
+    if(!icell->Read(val, sizeof(val), len))
+      return false;
+
+    //Check for valid method
+    if(_setmethod != 0)
+    {
+      //Call set method
+      lerr = (_object->*_setmethod)(val, len);
+    }
+    else
+    {
+      //Access error
+      lerr = ERR_ACCESS;
+    }
+
+    //Write error code to outbound cell and check for error
+    if(!ocell->Write((int8_t)lerr))
+      return false;
+
+    return true;
+  }
+
+private:
+  C* _object;
+  GetMethod _getmethod;
+  SetMethod _setmethod;
+};
+
+//-----------------------------------------------------------------------------
+//Integer array template (savable)
+//-----------------------------------------------------------------------------
+template <class C, class T>
+class HCIntegerArrayS : public HCIntegerArray<C, T>
+{
+public:
+  HCIntegerArrayS(const std::string& name, C* object, int (C::*getmethod)(T*, uint16_t, uint16_t&), int (C::*setmethod)(const T*, uint16_t))
+  : HCIntegerArray<C, T>(name, object, getmethod, setmethod)
+  {
+  }
+
+  virtual bool IsSavable(void)
+  {
+    return true;
+  }
+};
+
+//-----------------------------------------------------------------------------
+//Classes derived from integer array templates
+//-----------------------------------------------------------------------------
+template <class C>
+class HCInt8Array : public HCIntegerArray<C, int8_t>
+{
+public:
+  HCInt8Array(const std::string& name, C* object, int (C::*getmethod)(int8_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int8_t*, uint16_t))
+  : HCIntegerArray<C, int8_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt8ArrayS : public HCIntegerArrayS<C, int8_t>
+{
+public:
+  HCInt8ArrayS(const std::string& name, C* object, int (C::*getmethod)(int8_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int8_t*, uint16_t))
+  : HCIntegerArrayS<C, int8_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt16Array : public HCIntegerArray<C, int16_t>
+{
+public:
+  HCInt16Array(const std::string& name, C* object, int (C::*getmethod)(int16_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int16_t*, uint16_t))
+  : HCIntegerArray<C, int16_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt16ArrayS : public HCIntegerArrayS<C, int16_t>
+{
+public:
+  HCInt16ArrayS(const std::string& name, C* object, int (C::*getmethod)(int16_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int16_t*, uint16_t))
+  : HCIntegerArrayS<C, int16_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt32Array : public HCIntegerArray<C, int32_t>
+{
+public:
+  HCInt32Array(const std::string& name, C* object, int (C::*getmethod)(int32_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int32_t*, uint16_t))
+  : HCIntegerArray<C, int32_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt32ArrayS : public HCIntegerArrayS<C, int32_t>
+{
+public:
+  HCInt32ArrayS(const std::string& name, C* object, int (C::*getmethod)(int32_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int32_t*, uint16_t))
+  : HCIntegerArrayS<C, int32_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt64Array : public HCIntegerArray<C, int64_t>
+{
+public:
+  HCInt64Array(const std::string& name, C* object, int (C::*getmethod)(int64_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int64_t*, uint16_t))
+  : HCIntegerArray<C, int64_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCInt64ArrayS : public HCIntegerArrayS<C, int64_t>
+{
+public:
+  HCInt64ArrayS(const std::string& name, C* object, int (C::*getmethod)(int64_t*, uint16_t, uint16_t&), int (C::*setmethod)(const int64_t*, uint16_t))
+  : HCIntegerArrayS<C, int64_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns8Array : public HCIntegerArray<C, uint8_t>
+{
+public:
+  HCUns8Array(const std::string& name, C* object, int (C::*getmethod)(uint8_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint8_t*, uint16_t))
+  : HCIntegerArray<C, uint8_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns8ArrayS : public HCIntegerArrayS<C, uint8_t>
+{
+public:
+  HCUns8ArrayS(const std::string& name, C* object, int (C::*getmethod)(uint8_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint8_t*, uint16_t))
+  : HCIntegerArrayS<C, uint8_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns16Array : public HCIntegerArray<C, uint16_t>
+{
+public:
+  HCUns16Array(const std::string& name, C* object, int (C::*getmethod)(uint16_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint16_t*, uint16_t))
+  : HCIntegerArray<C, uint16_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns16ArrayS : public HCIntegerArrayS<C, uint16_t>
+{
+public:
+  HCUns16ArrayS(const std::string& name, C* object, int (C::*getmethod)(uint16_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint16_t*, uint16_t))
+  : HCIntegerArrayS<C, uint16_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns32Array : public HCIntegerArray<C, uint32_t>
+{
+public:
+  HCUns32Array(const std::string& name, C* object, int (C::*getmethod)(uint32_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint32_t*, uint16_t))
+  : HCIntegerArray<C, uint32_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns32ArrayS : public HCIntegerArrayS<C, uint32_t>
+{
+public:
+  HCUns32ArrayS(const std::string& name, C* object, int (C::*getmethod)(uint32_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint32_t*, uint16_t))
+  : HCIntegerArrayS<C, uint32_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns64Array : public HCIntegerArray<C, uint64_t>
+{
+public:
+  HCUns64Array(const std::string& name, C* object, int (C::*getmethod)(uint64_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint64_t*, uint16_t))
+  : HCIntegerArray<C, uint64_t>(name, object, getmethod, setmethod)
+  {
+  }
+};
+
+template <class C>
+class HCUns64ArrayS : public HCIntegerArrayS<C, uint64_t>
+{
+public:
+  HCUns64ArrayS(const std::string& name, C* object, int (C::*getmethod)(uint64_t*, uint16_t, uint16_t&), int (C::*setmethod)(const uint64_t*, uint16_t))
+  : HCIntegerArrayS<C, uint64_t>(name, object, getmethod, setmethod)
   {
   }
 };

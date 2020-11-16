@@ -31,7 +31,7 @@
 
 using namespace std;
 
-HCParameter::HCParameter(const string &name)
+HCParameter::HCParameter(const string& name)
 : HCNode(name)
 {
   //Initialize member variables
@@ -43,7 +43,7 @@ HCParameter::~HCParameter()
   //Cleanup
 }
 
-bool HCParameter::SkipValue(HCCell *cell, uint8_t type)
+bool HCParameter::SkipValue(HCCell* cell, uint8_t type)
 {
   bool boolval;
   string strval;
@@ -109,47 +109,47 @@ const string HCParameter::TypeString(void)
   return "call";
 }
 
-uint8_t HCParameter::TypeCode(const bool &)
+uint8_t HCParameter::TypeCode(const bool&)
 {
   return HCParameter::T_BOOL;
 }
 
-const string HCParameter::TypeString(const bool &)
+const string HCParameter::TypeString(const bool&)
 {
   return "bool";
 }
 
-void HCParameter::DefaultVal(bool &val)
+void HCParameter::DefaultVal(bool& val)
 {
   val = false;
 }
 
-uint8_t HCParameter::TypeCode(const string &)
+uint8_t HCParameter::TypeCode(const string&)
 {
   return HCParameter::T_STR;
 }
 
-const string HCParameter::TypeString(const string &)
+const string HCParameter::TypeString(const string&)
 {
   return "str";
 }
 
-void HCParameter::DefaultVal(string &val)
+void HCParameter::DefaultVal(string& val)
 {
   val = "";
 }
 
-uint8_t HCParameter::TypeCode(const int8_t &)
+uint8_t HCParameter::TypeCode(const int8_t&)
 {
   return HCParameter::T_I8;
 }
 
-const string HCParameter::TypeString(const int8_t &)
+const string HCParameter::TypeString(const int8_t&)
 {
   return "i8";
 }
 
-void HCParameter::DefaultVal(int8_t &val)
+void HCParameter::DefaultVal(int8_t& val)
 {
   val = 0;
 }
@@ -159,17 +159,17 @@ int16_t HCParameter::PrintCast(const int8_t val)
   return (int16_t)val;
 }
 
-uint8_t HCParameter::TypeCode(const int16_t &)
+uint8_t HCParameter::TypeCode(const int16_t&)
 {
   return HCParameter::T_I16;
 }
 
-const string HCParameter::TypeString(const int16_t &)
+const string HCParameter::TypeString(const int16_t&)
 {
   return "i16";
 }
 
-void HCParameter::DefaultVal(int16_t &val)
+void HCParameter::DefaultVal(int16_t& val)
 {
   val = 0;
 }
@@ -179,17 +179,17 @@ int16_t HCParameter::PrintCast(const int16_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const int32_t &)
+uint8_t HCParameter::TypeCode(const int32_t&)
 {
   return HCParameter::T_I32;
 }
 
-const string HCParameter::TypeString(const int32_t &)
+const string HCParameter::TypeString(const int32_t&)
 {
   return "i32";
 }
 
-void HCParameter::DefaultVal(int32_t &val)
+void HCParameter::DefaultVal(int32_t& val)
 {
   val = 0;
 }
@@ -199,17 +199,17 @@ int32_t HCParameter::PrintCast(const int32_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const int64_t &)
+uint8_t HCParameter::TypeCode(const int64_t&)
 {
   return HCParameter::T_I64;
 }
 
-const string HCParameter::TypeString(const int64_t &)
+const string HCParameter::TypeString(const int64_t&)
 {
   return "i64";
 }
 
-void HCParameter::DefaultVal(int64_t &val)
+void HCParameter::DefaultVal(int64_t& val)
 {
   val = 0;
 }
@@ -219,17 +219,17 @@ int64_t HCParameter::PrintCast(const int64_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const uint8_t &)
+uint8_t HCParameter::TypeCode(const uint8_t&)
 {
   return HCParameter::T_U8;
 }
 
-const string HCParameter::TypeString(const uint8_t &)
+const string HCParameter::TypeString(const uint8_t&)
 {
   return "u8";
 }
 
-void HCParameter::DefaultVal(uint8_t &val)
+void HCParameter::DefaultVal(uint8_t& val)
 {
   val = 0;
 }
@@ -239,17 +239,17 @@ uint16_t HCParameter::PrintCast(const uint8_t val)
   return (uint16_t)val;
 }
 
-uint8_t HCParameter::TypeCode(const uint16_t &)
+uint8_t HCParameter::TypeCode(const uint16_t&)
 {
   return HCParameter::T_U16;
 }
 
-const string HCParameter::TypeString(const uint16_t &)
+const string HCParameter::TypeString(const uint16_t&)
 {
   return "u16";
 }
 
-void HCParameter::DefaultVal(uint16_t &val)
+void HCParameter::DefaultVal(uint16_t& val)
 {
   val = 0;
 }
@@ -259,17 +259,17 @@ uint16_t HCParameter::PrintCast(const uint16_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const uint32_t &)
+uint8_t HCParameter::TypeCode(const uint32_t&)
 {
   return HCParameter::T_U32;
 }
 
-const string HCParameter::TypeString(const uint32_t &)
+const string HCParameter::TypeString(const uint32_t&)
 {
   return "u32";
 }
 
-void HCParameter::DefaultVal(uint32_t &val)
+void HCParameter::DefaultVal(uint32_t& val)
 {
   val = 0;
 }
@@ -279,17 +279,17 @@ uint32_t HCParameter::PrintCast(const uint32_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const uint64_t &)
+uint8_t HCParameter::TypeCode(const uint64_t&)
 {
   return HCParameter::T_U64;
 }
 
-const string HCParameter::TypeString(const uint64_t &)
+const string HCParameter::TypeString(const uint64_t&)
 {
   return "u64";
 }
 
-void HCParameter::DefaultVal(uint64_t &val)
+void HCParameter::DefaultVal(uint64_t& val)
 {
   val = 0;
 }
@@ -299,103 +299,223 @@ uint64_t HCParameter::PrintCast(const uint64_t val)
   return val;
 }
 
-uint8_t HCParameter::TypeCode(const float &)
+uint8_t HCParameter::TypeCode(const int8_t*)
+{
+  return HCParameter::T_I8A;
+}
+
+const string HCParameter::TypeString(const int8_t*)
+{
+  return "i8a";
+}
+
+void HCParameter::DefaultVal(int8_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const int16_t*)
+{
+  return HCParameter::T_I16A;
+}
+
+const string HCParameter::TypeString(const int16_t*)
+{
+  return "i16a";
+}
+
+void HCParameter::DefaultVal(int16_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const int32_t*)
+{
+  return HCParameter::T_I32A;
+}
+
+const string HCParameter::TypeString(const int32_t*)
+{
+  return "i32a";
+}
+
+void HCParameter::DefaultVal(int32_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const int64_t*)
+{
+  return HCParameter::T_I64A;
+}
+
+const string HCParameter::TypeString(const int64_t*)
+{
+  return "i64a";
+}
+
+void HCParameter::DefaultVal(int64_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const uint8_t*)
+{
+  return HCParameter::T_U8A;
+}
+
+const string HCParameter::TypeString(const uint8_t*)
+{
+  return "u8a";
+}
+
+void HCParameter::DefaultVal(uint8_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const uint16_t*)
+{
+  return HCParameter::T_U16A;
+}
+
+const string HCParameter::TypeString(const uint16_t*)
+{
+  return "u16a";
+}
+
+void HCParameter::DefaultVal(uint16_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const uint32_t*)
+{
+  return HCParameter::T_U32A;
+}
+
+const string HCParameter::TypeString(const uint32_t*)
+{
+  return "u32a";
+}
+
+void HCParameter::DefaultVal(uint32_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const uint64_t*)
+{
+  return HCParameter::T_U64A;
+}
+
+const string HCParameter::TypeString(const uint64_t*)
+{
+  return "u64a";
+}
+
+void HCParameter::DefaultVal(uint64_t* val, uint16_t maxlen, uint16_t& len)
+{
+  len = 0;
+}
+
+uint8_t HCParameter::TypeCode(const float&)
 {
   return HCParameter::T_F32;
 }
 
-const string HCParameter::TypeString(const float &)
+const string HCParameter::TypeString(const float&)
 {
   return "f32";
 }
 
-void HCParameter::DefaultVal(float &val)
+void HCParameter::DefaultVal(float& val)
 {
   val = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const double &)
+uint8_t HCParameter::TypeCode(const double&)
 {
   return HCParameter::T_F64;
 }
 
-const string HCParameter::TypeString(const double &)
+const string HCParameter::TypeString(const double&)
 {
   return "f64";
 }
 
-void HCParameter::DefaultVal(double &val)
+void HCParameter::DefaultVal(double& val)
 {
   val = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const float &type0, const float &type1)
+uint8_t HCParameter::TypeCode(const float& type0, const float& type1)
 {
   return HCParameter::T_V2F32;
 }
 
-const std::string HCParameter::TypeString(const float &type0, const float &type1)
+const std::string HCParameter::TypeString(const float& type0, const float& type1)
 {
   return "v2f32";
 }
 
-void HCParameter::DefaultVal(float &val0, float &val1)
+void HCParameter::DefaultVal(float& val0, float& val1)
 {
   val0 = 0.0;
   val1 = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const double &type0, const double &type1)
+uint8_t HCParameter::TypeCode(const double& type0, const double& type1)
 {
   return HCParameter::T_V2F64;
 }
 
-const std::string HCParameter::TypeString(const double &type0, const double &type1)
+const std::string HCParameter::TypeString(const double& type0, const double& type1)
 {
   return "v2f64";
 }
 
-void HCParameter::DefaultVal(double &val0, double &val1)
+void HCParameter::DefaultVal(double& val0, double& val1)
 {
   val0 = 0.0;
   val1 = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const float &type0, const float &type1, const float &type2)
+uint8_t HCParameter::TypeCode(const float& type0, const float& type1, const float& type2)
 {
   return HCParameter::T_V3F32;
 }
 
-const std::string HCParameter::TypeString(const float &type0, const float &type1, const float &type2)
+const std::string HCParameter::TypeString(const float& type0, const float& type1, const float& type2)
 {
   return "v3f32";
 }
 
-void HCParameter::DefaultVal(float &val0, float &val1, float &val2)
+void HCParameter::DefaultVal(float& val0, float& val1, float& val2)
 {
   val0 = 0.0;
   val1 = 0.0;
   val2 = 0.0;
 }
 
-uint8_t HCParameter::TypeCode(const double &type0, const double &type1, const double &type2)
+uint8_t HCParameter::TypeCode(const double& type0, const double& type1, const double& type2)
 {
   return HCParameter::T_V3F64;
 }
 
-const std::string HCParameter::TypeString(const double &type0, const double &type1, const double &type2)
+const std::string HCParameter::TypeString(const double& type0, const double& type1, const double& type2)
 {
   return "v3f64";
 }
 
-void HCParameter::DefaultVal(double &val0, double &val1, double &val2)
+void HCParameter::DefaultVal(double& val0, double& val1, double& val2)
 {
   val0 = 0.0;
   val1 = 0.0;
   val2 = 0.0;
 }
 
-int HCParameter::HandleGetPIDError(HCCell *icell, HCCell *ocell)
+int HCParameter::HandleGetPIDError(HCCell* icell, HCCell* ocell)
 {
   int8_t i8val;
 
@@ -418,7 +538,7 @@ int HCParameter::HandleGetPIDError(HCCell *icell, HCCell *ocell)
   return true;
 }
 
-int HCParameter::HandleSetPIDError(HCCell *icell, HCCell *ocell)
+int HCParameter::HandleSetPIDError(HCCell* icell, HCCell* ocell)
 {
   uint8_t type;
 
@@ -444,7 +564,7 @@ int HCParameter::HandleSetPIDError(HCCell *icell, HCCell *ocell)
   return true;
 }
 
-bool HCParameter::GetNextCharInName(const string &name, char &nextchar)
+bool HCParameter::GetNextCharInName(const string& name, char& nextchar)
 {
   uint32_t namelen;
 
@@ -474,12 +594,12 @@ bool HCParameter::GetNextCharInName(const string &name, char &nextchar)
   return false;
 }
 
-HCParameter *HCParameter::GetNext(void)
+HCParameter* HCParameter::GetNext(void)
 {
   return _next;
 }
 
-void HCParameter::SetNext(HCParameter *next)
+void HCParameter::SetNext(HCParameter* next)
 {
   _next = next;
 }
@@ -534,16 +654,16 @@ void HCParameter::PrintVal(void)
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
 }
 
-void HCParameter::PrintConfig(const string &path, ostream &st)
+void HCParameter::PrintConfig(const string& path, ostream& st)
 {
 }
 
-void HCParameter::PrintInfo(ostream &st)
+void HCParameter::PrintInfo(ostream& st)
 {
   st << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET;
 }
 
-void HCParameter::SaveInfo(ofstream &, uint32_t, uint16_t)
+void HCParameter::SaveInfo(ofstream&, uint32_t, uint16_t)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
 }
@@ -560,7 +680,7 @@ int HCParameter::CallTbl(uint32_t)
   return ERR_TYPE;
 }
 
-int HCParameter::GetBool(bool &val)
+int HCParameter::GetBool(bool& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val = false;
@@ -573,7 +693,7 @@ int HCParameter::SetBool(bool)
   return ERR_TYPE;
 }
 
-int HCParameter::GetBoolTbl(uint32_t, bool &val)
+int HCParameter::GetBoolTbl(uint32_t, bool& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val = false;
@@ -586,111 +706,111 @@ int HCParameter::SetBoolTbl(uint32_t, bool)
   return ERR_TYPE;
 }
 
-int HCParameter::GetStr(string &val)
+int HCParameter::GetStr(string& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val.clear();
   return ERR_TYPE;
 }
 
-int HCParameter::SetStr(const string &)
+int HCParameter::SetStr(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::SetStrLit(const string &)
+int HCParameter::SetStrLit(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetStrTbl(uint32_t, string &val)
+int HCParameter::GetStrTbl(uint32_t, string& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   val.clear();
   return ERR_TYPE;
 }
 
-int HCParameter::SetStrTbl(uint32_t, const string &)
+int HCParameter::SetStrTbl(uint32_t, const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::SetStrLitTbl(uint32_t, const string &)
+int HCParameter::SetStrLitTbl(uint32_t, const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::AddStr(const string &)
+int HCParameter::AddStr(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::AddStrLit(const string &)
+int HCParameter::AddStrLit(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::SubStr(const string &)
+int HCParameter::SubStr(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::SubStrLit(const string &)
+int HCParameter::SubStrLit(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(int8_t &val)
+int HCParameter::GetInt(int8_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(int16_t &val)
+int HCParameter::GetInt(int16_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(int32_t &val)
+int HCParameter::GetInt(int32_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(int64_t &val)
+int HCParameter::GetInt(int64_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(uint8_t &val)
+int HCParameter::GetInt(uint8_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(uint16_t &val)
+int HCParameter::GetInt(uint16_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(uint32_t &val)
+int HCParameter::GetInt(uint32_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetInt(uint64_t &val)
+int HCParameter::GetInt(uint64_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
@@ -744,49 +864,49 @@ int HCParameter::SetInt(const uint64_t val)
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, int8_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, int8_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, int16_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, int16_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, int32_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, int32_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, int64_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, int64_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, uint8_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, uint8_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, uint16_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, uint16_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, uint32_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, uint32_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetIntTbl(uint32_t eid, uint64_t &val)
+int HCParameter::GetIntTbl(uint32_t eid, uint64_t& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
@@ -936,13 +1056,13 @@ int HCParameter::SubInt(const uint64_t val)
   return ERR_TYPE;
 }
 
-int HCParameter::GetFlt(float &val)
+int HCParameter::GetFlt(float& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetFlt(double &val)
+int HCParameter::GetFlt(double& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
@@ -960,13 +1080,13 @@ int HCParameter::SetFlt(const double val)
   return ERR_TYPE;
 }
 
-int HCParameter::GetFltTbl(uint32_t eid, float &val)
+int HCParameter::GetFltTbl(uint32_t eid, float& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::GetFltTbl(uint32_t eid, double &val)
+int HCParameter::GetFltTbl(uint32_t eid, double& val)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
@@ -984,79 +1104,79 @@ int HCParameter::SetFltTbl(uint32_t eid, const double val)
   return ERR_TYPE;
 }
 
-int HCParameter::Upload(const string &)
+int HCParameter::Upload(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-int HCParameter::Download(const string &)
+int HCParameter::Download(const string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return ERR_TYPE;
 }
 
-bool HCParameter::CallCell(HCCell *, HCCell *)
+bool HCParameter::CallCell(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::CallCellTbl(uint32_t, HCCell *, HCCell *)
+bool HCParameter::CallCellTbl(uint32_t, HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::GetCell(HCCell *, HCCell *)
+bool HCParameter::GetCell(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::SetCell(HCCell *, HCCell *)
+bool HCParameter::SetCell(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::GetCellTbl(uint32_t, HCCell *, HCCell *)
+bool HCParameter::GetCellTbl(uint32_t, HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::SetCellTbl(uint32_t, HCCell *, HCCell *)
+bool HCParameter::SetCellTbl(uint32_t, HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::GetCellLst(HCCell *, HCCell *)
+bool HCParameter::GetCellLst(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::AddCell(HCCell *, HCCell *)
+bool HCParameter::AddCell(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::SubCell(HCCell *, HCCell *)
+bool HCParameter::SubCell(HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::ReadCell(uint32_t, uint16_t, HCCell *, HCCell *)
+bool HCParameter::ReadCell(uint32_t, uint16_t, HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
 }
 
-bool HCParameter::WriteCell(uint32_t, HCCell *, HCCell *)
+bool HCParameter::WriteCell(uint32_t, HCCell*, HCCell*)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
@@ -1068,21 +1188,21 @@ uint32_t HCParameter::GetNumEIDs(void)
   return 0;
 }
 
-bool HCParameter::EIDStrToNum(const string &, uint32_t &num)
+bool HCParameter::EIDStrToNum(const string&, uint32_t& num)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   num = 0;
   return false;
 }
 
-bool HCParameter::EIDNumToStr(uint32_t, string &str)
+bool HCParameter::EIDNumToStr(uint32_t, string& str)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   str.clear();
   return false;
 }
 
-bool HCParameter::GetValEnumStr(uint32_t, string &)
+bool HCParameter::GetValEnumStr(uint32_t, string&)
 {
   cout << TC_RED << _name << " does not override method '" << __PRETTY_FUNCTION__ << "'" << TC_RESET << "\n";
   return false;
@@ -1095,7 +1215,7 @@ HCEIDEnum::HCEIDEnum()
   _str = "";
 }
 
-HCEIDEnum::HCEIDEnum(uint32_t num, const string &str)
+HCEIDEnum::HCEIDEnum(uint32_t num, const string& str)
 {
   //Initialize member variables
   _num = num;

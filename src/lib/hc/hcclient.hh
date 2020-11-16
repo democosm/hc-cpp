@@ -74,6 +74,8 @@ public:
   template <typename T> int Set(uint16_t pid, const T val0, const T val1, const T val2);
   template <typename T> int IGet(uint16_t pid, uint32_t eid, T &val0, T &val1, T &val2);
   template <typename T> int ISet(uint16_t pid, uint32_t eid, const T val0, const T val1, const T val2);
+  template <typename T> int Get(uint16_t pid, T* val, uint16_t maxlen, uint16_t& len);
+  template <typename T> int Set(uint16_t pid, const T* val, uint16_t len);
 
 private:
   int CallXact(uint16_t pid);

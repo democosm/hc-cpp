@@ -55,7 +55,7 @@ UDPSocket::UDPSocket(uint16_t port, const char *bindif)
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
   if(bind(_socketfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
-    cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
+    cout << __FILE__ << ":" << __LINE__ << " - Error binding socket to port " << port << "\n";
 
   //Check for desire to bind to an interface
   if((bindif != 0) && (strlen(bindif) != 0))

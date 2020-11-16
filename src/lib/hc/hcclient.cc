@@ -916,6 +916,87 @@ template int HCClient::Set<double>(uint16_t pid, const double val0, const double
 template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double &val0, double &val1, double &val2);
 template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val0, const double val1, const double val2);
 
+template <typename T> int HCClient::Get(uint16_t pid, T* val, uint16_t maxlen, uint16_t& len)
+{
+  uint8_t type;
+  int8_t merr;
+  int ierr;
+
+  //Determine type code
+  type = HCParameter::TypeCode(val);
+
+  //Take the transaction mutex
+  _xactmutex->Wait();
+
+  //Perform get transaction
+  ierr = GetXact(pid, type);
+
+  //Check for no internal error
+  if(ierr == ERR_NONE)
+  {
+    //Read value and error from inbound cell (already skipped past PID and type)
+    _icell->Read(val, maxlen, len);
+    _icell->Read(merr);
+    ierr = (int)merr;
+  }
+  else
+  {
+    //Set to default value
+    HCParameter::DefaultVal(val, maxlen, len);
+  }
+
+  //Give the transaction mutex
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template <typename T> int HCClient::Set(uint16_t pid, const T* val, uint16_t len)
+{
+  uint8_t type;
+  int ierr;
+
+  //Determine type code
+  type = HCParameter::TypeCode(val);
+
+  //Begin mutual exclusion of transaction
+  _xactmutex->Wait();
+
+  //Format outbound message
+  _omsg->Reset(_transaction);
+  _ocell->Reset(HCCell::OPCODE_SET_CMD);
+  _ocell->Write(pid);
+  _ocell->Write(type);
+  _ocell->Write(val, len);
+  _omsg->Write(_ocell);
+
+  //Perform set transaction
+  ierr = SetXact(pid);
+
+  //End mutual exclusion of transaction
+  _xactmutex->Give();
+
+  return ierr;
+}
+
+template int HCClient::Get<int8_t>(uint16_t pid, int8_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<int8_t>(uint16_t pid, const int8_t* val, uint16_t len);
+template int HCClient::Get<int16_t>(uint16_t pid, int16_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<int16_t>(uint16_t pid, const int16_t* val, uint16_t len);
+template int HCClient::Get<int32_t>(uint16_t pid, int32_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<int32_t>(uint16_t pid, const int32_t* val, uint16_t len);
+template int HCClient::Get<int64_t>(uint16_t pid, int64_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<int64_t>(uint16_t pid, const int64_t* val, uint16_t len);
+
+template int HCClient::Get<uint8_t>(uint16_t pid, uint8_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<uint8_t>(uint16_t pid, const uint8_t* val, uint16_t len);
+template int HCClient::Get<uint16_t>(uint16_t pid, uint16_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<uint16_t>(uint16_t pid, const uint16_t* val, uint16_t len);
+template int HCClient::Get<uint32_t>(uint16_t pid, uint32_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<uint32_t>(uint16_t pid, const uint32_t* val, uint16_t len);
+template int HCClient::Get<uint64_t>(uint16_t pid, uint64_t* val, uint16_t maxlen, uint16_t& len);
+template int HCClient::Set<uint64_t>(uint16_t pid, const uint64_t* val, uint16_t len);
+
 int HCClient::CallXact(uint16_t pid)
 {
   uint16_t ipid;

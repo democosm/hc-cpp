@@ -418,6 +418,7 @@ int main(int argc, char **argv)
   Add(new HCInt8List<ScratchI8>("listro", scratchi8, &ScratchI8::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt8List<ScratchI8>("listwo", scratchi8, 0, &ScratchI8::ListAdd, &ScratchI8::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt8ListS<ScratchI8>("listve", scratchi8, &ScratchI8::ListGet, &ScratchI8::ListAdd, &ScratchI8::ListSub, LIST_MAX_SIZE, I8enums), cont, srv);
+  Add(new HCInt8Array<ScratchI8>("array", scratchi8, &ScratchI8::ArrayGet, &ScratchI8::ArraySet), cont, srv);
 
   cont = new HCContainer("i16");
   Add(cont, topcont);
@@ -437,6 +438,7 @@ int main(int argc, char **argv)
   Add(new HCInt16List<ScratchI16>("listro", scratchi16, &ScratchI16::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt16List<ScratchI16>("listwo", scratchi16, 0, &ScratchI16::ListAdd, &ScratchI16::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt16ListS<ScratchI16>("listve", scratchi16, &ScratchI16::ListGet, &ScratchI16::ListAdd, &ScratchI16::ListSub, LIST_MAX_SIZE, I16enums), cont, srv);
+  Add(new HCInt16Array<ScratchI16>("array", scratchi16, &ScratchI16::ArrayGet, &ScratchI16::ArraySet), cont, srv);
 
   cont = new HCContainer("i32");
   Add(cont, topcont);
@@ -456,6 +458,7 @@ int main(int argc, char **argv)
   Add(new HCInt32List<ScratchI32>("listro", scratchi32, &ScratchI32::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt32List<ScratchI32>("listwo", scratchi32, 0, &ScratchI32::ListAdd, &ScratchI32::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt32ListS<ScratchI32>("listve", scratchi32, &ScratchI32::ListGet, &ScratchI32::ListAdd, &ScratchI32::ListSub, LIST_MAX_SIZE, I32enums), cont, srv);
+  Add(new HCInt32Array<ScratchI32>("array", scratchi32, &ScratchI32::ArrayGet, &ScratchI32::ArraySet), cont, srv);
 
   cont = new HCContainer("i64");
   Add(cont, topcont);
@@ -475,6 +478,7 @@ int main(int argc, char **argv)
   Add(new HCInt64List<ScratchI64>("listro", scratchi64, &ScratchI64::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt64List<ScratchI64>("listwo", scratchi64, 0, &ScratchI64::ListAdd, &ScratchI64::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCInt64ListS<ScratchI64>("listve", scratchi64, &ScratchI64::ListGet, &ScratchI64::ListAdd, &ScratchI64::ListSub, LIST_MAX_SIZE, I64enums), cont, srv);
+  Add(new HCInt64Array<ScratchI64>("array", scratchi64, &ScratchI64::ArrayGet, &ScratchI64::ArraySet), cont, srv);
 
   cont = new HCContainer("u8");
   Add(cont, topcont);
@@ -494,6 +498,7 @@ int main(int argc, char **argv)
   Add(new HCUns8List<ScratchU8>("listro", scratchu8, &ScratchU8::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns8List<ScratchU8>("listwo", scratchu8, 0, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns8ListS<ScratchU8>("listve", scratchu8, &ScratchU8::ListGet, &ScratchU8::ListAdd, &ScratchU8::ListSub, LIST_MAX_SIZE, U8enums), cont, srv);
+  Add(new HCUns8Array<ScratchU8>("array", scratchu8, &ScratchU8::ArrayGet, &ScratchU8::ArraySet), cont, srv);
 
   cont = new HCContainer("u16");
   Add(cont, topcont);
@@ -513,6 +518,7 @@ int main(int argc, char **argv)
   Add(new HCUns16List<ScratchU16>("listro", scratchu16, &ScratchU16::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns16List<ScratchU16>("listwo", scratchu16, 0, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns16ListS<ScratchU16>("listve", scratchu16, &ScratchU16::ListGet, &ScratchU16::ListAdd, &ScratchU16::ListSub, LIST_MAX_SIZE, U16enums), cont, srv);
+  Add(new HCUns16Array<ScratchU16>("array", scratchu16, &ScratchU16::ArrayGet, &ScratchU16::ArraySet), cont, srv);
 
   cont = new HCContainer("u32");
   Add(cont, topcont);
@@ -532,6 +538,7 @@ int main(int argc, char **argv)
   Add(new HCUns32List<ScratchU32>("listro", scratchu32, &ScratchU32::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns32List<ScratchU32>("listwo", scratchu32, 0, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns32ListS<ScratchU32>("listve", scratchu32, &ScratchU32::ListGet, &ScratchU32::ListAdd, &ScratchU32::ListSub, LIST_MAX_SIZE, U32enums), cont, srv);
+  Add(new HCUns32Array<ScratchU32>("array", scratchu32, &ScratchU32::ArrayGet, &ScratchU32::ArraySet), cont, srv);
 
   cont = new HCContainer("u64");
   Add(cont, topcont);
@@ -551,6 +558,7 @@ int main(int argc, char **argv)
   Add(new HCUns64List<ScratchU64>("listro", scratchu64, &ScratchU64::ListGet, 0, 0, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns64List<ScratchU64>("listwo", scratchu64, 0, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE), cont, srv);
   Add(new HCUns64ListS<ScratchU64>("listve", scratchu64, &ScratchU64::ListGet, &ScratchU64::ListAdd, &ScratchU64::ListSub, LIST_MAX_SIZE, U64enums), cont, srv);
+  Add(new HCUns64Array<ScratchU64>("array", scratchu64, &ScratchU64::ArrayGet, &ScratchU64::ArraySet), cont, srv);
 
   cont = new HCContainer("f32");
   Add(cont, topcont);

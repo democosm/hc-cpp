@@ -133,7 +133,7 @@ uint32_t HCCell::Deserialize(uint8_t *serbuf, uint32_t maxlen)
   return _payloadlength + i;
 }
 
-bool HCCell::Read(bool &val)
+bool HCCell::Read(bool& val)
 {
   uint8_t temp;
 
@@ -157,7 +157,7 @@ bool HCCell::Write(bool val)
   return Write(temp);
 }
 
-bool HCCell::Read(string &val)
+bool HCCell::Read(string& val)
 {
   uint32_t i;
   char ch;
@@ -187,7 +187,7 @@ bool HCCell::Read(string &val)
   return false;
 }
 
-bool HCCell::Write(const string &val)
+bool HCCell::Write(const string& val)
 {
   uint32_t len;
   uint32_t i;
@@ -208,61 +208,10 @@ bool HCCell::Write(const string &val)
   return true;
 }
 
-bool HCCell::Read(uint8_t *val, uint32_t maxlen, uint16_t &len)
-{
-  uint32_t i;
-
-  //Assert valid arguments
-  assert((val != 0) && (maxlen != 0));
-
-  //Read length and check for error
-  if(!Read(len))
-    return false;
-
-  //Check for buffer underflow
-  if((_readindex + len) > _payloadlength)
-    return false;
-
-  //Copy bytes
-  for(i=0; i<len; i++)
-  {
-    //Check for max length reached
-    if(i >= maxlen)
-      return true;
-
-    //Copy a character
-    val[i] = _payload[_readindex++];
-  }
-
-  return true;
-}
-
-bool HCCell::Write(uint8_t *val, uint16_t len)
-{
-  uint32_t i;
-
-  //Assert valid arguments
-  assert(val != 0);
-
-  //Write length and check for error
-  if(!Write(len))
-    return false;
-
-  //Check for buffer overflow
-  if((_payloadlength + len) > PAYLOAD_MAX)
-    return false;
-
-  //Copy bytes
-  for(i=0; i<len; i++)
-    _payload[_payloadlength++] = val[i];
-
-  return true;
-}
-
-bool HCCell::Read(int8_t &val)
+bool HCCell::Read(int8_t& val)
 {
   //Delegate to unsigned version of this method
-  return Read((uint8_t &)val);
+  return Read((uint8_t&)val);
 }
 
 bool HCCell::Write(int8_t val)
@@ -271,10 +220,10 @@ bool HCCell::Write(int8_t val)
   return Write((uint8_t)val);
 }
 
-bool HCCell::Read(int16_t &val)
+bool HCCell::Read(int16_t& val)
 {
   //Delegate to unsigned version of this method
-  return Read((uint16_t &)val);
+  return Read((uint16_t&)val);
 }
 
 bool HCCell::Write(int16_t val)
@@ -283,10 +232,10 @@ bool HCCell::Write(int16_t val)
   return Write((uint16_t)val);
 }
 
-bool HCCell::Read(int32_t &val)
+bool HCCell::Read(int32_t& val)
 {
   //Delegate to unsigned version of this method
-  return Read((uint32_t &)val);
+  return Read((uint32_t&)val);
 }
 
 bool HCCell::Write(int32_t val)
@@ -295,10 +244,10 @@ bool HCCell::Write(int32_t val)
   return Write((uint32_t)val);
 }
 
-bool HCCell::Read(int64_t &val)
+bool HCCell::Read(int64_t& val)
 {
   //Delegate to unsigned version of this method
-  return Read((uint64_t &)val);
+  return Read((uint64_t&)val);
 }
 
 bool HCCell::Write(int64_t val)
@@ -307,7 +256,7 @@ bool HCCell::Write(int64_t val)
   return Write((uint64_t)val);
 }
 
-bool HCCell::Read(uint8_t &val)
+bool HCCell::Read(uint8_t& val)
 {
   //Check for buffer underflow
   if((_payloadlength - _readindex) < sizeof(uint8_t))
@@ -329,7 +278,7 @@ bool HCCell::Write(uint8_t val)
   return true;
 }
 
-bool HCCell::Read(uint16_t &val)
+bool HCCell::Read(uint16_t& val)
 {
   //Check for buffer underflow
   if((_payloadlength - _readindex) < sizeof(uint16_t))
@@ -353,7 +302,7 @@ bool HCCell::Write(uint16_t val)
   return true;
 }
 
-bool HCCell::Read(uint32_t &val)
+bool HCCell::Read(uint32_t& val)
 {
   //Check for buffer underflow
   if((_payloadlength - _readindex) < sizeof(uint32_t))
@@ -381,7 +330,7 @@ bool HCCell::Write(uint32_t val)
   return true;
 }
 
-bool HCCell::Read(uint64_t &val)
+bool HCCell::Read(uint64_t& val)
 {
   //Check for buffer underflow
   if((_payloadlength - _readindex) < sizeof(uint64_t))
@@ -417,7 +366,84 @@ bool HCCell::Write(uint64_t val)
   return true;
 }
 
-bool HCCell::Read(float &val)
+template <typename T> bool HCCell::Read(T* val, uint16_t maxlen, uint16_t& len)
+{
+  uint32_t i;
+  uint32_t j;
+
+  //Assert valid arguments
+  assert((val != 0) && (maxlen != 0));
+
+  //Read length and check for error
+  if(!Read(len))
+    return false;
+
+  //Check for buffer underflow
+  if((_readindex + len * sizeof(T)) > _payloadlength)
+    return false;
+
+  //Copy values from payload
+  for(i = 0; i < len; i++)
+  {
+    //Check for max length reached
+    if(i >= maxlen)
+      return true;
+
+    //Copy value from payload
+    val[i] = (T)_payload[_readindex++];
+    for(j = 1; j < sizeof(T); j++)
+      val[i] = (val[i] << 8) | _payload[_readindex++];
+  }
+
+  return true;
+}
+
+template bool HCCell::Read<int8_t>(int8_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<int16_t>(int16_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<int32_t>(int32_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<int64_t>(int64_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<uint8_t>(uint8_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<uint16_t>(uint16_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<uint32_t>(uint32_t* val, uint16_t maxlen, uint16_t& len);
+template bool HCCell::Read<uint64_t>(uint64_t* val, uint16_t maxlen, uint16_t& len);
+
+template <typename T> bool HCCell::Write(const T* val, uint16_t len)
+{
+  uint32_t i;
+  uint32_t j;
+
+  //Assert valid arguments
+  assert(val != 0);
+
+  //Write length and check for error
+  if(!Write(len))
+    return false;
+
+  //Check for buffer overflow
+  if((_payloadlength + len * sizeof(T)) > PAYLOAD_MAX)
+    return false;
+
+  //Copy values to payload
+  for(i = 0; i < len; i++)
+  {
+    //Copy value to payload
+    for(j = 0; j < sizeof(T); j++)
+      _payload[_payloadlength++] = (uint8_t)(val[i] >> (8 * (sizeof(T) - j - 1)));
+  }
+
+  return true;
+}
+
+template bool HCCell::Write<int8_t>(const int8_t* val, uint16_t len);
+template bool HCCell::Write<int16_t>(const int16_t* val, uint16_t len);
+template bool HCCell::Write<int32_t>(const int32_t* val, uint16_t len);
+template bool HCCell::Write<int64_t>(const int64_t* val, uint16_t len);
+template bool HCCell::Write<uint8_t>(const uint8_t* val, uint16_t len);
+template bool HCCell::Write<uint16_t>(const uint16_t* val, uint16_t len);
+template bool HCCell::Write<uint32_t>(const uint32_t* val, uint16_t len);
+template bool HCCell::Write<uint64_t>(const uint64_t* val, uint16_t len);
+
+bool HCCell::Read(float& val)
 {
   uint32_t temp;
 
@@ -441,7 +467,7 @@ bool HCCell::Write(float val)
   return Write(temp);
 }
 
-bool HCCell::Read(double &val)
+bool HCCell::Read(double& val)
 {
   uint64_t temp;
 
@@ -465,7 +491,7 @@ bool HCCell::Write(double val)
   return Write(temp);
 }
 
-bool HCCell::Read(float &val0, float &val1)
+bool HCCell::Read(float& val0, float& val1)
 {
   uint32_t temp0;
   uint32_t temp1;
@@ -502,7 +528,7 @@ bool HCCell::Write(float val0, float val1)
   return true;
 }
 
-bool HCCell::Read(double &val0, double &val1)
+bool HCCell::Read(double& val0, double& val1)
 {
   uint64_t temp0;
   uint64_t temp1;
@@ -539,7 +565,7 @@ bool HCCell::Write(double val0, double val1)
   return true;
 }
 
-bool HCCell::Read(float &val0, float &val1, float &val2)
+bool HCCell::Read(float& val0, float& val1, float& val2)
 {
   uint32_t temp0;
   uint32_t temp1;
@@ -586,7 +612,7 @@ bool HCCell::Write(float val0, float val1, float val2)
   return true;
 }
 
-bool HCCell::Read(double &val0, double &val1, double &val2)
+bool HCCell::Read(double& val0, double& val1, double& val2)
 {
   uint64_t temp0;
   uint64_t temp1;
@@ -633,7 +659,7 @@ bool HCCell::Write(double val0, double val1, double val2)
   return true;
 }
 
-void HCCell::Print(const string &extra)
+void HCCell::Print(const string& extra)
 {
   uint32_t i;
 

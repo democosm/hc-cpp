@@ -182,48 +182,64 @@ void HCConnection::ParseServer(XMLElement *pelt, HCContainer *pcont)
       ParseIntT<int8_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i8l") == 0)
       ParseIntL<int8_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "i8a") == 0)
+      ParseIntA<int8_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i16") == 0)
       ParseInt<int16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i16t") == 0)
       ParseIntT<int16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i16l") == 0)
       ParseIntL<int16_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "i16a") == 0)
+      ParseIntA<int16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i32") == 0)
       ParseInt<int32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i32t") == 0)
       ParseIntT<int32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i32l") == 0)
       ParseIntL<int32_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "i32a") == 0)
+      ParseIntA<int32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i64") == 0)
       ParseInt<int64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i64t") == 0)
       ParseIntT<int64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "i64l") == 0)
       ParseIntL<int64_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "i64a") == 0)
+      ParseIntA<int64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u8") == 0)
       ParseInt<uint8_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u8t") == 0)
       ParseIntT<uint8_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u8l") == 0)
       ParseIntL<uint8_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "u8a") == 0)
+      ParseIntA<uint8_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u16") == 0)
       ParseInt<uint16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u16t") == 0)
       ParseIntT<uint16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u16l") == 0)
       ParseIntL<uint16_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "u16a") == 0)
+      ParseIntA<uint16_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u32") == 0)
       ParseInt<uint32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u32t") == 0)
       ParseIntT<uint32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u32l") == 0)
       ParseIntL<uint32_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "u32a") == 0)
+      ParseIntA<uint32_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u64") == 0)
       ParseInt<uint64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u64t") == 0)
       ParseIntT<uint64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "u64l") == 0)
       ParseIntL<uint64_t>(elt, pcont);
+    else if(strcmp(elt->Name(), "u64a") == 0)
+      ParseIntA<uint64_t>(elt, pcont);
     else if(strcmp(elt->Name(), "f32") == 0)
       ParseFloat<float>(elt, pcont);
     else if(strcmp(elt->Name(), "f32t") == 0)
@@ -297,48 +313,64 @@ void HCConnection::ParseCont(XMLElement *pelt, HCContainer *pcont)
       ParseIntT<int8_t>(elt, cont);
     else if(strcmp(elt->Name(), "i8l") == 0)
       ParseIntL<int8_t>(elt, cont);
+    else if(strcmp(elt->Name(), "i8a") == 0)
+      ParseIntA<int8_t>(elt, cont);
     else if(strcmp(elt->Name(), "i16") == 0)
       ParseInt<int16_t>(elt, cont);
     else if(strcmp(elt->Name(), "i16t") == 0)
       ParseIntT<int16_t>(elt, cont);
     else if(strcmp(elt->Name(), "i16l") == 0)
       ParseIntL<int16_t>(elt, cont);
+    else if(strcmp(elt->Name(), "i16a") == 0)
+      ParseIntA<int16_t>(elt, cont);
     else if(strcmp(elt->Name(), "i32") == 0)
       ParseInt<int32_t>(elt, cont);
     else if(strcmp(elt->Name(), "i32t") == 0)
       ParseIntT<int32_t>(elt, cont);
     else if(strcmp(elt->Name(), "i32l") == 0)
       ParseIntL<int32_t>(elt, cont);
+    else if(strcmp(elt->Name(), "i32a") == 0)
+      ParseIntA<int32_t>(elt, cont);
     else if(strcmp(elt->Name(), "i64") == 0)
       ParseInt<int64_t>(elt, cont);
     else if(strcmp(elt->Name(), "i64t") == 0)
       ParseIntT<int64_t>(elt, cont);
     else if(strcmp(elt->Name(), "i64l") == 0)
       ParseIntL<int64_t>(elt, cont);
+    else if(strcmp(elt->Name(), "i64a") == 0)
+      ParseIntA<int64_t>(elt, cont);
     else if(strcmp(elt->Name(), "u8") == 0)
       ParseInt<uint8_t>(elt, cont);
     else if(strcmp(elt->Name(), "u8t") == 0)
       ParseIntT<uint8_t>(elt, cont);
     else if(strcmp(elt->Name(), "u8l") == 0)
       ParseIntL<uint8_t>(elt, cont);
+    else if(strcmp(elt->Name(), "u8a") == 0)
+      ParseIntA<uint8_t>(elt, cont);
     else if(strcmp(elt->Name(), "u16") == 0)
       ParseInt<uint16_t>(elt, cont);
     else if(strcmp(elt->Name(), "u16t") == 0)
       ParseIntT<uint16_t>(elt, cont);
     else if(strcmp(elt->Name(), "u16l") == 0)
       ParseIntL<uint16_t>(elt, cont);
+    else if(strcmp(elt->Name(), "u16a") == 0)
+      ParseIntA<uint16_t>(elt, cont);
     else if(strcmp(elt->Name(), "u32") == 0)
       ParseInt<uint32_t>(elt, cont);
     else if(strcmp(elt->Name(), "u32t") == 0)
       ParseIntT<uint32_t>(elt, cont);
     else if(strcmp(elt->Name(), "u32l") == 0)
       ParseIntL<uint32_t>(elt, cont);
+    else if(strcmp(elt->Name(), "u32a") == 0)
+      ParseIntA<uint32_t>(elt, cont);
     else if(strcmp(elt->Name(), "u64") == 0)
       ParseInt<uint64_t>(elt, cont);
     else if(strcmp(elt->Name(), "u64t") == 0)
       ParseIntT<uint64_t>(elt, cont);
     else if(strcmp(elt->Name(), "u64l") == 0)
       ParseIntL<uint64_t>(elt, cont);
+    else if(strcmp(elt->Name(), "u64a") == 0)
+      ParseIntA<uint64_t>(elt, cont);
     else if(strcmp(elt->Name(), "f32") == 0)
       ParseFloat<float>(elt, cont);
     else if(strcmp(elt->Name(), "f32t") == 0)
@@ -1115,6 +1147,66 @@ template <typename T> void HCConnection::ParseIntL(XMLElement *pelt, HCContainer
       param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Add, &HCIntegerCli<T>::Sub, maxsize, valenums);
     else
       param = new HCIntegerList<HCIntegerCli<T>, T>(name, stub, 0, 0, 0, maxsize, valenums);
+  }
+
+  //Add to parent
+  pcont->Add(param);
+}
+
+template <typename T> void HCConnection::ParseIntA(XMLElement *pelt, HCContainer *pcont)
+{
+  uint16_t pid;
+  string name;
+  string acc;
+  string sav;
+  HCIntegerCli<T> *stub;
+  HCParameter *param;
+
+  //Check for null parent objects
+  if((pelt == 0) || (pcont == 0))
+    return;
+
+  //Parse pid element and check for error
+  if(!ParseValue(pelt, "pid", pid))
+    return;
+
+  //Parse name element and check for error
+  if(!ParseValue(pelt, "name", name))
+    return;
+
+  //Parse acc element and check for error
+  if(!ParseValue(pelt, "acc", acc))
+    return;
+
+  //Parse sav element and check for error
+  if(!ParseValue(pelt, "sav", sav))
+    return;
+
+  //Create client stub
+  stub = new HCIntegerCli<T>(_cli, pid);
+
+  //Create parameter
+  if(sav == "Yes")
+  {
+    if(acc == "RW")
+      param = new HCIntegerArrayS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, &HCIntegerCli<T>::Set);
+    else if(acc == "R")
+      param = new HCIntegerArrayS<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, 0);
+    else if(acc == "W")
+      param = new HCIntegerArrayS<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Set);
+    else
+      param = new HCIntegerArrayS<HCIntegerCli<T>, T>(name, stub, 0, 0);
+  }
+  else
+  {
+    if(acc == "RW")
+      param = new HCIntegerArray<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, &HCIntegerCli<T>::Set);
+    else if(acc == "R")
+      param = new HCIntegerArray<HCIntegerCli<T>, T>(name, stub, &HCIntegerCli<T>::Get, 0);
+    else if(acc == "W")
+      param = new HCIntegerArray<HCIntegerCli<T>, T>(name, stub, 0, &HCIntegerCli<T>::Set);
+    else
+      param = new HCIntegerArray<HCIntegerCli<T>, T>(name, stub, 0, 0);
   }
 
   //Add to parent

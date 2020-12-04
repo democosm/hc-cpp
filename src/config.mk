@@ -24,13 +24,10 @@ SOURCE_FILES = $(wildcard $(CURRENT_DIR)/*.cc)
 OBJECT_FILES = $(addsuffix .o,$(foreach sourcefile,$(SOURCE_FILES),$(subst $(SOURCE_DIR)/$(DIR_TYPE)/,$(TARGET_DIR)/$(DIR_TYPE)/,$(sourcefile))))
 
 # Determine list of dependency files
-DEPEND_FILES = $(addsuffix .dep,$(foreach sourcefile,$(SOURCE_FILES),$(subst $(SOURCE_DIR)/$(DIR_TYPE)/,$(TARGET_DIR)/$(DIR_TYPE)/,$(sourcefile))))
+DEPEND_FILES = $(addsuffix .d,$(foreach sourcefile,$(SOURCE_FILES),$(subst $(SOURCE_DIR)/$(DIR_TYPE)/,$(TARGET_DIR)/$(DIR_TYPE)/,$(sourcefile))))
 
 # Determine list of library files
 LIBRARY_FILES = $(foreach libname,$(LIBRARY_NAMES),$(addprefix $(TARGET_DIR)/lib/lib,$(addsuffix .a,$(libname))))
-
-# Determine list of library redirection targets
-LIBRARY_REDIR = $(addprefix redir_,$(LIBRARY_NAMES))
 
 # Variables used to build for different targets
 ifeq ($(TGTPROC), $(shell uname -m))

@@ -1,44 +1,32 @@
-# Target - Default targets depending on package type
-ifeq ($(DIR_TYPE), lib)
-  default: $(TARGET_DIR)/lib/lib$(DIR_NAME).a
-else
-  ifeq ($(DIR_TYPE), app)
-    default: $(TARGET_DIR)/bin/$(DIR_NAME)
-  else
-    default::
-	@echo "Unrecognized package type (must be 'lib' or 'app')"
-  endif
+# Check for building from directory under app
+ifeq ($(DIR_TYPE), app)
+  # Target - Application
+  $(TARGET_DIR)/bin/$(DIR_NAME): $(OBJECT_FILES) $(LIBRARY_FILES)
+	@echo "APP: $(DIR_NAME)"
+	@mkdir -p $(dir $@)
+	$(CXX) $(CFLAGS) $(CG_START) $(OBJECT_FILES) $(LIBRARY_FILES) $(CG_END) $(STDLIBLIST) -o $@
+
+  # Target - Library archive
+  $(TARGET_DIR)/lib/lib%.a:
+	@echo "LIB: $(subst $(TARGET_DIR)/lib/lib,,$(subst .a,,$@))"
+	cd $(subst $(TARGET_DIR)/lib/lib,$(SOURCE_DIR)/lib/,$(subst .a,,$@)) && $(MAKE)
 endif
 
-# Target - Application
-$(TARGET_DIR)/bin/$(DIR_NAME): $(OBJECT_FILES) $(LIBRARY_REDIR)
-	@echo "APP: $@"
+# Check for building from directory under lib
+ifeq ($(DIR_TYPE), lib)
+  # Target - Library archive
+  $(TARGET_DIR)/lib/lib$(DIR_NAME).a: $(OBJECT_FILES)
+	@echo "LIB: $(DIR_NAME)"
 	@mkdir -p $(dir $@)
-	@$(CXX) $(CFLAGS) $(CG_START) $(OBJECT_FILES) $(LIBRARY_FILES) $(CG_END) $(STDLIBLIST) -o $@
-
-# Target - Library archive
-$(TARGET_DIR)/lib/lib$(DIR_NAME).a: $(OBJECT_FILES)
-	@echo "LIB: $@"
-	@mkdir -p $(dir $@)
-	@$(AR) -r -c -s $@ $^
+	$(AR) -r -c -s $@ $^
+endif
 
 # Rule - Generate object files from C++ source
 $(TARGET_DIR)/%.cc.o: $(SOURCE_DIR)/%.cc
 	@echo "OBJ: $@"
 	@mkdir -p "$(dir $@)"
-	@$(CXX) $(CFLAGS) -c $< -o $@
-
-# Rule - Generate dependencies files from C++ source
-$(TARGET_DIR)/%.cc.dep: $(SOURCE_DIR)/%.cc
-	@echo "DEP: $@"
-	@mkdir -p "$(dir $@)"
-	@touch $@
-	@$(CC) -M $(CFLAGS) $< | sed -e 's;^\([^ ]\);$(dir $@)\1;' | sed -e 's;\.o:;\.cc\.o:;' > $@
-
-# Target - Library redirect (need this so we can move to the lib directory and build when invoking make from an app directory)
-redir_%:
-	@echo "LIB (REDIRECT): $@"
-	@cd $(subst redir_,$(SOURCE_DIR)/lib/,$@) && $(MAKE)
+	$(CXX) $(CFLAGS) -MM -MT $@ -MF $(subst .o,.d,$@) $<
+	$(CXX) $(CFLAGS) -c $< -o $@
 
 # Target - Show make system variables
 vars:

@@ -1,6 +1,6 @@
 # Aliases
-alias mkposr make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=rel
-alias mkposd make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=dbg
+alias mkposr make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=rel --no-print-directory
+alias mkposd make TGTPROC=`uname -m` TGTOS=posix TGTBUILD=dbg --no-print-directory
 
 # Environment variables
 setenv PROJBASEDIR `pwd`

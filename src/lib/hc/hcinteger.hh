@@ -3065,16 +3065,17 @@ public:
   typedef int (C::* SetMethod)(const T*, uint16_t len);
 
 public:
-  HCIntegerArray(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod)
+  HCIntegerArray(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint8_t base=16)
   : HCParameter(name)
   {
     //Assert valid arguments
-    assert(object != 0);
+    assert((object != 0) && ((base == 8) || (base == 10) || (base == 16)));
 
     //Initialize member variables
     _object = object;
     _getmethod = getmethod;
     _setmethod = setmethod;
+    _base = base;
   }
 
   virtual ~HCIntegerArray()
@@ -3131,7 +3132,12 @@ public:
       if(i != 0)
         std::cout << ',';
 
-      std::cout << PrintCast(val[i]);
+      if(_base == 16)
+        std::cout << std::hex << PrintCast(val[i]) << std::dec;
+      else if(_base == 10)
+        std::cout << PrintCast(val[i]);
+      else if(_base == 8)
+        std::cout << std::oct << PrintCast(val[i]) << std::dec;
     }
 
     std::cout << " !" << ErrToString(lerr);
@@ -3162,7 +3168,12 @@ public:
       if(i != 0)
         st << ',';
 
-      st << PrintCast(val[i]);
+      if(_base == 16)
+        st << std::hex << PrintCast(val[i]) << std::dec;
+      else if(_base == 10)
+        st << PrintCast(val[i]);
+      else if(_base == 8)
+        st << std::oct << PrintCast(val[i]) << std::dec;
     }
 
     st << "\n";
@@ -3242,7 +3253,7 @@ public:
     }
 
     //Convert to string
-    StringPrint(nval, len, val);
+    StringPrint(nval, len, val, _base);
     return ERR_NONE;
   }
 
@@ -3256,7 +3267,7 @@ public:
       return ERR_ACCESS;
 
     //Convert string value to native value and check for error
-    if(!StringConvert(val, nval, sizeof(nval), len))
+    if(!StringConvert(val, nval, sizeof(nval), len, _base))
       return ERR_UNSPEC;
 
     return (_object->*_setmethod)(nval, len);
@@ -3359,6 +3370,7 @@ private:
   C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
+  uint8_t _base;
 };
 
 //-----------------------------------------------------------------------------

@@ -11,7 +11,7 @@ ifeq ($(DIR_TYPE), app)
 	@echo "LIB (REDIRECT): $(subst $(TARGET_DIR)/lib/lib,,$(subst .a,,$@))"
 	$(MAKE) -C $(subst $(TARGET_DIR)/lib/lib,$(SOURCE_DIR)/lib/,$(subst .a,,$@))
 
-  # Fake force target
+  # Force make to redirect to libraries
   FORCE:
 endif
 
@@ -31,6 +31,11 @@ $(TARGET_DIR)/%.cc.o: $(SOURCE_DIR)/%.cc
 	$(CXX) $(CFLAGS) -MM -MT $@ -MF $(subst .o,.d,$@) $<
 	$(CXX) $(CFLAGS) -c $< -o $@
 
+# Target - Remove all built output
+clean:
+	rm -f $(OBJECT_FILES)
+	rm -f $(DEPEND_FILES)
+
 # Target - Show make system variables
 vars:
 	@echo "PROJBASEDIR = $(PROJBASEDIR)"
@@ -48,6 +53,7 @@ vars:
 	@echo "DEPEND_FILES = $(DEPEND_FILES)"
 	@echo "LIBRARY_NAMES = $(LIBRARY_NAMES)"
 	@echo "LIBRARY_FILES = $(LIBRARY_FILES)"
+	@echo "LIBRARY_DIRS = $(LIBRARY_DIRS)"
 	@echo "STDLIBLIST = $(STDLIBLIST)"
 	@echo "CC = $(CC)"
 	@echo "CXX = $(CXX)"
@@ -55,6 +61,8 @@ vars:
 	@echo "CFLAGS = $(CFLAGS)"
 
 # Include the dependencies files if appropriate
-ifeq (,$(findstring vars,$(MAKECMDGOALS)))
-  -include $(DEPEND_FILES)
+ifeq (,$(findstring clean,$(MAKECMDGOALS)))
+  ifeq (,$(findstring vars,$(MAKECMDGOALS)))
+    -include $(DEPEND_FILES)
+  endif
 endif

@@ -29,6 +29,9 @@ DEPEND_FILES = $(addsuffix .d,$(foreach sourcefile,$(SOURCE_FILES),$(subst $(SOU
 # Determine list of library files
 LIBRARY_FILES = $(foreach libname,$(LIBRARY_NAMES),$(addprefix $(TARGET_DIR)/lib/lib,$(addsuffix .a,$(libname))))
 
+# Determine list of library directories
+LIBRARY_DIRS = $(foreach libname,$(LIBRARY_NAMES),$(addprefix $(SOURCE_DIR)/lib/,$(libname)))
+
 # Variables used to build for different targets
 ifeq ($(TGTPROC), $(shell uname -m))
   CC = gcc

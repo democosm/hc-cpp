@@ -29,6 +29,7 @@
 #include "error.hh"
 #include <arpa/inet.h>
 #include <cassert>
+#include <limits>
 #include <stdint.h>
 #include <stdlib.h>
 #include <sstream>
@@ -151,6 +152,64 @@ bool StringIPv4Convert(const string& str, uint32_t& val)
   return true;
 }
 
+template <typename T> bool StringConvert(const string& str, T& val, uint8_t base)
+{
+  char* end;
+
+  //Initialize value to zero
+  val = 0;
+
+  //Check signedness
+  if(std::numeric_limits<T>::is_signed)
+  {
+    intmax_t temp;
+
+    //Convert value
+    temp = strtoimax(str.c_str(), &end, base);
+
+    //Check for error
+    if(*end != '\0')
+      return false;
+
+    //Check for value out of range
+    if((temp < std::numeric_limits<T>::min()) || (temp > std::numeric_limits<T>::max()))
+      return false;
+
+    //Set value for return
+    val = temp;
+  }
+  else
+  {
+    uintmax_t temp;
+
+    //Convert the value
+    temp = strtoumax(str.c_str(), &end, base);
+
+    //Check for error
+    if(*end != '\0')
+      return false;
+
+    //Check for value out of range
+    if(temp > std::numeric_limits<T>::max())
+      return false;
+
+    //Set value for return
+    val = temp;
+  }
+
+  //Return success
+  return true;
+}
+
+template bool StringConvert<int8_t>(const std::string& str, int8_t& val, uint8_t base);
+template bool StringConvert<int16_t>(const std::string& str, int16_t& val, uint8_t base);
+template bool StringConvert<int32_t>(const std::string& str, int32_t& val, uint8_t base);
+template bool StringConvert<int64_t>(const std::string& str, int64_t& val, uint8_t base);
+template bool StringConvert<uint8_t>(const std::string& str, uint8_t& val, uint8_t base);
+template bool StringConvert<uint16_t>(const std::string& str, uint16_t& val, uint8_t base);
+template bool StringConvert<uint32_t>(const std::string& str, uint32_t& val, uint8_t base);
+template bool StringConvert<uint64_t>(const std::string& str, uint64_t& val, uint8_t base);
+
 bool StringConvert(const string& str, bool& val)
 {
   //Check for false
@@ -169,198 +228,6 @@ bool StringConvert(const string& str, bool& val)
 
   //Error
   return false;
-}
-
-bool StringConvert(const string& str, int8_t& val)
-{
-  intmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoimax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if((temp < INT8_MIN) || (temp > INT8_MAX))
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, int16_t& val)
-{
-  intmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoimax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if((temp < INT16_MIN) || (temp > INT16_MAX))
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, int32_t& val)
-{
-  intmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoimax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if((temp < INT32_MIN) || (temp > INT32_MAX))
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, int64_t& val)
-{
-  intmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoimax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if((temp < INT64_MIN) || (temp > INT64_MAX))
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, uint8_t& val)
-{
-  uintmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoumax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if(temp > UINT8_MAX)
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, uint16_t& val)
-{
-  uintmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoumax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if(temp > UINT16_MAX)
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, uint32_t& val)
-{
-  uintmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoumax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if(temp > UINT32_MAX)
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
-}
-
-bool StringConvert(const string& str, uint64_t& val)
-{
-  uintmax_t temp;
-  char* end;
-
-  //Initialize value to zero
-  val = 0;
-
-  //Convert the value
-  temp = strtoumax(str.c_str(), &end, 0);
-
-  //Check for error
-  if(*end != '\0')
-    return false;
-
-  //Check for value out of range
-  if(temp > UINT64_MAX)
-    return false;
-
-  //Set value for return
-  val = temp;
-  return true;
 }
 
 bool StringConvert(const string& str, float& val)
@@ -433,55 +300,22 @@ bool StringConvert(const string& str, double& val0, double& val1, double& val2)
   return true;
 }
 
+template <typename T> bool StringConvert(const char* str, T& val, uint8_t base)
+{
+  string temp = str;
+  return StringConvert(temp, val, base);
+}
+
+template bool StringConvert<int8_t>(const char* str, int8_t& val, uint8_t base);
+template bool StringConvert<int16_t>(const char* str, int16_t& val, uint8_t base);
+template bool StringConvert<int32_t>(const char* str, int32_t& val, uint8_t base);
+template bool StringConvert<int64_t>(const char* str, int64_t& val, uint8_t base);
+template bool StringConvert<uint8_t>(const char* str, uint8_t& val, uint8_t base);
+template bool StringConvert<uint16_t>(const char* str, uint16_t& val, uint8_t base);
+template bool StringConvert<uint32_t>(const char* str, uint32_t& val, uint8_t base);
+template bool StringConvert<uint64_t>(const char* str, uint64_t& val, uint8_t base);
+
 bool StringConvert(const char* str, bool& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, int8_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, int16_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, int32_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, int64_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, uint8_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, uint16_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, uint32_t& val)
-{
-  string temp = str;
-  return StringConvert(temp, val);
-}
-
-bool StringConvert(const char* str, uint64_t& val)
 {
   string temp = str;
   return StringConvert(temp, val);
@@ -529,7 +363,7 @@ bool StringConvert(const char* str, double& val0, double& val1, double& val2)
   return StringConvert(temp, val0, val1, val2);
 }
 
-template <typename T> bool StringConvert(const std::string& str, T* val, uint16_t maxlen, uint16_t& len)
+template <typename T> bool StringConvert(const std::string& str, T* val, uint16_t maxlen, uint16_t& len, uint8_t base)
 {
   uint32_t ind;
   string token;
@@ -547,7 +381,7 @@ template <typename T> bool StringConvert(const std::string& str, T* val, uint16_
     ind = StrTok(str, ind, ',', token);
 
     //Convert
-    if(!StringConvert(token, val[i]))
+    if(!StringConvert(token, val[i], base))
     {
       len = i;
       return false;
@@ -559,73 +393,129 @@ template <typename T> bool StringConvert(const std::string& str, T* val, uint16_
   return true;
 }
 
-template bool StringConvert<int8_t>(const std::string& str, int8_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<int16_t>(const std::string& str, int16_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<int32_t>(const std::string& str, int32_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<int64_t>(const std::string& str, int64_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<uint8_t>(const std::string& str, uint8_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<uint16_t>(const std::string& str, uint16_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<uint32_t>(const std::string& str, uint32_t* val, uint16_t maxlen, uint16_t& len);
-template bool StringConvert<uint64_t>(const std::string& str, uint64_t* val, uint16_t maxlen, uint16_t& len);
+template bool StringConvert<int8_t>(const std::string& str, int8_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<int16_t>(const std::string& str, int16_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<int32_t>(const std::string& str, int32_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<int64_t>(const std::string& str, int64_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<uint8_t>(const std::string& str, uint8_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<uint16_t>(const std::string& str, uint16_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<uint32_t>(const std::string& str, uint32_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
+template bool StringConvert<uint64_t>(const std::string& str, uint64_t* val, uint16_t maxlen, uint16_t& len, uint8_t base);
 
 void StringPrint(bool val, string& str)
 {
   str = val ? "true" : "false";
 }
 
-void StringPrint(int8_t val, string& str)
+void StringPrint(int8_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << (int16_t)val;
+
+  if(base == 16)
+    ss << std::hex << (int16_t)val << std::dec;
+  else if(base == 8)
+    ss << std::oct << (int16_t)val << std::dec;
+  else
+    ss << (int16_t)val;
+
   str = ss.str();
 }
 
-void StringPrint(int16_t val, string& str)
+void StringPrint(int16_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
-void StringPrint(int32_t val, string& str)
+void StringPrint(int32_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
-void StringPrint(int64_t val, string& str)
+void StringPrint(int64_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
-void StringPrint(uint8_t val, string& str)
+void StringPrint(uint8_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << (uint16_t)val;
+
+  if(base == 16)
+    ss << std::hex << (uint16_t)val << std::dec;
+  else if(base == 8)
+    ss << std::oct << (uint16_t)val << std::dec;
+  else
+    ss << (uint16_t)val;
+
   str = ss.str();
 }
 
-void StringPrint(uint16_t val, string& str)
+void StringPrint(uint16_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
-void StringPrint(uint32_t val, string& str)
+void StringPrint(uint32_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
-void StringPrint(uint64_t val, string& str)
+void StringPrint(uint64_t val, string& str, uint8_t base)
 {
   stringstream ss;
-  ss << val;
+
+  if(base == 16)
+    ss << std::hex << val << std::dec;
+  else if(base == 8)
+    ss << std::oct << val << std::dec;
+  else
+    ss << val;
+
   str = ss.str();
 }
 
@@ -671,22 +561,32 @@ void StringPrint(double val0, double val1, double val2, string& str)
   str = ss.str();
 }
 
-template <typename T> void StringPrint(T* val, uint16_t len, std::string& str)
+template <typename T> void StringPrint(T* val, uint16_t len, std::string& str, uint8_t base)
 {
   uint32_t i;
   stringstream ss;
 
+  if(base == 16)
+    ss << std::hex;
+  else if(base == 8)
+    ss << std::oct;
+
   for(i = 0; i < len; i++)
     ss << val;
+
+  if(base == 16)
+    ss << std::dec;
+  else if(base == 8)
+    ss << std::dec;
 
   str = ss.str();
 }
 
-template void StringPrint<int8_t>(int8_t* val, uint16_t len, std::string& str);
-template void StringPrint<int16_t>(int16_t* val, uint16_t len, std::string& str);
-template void StringPrint<int32_t>(int32_t* val, uint16_t len, std::string& str);
-template void StringPrint<int64_t>(int64_t* val, uint16_t len, std::string& str);
-template void StringPrint<uint8_t>(uint8_t* val, uint16_t len, std::string& str);
-template void StringPrint<uint16_t>(uint16_t* val, uint16_t len, std::string& str);
-template void StringPrint<uint32_t>(uint32_t* val, uint16_t len, std::string& str);
-template void StringPrint<uint64_t>(uint64_t* val, uint16_t len, std::string& str);
+template void StringPrint<int8_t>(int8_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<int16_t>(int16_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<int32_t>(int32_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<int64_t>(int64_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<uint8_t>(uint8_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<uint16_t>(uint16_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<uint32_t>(uint32_t* val, uint16_t len, std::string& str, uint8_t base);
+template void StringPrint<uint64_t>(uint64_t* val, uint16_t len, std::string& str, uint8_t base);

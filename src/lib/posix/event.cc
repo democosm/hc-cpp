@@ -117,7 +117,7 @@ int Event::Wait(uint32_t usecs)
     if(_count == 0)
     {
       //Calculate absolute time for cond wait timeout
-      clock_gettime(CLOCK_REALTIME, &timeout);
+      clock_gettime(CLOCK_MONOTONIC, &timeout);
       timeout.tv_sec += usecs/1000000;
       timeout.tv_nsec += (usecs%1000000)*1000;
       if(timeout.tv_nsec >= 1000000000)

@@ -46,6 +46,7 @@ public:
 
 private:
   pthread_mutex_t _mutex;
+  pthread_condattr_t _condattr;
   pthread_cond_t _cond;
   uint32_t _initcount;
   uint32_t _count;

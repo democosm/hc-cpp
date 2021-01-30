@@ -41,32 +41,39 @@ Semaphore::Semaphore(uint32_t initcount)
   _initcount = initcount;
   _count = initcount;
 
-  //Initialize the mutex
+  //Initialize mutex
   pthread_mutex_init(&_mutex, NULL);
 
-  //Initialize the cond lock
-  pthread_cond_init(&_cond, NULL);
+  //Initialize cond lock attributes to use monotonic clock
+  pthread_condattr_init(&_condattr);
+  pthread_condattr_setclock(&_condattr, CLOCK_MONOTONIC);
+
+  //Initialize cond lock
+  pthread_cond_init(&_cond, &_condattr);
 }
 
 Semaphore::~Semaphore()
 {
-  //Destroy the mutex
-  pthread_mutex_destroy(&_mutex);
-
-  //Destroy the cond lock
+  //Destroy cond lock
   pthread_cond_destroy(&_cond);
+
+  //Destroy cond lock attributes
+  pthread_condattr_destroy(&_condattr);
+
+  //Destroy mutex
+  pthread_mutex_destroy(&_mutex);
 }
 
 int Semaphore::Clear(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
-  //Clear the count
+  //Clear count
   _count = 0;
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -78,7 +85,7 @@ int Semaphore::Wait(uint32_t usecs)
   struct timespec timeout;
   int result;
 
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -88,7 +95,7 @@ int Semaphore::Wait(uint32_t usecs)
     //Check for count of 0
     if(_count == 0)
     {
-      //Unlock the mutex
+      //Unlock mutex
       pthread_mutex_unlock(&_mutex);
 
       //Return error
@@ -106,7 +113,7 @@ int Semaphore::Wait(uint32_t usecs)
       //Wait for cond lock and check for error
       if(pthread_cond_wait(&_cond, &_mutex) != 0)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return error
@@ -141,7 +148,7 @@ int Semaphore::Wait(uint32_t usecs)
       //Check for timeout or other error
       if(result == ETIMEDOUT)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return timeout
@@ -149,7 +156,7 @@ int Semaphore::Wait(uint32_t usecs)
       }
       else if(result != 0)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return timeout
@@ -164,7 +171,7 @@ int Semaphore::Wait(uint32_t usecs)
     _count--;
   }
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -173,7 +180,7 @@ int Semaphore::Wait(uint32_t usecs)
 
 int Semaphore::Give(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -184,14 +191,14 @@ int Semaphore::Give(void)
   //Signal cond lock and check for error
   if(pthread_cond_signal(&_cond) != 0)
   {
-    //Unlock the mutex
+    //Unlock mutex
     pthread_mutex_unlock(&_mutex);
 
     //Return timeout
     return ERR_UNSPEC;
   }
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -200,14 +207,14 @@ int Semaphore::Give(void)
 
 int Semaphore::Reset(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
   //Set count to initial value
   _count = _initcount;
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 

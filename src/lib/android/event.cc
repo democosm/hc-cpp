@@ -35,32 +35,39 @@ Event::Event(bool signalled)
   _initcount = signalled ? 1 : 0;
   _count = _initcount;
 
-  //Initialize the mutex
+  //Initialize mutex
   pthread_mutex_init(&_mutex, NULL);
 
-  //Initialize the cond lock
-  pthread_cond_init(&_cond, NULL);
+  //Initialize cond lock attributes to use monotonic clock
+  pthread_condattr_init(&_condattr);
+  pthread_condattr_setclock(&_condattr, CLOCK_MONOTONIC);
+
+  //Initialize cond lock
+  pthread_cond_init(&_cond, &_condattr);
 }
 
 Event::~Event()
 {
-  //Destroy the mutex
-  pthread_mutex_destroy(&_mutex);
-
-  //Destroy the cond lock
+  //Destroy cond lock
   pthread_cond_destroy(&_cond);
+
+  //Destroy cond lock attributes
+  pthread_condattr_destroy(&_condattr);
+
+  //Destroy mutex
+  pthread_mutex_destroy(&_mutex);
 }
 
 int Event::Clear(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
-  //Clear the count
+  //Clear count
   _count = 0;
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -72,7 +79,7 @@ int Event::Wait(uint32_t usecs)
   struct timespec timeout;
   int result;
 
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -82,7 +89,7 @@ int Event::Wait(uint32_t usecs)
     //Check for count of 0
     if(_count == 0)
     {
-      //Unlock the mutex
+      //Unlock mutex
       pthread_mutex_unlock(&_mutex);
 
       //Return error
@@ -100,7 +107,7 @@ int Event::Wait(uint32_t usecs)
       //Wait for cond lock and check for error
       if(pthread_cond_wait(&_cond, &_mutex) != 0)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return error
@@ -132,7 +139,7 @@ int Event::Wait(uint32_t usecs)
       //Check for timeout or other error
       if(result == ETIMEDOUT)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return timeout
@@ -140,7 +147,7 @@ int Event::Wait(uint32_t usecs)
       }
       else if(result != 0)
       {
-        //Unlock the mutex
+        //Unlock mutex
         pthread_mutex_unlock(&_mutex);
 
         //Return timeout
@@ -152,7 +159,7 @@ int Event::Wait(uint32_t usecs)
     _count = 0;
   }
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -161,7 +168,7 @@ int Event::Wait(uint32_t usecs)
 
 int Event::Signal(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -171,14 +178,14 @@ int Event::Signal(void)
   //Signal cond lock and check for error
   if(pthread_cond_signal(&_cond) != 0)
   {
-    //Unlock the mutex
+    //Unlock mutex
     pthread_mutex_unlock(&_mutex);
 
     //Return timeout
     return ERR_UNSPEC;
   }
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 
@@ -187,14 +194,14 @@ int Event::Signal(void)
 
 int Event::Reset(void)
 {
-  //Lock the mutex and check for error
+  //Lock mutex and check for error
   if(pthread_mutex_lock(&_mutex) != 0)
     return ERR_UNSPEC;
 
   //Set count to initial value
   _count = _initcount;
 
-  //Unlock the mutex and check for error
+  //Unlock mutex and check for error
   if(pthread_mutex_unlock(&_mutex) != 0)
     return ERR_UNSPEC;
 

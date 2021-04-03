@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCFILE_HH_
-#define _HCFILE_HH_
+#pragma once
 
 #include "const.hh"
 #include "error.hh"
@@ -334,5 +333,3 @@ private:
   WriteMethod _writemethod;
   uint8_t *_buffer;
 };
-
-#endif

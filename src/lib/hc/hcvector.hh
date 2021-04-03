@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCVECTOR_HH_
-#define _HCVECTOR_HH_
+#pragma once
 
 #include "const.hh"
 #include "error.hh"
@@ -2131,5 +2130,3 @@ public:
   {
   }
 };
-
-#endif

@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCNODE_HH_
-#define _HCNODE_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -44,5 +43,3 @@ public:
 protected:
   std::string _name;
 };
-
-#endif

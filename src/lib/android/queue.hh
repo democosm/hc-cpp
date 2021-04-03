@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _QUEUE_HH_
-#define _QUEUE_HH_
+#pragma once
 
 #include "mutex.hh"
 #include "semaphore.hh"
@@ -67,5 +66,3 @@ private:
   QueueBuffer *_writebuf;
   QueueBuffer *_readbuf;
 };
-
-#endif

@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _DEVICE_HH_
-#define _DEVICE_HH_
+#pragma once
 
 #include <inttypes.h>
 
@@ -37,5 +36,3 @@ public:
   virtual uint32_t Read(void *buf, uint32_t maxlen);
   virtual uint32_t Write(const void *buf, uint32_t len);
 };
-
-#endif

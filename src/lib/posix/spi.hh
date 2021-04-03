@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SPI_HH_
-#define _SPI_HH_
+#pragma once
 
 #include "mutex.hh"
 #include <inttypes.h>
@@ -42,5 +41,3 @@ private:
   int _fd;
   uint32_t _speed;
 };
-
-#endif

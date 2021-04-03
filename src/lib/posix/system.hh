@@ -24,12 +24,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SYSTEM_HH_
-#define _SYSTEM_HH_
+#pragma once
 
 #define SC_QUIET_BEG "("
 #define SC_QUIET_END ") > /dev/null 2>&1"
 
 int SysCmd(const char *fmt, ...);
-
-#endif

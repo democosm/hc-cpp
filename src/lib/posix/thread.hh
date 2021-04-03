@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _THREAD_HH_
-#define _THREAD_HH_
+#pragma once
 
 #include "error.hh"
 #include "mutex.hh"
@@ -165,5 +164,3 @@ private:
   bool _started;
   pthread_t _threadid;
 };
-
-#endif

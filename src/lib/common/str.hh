@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _STR_HH_
-#define _STR_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -68,5 +67,3 @@ void StringPrint(double val0, double val1, std::string& str);
 void StringPrint(float val0, float val1, float val2, std::string& str);
 void StringPrint(double val0, double val1, double val2, std::string& str);
 template <typename T> void StringPrint(T* val, uint16_t len, std::string& str, uint8_t base=10);
-
-#endif

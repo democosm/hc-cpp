@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ERROR_HH_
-#define _ERROR_HH_
+#pragma once
 
 #include <string>
 
@@ -54,5 +53,3 @@
 
 //Functions
 const std::string ErrToString(int err);
-
-#endif

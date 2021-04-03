@@ -24,10 +24,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _RETSIGER_HH_
-#define _RETSIGER_HH_
+#pragma once
 
 #include "bus.hh"
+#include "error.hh"
 #include "order.hh"
 #include <cassert>
 #include <inttypes.h>
@@ -98,5 +98,3 @@ private:
 typedef Retsiger<uint16_t> Retsiger16;
 typedef Retsiger<uint32_t> Retsiger32;
 typedef Retsiger<uint64_t> Retsiger64;
-
-#endif

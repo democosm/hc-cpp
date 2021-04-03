@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SCRATCHFILE_HH_
-#define _SCRATCHFILE_HH_
+#pragma once
 
 #include "hcparameter.hh"
 #include <inttypes.h>
@@ -102,5 +101,3 @@ public:
 private:
   std::string _filename;
 };
-
-#endif

@@ -24,10 +24,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _STIB_HH_
-#define _STIB_HH_
+#pragma once
 
 #include "bus.hh"
+#include "error.hh"
 #include "order.hh"
 #include <cassert>
 #include <inttypes.h>
@@ -132,5 +132,3 @@ private:
 typedef Stib<uint16_t> Stib16;
 typedef Stib<uint32_t> Stib32;
 typedef Stib<uint64_t> Stib64;
-
-#endif

@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCALL_HH_
-#define _HCCALL_HH_
+#pragma once
 
 #include "const.hh"
 #include "error.hh"
@@ -392,5 +391,3 @@ private:
   uint32_t _size;
   const HCEIDEnum *_eidenums;
 };
-
-#endif

@@ -24,10 +24,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _BITS_HH_
-#define _BITS_HH_
+#pragma once
 
 #include "bus.hh"
+#include "error.hh"
 #include "order.hh"
 #include <cassert>
 #include <inttypes.h>
@@ -133,5 +133,3 @@ typedef Bits<uint8_t> Bits8;
 typedef Bits<uint16_t> Bits16;
 typedef Bits<uint32_t> Bits32;
 typedef Bits<uint64_t> Bits64;
-
-#endif

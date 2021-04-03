@@ -1,4 +1,4 @@
-// Class for controlling a raspberry pi 3
+// Class for controlling GPIO pins of a raspberry pi 3
 //
 // Copyright 2019 Democosm
 // 
@@ -32,7 +32,7 @@
 
 using namespace std;
 
-PIGPIO::PIGPIO(uint8_t num, bool output, bool initval)
+PiGPIO::PiGPIO(uint8_t num, bool output, bool initval)
 {
   char filename[200];
   FILE *file;
@@ -76,7 +76,7 @@ PIGPIO::PIGPIO(uint8_t num, bool output, bool initval)
   SetValue(initval);
 }
 
-PIGPIO::~PIGPIO()
+PiGPIO::~PiGPIO()
 {
   char filename[200];
   FILE *file;
@@ -111,7 +111,7 @@ PIGPIO::~PIGPIO()
   fclose(file);
 }
 
-int PIGPIO::GetValue(bool &val)
+int PiGPIO::GetValue(bool &val)
 {
   char filename[200];
   FILE *file;
@@ -144,7 +144,7 @@ int PIGPIO::GetValue(bool &val)
   return ERR_NONE;
 }
 
-int PIGPIO::SetValue(bool val)
+int PiGPIO::SetValue(bool val)
 {
   char filename[200];
   FILE *file;

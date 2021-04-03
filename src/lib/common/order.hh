@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _ORDER_HH_
-#define _ORDER_HH_
+#pragma once
 
 #include <inttypes.h>
 
@@ -46,5 +45,3 @@ uint32_t HostToWrong(uint32_t n);
 uint32_t WrongToHost(uint32_t n);
 uint64_t HostToWrong(uint64_t n);
 uint64_t WrongToHost(uint64_t n);
-
-#endif

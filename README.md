@@ -70,7 +70,7 @@ Open a terminal
 cd hc-cpp
 source activate
 cd src/app/scratchsrv
-mkposd
+mkhpd
 ../../../dst/x86_64posixdbg/bin/scratchsrv
 
 # To build and execute the example peer to peer message server
@@ -78,7 +78,7 @@ Open a terminal
 cd hc-cpp
 source activate
 cd src/app/msgsrv
-mkposd
+mkhpd
 ../../../dst/x86_64posixdbg/bin/msgsrv 1501
 
 # To build and execute the HC client
@@ -86,7 +86,7 @@ Open a terminal
 cd hc-cpp
 source activate
 cd src/app/hccli
-mkposd
+mkhpd
 ../../../dst/x86_64posixdbg/bin/hccli scratchudp.xml
 ../../../dst/x86_64posixdbg/bin/hccli scratchmsg.xml
 ../../../dst/x86_64posixdbg/bin/hccli proxy.xml

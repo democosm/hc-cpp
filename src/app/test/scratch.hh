@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SCRATCH_HH_
-#define _SCRATCH_HH_
+#pragma once
 
 #include <string>
 
@@ -40,5 +39,3 @@ public:
 private:
   std::string _string;
 };
-
-#endif

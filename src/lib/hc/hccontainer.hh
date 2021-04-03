@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCONTAINER_HH_
-#define _HCCONTAINER_HH_
+#pragma once
 
 #include "hcnode.hh"
 #include "hcparameter.hh"
@@ -56,5 +55,3 @@ private:
   HCContainer *_firstsubcont;
   HCParameter *_firstsubparam;
 };
-
-#endif

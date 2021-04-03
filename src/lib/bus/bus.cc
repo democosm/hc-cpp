@@ -24,8 +24,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "error.hh"
 #include "bus.hh"
+#include "error.hh"
+#include "order.hh"
 
 Bus::Bus()
 {
@@ -48,6 +49,55 @@ int Bus::Set(uint32_t addr, uint8_t *data, uint32_t len)
 {
   return ERR_NOIMP;
 }
+
+template <typename T> int Bus::Get(uint32_t addr, T& val)
+{
+  int err;
+  T buf;
+
+  //Get data using bus
+  _mutex->Wait();
+  err = Get(addr, (uint8_t*)&buf, sizeof(T));
+  _mutex->Give();
+
+  //Check for error
+  if(err != ERR_NONE)
+  {
+    val = 0;
+    return err;
+  }
+
+  //Convert to host byte order
+  val = NetToHost(buf);
+
+  return ERR_NONE;
+}
+
+template int Bus::Get<uint8_t>(uint32_t addr, uint8_t& val);
+template int Bus::Get<uint16_t>(uint32_t addr, uint16_t& val);
+template int Bus::Get<uint32_t>(uint32_t addr, uint32_t& val);
+template int Bus::Get<uint64_t>(uint32_t addr, uint64_t& val);
+
+template <typename T> int Bus::Set(uint32_t addr, const T val)
+{
+  int err;
+  T buf;
+
+  //Convert to network byte order
+  buf = HostToNet(val);
+
+  //Set data using bus
+  _mutex->Wait();
+  err = Set(addr, (uint8_t*)&buf, sizeof(T));
+  _mutex->Give();
+
+  return err;
+}
+
+template int Bus::Set<uint8_t>(uint32_t addr, const uint8_t val);
+template int Bus::Set<uint16_t>(uint32_t addr, const uint16_t val);
+template int Bus::Set<uint32_t>(uint32_t addr, const uint32_t val);
+template int Bus::Set<uint64_t>(uint32_t addr, const uint64_t val);
 
 void Bus::Reserve(void)
 {

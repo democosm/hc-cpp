@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SCRATCHVEC_HH_
-#define _SCRATCHVEC_HH_
+#pragma once
 
 #include "hcparameter.hh"
 #include <inttypes.h>
@@ -219,5 +218,3 @@ private:
 
 typedef ScratchVec3<float> ScratchV3F32;
 typedef ScratchVec3<double> ScratchV3F64;
-
-#endif

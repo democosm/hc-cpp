@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCONSOLE_HH_
-#define _HCCONSOLE_HH_
+#pragma once
 
 #include "device.hh"
 #include "hccontainer.hh"
@@ -152,5 +151,3 @@ private:
   std::vector<std::string> _tokens;
   bool _exit;
 };
-
-#endif

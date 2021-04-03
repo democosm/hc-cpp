@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCMESSAGE_HH_
-#define _HCMESSAGE_HH_
+#pragma once
 
 #include "device.hh"
 #include "hccell.hh"
@@ -59,5 +58,3 @@ private:
   uint32_t _payloadlength;
   uint8_t _transaction;
 };
-
-#endif

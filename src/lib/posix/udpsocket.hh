@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _UDPSOCKET_HH_
-#define _UDPSOCKET_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <netinet/in.h>
@@ -33,7 +32,7 @@
 class UDPSocket
 {
 public:
-  UDPSocket(uint16_t port, const char *bindif=0);
+  UDPSocket(uint16_t port=0, const char *bindif=0);
   virtual ~UDPSocket();
   uint32_t RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, uint16_t &srcport);
   uint32_t SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport);
@@ -41,5 +40,3 @@ public:
 private:
   int _socketfd;
 };
-
-#endif

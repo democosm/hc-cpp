@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2CBUS_HH_
-#define _I2CBUS_HH_
+#pragma once
 
 #include "bus.hh"
 #include "i2c.hh"
@@ -43,5 +42,3 @@ private:
   I2C *_i2c;
   uint8_t _devaddr;
 };
-
-#endif

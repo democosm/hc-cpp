@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCSERVER_HH_
-#define _HCSERVER_HH_
+#pragma once
 
 #include "device.hh"
 #include "thread.hh"
@@ -111,5 +110,3 @@ private:
   uint32_t _goodxactcnt;
   Thread<HCServer> *_ctlthread;
 };
-
-#endif

@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SCRATCH_HH_
-#define _SCRATCH_HH_
+#pragma once
 
 #include "hcparameter.hh"
 #include <inttypes.h>
@@ -223,5 +222,3 @@ typedef Scratch<uint32_t> ScratchU32;
 typedef Scratch<uint64_t> ScratchU64;
 typedef Scratch<float> ScratchF32;
 typedef Scratch<double> ScratchF64;
-
-#endif

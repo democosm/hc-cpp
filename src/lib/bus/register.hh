@@ -24,10 +24,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _REGISTER_HH_
-#define _REGISTER_HH_
+#pragma once
 
 #include "bus.hh"
+#include "error.hh"
 #include "order.hh"
 #include <cassert>
 #include <inttypes.h>
@@ -99,5 +99,3 @@ typedef Register<uint8_t> Register8;
 typedef Register<uint16_t> Register16;
 typedef Register<uint32_t> Register32;
 typedef Register<uint64_t> Register64;
-
-#endif

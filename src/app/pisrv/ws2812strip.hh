@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _WS2812STRIP_HH_
-#define _WS2812STRIP_HH_
+#pragma once
 
 #include "spi.hh"
 #include <inttypes.h>
@@ -44,5 +43,3 @@ private:
   uint32_t _count;
   uint8_t *_colorbuf;
 };
-
-#endif

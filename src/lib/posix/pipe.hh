@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PIPE_HH_
-#define _PIPE_HH_
+#pragma once
 
 #include "mutex.hh"
 #include "event.hh"
@@ -50,5 +49,3 @@ private:
   uint32_t _size;
   uint8_t *_buffer;
 };
-
-#endif

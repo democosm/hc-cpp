@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SEMAPHORE_HH_
-#define _SEMAPHORE_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <pthread.h>
@@ -51,5 +50,3 @@ private:
   uint32_t _initcount;
   uint32_t _count;
 };
-
-#endif

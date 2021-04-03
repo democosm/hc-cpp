@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _I2C_HH_
-#define _I2C_HH_
+#pragma once
 
 #include "mutex.hh"
 #include <inttypes.h>
@@ -42,5 +41,3 @@ private:
   Mutex *_mutex;
   int _fd;
 };
-
-#endif

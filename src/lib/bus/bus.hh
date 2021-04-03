@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _BUS_HH_
-#define _BUS_HH_
+#pragma once
 
 #include "mutex.hh"
 #include <inttypes.h>
@@ -37,11 +36,11 @@ public:
   virtual ~Bus();
   virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
   virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  template <typename T> int Get(uint32_t addr, T& val);
+  template <typename T> int Set(uint32_t addr, const T val);
   void Reserve(void);
   void Release(void);
 
 private:
   Mutex *_mutex;
 };
-
-#endif

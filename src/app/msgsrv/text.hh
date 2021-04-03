@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _TEXT_HH_
-#define _TEXT_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -41,5 +40,3 @@ public:
 private:
   std::string _message;
 };
-
-#endif

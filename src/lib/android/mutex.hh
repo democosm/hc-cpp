@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _MUTEX_HH_
-#define _MUTEX_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <pthread.h>
@@ -42,5 +41,3 @@ public:
 private:
   pthread_mutex_t _mutex;
 };
-
-#endif

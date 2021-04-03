@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SLIPFRAMER_HH_
-#define _SLIPFRAMER_HH_
+#pragma once
 
 #include "device.hh"
 #include <inttypes.h>
@@ -54,5 +53,3 @@ private:
   uint32_t _maxpldsiz;
   uint8_t *_txbuf;
 };
-
-#endif

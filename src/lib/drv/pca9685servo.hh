@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PCA9685SERVO_HH_
-#define _PCA9685SERVO_HH_
+#pragma once
 
 #include "pca9685.hh"
 #include "hccontainer.hh"
@@ -48,5 +47,3 @@ private:
   double _dutymin;
   double _dutymax;
 };
-
-#endif

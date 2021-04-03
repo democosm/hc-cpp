@@ -24,21 +24,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PIGPIO_HH_
-#define _PIGPIO_HH_
+#pragma once
 
 #include <inttypes.h>
 
-class PIGPIO
+class PiGPIO
 {
 public:
-  PIGPIO(uint8_t num, bool output=false, bool initval=false);
-  ~PIGPIO();
+  PiGPIO(uint8_t num, bool output=false, bool initval=false);
+  ~PiGPIO();
   int GetValue(bool &val);
   int SetValue(bool val);
 
 private:
   uint8_t _num;
 };
-
-#endif

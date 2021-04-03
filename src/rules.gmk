@@ -31,7 +31,7 @@ $(TARGET_DIR)/%.cc.o: $(SOURCE_DIR)/%.cc
 	$(CXX) $(CFLAGS) -MM -MT $@ -MF $(subst .o,.d,$@) $<
 	$(CXX) $(CFLAGS) -c $< -o $@
 
-# Target - Remove all built output
+# Target - Remove all build output
 clean:
 	rm -f $(OBJECT_FILES)
 	rm -f $(DEPEND_FILES)

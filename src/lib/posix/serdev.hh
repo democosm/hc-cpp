@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _SERDEV_HH_
-#define _SERDEV_HH_
+#pragma once
 
 #include "device.hh"
 #include <inttypes.h>
@@ -43,5 +42,3 @@ private:
   int _fd;
   struct termios _oldopts;
 };
-
-#endif

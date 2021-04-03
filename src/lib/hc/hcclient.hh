@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCLIENT_HH_
-#define _HCCLIENT_HH_
+#pragma once
 
 #include "hccell.hh"
 #include "hccontainer.hh"
@@ -119,5 +118,3 @@ private:
   uint8_t *_filebuffer;
   Thread<HCClient> *_readthread;
 };
-
-#endif

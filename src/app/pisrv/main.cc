@@ -1,4 +1,4 @@
-// PI server application
+// Raspberry Pi server application
 //
 // Copyright 2019 Democosm
 // 
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 //  PCA9685Servo *leftwindow;
 //  PCA9685Servo *rightwindow;
 //  PCA9685Servo *cellardoor;
-  PIServer *pisrv;
+  PiServer *pisrv;
   HCContainer *topcont;
   UDPDevice *srvdev;
   HCServer *srv;
@@ -146,8 +146,8 @@ int main(int argc, char **argv)
 //  rightwindow = new PCA9685Servo(pca9685, 14, 0.027, 0.127);
 //  cellardoor = new PCA9685Servo(pca9685, 15, 0.027, 0.127);
 
-  //Create PI server object
-  pisrv = new PIServer();
+  //Create Raspberry Pi server object
+  pisrv = new PiServer();
 
   //Create top container
   topcont = new HCContainer("");
@@ -164,16 +164,16 @@ int main(int argc, char **argv)
 //  leftwindow->RegisterInterface("leftwindow", topcont, srv);
 //  rightwindow->RegisterInterface("rightwindow", topcont, srv);
 //  cellardoor->RegisterInterface("cellardoor", topcont, srv);
-  param = new HCFlt32<PIServer>("temperature", pisrv, &PIServer::GetTemperature, 0);
+  param = new HCFlt32<PiServer>("temperature", pisrv, &PiServer::GetTemperature, 0);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCUns8<PIServer>("cpuutilization", pisrv, &PIServer::GetCPUUtilization, 0);
+  param = new HCUns8<PiServer>("cpuutilization", pisrv, &PiServer::GetCPUUtilization, 0);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCBoolTable<PIServer>("relayon", pisrv, &PIServer::GetRelayOn, &PIServer::SetRelayOn, 3);
+  param = new HCBoolTable<PiServer>("relayon", pisrv, &PiServer::GetRelayOn, &PiServer::SetRelayOn, 3);
   topcont->Add(param);
   srv->Add(param);
-  param = new HCCallTable<PIServer>("pulserelayhigh", pisrv, &PIServer::PulseRelayHigh, 3);
+  param = new HCCallTable<PiServer>("pulserelayhigh", pisrv, &PiServer::PulseRelayHigh, 3);
   topcont->Add(param);
   srv->Add(param);
 

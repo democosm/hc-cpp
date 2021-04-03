@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _TCPSERVER_HH_
-#define _TCPSERVER_HH_
+#pragma once
 
 #include "device.hh"
 #include "mutex.hh"
@@ -50,5 +49,3 @@ private:
   int _listenfd;
   int _connfd;
 };
-
-#endif

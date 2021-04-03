@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCQSERVER_HH_
-#define _HCQSERVER_HH_
+#pragma once
 
 #include "device.hh"
 #include "hccontainer.hh"
@@ -66,5 +65,3 @@ private:
   uint32_t _writeind;
   Thread<HCQServer> *_ctlthread;
 };
-
-#endif

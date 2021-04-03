@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _UDPDEVICE_HH_
-#define _UDPDEVICE_HH_
+#pragma once
 
 #include "device.hh"
 #include "mutex.hh"
@@ -48,5 +47,3 @@ private:
   uint16_t _dstport;
   bool _setdstonread;
 };
-
-#endif

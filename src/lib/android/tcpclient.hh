@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _TCPCLIENT_HH_
-#define _TCPCLIENT_HH_
+#pragma once
 
 #include "device.hh"
 #include "mutex.hh"
@@ -52,5 +51,3 @@ private:
   uint16_t _srvport;
   int _connfd;
 };
-
-#endif

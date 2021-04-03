@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCPARAM_HH_
-#define _HCPARAM_HH_
+#pragma once
 
 #include "hcnode.hh"
 #include "hccell.hh"
@@ -272,5 +271,3 @@ struct HCEIDEnum
   uint32_t _num;
   std::string _str;
 };
-
-#endif

@@ -24,12 +24,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _FTOI_HH_
-#define _FTOI_HH_
+#pragma once
 
 #include <inttypes.h>
 
 template <typename T> bool FToI(const double fval, T &ival);
 template <typename T> bool FToU(const double fval, T &ival);
-
-#endif

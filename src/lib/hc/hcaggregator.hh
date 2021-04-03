@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCAGGREGATOR_HH_
-#define _HCAGGREGATOR_HH_
+#pragma once
 
 #include "hcconnection.hh"
 #include "hccontainer.hh"
@@ -64,5 +63,3 @@ private:
   UDPDevice *_srvdev;
   HCServer *_srv;
 };
-
-#endif

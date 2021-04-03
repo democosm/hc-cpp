@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCELL_HH_
-#define _HCCELL_HH_
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -111,5 +110,3 @@ private:
   uint8_t _opcode;
   uint32_t _payloadlength;
 };
-
-#endif

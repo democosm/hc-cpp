@@ -31,22 +31,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-PIServer::PIServer()
+PiServer::PiServer()
 {
   //Create relay GPIO drivers
-  _relay[0] = new PIGPIO(26, true, true);
-  _relay[1] = new PIGPIO(20, true, true);
-  _relay[2] = new PIGPIO(21, true, true);
+  _relay[0] = new PiGPIO(26, true, true);
+  _relay[1] = new PiGPIO(20, true, true);
+  _relay[2] = new PiGPIO(21, true, true);
 
   //Initialize CPU utilization status
   _cpuutilization = 0.0;
 
   //Create and start control thread
-  _ctlthread = new Thread<PIServer>(this, &PIServer::CtlThread);
+  _ctlthread = new Thread<PiServer>(this, &PiServer::CtlThread);
   _ctlthread->Start();
 }
 
-PIServer::~PIServer()
+PiServer::~PiServer()
 {
   //Delete control thread
   delete _ctlthread;
@@ -57,7 +57,7 @@ PIServer::~PIServer()
   delete _relay[2];
 }
 
-int PIServer::GetTemperature(float &val)
+int PiServer::GetTemperature(float &val)
 {
   FILE *file;
   uint32_t valint;
@@ -83,13 +83,13 @@ int PIServer::GetTemperature(float &val)
   return ERR_NONE;
 }
 
-int PIServer::GetCPUUtilization(uint8_t &val)
+int PiServer::GetCPUUtilization(uint8_t &val)
 {
   val = _cpuutilization;
   return ERR_NONE;
 }
 
-int PIServer::GetRelayOn(uint32_t eid, bool &val)
+int PiServer::GetRelayOn(uint32_t eid, bool &val)
 {
   bool gpioval;
   int retval;
@@ -105,7 +105,7 @@ int PIServer::GetRelayOn(uint32_t eid, bool &val)
   return retval;
 }
 
-int PIServer::SetRelayOn(uint32_t eid, bool val)
+int PiServer::SetRelayOn(uint32_t eid, bool val)
 {
   //Check for invalid id
   if(eid >= 3)
@@ -115,7 +115,7 @@ int PIServer::SetRelayOn(uint32_t eid, bool val)
   return _relay[eid]->SetValue(val ? false : true);
 }
 
-int PIServer::PulseRelayHigh(uint32_t eid)
+int PiServer::PulseRelayHigh(uint32_t eid)
 {
   printf("%s(%d)\n", __FUNCTION__, eid);
   //Turn relay on, sleep and set turn relay off
@@ -126,7 +126,7 @@ int PIServer::PulseRelayHigh(uint32_t eid)
   return ERR_NONE;
 }
 
-void PIServer::CtlThread(void)
+void PiServer::CtlThread(void)
 {
   uint64_t user;
   uint64_t nice;

@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCCONNECTION_HH_
-#define _HCCONNECTION_HH_
+#pragma once
 
 #include "device.hh"
 #include "hcboolean.hh"
@@ -73,5 +72,3 @@ private:
   HCClient *_cli;
   HCContainer *_cont;
 };
-
-#endif

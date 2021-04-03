@@ -24,18 +24,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PISERVER_HH_
-#define _PISERVER_HH_
+#pragma once
 
 #include "pigpio.hh"
 #include "thread.hh"
 #include <inttypes.h>
 
-class PIServer
+class PiServer
 {
 public:
-  PIServer();
-  ~PIServer();
+  PiServer();
+  ~PiServer();
   int GetTemperature(float &val);
   int GetCPUUtilization(uint8_t &val);
   int GetRelayOn(uint32_t eid, bool &val);
@@ -46,9 +45,7 @@ private:
   void CtlThread(void);
 
 private:
-  PIGPIO *_relay[3];
+  PiGPIO *_relay[3];
   uint8_t _cpuutilization;
-  Thread<PIServer> *_ctlthread;
+  Thread<PiServer> *_ctlthread;
 };
-
-#endif

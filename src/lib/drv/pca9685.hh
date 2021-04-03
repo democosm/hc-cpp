@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _PCA9685_HH_
-#define _PCA9685_HH_
+#pragma once
 
 #include "bits.hh"
 #include "bus.hh"
@@ -81,5 +80,3 @@ private:
   LED _ledall;
   Register8 *_prescale;
 };
-
-#endif

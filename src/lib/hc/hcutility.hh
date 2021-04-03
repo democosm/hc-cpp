@@ -24,8 +24,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef _HCUTILITY_HH_
-#define _HCUTILITY_HH_
+#pragma once
 
 #include "hccontainer.hh"
 #include "hcparameter.hh"
@@ -40,5 +39,3 @@ public:
   static HCContainer *GetCont(const std::string &name, HCContainer *startcont, size_t index=0);
   static HCParameter *GetParam(const std::string &name, HCContainer *startcont, size_t index=0);
 };
-
-#endif

@@ -39,6 +39,7 @@ ifeq ($(TGTPROC), $(shell uname -m))
   AR = ar
   CFLAGS = \
     -Wall \
+    -Werror \
     -I$(PROJBASEDIR)/src/lib/bus \
     -I$(PROJBASEDIR)/src/lib/common \
     -I$(PROJBASEDIR)/src/lib/drv \

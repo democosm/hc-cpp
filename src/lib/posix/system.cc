@@ -31,6 +31,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+int Sysprintmaxdetail = 10;
+FILE* Sysprintlogfile = NULL;
+
 int SysCmd(const char *fmt, ...)
 {
   char cmdstr[1000];
@@ -65,4 +68,56 @@ int SysCmd(const char *fmt, ...)
 
   //Return exit status from command
   return WEXITSTATUS(retval);
+}
+
+void SysPrint(int detail, const char *fmt, ...)
+{
+  va_list args;
+
+  //Assert valid arguments
+  assert((detail >= 0) && (detail <= 10) && (fmt != 0));
+
+  //Filter out details beyond max level
+  if(detail > Sysprintmaxdetail)
+    return;
+
+  //Start var args
+  va_start(args, fmt);
+
+  //Send to file or console
+  if(Sysprintlogfile == NULL)
+    vprintf(fmt, args);
+  else
+    vfprintf(Sysprintlogfile, fmt, args);
+
+  //End var args
+  va_end(args);
+}
+
+void SysPrintSetMaxDetail(int val)
+{
+  //Assert valid arguments
+  assert((val >= -1) && (val <= 10));
+
+  //Set maximum print detail
+  Sysprintmaxdetail = val;
+}
+
+void SysPrintSetLogFile(const char* filename)
+{
+  FILE* temp;
+
+  //Close file if open
+  if(Sysprintlogfile != NULL)
+  {
+    //Temp variable used to minimize reentrancy issues without needing a mutex
+    temp = Sysprintlogfile;
+    Sysprintlogfile = NULL;
+    fclose(temp);
+  }
+
+  //Open log file if name provided
+  if(filename != 0)
+    if((Sysprintlogfile = fopen(filename, "w")) == NULL)
+      printf("SysPrint - Can't open log file '%s'\n", filename);
 }

@@ -30,3 +30,6 @@
 #define SC_QUIET_END ") > /dev/null 2>&1"
 
 int SysCmd(const char *fmt, ...);
+void SysPrint(int detail, const char *fmt, ...);
+void SysPrintSetMaxDetail(int detail);
+void SysPrintSetLogFile(const char* filename);

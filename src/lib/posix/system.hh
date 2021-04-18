@@ -26,10 +26,30 @@
 
 #pragma once
 
+#include <inttypes.h>
+#include <stdio.h>
+
 #define SC_QUIET_BEG "("
 #define SC_QUIET_END ") > /dev/null 2>&1"
 
-int SysCmd(const char *fmt, ...);
-void SysPrint(int detail, const char *fmt, ...);
-void SysPrintSetMaxDetail(int detail);
-void SysPrintSetLogFile(const char* filename);
+int SystemExecute(const char *fmt, ...);
+void SystemPrint(uint8_t detail, const char *fmt, ...);
+bool SystemGetPrintEnable(void);
+void SystemSetPrintEnable(bool enable);
+uint8_t SystemGetMaxPrintDetail(void);
+void SystemSetMaxPrintDetail(uint8_t detail);
+const char* SystemGetPrintLogFile(void);
+void SystemSetPrintLogFile(const char* filename);
+
+class System
+{
+public:
+  System();
+  ~System();
+  int GetPrintEnable(bool& val);
+  int SetPrintEnable(const bool val);
+  int GetMaxPrintDetail(uint8_t& val);
+  int SetMaxPrintDetail(const uint8_t val);
+  int GetPrintLogFile(std::string& val);
+  int SetPrintLogFile(const std::string& val);
+};

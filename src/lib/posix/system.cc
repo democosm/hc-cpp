@@ -24,17 +24,73 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "error.hh"
 #include "system.hh"
 #include <cassert>
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int Sysprintmaxdetail = 10;
-FILE* Sysprintlogfile = NULL;
+using namespace std;
 
-int SysCmd(const char *fmt, ...)
+bool Systemprintenable = false;
+uint8_t Systemmaxprintdetail = 0;
+char Systemprintlogfilename[100] = {};
+FILE* Systemprintlogfile = NULL;
+
+System::System()
+{
+}
+
+System::~System()
+{
+}
+
+int System::GetPrintEnable(bool& val)
+{
+  val = SystemGetPrintEnable();
+  return ERR_NONE;
+}
+
+int System::SetPrintEnable(const bool val)
+{
+  SystemSetPrintEnable(val);
+  return ERR_NONE;
+}
+
+int System::GetMaxPrintDetail(uint8_t& val)
+{
+  val = SystemGetMaxPrintDetail();
+  return ERR_NONE;
+}
+
+int System::SetMaxPrintDetail(const uint8_t val)
+{
+  //Check for range error
+  if(val > 10)
+    return ERR_RANGE;
+
+  SystemSetMaxPrintDetail(val);
+  return ERR_NONE;
+}
+
+int System::GetPrintLogFile(string& val)
+{
+  val = SystemGetPrintLogFile();
+  return ERR_NONE;
+}
+
+int System::SetPrintLogFile(const string& val)
+{
+  if(val.length() == 0)
+    SystemSetPrintLogFile(0);
+  else
+    SystemSetPrintLogFile(val.c_str());
+
+  return ERR_NONE;
+}
+
+int SystemExecute(const char *fmt, ...)
 {
   char cmdstr[1000];
   int retval;
@@ -70,54 +126,92 @@ int SysCmd(const char *fmt, ...)
   return WEXITSTATUS(retval);
 }
 
-void SysPrint(int detail, const char *fmt, ...)
+void SystemPrint(uint8_t detail, const char *fmt, ...)
 {
   va_list args;
 
   //Assert valid arguments
-  assert((detail >= 0) && (detail <= 10) && (fmt != 0));
+  assert((detail <= 10) && (fmt != 0));
+
+  //Check for output disabled
+  if(!Systemprintenable)
+    return;
 
   //Filter out details beyond max level
-  if(detail > Sysprintmaxdetail)
+  if(detail > Systemmaxprintdetail)
     return;
 
   //Start var args
   va_start(args, fmt);
 
   //Send to file or console
-  if(Sysprintlogfile == NULL)
+  if(Systemprintlogfile == NULL)
     vprintf(fmt, args);
   else
-    vfprintf(Sysprintlogfile, fmt, args);
+    vfprintf(Systemprintlogfile, fmt, args);
 
   //End var args
   va_end(args);
 }
 
-void SysPrintSetMaxDetail(int val)
+bool SystemGetPrintEnable(void)
 {
-  //Assert valid arguments
-  assert((val >= -1) && (val <= 10));
-
-  //Set maximum print detail
-  Sysprintmaxdetail = val;
+  //Return print enable
+  return Systemprintenable;
 }
 
-void SysPrintSetLogFile(const char* filename)
+void SystemSetPrintEnable(bool enable)
+{
+  //Set print enable
+  Systemprintenable = enable;
+}
+
+uint8_t SystemGetMaxPrintDetail(void)
+{
+  //Return maximum print detail
+  return Systemmaxprintdetail;
+}
+
+void SystemSetMaxPrintDetail(uint8_t detail)
+{
+  //Assert valid arguments
+  assert(detail <= 10);
+
+  //Set maximum print detail
+  Systemmaxprintdetail = detail;
+}
+
+const char* SystemGetPrintLogFile(void)
+{
+  //Return print log file name
+  return Systemprintlogfilename;
+}
+
+void SystemSetPrintLogFile(const char* filename)
 {
   FILE* temp;
 
   //Close file if open
-  if(Sysprintlogfile != NULL)
+  if(Systemprintlogfile != NULL)
   {
     //Temp variable used to minimize reentrancy issues without needing a mutex
-    temp = Sysprintlogfile;
-    Sysprintlogfile = NULL;
+    temp = Systemprintlogfile;
+    Systemprintlogfile = NULL;
+    Systemprintlogfilename[0] = '\0';
     fclose(temp);
   }
 
   //Open log file if name provided
   if(filename != 0)
-    if((Sysprintlogfile = fopen(filename, "w")) == NULL)
+  {
+    if((Systemprintlogfile = fopen(filename, "w")) == NULL)
+    {
       printf("SysPrint - Can't open log file '%s'\n", filename);
+      return;
+    }
+
+    //Cache file name
+    strncpy(Systemprintlogfilename, filename, sizeof(Systemprintlogfilename));
+    Systemprintlogfilename[sizeof(Systemprintlogfilename) - 1] = '\0';
+  }
 }

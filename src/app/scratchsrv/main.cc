@@ -43,6 +43,7 @@
 #include "scratchvec.hh"
 #include "slipframer.hh"
 #include "str.hh"
+#include "system.hh"
 #include "tcpserver.hh"
 #include "thread.hh"
 #include "tlsserver.hh"
@@ -272,6 +273,7 @@ static const HCEIDEnum Eidenums[] =
 
 int main(int argc, char **argv)
 {
+  System *system;
   ScratchBool *scratchbool;
   ScratchString *scratchstr;
   ScratchFile *scratchfile;
@@ -320,6 +322,9 @@ int main(int argc, char **argv)
   SSL_load_error_strings();	
   OpenSSL_add_ssl_algorithms();
 
+  //Create system
+  system = new System();
+
   //Create scratch objects
   scratchbool = new ScratchBool(TABLE_SIZE, LIST_MAX_SIZE);
   scratchstr = new ScratchString(TABLE_SIZE, LIST_MAX_SIZE);
@@ -365,6 +370,12 @@ int main(int argc, char **argv)
   srv = new HCServer(srvdev, topcont, "Scratch", __DATE__ " " __TIME__);
 
   //Add parameters
+  cont = new HCContainer("system");
+  Add(cont, topcont);
+  Add(new HCBool<System>("printenable", system, &System::GetPrintEnable, &System::SetPrintEnable, Boolenums), cont, srv);
+  Add(new HCUns8<System>("maxprintdetail", system, &System::GetMaxPrintDetail, &System::SetMaxPrintDetail), cont, srv);
+  Add(new HCStr<System>("printlogfile", system, &System::GetPrintLogFile, &System::SetPrintLogFile), cont, srv);
+
   cont = new HCContainer("bool");
   Add(cont, topcont);
   Add(new HCCall<ScratchBool>("print", scratchbool, &ScratchBool::Print), cont, srv);
@@ -686,6 +697,7 @@ int main(int argc, char **argv)
   delete scratchv2f64;
   delete scratchv3f32;
   delete scratchv3f64;
+  delete system;
 
   //Cleanup TLS
   EVP_cleanup();

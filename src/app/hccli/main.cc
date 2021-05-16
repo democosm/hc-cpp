@@ -32,10 +32,10 @@
 
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  HCAggregator *agg;
-  HCConsole *hccons;
+  HCAggregator* agg;
+  HCConsole* hccons;
 
   //Check for wrong number of arguments
   if(argc != 2)

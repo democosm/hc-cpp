@@ -28,7 +28,7 @@
 #include <limits>
 #include <math.h>
 
-template <typename T> bool FToI(const double fval, T &ival)
+template <typename T> bool FToI(const double fval, T& ival)
 {
   int64_t temp;
 
@@ -52,12 +52,12 @@ template <typename T> bool FToI(const double fval, T &ival)
   return true;
 }
 
-template bool FToI<int8_t>(const double fval, int8_t &ival);
-template bool FToI<int16_t>(const double fval, int16_t &ival);
-template bool FToI<int32_t>(const double fval, int32_t &ival);
-template bool FToI<int64_t>(const double fval, int64_t &ival);
+template bool FToI<int8_t>(const double fval, int8_t& ival);
+template bool FToI<int16_t>(const double fval, int16_t& ival);
+template bool FToI<int32_t>(const double fval, int32_t& ival);
+template bool FToI<int64_t>(const double fval, int64_t& ival);
 
-template <typename T> bool FToU(const double fval, T &ival)
+template <typename T> bool FToU(const double fval, T& ival)
 {
   uint64_t temp;
 
@@ -81,7 +81,7 @@ template <typename T> bool FToU(const double fval, T &ival)
   return true;
 }
 
-template bool FToU<uint8_t>(const double fval, uint8_t &ival);
-template bool FToU<uint16_t>(const double fval, uint16_t &ival);
-template bool FToU<uint32_t>(const double fval, uint32_t &ival);
-template bool FToU<uint64_t>(const double fval, uint64_t &ival);
+template bool FToU<uint8_t>(const double fval, uint8_t& ival);
+template bool FToU<uint16_t>(const double fval, uint16_t& ival);
+template bool FToU<uint32_t>(const double fval, uint32_t& ival);
+template bool FToU<uint64_t>(const double fval, uint64_t& ival);

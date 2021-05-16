@@ -66,21 +66,21 @@ public:
     return ERR_NONE;
   }
 
-  int Get(std::string &val)
+  int Get(std::string& val)
   {
     //Get value
     val = _val;
     return ERR_NONE;
   }
 
-  int Set(const std::string &val)
+  int Set(const std::string& val)
   {
     //Set value
     _val = val;
     return ERR_NONE;
   }
 
-  int TableGet(uint32_t eid, std::string &val)
+  int TableGet(uint32_t eid, std::string& val)
   {
     //Check for EID out of range
     if(eid >= _table.size())
@@ -94,7 +94,7 @@ public:
     return ERR_NONE;
   }
 
-  int TableSet(uint32_t eid, const std::string &val)
+  int TableSet(uint32_t eid, const std::string& val)
   {
     //Check for EID out of range
     if(eid >= _table.size())
@@ -105,7 +105,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListGet(uint32_t eid, std::string &val)
+  int ListGet(uint32_t eid, std::string& val)
   {
     //Check for EID out of range
     if(eid >= _list.size())
@@ -119,7 +119,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListAdd(const std::string &val)
+  int ListAdd(const std::string& val)
   {
     uint32_t i;
 
@@ -141,7 +141,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListSub(const std::string &val)
+  int ListSub(const std::string& val)
   {
     uint32_t i;
 

@@ -31,7 +31,7 @@
 
 using namespace std;
 
-HCContainer::HCContainer(const string &name)
+HCContainer::HCContainer(const string& name)
 : HCNode(name)
 {
   //Initialize member variables
@@ -43,10 +43,10 @@ HCContainer::HCContainer(const string &name)
 
 HCContainer::~HCContainer()
 {
-  HCContainer *cont;
-  HCContainer *nextcont;
-  HCParameter *param;
-  HCParameter *nextparam;
+  HCContainer* cont;
+  HCContainer* nextcont;
+  HCParameter* param;
+  HCParameter* nextparam;
 
   //Cleanup sub containers
   for(cont=_firstsubcont; cont!=0; cont=nextcont)
@@ -65,7 +65,7 @@ HCContainer::~HCContainer()
   }
 }
 
-bool HCContainer::GetNextCharInName(const string &name, char &nextchar)
+bool HCContainer::GetNextCharInName(const string& name, char& nextchar)
 {
   uint32_t namelen;
 
@@ -95,7 +95,7 @@ bool HCContainer::GetNextCharInName(const string &name, char &nextchar)
   return false;
 }
 
-void HCContainer::GetPath(string &path)
+void HCContainer::GetPath(string& path)
 {
   //Check for at root of path
   if(_parent == 0)
@@ -114,7 +114,7 @@ void HCContainer::GetPath(string &path)
   path += '/';
 }
 
-void HCContainer::PrintPath(ostream &st)
+void HCContainer::PrintPath(ostream& st)
 {
   //Check for at root of path
   if(_parent == 0)
@@ -131,16 +131,16 @@ void HCContainer::PrintPath(ostream &st)
   st << _name << '/';
 }
 
-void HCContainer::PrintInfo(ostream &st)
+void HCContainer::PrintInfo(ostream& st)
 {
   //Print information
   st << "Type: Cont";
 }
 
-void HCContainer::PrintConfig(ostream &st)
+void HCContainer::PrintConfig(ostream& st)
 {
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
   string path;
 
   //Loop through all sub parameters
@@ -161,29 +161,29 @@ void HCContainer::PrintConfig(ostream &st)
     cont->PrintConfig(st);
 }
 
-HCContainer *HCContainer::GetParent(void)
+HCContainer* HCContainer::GetParent(void)
 {
   return _parent;
 }
 
-void HCContainer::SetParent(HCContainer *parent)
+void HCContainer::SetParent(HCContainer* parent)
 {
   _parent = parent;
 }
 
-HCContainer *HCContainer::GetNext(void)
+HCContainer* HCContainer::GetNext(void)
 {
   return _next;
 }
 
-void HCContainer::SetNext(HCContainer *next)
+void HCContainer::SetNext(HCContainer* next)
 {
   _next = next;
 }
 
-void HCContainer::Add(HCContainer *cont)
+void HCContainer::Add(HCContainer* cont)
 {
-  HCContainer *last;
+  HCContainer* last;
 
   //Assert valid arguments
   assert(cont != 0);
@@ -208,9 +208,9 @@ void HCContainer::Add(HCContainer *cont)
   cont->SetParent(this);
 }
 
-void HCContainer::Add(HCParameter *param)
+void HCContainer::Add(HCParameter* param)
 {
-  HCParameter *last;
+  HCParameter* last;
 
   //Assert valid arguments
   assert(param != 0);
@@ -232,12 +232,12 @@ void HCContainer::Add(HCParameter *param)
   }
 }
 
-HCContainer *HCContainer::GetFirstSubCont(void)
+HCContainer* HCContainer::GetFirstSubCont(void)
 {
   return _firstsubcont;
 }
 
-HCParameter *HCContainer::GetFirstSubParam(void)
+HCParameter* HCContainer::GetFirstSubParam(void)
 {
   return _firstsubparam;
 }

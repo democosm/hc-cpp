@@ -32,12 +32,12 @@
 class I2C
 {
 public:
-  I2C(const char *name);
+  I2C(const char* name);
   virtual ~I2C();
-  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
-  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len);
+  int Get(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint32_t len);
+  int Set(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint32_t len);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
   int _fd;
 };

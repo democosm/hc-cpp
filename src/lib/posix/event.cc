@@ -74,7 +74,7 @@ int Event::Clear(void)
   return ERR_NONE;
 }
 
-int Event::Wait(uint32_t usecs)
+int Event::Wait(uint32_t msecs)
 {
   struct timespec timeout;
   int result;
@@ -84,7 +84,7 @@ int Event::Wait(uint32_t usecs)
     return ERR_UNSPEC;
 
   //Check for timeout specified as none, finite or infinite
-  if(usecs == WAIT_NONE)
+  if(msecs == WAIT_NONE)
   {
     //Check for count of 0
     if(_count == 0)
@@ -99,7 +99,7 @@ int Event::Wait(uint32_t usecs)
     //Set count to 0
     _count = 0;
   }
-  else if(usecs == WAIT_INF)
+  else if(msecs == WAIT_INF)
   {
     //Check for count of 0
     if(_count == 0)
@@ -125,12 +125,12 @@ int Event::Wait(uint32_t usecs)
     {
       //Calculate absolute time for cond wait timeout
       clock_gettime(CLOCK_MONOTONIC, &timeout);
-      timeout.tv_sec += usecs/1000000;
-      timeout.tv_nsec += (usecs%1000000)*1000;
+      timeout.tv_sec += msecs / 1000;
+      timeout.tv_nsec += (msecs % 1000) * 1000000;
       if(timeout.tv_nsec >= 1000000000)
       {
-        timeout.tv_sec += timeout.tv_nsec/1000000000;
-        timeout.tv_nsec = timeout.tv_nsec%1000000000;
+        timeout.tv_sec += timeout.tv_nsec / 1000000000;
+        timeout.tv_nsec = timeout.tv_nsec % 1000000000;
       }
 
       //Wait for cond lock with timeout

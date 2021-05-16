@@ -32,13 +32,13 @@
 class HCNode
 {
 public:
-  HCNode(const std::string &name="");
+  HCNode(const std::string& name="");
   virtual ~HCNode();
   const std::string GetName(void);
-  void GetName(const std::string &name);
-  bool IsNamed(const std::string &name);
-  bool NameStartsWith(const std::string &name);
-  bool NameMatchesExpression(const std::string &expression);
+  void GetName(const std::string& name);
+  bool IsNamed(const std::string& name);
+  bool NameStartsWith(const std::string& name);
+  bool NameMatchesExpression(const std::string& expression);
 
 protected:
   std::string _name;

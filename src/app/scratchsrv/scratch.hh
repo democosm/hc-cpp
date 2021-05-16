@@ -69,7 +69,7 @@ public:
     return ERR_NONE;
   }
 
-  int Get(T &val)
+  int Get(T& val)
   {
     //Get value
     val = _val;
@@ -83,7 +83,7 @@ public:
     return ERR_NONE;
   }
 
-  int TableGet(uint32_t eid, T &val)
+  int TableGet(uint32_t eid, T& val)
   {
     //Check for EID out of range
     if(eid >= _table.size())
@@ -108,7 +108,7 @@ public:
     return ERR_NONE;
   }
 
-  int ListGet(uint32_t eid, T &val)
+  int ListGet(uint32_t eid, T& val)
   {
     //Check for EID out of range
     if(eid >= _list.size())
@@ -167,7 +167,7 @@ public:
     return ERR_NOTFOUND;
   }
 
-  int ArrayGet(T* val, uint16_t maxlen, uint16_t &len)
+  int ArrayGet(T* val, uint16_t maxlen, uint16_t& len)
   {
     uint32_t i;
 

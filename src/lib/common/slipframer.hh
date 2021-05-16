@@ -32,10 +32,10 @@
 class SLIPFramer : public Device
 {
 public:
-  SLIPFramer(Device *lowdev, uint32_t maxpldsiz);
+  SLIPFramer(Device* lowdev, uint32_t maxpldsiz);
   virtual ~SLIPFramer();
-  virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(const void *buf, uint32_t len);
+  virtual uint32_t Read(void* buf, uint32_t maxlen);
+  virtual uint32_t Write(const void* buf, uint32_t len);
 
 private:
   //Receive states
@@ -49,7 +49,7 @@ private:
   static const uint8_t BYTE_ESC_ESC = 0xDD;
 
 private:
-  Device *_lowdev;
+  Device* _lowdev;
   uint32_t _maxpldsiz;
-  uint8_t *_txbuf;
+  uint8_t* _txbuf;
 };

@@ -42,7 +42,7 @@
 class HCStringCli
 {
 public:
-  HCStringCli(HCClient *cli, uint16_t pid)
+  HCStringCli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -57,44 +57,44 @@ public:
     //Cleanup
   }
 
-  int Get(std::string &val)
+  int Get(std::string& val)
   {
     //Delegate to client
     return _cli->Get(_pid, val);
   }
 
-  int Set(const std::string &val)
+  int Set(const std::string& val)
   {
     //Delegate to client
     return _cli->Set(_pid, val);
   }
 
-  int Add(const std::string &val)
+  int Add(const std::string& val)
   {
     //Delegate to client
     return _cli->Add(_pid, val);
   }
 
-  int Sub(const std::string &val)
+  int Sub(const std::string& val)
   {
     //Delegate to client
     return _cli->Sub(_pid, val);
   }
 
-  int IGet(uint32_t eid, std::string &val)
+  int IGet(uint32_t eid, std::string& val)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val);
   }
 
-  int ISet(uint32_t eid, const std::string &val)
+  int ISet(uint32_t eid, const std::string& val)
   {
     //Delegate to client
     return _cli->ISet(_pid, eid, val);
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -106,11 +106,11 @@ class HCString : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(std::string &);
-  typedef int (C::*SetMethod)(const std::string &);
+  typedef int (C::*GetMethod)(std::string&);
+  typedef int (C::*SetMethod)(const std::string&);
 
 public:
-  HCString(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod)
+  HCString(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -173,7 +173,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     std::string val;
 
@@ -193,7 +193,7 @@ public:
     st << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     st << _name;
     st << "\n  Type: str";
@@ -201,7 +201,7 @@ public:
     st << "\n  Savable: " << (IsSavable() ? "Yes" : "No");
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<str>" << "\n";
@@ -212,7 +212,7 @@ public:
     file << std::string(indent, ' ') << "</str>" << "\n";
   }
 
-  virtual int GetStr(std::string &val)
+  virtual int GetStr(std::string& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -225,7 +225,7 @@ public:
     return (_object->*_getmethod)(val);
   }
 
-  virtual int SetStr(const std::string &val)
+  virtual int SetStr(const std::string& val)
   {
     //Check for null method
     if(_setmethod == 0)
@@ -235,13 +235,13 @@ public:
     return (_object->*_setmethod)(val);
   }
 
-  virtual int SetStrLit(const std::string &val)
+  virtual int SetStrLit(const std::string& val)
   {
     //Delegate to normal set string method
     return SetStr(val);
   }
 
-  virtual bool GetCell(HCCell *icell, HCCell *ocell)
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
   {
     std::string val;
     int lerr;
@@ -277,7 +277,7 @@ public:
     return true;
   }
 
-  virtual bool SetCell(HCCell *icell, HCCell *ocell)
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     std::string val;
@@ -328,7 +328,7 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
 };
@@ -340,7 +340,7 @@ template <class C>
 class HCStringS : public HCString<C>
 {
 public:
-  HCStringS(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  HCStringS(const std::string& name, C* object, int (C::*getmethod)(std::string&), int (C::*setmethod)(const std::string&))
   : HCString<C>(name, object, getmethod, setmethod)
   {
   }
@@ -358,7 +358,7 @@ template <class C>
 class HCStr : public HCString<C>
 {
 public:
-  HCStr(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  HCStr(const std::string& name, C* object, int (C::*getmethod)(std::string&), int (C::*setmethod)(const std::string&))
   : HCString<C>(name, object, getmethod, setmethod)
   {
   }
@@ -368,7 +368,7 @@ template <class C>
 class HCStrS : public HCStringS<C>
 {
 public:
-  HCStrS(const std::string &name, C *object, int (C::*getmethod)(std::string &), int (C::*setmethod)(const std::string &))
+  HCStrS(const std::string& name, C* object, int (C::*getmethod)(std::string&), int (C::*setmethod)(const std::string&))
   : HCStringS<C>(name, object, getmethod, setmethod)
   {
   }
@@ -382,11 +382,11 @@ class HCStringTable : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, std::string &);
-  typedef int (C::*SetMethod)(uint32_t, const std::string &);
+  typedef int (C::*GetMethod)(uint32_t, std::string&);
+  typedef int (C::*SetMethod)(uint32_t, const std::string&);
 
 public:
-  HCStringTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums)
+  HCStringTable(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum* eidenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -491,7 +491,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     std::string val;
     uint32_t eid;
@@ -546,7 +546,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     uint32_t i;
 
@@ -566,7 +566,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -591,7 +591,7 @@ public:
     file << std::string(indent, ' ') << "</strt>" << "\n";
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -604,7 +604,7 @@ public:
     return (_object->*_getmethod)(eid, val);
   }
 
-  virtual int SetStrTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string& val)
   {
     //Check for null method
     if(_setmethod == 0)
@@ -614,13 +614,13 @@ public:
     return (_object->*_setmethod)(eid, val);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string& val)
   {
     //Delegate to normal set string method
     return SetStrTbl(eid, val);
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     std::string val;
     int lerr;
@@ -656,7 +656,7 @@ public:
     return true;
   }
 
-  virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool SetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     std::string val;
@@ -711,7 +711,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -737,7 +737,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -764,11 +764,11 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   uint32_t _size;
-  const HCEIDEnum *_eidenums;
+  const HCEIDEnum* _eidenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -778,7 +778,7 @@ template <class C>
 class HCStringTableS : public HCStringTable<C>
 {
 public:
-  HCStringTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  HCStringTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*setmethod)(uint32_t, const std::string&), uint32_t size, const HCEIDEnum* eidenums)
   : HCStringTable<C>(name, object, getmethod, setmethod, size, eidenums)
   {
   }
@@ -796,12 +796,12 @@ template <class C>
 class HCStrTable : public HCStringTable<C>
 {
 public:
-  HCStrTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  HCStrTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*setmethod)(uint32_t, const std::string&), uint32_t size, const HCEIDEnum* eidenums)
   : HCStringTable<C>(name, object, getmethod, setmethod, size, eidenums)
   {
   }
 
-  HCStrTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size)
+  HCStrTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*setmethod)(uint32_t, const std::string&), uint32_t size)
   : HCStringTable<C>(name, object, getmethod, setmethod, size, 0)
   {
   }
@@ -811,12 +811,12 @@ template <class C>
 class HCStrTableS : public HCStringTableS<C>
 {
 public:
-  HCStrTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size, const HCEIDEnum *eidenums)
+  HCStrTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*setmethod)(uint32_t, const std::string&), uint32_t size, const HCEIDEnum* eidenums)
   : HCStringTableS<C>(name, object, getmethod, setmethod, size, eidenums)
   {
   }
 
-  HCStrTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*setmethod)(uint32_t, const std::string &), uint32_t size)
+  HCStrTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*setmethod)(uint32_t, const std::string&), uint32_t size)
   : HCStringTableS<C>(name, object, getmethod, setmethod, size, 0)
   {
   }
@@ -830,12 +830,12 @@ class HCStringList : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, std::string &);
-  typedef int (C::*AddMethod)(const std::string &);
-  typedef int (C::*SubMethod)(const std::string &);
+  typedef int (C::*GetMethod)(uint32_t, std::string&);
+  typedef int (C::*AddMethod)(const std::string&);
+  typedef int (C::*SubMethod)(const std::string&);
 
 public:
-  HCStringList(const std::string &name, C *object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize)
+  HCStringList(const std::string& name, C* object, GetMethod getmethod, AddMethod addmethod, SubMethod submethod, uint32_t maxsize)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -923,7 +923,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     std::string val;
     uint32_t eid;
@@ -948,7 +948,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     st << _name;
     st << "\n  Type: strl";
@@ -957,7 +957,7 @@ public:
     st << "\n  Max Size: " << _maxsize;
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<strl>" << "\n";
@@ -969,7 +969,7 @@ public:
     file << std::string(indent, ' ') << "</strl>" << "\n";
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -982,7 +982,7 @@ public:
     return (_object->*_getmethod)(eid, val);
   }
 
-  virtual int AddStr(const std::string &val)
+  virtual int AddStr(const std::string& val)
   {
     //Check for null method
     if(_addmethod == 0)
@@ -992,13 +992,13 @@ public:
     return (_object->*_addmethod)(val);
   }
 
-  virtual int AddStrLit(const std::string &val)
+  virtual int AddStrLit(const std::string& val)
   {
     //Delegate to normal add string method
     return AddStr(val);
   }
 
-  virtual int SubStr(const std::string &val)
+  virtual int SubStr(const std::string& val)
   {
     //Check for null method
     if(_submethod == 0)
@@ -1008,13 +1008,13 @@ public:
     return (_object->*_submethod)(val);
   }
 
-  virtual int SubStrLit(const std::string &val)
+  virtual int SubStrLit(const std::string& val)
   {
     //Delegate to normal subtract string method
     return SubStr(val);
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     std::string val;
     int lerr;
@@ -1050,7 +1050,7 @@ public:
     return true;
   }
 
-  virtual bool AddCell(HCCell *icell, HCCell *ocell)
+  virtual bool AddCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     std::string val;
@@ -1100,7 +1100,7 @@ public:
     return true;
   }
 
-  virtual bool SubCell(HCCell *icell, HCCell *ocell)
+  virtual bool SubCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     std::string val;
@@ -1151,7 +1151,7 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   AddMethod _addmethod;
   SubMethod _submethod;
@@ -1165,7 +1165,7 @@ template <class C>
 class HCStringListS : public HCStringList<C>
 {
 public:
-  HCStringListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  HCStringListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*addmethod)(const std::string&), int (C::*submethod)(const std::string&), uint32_t maxsize)
   : HCStringList<C>(name, object, getmethod, addmethod, submethod, maxsize)
   {
   }
@@ -1183,7 +1183,7 @@ template <class C>
 class HCStrList : public HCStringList<C>
 {
 public:
-  HCStrList(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  HCStrList(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*addmethod)(const std::string&), int (C::*submethod)(const std::string&), uint32_t maxsize)
   : HCStringList<C>(name, object, getmethod, addmethod, submethod, maxsize)
   {
   }
@@ -1193,7 +1193,7 @@ template <class C>
 class HCStrListS : public HCStringListS<C>
 {
 public:
-  HCStrListS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, std::string &), int (C::*addmethod)(const std::string &), int (C::*submethod)(const std::string &), uint32_t maxsize)
+  HCStrListS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, std::string&), int (C::*addmethod)(const std::string&), int (C::*submethod)(const std::string&), uint32_t maxsize)
   : HCStringListS<C>(name, object, getmethod, addmethod, submethod, maxsize)
   {
   }

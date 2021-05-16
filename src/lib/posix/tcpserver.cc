@@ -55,7 +55,7 @@ TCPServer::TCPServer(uint16_t port)
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
-  if(bind(_listenfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+  if(bind(_listenfd, (struct sockaddr*)&addr, sizeof(addr)) != 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << "\n";
 
   //Set listening socket to reuseable
@@ -78,7 +78,7 @@ TCPServer::~TCPServer()
   delete _mutex;
 }
 
-uint32_t TCPServer::Read(void *buf, uint32_t maxlen)
+uint32_t TCPServer::Read(void* buf, uint32_t maxlen)
 {
   int connfd;
   ssize_t retval;
@@ -104,7 +104,7 @@ uint32_t TCPServer::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TCPServer::Write(const void *buf, uint32_t len)
+uint32_t TCPServer::Write(const void* buf, uint32_t len)
 {
   int connfd;
   ssize_t wlen;
@@ -155,16 +155,16 @@ int TCPServer::WaitForConnection(void)
     if(listen(_listenfd, 1024) != 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error listening" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
     //Accept
     caddrsiz = sizeof(caddr);
-    if((_connfd = accept(_listenfd, (struct sockaddr *)&caddr, &caddrsiz)) < 0)
+    if((_connfd = accept(_listenfd, (struct sockaddr*)&caddr, &caddrsiz)) < 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 

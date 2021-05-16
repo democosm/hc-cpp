@@ -35,14 +35,14 @@
 class UDPDevice : public Device
 {
 public:
-  UDPDevice(uint16_t port, const char *bindif=0, const char *destipaddr=0, uint16_t destport=0);
+  UDPDevice(uint16_t port, const char* bindif=0, const char* destipaddr=0, uint16_t destport=0);
   virtual ~UDPDevice();
-  uint32_t Read(void *buf, uint32_t maxlen);
-  uint32_t Write(const void *buf, uint32_t len);
+  uint32_t Read(void* buf, uint32_t maxlen);
+  uint32_t Write(const void* buf, uint32_t len);
 
 private:
-  UDPSocket *_sock;
-  Mutex *_mutex;
+  UDPSocket* _sock;
+  Mutex* _mutex;
   uint32_t _dstipaddr;
   uint16_t _dstport;
   bool _setdstonread;

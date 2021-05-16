@@ -46,8 +46,8 @@
 using namespace std;
 
 //Description strings
-static const char *Appversion = "1.0.0 " __DATE__ " " __TIME__;
-static const char *Appbugaddress = "<democosm@gmail.com>";
+static const char* Appversion = "1.0.0 " __DATE__ " " __TIME__;
+static const char* Appbugaddress = "<democosm@gmail.com>";
 static const char Appdoc[] = "Creates a server to control the Raspberry Pi.";
 
 //Application options
@@ -73,7 +73,7 @@ void Usage()
   cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 
-bool ParseOptions(int argc, char **argv, struct Args* args)
+bool ParseOptions(int argc, char** argv, struct Args* args)
 {
   int ch;
   bool valid;
@@ -100,23 +100,23 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
   return valid;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-//  I2C *i2c;
-//  I2CBus *pca9685bus;
-//  PCA9685 *pca9685;
-//  PCA9685Servo *frontdoor;
-//  PCA9685Servo *leftwindow;
-//  PCA9685Servo *rightwindow;
-//  PCA9685Servo *cellardoor;
-  PiServer *pisrv;
-  HCContainer *topcont;
-  UDPDevice *srvdev;
-  HCServer *srv;
-  Device *qsrvdev;
-  HCQServer *qsrv;
-  HCConsole *hccons;
-  HCParameter *param;
+//  I2C* i2c;
+//  I2CBus* pca9685bus;
+//  PCA9685* pca9685;
+//  PCA9685Servo* frontdoor;
+//  PCA9685Servo* leftwindow;
+//  PCA9685Servo* rightwindow;
+//  PCA9685Servo* cellardoor;
+  PiServer* pisrv;
+  HCContainer* topcont;
+  UDPDevice* srvdev;
+  HCServer* srv;
+  Device* qsrvdev;
+  HCQServer* qsrv;
+  HCConsole* hccons;
+  HCParameter* param;
   struct Args args;
 
   //Set argument default values
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
   if(args.daemon)
   {
     while(true)
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
   }
   else
   {

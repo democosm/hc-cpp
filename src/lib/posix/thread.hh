@@ -34,7 +34,7 @@
 #include <sched.h>
 #include <stdio.h>
 
-int ThreadSleep(uint32_t usecs);
+int ThreadSleep(uint32_t msecs);
 uint32_t ThreadNumProcsOnline(void);
 
 template <class T>
@@ -46,7 +46,7 @@ public:
   typedef void (T::*ThreadMethod)(void);
 
 public:
-  Thread(T *object, ThreadMethod method, int core=-1)
+  Thread(T* object, ThreadMethod method, int core=-1)
   {
     //Assert valid arguments
     assert((object != 0) && (method != 0));
@@ -99,7 +99,7 @@ public:
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     //Start the thread
-    if((result = pthread_create(&_threadid, NULL, (void *(*)(void *))&Thread<T>::Wrapper, this)) != 0)
+    if((result = pthread_create(&_threadid, NULL, (void*(*)(void*))&Thread<T>::Wrapper, this)) != 0)
     {
       //End mutual exclusion
       _mutex->Give();
@@ -118,7 +118,7 @@ public:
     return ERR_NONE;
   }
 
-  static void *Wrapper(Thread<T> *thread)
+  static void* Wrapper(Thread<T>* thread)
   {
     pthread_t tid;
     cpu_set_t cs;
@@ -157,10 +157,10 @@ public:
   }
 
 private:
-  T *_object;
+  T* _object;
   ThreadMethod _method;
   int _core;
-  Mutex *_mutex;
+  Mutex* _mutex;
   bool _started;
   pthread_t _threadid;
 };

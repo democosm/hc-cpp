@@ -35,17 +35,17 @@
 class TCPClient : public Device
 {
 public:
-  TCPClient(uint16_t port, const char *srvipaddr, uint16_t srvport);
+  TCPClient(uint16_t port, const char* srvipaddr, uint16_t srvport);
   virtual ~TCPClient();
-  virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(const void *buf, uint32_t len);
+  virtual uint32_t Read(void* buf, uint32_t maxlen);
+  virtual uint32_t Write(const void* buf, uint32_t len);
 
 private:
   void CloseConnection(void);
   int WaitForConnection(void);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
   uint16_t _port;
   uint32_t _srvipaddr;
   uint16_t _srvport;

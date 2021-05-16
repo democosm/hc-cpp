@@ -60,8 +60,8 @@ using namespace std;
 #define LIST_MAX_SIZE 10
 
 //Description strings
-static const char *Appversion = "2.0.0 " __DATE__ " " __TIME__;
-static const char *Appbugaddress = "<democosm@gmail.com>";
+static const char* Appversion = "2.0.0 " __DATE__ " " __TIME__;
+static const char* Appbugaddress = "<democosm@gmail.com>";
 static const char Appdoc[] = "Creates a scratch pad HC server that contains all basic HC types.";
 
 //Application options
@@ -99,7 +99,7 @@ void Usage()
   cout << "[-d, --daemon] Spawn in background mode" << "\n";
 }
 
-bool ParseOptions(int argc, char **argv, struct Args* args)
+bool ParseOptions(int argc, char** argv, struct Args* args)
 {
   int ch;
   bool valid;
@@ -154,7 +154,7 @@ bool ParseOptions(int argc, char **argv, struct Args* args)
   return valid;
 }
 
-void Add(HCContainer *cont, HCContainer *parent)
+void Add(HCContainer* cont, HCContainer* parent)
 {
   //Assert valid arguments
   assert((cont != 0) && (parent != 0));
@@ -163,7 +163,7 @@ void Add(HCContainer *cont, HCContainer *parent)
   parent->Add(cont);
 }
 
-void Add(HCParameter *param, HCContainer *parent, HCServer *srv)
+void Add(HCParameter* param, HCContainer* parent, HCServer* srv)
 {
   //Assert valid arguments
   assert((param != 0) && (parent != 0));
@@ -271,35 +271,35 @@ static const HCEIDEnum Eidenums[] =
   HCEIDEnum()
 };
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  System *system;
-  ScratchBool *scratchbool;
-  ScratchString *scratchstr;
-  ScratchFile *scratchfile;
-  ScratchI8 *scratchi8;
-  ScratchI16 *scratchi16;
-  ScratchI32 *scratchi32;
-  ScratchI64 *scratchi64;
-  ScratchU8 *scratchu8;
-  ScratchU16 *scratchu16;
-  ScratchU32 *scratchu32;
-  ScratchU64 *scratchu64;
-  ScratchF32 *scratchf32;
-  ScratchF64 *scratchf64;
-  ScratchV2F32 *scratchv2f32;
-  ScratchV2F64 *scratchv2f64;
-  ScratchV3F32 *scratchv3f32;
-  ScratchV3F64 *scratchv3f64;
-  HCContainer *topcont;
-  HCContainer *cont;
-  Device *srvdev;
-  TCPServer *tcpsrv;
-  TLSServer *tlssrv;
-  HCServer *srv;
-  Device *qsrvdev;
-  HCQServer *qsrv;
-  HCConsole *hccons;
+  System* system;
+  ScratchBool* scratchbool;
+  ScratchString* scratchstr;
+  ScratchFile* scratchfile;
+  ScratchI8* scratchi8;
+  ScratchI16* scratchi16;
+  ScratchI32* scratchi32;
+  ScratchI64* scratchi64;
+  ScratchU8* scratchu8;
+  ScratchU16* scratchu16;
+  ScratchU32* scratchu32;
+  ScratchU64* scratchu64;
+  ScratchF32* scratchf32;
+  ScratchF64* scratchf64;
+  ScratchV2F32* scratchv2f32;
+  ScratchV2F64* scratchv2f64;
+  ScratchV3F32* scratchv3f32;
+  ScratchV3F64* scratchv3f64;
+  HCContainer* topcont;
+  HCContainer* cont;
+  Device* srvdev;
+  TCPServer* tcpsrv;
+  TLSServer* tlssrv;
+  HCServer* srv;
+  Device* qsrvdev;
+  HCQServer* qsrv;
+  HCConsole* hccons;
   struct Args args;
 
   //Set argument default values
@@ -660,7 +660,7 @@ int main(int argc, char **argv)
   if(args.daemon)
   {
     while(true)
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
   }
   else
   {

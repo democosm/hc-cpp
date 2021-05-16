@@ -26,6 +26,10 @@
 
 #pragma once
 
+//Special wait times
+#define WAIT_NONE 0
+#define WAIT_INF 0xFFFFFFFF
+
 //Terminal codes
 #define TC_RESET "\033[0m"
 #define TC_BLINK "\033[5m"

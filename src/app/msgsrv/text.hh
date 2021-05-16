@@ -34,8 +34,8 @@ class Text
 public:
   Text();
   ~Text();
-  int GetMessage(std::string &val);
-  int SetMessage(const std::string &val);
+  int GetMessage(std::string& val);
+  int SetMessage(const std::string& val);
 
 private:
   std::string _message;

@@ -48,7 +48,7 @@ SimBus::~SimBus()
   delete[] _buf;
 }
 
-int SimBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
+int SimBus::Get(uint32_t addr, uint8_t* data, uint32_t len)
 {
   //Assert valid arguments
   assert((data != 0) && (len > 0));
@@ -62,7 +62,7 @@ int SimBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
   return ERR_NONE;
 }
 
-int SimBus::Set(uint32_t addr, uint8_t *data, uint32_t len)
+int SimBus::Set(uint32_t addr, uint8_t* data, uint32_t len)
 {
   //Assert valid arguments
   assert((data != 0) && (len > 0));

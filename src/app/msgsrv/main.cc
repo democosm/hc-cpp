@@ -41,15 +41,15 @@
 
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-  Text *text;
-  HCContainer *topcont;
-  UDPDevice *srvdev;
-  HCServer *srv;
-  HCConsole *hccons;
+  Text* text;
+  HCContainer* topcont;
+  UDPDevice* srvdev;
+  HCServer* srv;
+  HCConsole* hccons;
   uint16_t port;
-  HCParameter *param;
+  HCParameter* param;
 
   //Set argument default values
   port = 1500;

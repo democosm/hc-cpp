@@ -35,12 +35,12 @@
 
 using namespace std;
 
-TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, uint32_t authcode)
+TLSServer::TLSServer(uint16_t port, const char* certfile, const char* keyfile, uint32_t authcode)
 : Device()
 {
   struct sockaddr_in addr;
   int optval;
-  const SSL_METHOD *sslmethod;
+  const SSL_METHOD* sslmethod;
 
   //Assert valid arguments
   assert((certfile != 0) && (keyfile != 0));
@@ -63,7 +63,7 @@ TLSServer::TLSServer(uint16_t port, const char *certfile, const char *keyfile, u
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
-  if(bind(_listenfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+  if(bind(_listenfd, (struct sockaddr*)&addr, sizeof(addr)) != 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error binding listening socket" << "\n";
 
   //Set listening socket to reuseable
@@ -113,9 +113,9 @@ TLSServer::~TLSServer()
   delete _mutex;
 }
 
-uint32_t TLSServer::Read(void *buf, uint32_t maxlen)
+uint32_t TLSServer::Read(void* buf, uint32_t maxlen)
 {
-  SSL *ssl;
+  SSL* ssl;
   ssize_t retval;
 
   //Assert valid arguments
@@ -139,9 +139,9 @@ uint32_t TLSServer::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TLSServer::Write(const void *buf, uint32_t len)
+uint32_t TLSServer::Write(const void* buf, uint32_t len)
 {
-  SSL *ssl;
+  SSL* ssl;
   ssize_t wlen;
 
   //Assert valid arguments
@@ -180,7 +180,7 @@ void TLSServer::CloseConnection(void)
   _connfd = -1;
 }
 
-SSL *TLSServer::WaitForConnection(void)
+SSL* TLSServer::WaitForConnection(void)
 {
   struct sockaddr_in caddr;
   socklen_t caddrsiz;
@@ -196,16 +196,16 @@ SSL *TLSServer::WaitForConnection(void)
     if(listen(_listenfd, 1024) != 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error listening" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
     //Accept
     caddrsiz = sizeof(caddr);
-    if((_connfd = accept(_listenfd, (struct sockaddr *)&caddr, &caddrsiz)) < 0)
+    if((_connfd = accept(_listenfd, (struct sockaddr*)&caddr, &caddrsiz)) < 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error accepting" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -218,7 +218,7 @@ SSL *TLSServer::WaitForConnection(void)
     {
       ERR_print_errors_fp(stderr);
       CloseConnection();
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -227,7 +227,7 @@ SSL *TLSServer::WaitForConnection(void)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error authenticating" << "\n";
       CloseConnection();
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -236,7 +236,7 @@ SSL *TLSServer::WaitForConnection(void)
   }
 }
 
-bool TLSServer::Authenticate(SSL *ssl)
+bool TLSServer::Authenticate(SSL* ssl)
 {
   uint8_t byte;
   uint32_t hash;

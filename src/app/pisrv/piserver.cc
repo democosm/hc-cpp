@@ -57,9 +57,9 @@ PiServer::~PiServer()
   delete _relay[2];
 }
 
-int PiServer::GetTemperature(float &val)
+int PiServer::GetTemperature(float& val)
 {
-  FILE *file;
+  FILE* file;
   uint32_t valint;
 
   //Open temperature file and check for error
@@ -83,13 +83,13 @@ int PiServer::GetTemperature(float &val)
   return ERR_NONE;
 }
 
-int PiServer::GetCPUUtilization(uint8_t &val)
+int PiServer::GetCPUUtilization(uint8_t& val)
 {
   val = _cpuutilization;
   return ERR_NONE;
 }
 
-int PiServer::GetRelayOn(uint32_t eid, bool &val)
+int PiServer::GetRelayOn(uint32_t eid, bool& val)
 {
   bool gpioval;
   int retval;
@@ -120,7 +120,7 @@ int PiServer::PulseRelayHigh(uint32_t eid)
   printf("%s(%d)\n", __FUNCTION__, eid);
   //Turn relay on, sleep and set turn relay off
   SetRelayOn(eid, true);
-  ThreadSleep(500000);
+  ThreadSleep(500);
   SetRelayOn(eid, false);
 
   return ERR_NONE;
@@ -136,7 +136,7 @@ void PiServer::CtlThread(void)
   uint64_t total;
   uint64_t oldtotaluse;
   uint64_t oldtotal;
-  FILE *fp;
+  FILE* fp;
 
   //Initialize old counts
   oldtotaluse = 0;
@@ -146,7 +146,7 @@ void PiServer::CtlThread(void)
   while(true)
   {
     //Sleep one second
-    ThreadSleep(1000000);
+    ThreadSleep(1000);
 
     //Open processor stats file and check for success
     if((fp = fopen("/proc/stat", "r")) != NULL)

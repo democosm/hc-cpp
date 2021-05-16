@@ -49,7 +49,7 @@ struct HCBooleanEnum
     _str = "";
   }
 
-  HCBooleanEnum(bool num, const std::string &str)
+  HCBooleanEnum(bool num, const std::string& str)
   {
     //Initialize member variables
     _num = num;
@@ -66,7 +66,7 @@ struct HCBooleanEnum
 class HCBooleanCli
 {
 public:
-  HCBooleanCli(HCClient *cli, uint16_t pid)
+  HCBooleanCli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -80,7 +80,7 @@ public:
   {
   }
 
-  int Get(bool &val)
+  int Get(bool& val)
   {
     //Delegate to client
     return _cli->Get(_pid, val);
@@ -92,7 +92,7 @@ public:
     return _cli->Set(_pid, val);
   }
 
-  int IGet(uint32_t eid, bool &val)
+  int IGet(uint32_t eid, bool& val)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val);
@@ -105,7 +105,7 @@ public:
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -117,11 +117,11 @@ class HCBoolean : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(bool &val);
+  typedef int (C::*GetMethod)(bool& val);
   typedef int (C::*SetMethod)(const bool);
 
 public:
-  HCBoolean(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum *valenums)
+  HCBoolean(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, const HCBooleanEnum* valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -228,7 +228,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     bool val;
     uint32_t i;
@@ -279,7 +279,7 @@ public:
     st << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     uint32_t i;
 
@@ -299,7 +299,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -323,7 +323,7 @@ public:
     file << std::string(indent, ' ') << "</bool>" << "\n";
   }
 
-  virtual int GetBool(bool &val)
+  virtual int GetBool(bool& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -346,7 +346,7 @@ public:
     return (_object->*_setmethod)(val);
   }
 
-  virtual int GetStr(std::string &val)
+  virtual int GetStr(std::string& val)
   {
     bool nval;
     int lerr;
@@ -391,7 +391,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStr(const std::string &val)
+  virtual int SetStr(const std::string& val)
   {
     bool nval;
 
@@ -407,7 +407,7 @@ public:
     return (_object->*_setmethod)(nval);
   }
 
-  virtual int SetStrLit(const std::string &val)
+  virtual int SetStrLit(const std::string& val)
   {
     uint32_t i;
 
@@ -433,7 +433,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual bool GetCell(HCCell *icell, HCCell *ocell)
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
   {
     bool val;
     int lerr;
@@ -469,7 +469,7 @@ public:
     return true;
   }
 
-  virtual bool SetCell(HCCell *icell, HCCell *ocell)
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     bool val;
@@ -519,7 +519,7 @@ public:
     return true;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string& str)
   {
     uint32_t i;
 
@@ -546,10 +546,10 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
-  const HCBooleanEnum *_valenums;
+  const HCBooleanEnum* _valenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -559,7 +559,7 @@ template <class C>
 class HCBooleanS : public HCBoolean<C>
 {
 public:
-  HCBooleanS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  HCBooleanS(const std::string& name, C* object, int (C::*getmethod)(bool&), int (C::*setmethod)(const bool), const HCBooleanEnum* valenums)
   : HCBoolean<C>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -577,12 +577,12 @@ template <class C>
 class HCBool : public HCBoolean<C>
 {
 public:
-  HCBool(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool))
+  HCBool(const std::string& name, C* object, int (C::*getmethod)(bool&), int (C::*setmethod)(const bool))
   : HCBoolean<C>(name, object, getmethod, setmethod, 0)
   {
   }
 
-  HCBool(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  HCBool(const std::string& name, C* object, int (C::*getmethod)(bool&), int (C::*setmethod)(const bool), const HCBooleanEnum* valenums)
   : HCBoolean<C>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -592,12 +592,12 @@ template <class C>
 class HCBoolS : public HCBooleanS<C>
 {
 public:
-  HCBoolS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool))
+  HCBoolS(const std::string& name, C* object, int (C::*getmethod)(bool&), int (C::*setmethod)(const bool))
   : HCBooleanS<C>(name, object, getmethod, setmethod, 0)
   {
   }
 
-  HCBoolS(const std::string &name, C *object, int (C::*getmethod)(bool &), int (C::*setmethod)(const bool), const HCBooleanEnum *valenums)
+  HCBoolS(const std::string& name, C* object, int (C::*getmethod)(bool&), int (C::*setmethod)(const bool), const HCBooleanEnum* valenums)
   : HCBooleanS<C>(name, object, getmethod, setmethod, valenums)
   {
   }
@@ -611,11 +611,11 @@ class HCBooleanTable : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, bool &);
+  typedef int (C::*GetMethod)(uint32_t, bool&);
   typedef int (C::*SetMethod)(uint32_t, const bool);
 
 public:
-  HCBooleanTable(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  HCBooleanTable(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum* eidenums, const HCBooleanEnum* valenums)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -826,7 +826,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     bool val;
     uint32_t eid;
@@ -966,7 +966,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     uint32_t i;
 
@@ -996,7 +996,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -1031,7 +1031,7 @@ public:
     file << std::string(indent, ' ') << "</boolt>" << "\n";
   }
 
-  virtual int GetBoolTbl(uint32_t eid, bool &val)
+  virtual int GetBoolTbl(uint32_t eid, bool& val)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -1054,7 +1054,7 @@ public:
     return (_object->*_setmethod)(eid, val);
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     bool nval;
     int lerr;
@@ -1099,7 +1099,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string& val)
   {
     bool nval;
     uint32_t i;
@@ -1137,7 +1137,7 @@ public:
     return (_object->*_setmethod)(eid, nval);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string& val)
   {
     uint32_t i;
 
@@ -1167,7 +1167,7 @@ public:
     return ERR_RANGE;
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     bool val;
     int lerr;
@@ -1203,7 +1203,7 @@ public:
     return true;
   }
 
-  virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool SetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     bool val;
@@ -1258,7 +1258,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -1284,7 +1284,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -1310,7 +1310,7 @@ public:
     return false;
   }
 
-  virtual bool ValToEnumStr(bool num, std::string &str)
+  virtual bool ValToEnumStr(bool num, std::string& str)
   {
     uint32_t i;
 
@@ -1336,7 +1336,7 @@ public:
     return false;
   }
 
-  virtual bool GetValEnumStr(uint32_t ind, std::string &str)
+  virtual bool GetValEnumStr(uint32_t ind, std::string& str)
   {
     uint32_t i;
 
@@ -1363,12 +1363,12 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   uint32_t _size;
-  const HCBooleanEnum *_valenums;
-  const HCEIDEnum *_eidenums;
+  const HCBooleanEnum* _valenums;
+  const HCEIDEnum* _eidenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -1378,7 +1378,7 @@ template <class C>
 class HCBooleanTableS : public HCBooleanTable<C>
 {
 public:
-  HCBooleanTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  HCBooleanTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum* eidenums, const HCBooleanEnum* valenums)
   : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1396,22 +1396,22 @@ template <class C>
 class HCBoolTable : public HCBooleanTable<C>
 {
 public:
-  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
+  HCBoolTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
   : HCBooleanTable<C>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum *valenums)
+  HCBoolTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum* valenums)
   : HCBooleanTable<C>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums)
+  HCBoolTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum* eidenums)
   : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCBoolTable(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  HCBoolTable(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum* eidenums, const HCBooleanEnum* valenums)
   : HCBooleanTable<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }
@@ -1421,22 +1421,22 @@ template <class C>
 class HCBoolTableS : public HCBooleanTableS<C>
 {
 public:
-  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
+  HCBoolTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size)
   : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, 0, 0)
   {
   }
 
-  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum *valenums)
+  HCBoolTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCBooleanEnum* valenums)
   : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, 0, valenums)
   {
   }
 
-  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums)
+  HCBoolTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum* eidenums)
   : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, eidenums, 0)
   {
   }
 
-  HCBoolTableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, bool &), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum *eidenums, const HCBooleanEnum *valenums)
+  HCBoolTableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, bool&), int (C::*setmethod)(uint32_t, const bool), uint32_t size, const HCEIDEnum* eidenums, const HCBooleanEnum* valenums)
   : HCBooleanTableS<C>(name, object, getmethod, setmethod, size, eidenums, valenums)
   {
   }

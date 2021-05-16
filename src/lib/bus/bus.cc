@@ -40,12 +40,12 @@ Bus::~Bus()
   delete _mutex;
 }
 
-int Bus::Get(uint32_t addr, uint8_t *data, uint32_t len)
+int Bus::Get(uint32_t addr, uint8_t* data, uint32_t len)
 {
   return ERR_NOIMP;
 }
 
-int Bus::Set(uint32_t addr, uint8_t *data, uint32_t len)
+int Bus::Set(uint32_t addr, uint8_t* data, uint32_t len)
 {
   return ERR_NOIMP;
 }

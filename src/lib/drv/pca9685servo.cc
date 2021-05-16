@@ -33,10 +33,10 @@
 #include <cassert>
 #include <math.h>
 
-PCA9685Servo::PCA9685Servo(PCA9685 *pca9685, uint32_t chanid, double dutymin, double dutymax)
+PCA9685Servo::PCA9685Servo(PCA9685* pca9685, uint32_t chanid, double dutymin, double dutymax)
 {
   //Assert valid arguments
-  assert((pca9685 != 0) && (chanid < 16) && (dutymin < dutymax) && (dutymin >= 0.0) & (dutymax <= 1.0));
+  assert((pca9685 != 0) && (chanid < 16) && (dutymin < dutymax) && (dutymin >= 0.0) && (dutymax <= 1.0));
 
   //Initialize cache variables
   _pca9685 = pca9685;
@@ -49,10 +49,10 @@ PCA9685Servo::~PCA9685Servo()
 {
 }
 
-void PCA9685Servo::RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv)
+void PCA9685Servo::RegisterInterface(const char* contname, HCContainer* pcont, HCServer* srv)
 {
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
 
   cont = new HCContainer(contname);
   pcont->Add(cont);
@@ -65,7 +65,7 @@ void PCA9685Servo::RegisterInterface(const char *contname, HCContainer *pcont, H
   srv->Add(param);
 }
 
-int PCA9685Servo::GetAngle(double &val)
+int PCA9685Servo::GetAngle(double& val)
 {
   int err;
   double duty;
@@ -107,13 +107,13 @@ int PCA9685Servo::SlewTest(void)
   for(i=0; i<20; i++)
   {
     SetAngle(M_PI * (double)i / 19.0 - M_PI_2);
-    ThreadSleep(50000);
+    ThreadSleep(50);
   }
 
   for(i=0; i<20; i++)
   {
     SetAngle(M_PI_2 - M_PI * (double)i / 19.0);
-    ThreadSleep(50000);
+    ThreadSleep(50);
   }
 
   SetAngle(0.0);

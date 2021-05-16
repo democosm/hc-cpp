@@ -36,7 +36,7 @@ template <class T>
 class Register
 {
 public:
-  Register(Bus *bus, uint32_t addr)
+  Register(Bus* bus, uint32_t addr)
   {
     //Assert valid arguments
     assert(bus != 0);
@@ -50,14 +50,14 @@ public:
   {
   }
 
-  int Get(T &val)
+  int Get(T& val)
   {
     int terr;
     T buf;
 
     //Get data using bus
     _bus->Reserve();
-    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t*)&buf, sizeof(T));
     _bus->Release();
 
     //Check for error
@@ -83,14 +83,14 @@ public:
 
     //Set data using bus
     _bus->Reserve();
-    terr = _bus->Set(_addr, (uint8_t *)&buf, sizeof(T));
+    terr = _bus->Set(_addr, (uint8_t*)&buf, sizeof(T));
     _bus->Release();
 
     return terr;
   }
 
 private:
-  Bus *_bus;
+  Bus* _bus;
   uint32_t _addr;
 };
 

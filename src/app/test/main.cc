@@ -37,14 +37,14 @@
 
 using namespace std;
 
-Scratch *scratch;
-UDPSocket *srvdev;
-HCContainer *srvtopcont;
-HCServer *srv;
-HCParameter *param;
-UDPSocket *clidev;
-HCContainer *clitopcont;
-HCClient *cli;
+Scratch* scratch;
+UDPSocket* srvdev;
+HCContainer* srvtopcont;
+HCServer* srv;
+HCParameter* param;
+UDPSocket* clidev;
+HCContainer* clitopcont;
+HCClient* cli;
 
 TEST(HC, ServerInit)
 {
@@ -59,19 +59,19 @@ TEST(HC, ServerInit)
   ASSERT_EQ("Scratch", sval);
   ASSERT_EQ(ERR_NONE, srv->GetDebug(bval));
   ASSERT_FALSE(bval);
-  ASSERT_EQ(ERR_NONE, srv->GetSendErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetSendErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetRecvErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetRecvErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetCellErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetCellErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetOpCodeErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetOpCodeErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetPIDErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetPIDErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetIntErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetIntErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, srv->GetGoodXactCnt(u32val));
+  ASSERT_EQ(ERR_NONE, srv->GetGoodXactCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
 
   //Get server CRC by method and compare to file CRC
@@ -85,27 +85,27 @@ TEST(HC, ClientInit)
   uint32_t u32val;
 
   //Verify all error counts in client are zero
-  ASSERT_EQ(ERR_NONE, cli->GetSendErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetSendErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetRecvErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetRecvErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetTransactionErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetTransactionErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetCellErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetCellErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetOpCodeErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetOpCodeErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetTimeoutErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetTimeoutErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetPIDErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetPIDErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetTypeErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetTypeErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetEIDErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetEIDErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetOffsetErrCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetOffsetErrCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
-  ASSERT_EQ(ERR_NONE, cli->GetGoodXactCnt(u32val));
+  ASSERT_EQ(ERR_NONE, cli->GetGoodXactCount(u32val));
   ASSERT_EQ(u32val, (uint32_t)0);
 }
 
@@ -155,7 +155,7 @@ TEST(HC, ControlStrings)
   ASSERT_EQ(clival, testval);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   int result;
 
@@ -186,7 +186,7 @@ int main(int argc, char **argv)
   clitopcont = new HCContainer("");
 
   //Create client
-  cli = new HCClient(clidev, clitopcont, 100000);
+  cli = new HCClient(clidev, clitopcont, 100);
 
   //Initialize and run all tests
   testing::InitGoogleTest(&argc, argv);

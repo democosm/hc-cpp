@@ -35,7 +35,7 @@
 
 using namespace std;
 
-PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
+PCA9685::PCA9685(Bus* bus, uint32_t pwmfreq)
 {
   uint32_t i;
   uint8_t prescale;
@@ -64,12 +64,12 @@ PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
 
   for(i=0; i<16; i++)
   {
-    _led[i]._oncnt = new Retsiger16(bus, i*4+6);
-    _led[i]._offcnt = new Retsiger16(bus, i*4+8);
+    _led[i]._oncount = new Retsiger16(bus, i*4+6);
+    _led[i]._offcount = new Retsiger16(bus, i*4+8);
   }
 
-  _ledall._oncnt = new Retsiger16(bus, 0xFA);
-  _ledall._offcnt = new Retsiger16(bus, 0xFC);
+  _ledall._oncount = new Retsiger16(bus, 0xFA);
+  _ledall._offcount = new Retsiger16(bus, 0xFC);
   _prescale = new Register8(bus, 0xFE);
 
   //Force into sleep mode without restarting (prescale can only be set in sleep mode)
@@ -84,7 +84,7 @@ PCA9685::PCA9685(Bus *bus, uint32_t pwmfreq)
   //Pull out of sleep mode, wait 50ms and then restart
   tval = 0x00;
   bus->Set(0, &tval, 1);
-  ThreadSleep(50000);
+  ThreadSleep(50);
   tval = 0x80;
   bus->Set(0, &tval, 1);
 
@@ -119,21 +119,21 @@ PCA9685::~PCA9685()
 
   for(i=0; i<16; i++)
   {
-    delete _led[i]._oncnt;
-    delete _led[i]._offcnt;
+    delete _led[i]._oncount;
+    delete _led[i]._offcount;
   }
 
-  delete _ledall._oncnt;
-  delete _ledall._offcnt;
+  delete _ledall._oncount;
+  delete _ledall._offcount;
   delete _prescale;
 }
 
-void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv)
+void PCA9685::RegisterInterface(const char* contname, HCContainer* pcont, HCServer* srv)
 {
-  HCContainer *cont;
-  HCContainer *regcont;
-  HCContainer *namecont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCContainer* regcont;
+  HCContainer* namecont;
+  HCParameter* param;
   uint32_t i;
   ostringstream tempname;
 
@@ -208,20 +208,20 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
     tempname << "led" << i;
     namecont = new HCContainer(tempname.str());
     regcont->Add(namecont);
-    param = new HCUns16<Retsiger16>("oncnt", _led[i]._oncnt, &Retsiger16::Get, &Retsiger16::Set);
+    param = new HCUns16<Retsiger16>("oncount", _led[i]._oncount, &Retsiger16::Get, &Retsiger16::Set);
     namecont->Add(param);
     srv->Add(param);
-    param = new HCUns16<Retsiger16>("offcnt", _led[i]._offcnt, &Retsiger16::Get, &Retsiger16::Set);
+    param = new HCUns16<Retsiger16>("offcount", _led[i]._offcount, &Retsiger16::Get, &Retsiger16::Set);
     namecont->Add(param);
     srv->Add(param);
   }
 
   namecont = new HCContainer("ledall");
   regcont->Add(namecont);
-  param = new HCUns16<Retsiger16>("oncnt", _ledall._oncnt, 0, &Retsiger16::Set);
+  param = new HCUns16<Retsiger16>("oncount", _ledall._oncount, 0, &Retsiger16::Set);
   namecont->Add(param);
   srv->Add(param);
-  param = new HCUns16<Retsiger16>("offcnt", _ledall._offcnt, 0, &Retsiger16::Set);
+  param = new HCUns16<Retsiger16>("offcount", _ledall._offcount, 0, &Retsiger16::Set);
   namecont->Add(param);
   srv->Add(param);
 
@@ -230,10 +230,10 @@ void PCA9685::RegisterInterface(const char *contname, HCContainer *pcont, HCServ
   srv->Add(param);
 }
 
-int PCA9685::GetPWMDutyCycle(uint32_t id, double &val)
+int PCA9685::GetPWMDutyCycle(uint32_t id, double& val)
 {
   int lerr;
-  uint16_t offcnt;
+  uint16_t offcount;
 
   //Check for invalid ID
   if(id >= 16)
@@ -243,30 +243,30 @@ int PCA9685::GetPWMDutyCycle(uint32_t id, double &val)
   }
 
   //Get off count value
-  if((lerr = _led[id]._offcnt->Get(offcnt)) != ERR_NONE)
+  if((lerr = _led[id]._offcount->Get(offcount)) != ERR_NONE)
   {
     val = 0.0;
     return lerr;
   }
 
   //Check for off full set
-  if((offcnt & 0x1000) != 0)
+  if((offcount & 0x1000) != 0)
   {
     val = 0.0;
     return ERR_NONE;
   }
 
   //Mask off unused bits (including off full)
-  offcnt &= ~0xF000;
+  offcount &= ~0xF000;
 
   //Calculate PWM duty cycle from off count
-  val = (double)offcnt/4095.0;
+  val = (double)offcount/4095.0;
   return ERR_NONE;
 }
 
 int PCA9685::SetPWMDutyCycle(uint32_t id, double val)
 {
-  uint16_t offcnt;
+  uint16_t offcount;
 
   //Check for invalid ID
   if(id >= 16)
@@ -281,12 +281,12 @@ int PCA9685::SetPWMDutyCycle(uint32_t id, double val)
 
   //Check for 0 percent duty cycle desired
   if(val == 0.0)
-    return _led[id]._offcnt->Set(0x1000);
+    return _led[id]._offcount->Set(0x1000);
 
   //Calculate off count value
-  if(!FToU(4095.0*val, offcnt))
+  if(!FToU(4095.0*val, offcount))
     return ERR_RANGE;
 
   //Set off count value
-  return _led[id]._offcnt->Set(offcnt);
+  return _led[id]._offcount->Set(offcount);
 }

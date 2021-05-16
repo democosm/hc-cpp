@@ -33,25 +33,25 @@
 class HCContainer : public HCNode
 {
 public:
-  HCContainer(const std::string &name);
+  HCContainer(const std::string& name);
   virtual ~HCContainer();
-  bool GetNextCharInName(const std::string &name, char &nextchar);
-  void GetPath(std::string &path);
-  void PrintPath(std::ostream &st=std::cout);
-  void PrintInfo(std::ostream &st=std::cout);
-  void PrintConfig(std::ostream &st=std::cout);
-  HCContainer *GetParent(void);
-  void SetParent(HCContainer *node);
-  HCContainer *GetNext(void);
-  void SetNext(HCContainer *node);
-  void Add(HCContainer *cont);
-  void Add(HCParameter *param);
-  HCContainer *GetFirstSubCont(void);
-  HCParameter *GetFirstSubParam(void);
+  bool GetNextCharInName(const std::string& name, char& nextchar);
+  void GetPath(std::string& path);
+  void PrintPath(std::ostream& st=std::cout);
+  void PrintInfo(std::ostream& st=std::cout);
+  void PrintConfig(std::ostream& st=std::cout);
+  HCContainer* GetParent(void);
+  void SetParent(HCContainer* node);
+  HCContainer* GetNext(void);
+  void SetNext(HCContainer* node);
+  void Add(HCContainer* cont);
+  void Add(HCParameter* param);
+  HCContainer* GetFirstSubCont(void);
+  HCParameter* GetFirstSubParam(void);
 
 private:
-  HCContainer *_parent;
-  HCContainer *_next;
-  HCContainer *_firstsubcont;
-  HCParameter *_firstsubparam;
+  HCContainer* _parent;
+  HCContainer* _next;
+  HCContainer* _firstsubcont;
+  HCParameter* _firstsubparam;
 };

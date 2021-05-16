@@ -38,7 +38,7 @@
 
 using namespace std;
 
-SerDev::SerDev(const char *name, uint32_t baud, int hwflowctl)
+SerDev::SerDev(const char* name, uint32_t baud, int hwflowctl)
 {
   struct termios opts;
 
@@ -168,7 +168,7 @@ SerDev::~SerDev()
   close(_fd);
 }
 
-uint32_t SerDev::Read(void *buf, uint32_t maxlen)
+uint32_t SerDev::Read(void* buf, uint32_t maxlen)
 {
   ssize_t rlen;
 
@@ -182,7 +182,7 @@ uint32_t SerDev::Read(void *buf, uint32_t maxlen)
   return (uint32_t)rlen;
 }
 
-uint32_t SerDev::Write(const void *buf, uint32_t len)
+uint32_t SerDev::Write(const void* buf, uint32_t len)
 {
   ssize_t wlen;
 

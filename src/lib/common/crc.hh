@@ -29,5 +29,5 @@
 #include <inttypes.h>
 #include <string>
 
-uint32_t CRC32(uint32_t crc, const void *buf, uint32_t size);
-uint32_t CRC32File(const std::string &name);
+uint32_t CRC32(uint32_t crc, const void* buf, uint32_t size);
+uint32_t CRC32File(const std::string& name);

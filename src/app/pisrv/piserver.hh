@@ -35,9 +35,9 @@ class PiServer
 public:
   PiServer();
   ~PiServer();
-  int GetTemperature(float &val);
-  int GetCPUUtilization(uint8_t &val);
-  int GetRelayOn(uint32_t eid, bool &val);
+  int GetTemperature(float& val);
+  int GetCPUUtilization(uint8_t& val);
+  int GetRelayOn(uint32_t eid, bool& val);
   int SetRelayOn(uint32_t eid, bool val);
   int PulseRelayHigh(uint32_t eid);
 
@@ -45,7 +45,7 @@ private:
   void CtlThread(void);
 
 private:
-  PiGPIO *_relay[3];
+  PiGPIO* _relay[3];
   uint8_t _cpuutilization;
-  Thread<PiServer> *_ctlthread;
+  Thread<PiServer>* _ctlthread;
 };

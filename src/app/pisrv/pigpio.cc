@@ -35,7 +35,7 @@ using namespace std;
 PiGPIO::PiGPIO(uint8_t num, bool output, bool initval)
 {
   char filename[200];
-  FILE *file;
+  FILE* file;
 
   //Cache number
   _num = num;
@@ -54,7 +54,7 @@ PiGPIO::PiGPIO(uint8_t num, bool output, bool initval)
   fclose(file);
 
   //Takes a while for control files to show up
-  ThreadSleep(100000);
+  ThreadSleep(100);
 
   //Determine direction file name
   sprintf(filename, "/sys/class/gpio/gpio%" PRIu8 "/direction", _num);
@@ -79,7 +79,7 @@ PiGPIO::PiGPIO(uint8_t num, bool output, bool initval)
 PiGPIO::~PiGPIO()
 {
   char filename[200];
-  FILE *file;
+  FILE* file;
 
   //Determine direction file name
   sprintf(filename, "/sys/class/gpio/gpio%" PRIu8 "/direction", _num);
@@ -111,10 +111,10 @@ PiGPIO::~PiGPIO()
   fclose(file);
 }
 
-int PiGPIO::GetValue(bool &val)
+int PiGPIO::GetValue(bool& val)
 {
   char filename[200];
-  FILE *file;
+  FILE* file;
   uint8_t valint;
 
   //Determine value file name
@@ -147,7 +147,7 @@ int PiGPIO::GetValue(bool &val)
 int PiGPIO::SetValue(bool val)
 {
   char filename[200];
-  FILE *file;
+  FILE* file;
 
   //Determine value file name
   sprintf(filename, "/sys/class/gpio/gpio%" PRIu8 "/value", _num);

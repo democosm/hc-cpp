@@ -39,7 +39,7 @@
 
 using namespace std;
 
-UDPSocket::UDPSocket(uint16_t port, const char *bindif)
+UDPSocket::UDPSocket(uint16_t port, const char* bindif)
 {
   struct sockaddr_in addr;
   struct ifreq bindreq;
@@ -54,7 +54,7 @@ UDPSocket::UDPSocket(uint16_t port, const char *bindif)
   addr.sin_family = AF_INET;
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
   addr.sin_port = htons(port);
-  if(bind(_socketfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+  if(bind(_socketfd, (struct sockaddr*)&addr, sizeof(addr)) != 0)
     cout << __FILE__ << ":" << __LINE__ << " - Error binding socket to port " << port << "\n";
 
   //Check for desire to bind to an interface
@@ -65,7 +65,7 @@ UDPSocket::UDPSocket(uint16_t port, const char *bindif)
     bindreq.ifr_name[IFNAMSIZ - 1] = '\0';
 
     //Bind socket to interface
-    if(setsockopt(_socketfd, SOL_SOCKET, SO_BINDTODEVICE, (char *)&bindreq, sizeof(bindreq)) < 0)
+    if(setsockopt(_socketfd, SOL_SOCKET, SO_BINDTODEVICE, (char*)&bindreq, sizeof(bindreq)) < 0)
       cout << __FILE__ << ":" << __LINE__ << " - Error binding socket to interface '" << bindif << "'\n";
   }
 
@@ -87,7 +87,7 @@ UDPSocket::~UDPSocket()
     close(_socketfd);
 }
 
-uint32_t UDPSocket::RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, uint16_t &srcport)
+uint32_t UDPSocket::RecvFrom(void* buf, uint32_t maxlen, uint32_t& srcipaddr, uint16_t& srcport)
 {
   struct sockaddr_in src;
   socklen_t srclen;
@@ -98,7 +98,7 @@ uint32_t UDPSocket::RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, ui
 
   //Read from socket
   srclen = sizeof(src);
-  if((retval = recvfrom(_socketfd, buf, maxlen, 0, (struct sockaddr *)&src, &srclen)) <= 0)
+  if((retval = recvfrom(_socketfd, buf, maxlen, 0, (struct sockaddr*)&src, &srclen)) <= 0)
   {
     srcipaddr = 0;
     srcport = 0;
@@ -111,7 +111,7 @@ uint32_t UDPSocket::RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, ui
   return (uint32_t)retval;
 }
 
-uint32_t UDPSocket::SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport)
+uint32_t UDPSocket::SendTo(const void* buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport)
 {
   struct sockaddr_in dst;
 
@@ -125,7 +125,7 @@ uint32_t UDPSocket::SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, ui
   dst.sin_port = htons(dstport);
 
   //Write to socket
-  if(sendto(_socketfd, buf, len, 0, (struct sockaddr *)&dst, sizeof(dst)) <= 0)
+  if(sendto(_socketfd, buf, len, 0, (struct sockaddr*)&dst, sizeof(dst)) <= 0)
     return 0;
 
   return len;

@@ -37,7 +37,7 @@ using namespace std;
 class Transactor
 {
 public:
-  Transactor(Device *dev, const char *querystring)
+  Transactor(Device* dev, const char* querystring)
   {
     //Assert valid arguments
     assert((dev != 0) && (querystring != 0));
@@ -83,7 +83,7 @@ public:
     }
 
     //Wait for event
-    if(_event->Wait(1000000) != ERR_NONE)
+    if(_event->Wait(1000) != ERR_NONE)
       cout << "Timed out waiting for response" << "\n";
   }
 
@@ -100,7 +100,7 @@ private:
       //Read from device
       if((readcount = _dev->Read(readbuf, sizeof(readbuf)-1)) < 3)
       {
-        ThreadSleep(1000000);
+        ThreadSleep(1000);
         continue;
       }
 
@@ -121,22 +121,22 @@ private:
   }
 
 private:
-  Device *_dev;
-  const char *_querystring;
-  Event *_event;
-  Thread<Transactor> *_readthread;
+  Device* _dev;
+  const char* _querystring;
+  Event* _event;
+  Thread<Transactor>* _readthread;
 };
 
-void Usage(const char *appname)
+void Usage(const char* appname)
 {
   cout << "Usage: " << appname << " <SERVER IP ADDRESS> <SERVER PORT> <QUERY STRING>" << "\n";
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   uint16_t port;
-  UDPDevice *dev;
-  Transactor *transactor;
+  UDPDevice* dev;
+  Transactor* transactor;
 
   //Check for wrong number of arguments
   if(argc != 4)

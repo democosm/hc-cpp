@@ -42,7 +42,7 @@
 class HCCallCli
 {
 public:
-  HCCallCli(HCClient *cli, uint16_t pid)
+  HCCallCli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -69,7 +69,7 @@ public:
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -84,7 +84,7 @@ public:
   typedef int (C::*CallMethod)(void);
 
 public:
-  HCCall(const std::string &name, C *object, CallMethod method)
+  HCCall(const std::string& name, C* object, CallMethod method)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -122,13 +122,13 @@ public:
     std::cout << TC_GREEN << _name << "()" << TC_RESET << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     st << _name;
     st << "\n  Type: " << TypeString();
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<" << TypeString() << ">\n";
@@ -147,7 +147,7 @@ public:
     return (_object->*_method)();
   }
 
-  virtual bool CallCell(HCCell *icell, HCCell *ocell)
+  virtual bool CallCell(HCCell* icell, HCCell* ocell)
   {
     int lerr;
 
@@ -174,7 +174,7 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   CallMethod _method;
 };
 
@@ -189,21 +189,21 @@ public:
   typedef int (C::*CallMethod)(uint32_t);
 
 public:
-  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums)
+  HCCallTable(const std::string& name, C* object, CallMethod method, uint32_t size, const HCEIDEnum* eidenums)
   : HCParameter(name)
   {
     //Delegate to init method
     Init(name, object, method, size, eidenums);
   }
 
-  HCCallTable(const std::string &name, C *object, CallMethod method, uint32_t size)
+  HCCallTable(const std::string& name, C* object, CallMethod method, uint32_t size)
   : HCParameter(name)
   {
     //Delegate to init method
     Init(name, object, method, size, 0);
   }
 
-  void Init(const std::string &name, C *object, CallMethod method, uint32_t size, const HCEIDEnum *eidenums)
+  void Init(const std::string& name, C* object, CallMethod method, uint32_t size, const HCEIDEnum* eidenums)
   {
     //Assert valid arguments
     assert((object != 0) && (method != 0) && (size != 0));
@@ -247,7 +247,7 @@ public:
     std::cout << TC_GREEN << _name << "(0-" << (_size-1) << ')' << TC_RESET << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     uint32_t i;
 
@@ -265,7 +265,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     uint32_t i;
 
@@ -302,7 +302,7 @@ public:
     return (_object->*_method)(eid);
   }
 
-  virtual bool CallCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool CallCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     int lerr;
 
@@ -333,7 +333,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -359,7 +359,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -386,8 +386,8 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   CallMethod _method;
   uint32_t _size;
-  const HCEIDEnum *_eidenums;
+  const HCEIDEnum* _eidenums;
 };

@@ -65,8 +65,8 @@ public:
   ~HCCell();
   void Reset(uint8_t opcode);
   uint8_t GetOpCode(void);
-  uint32_t Serialize(uint8_t *serbuf, uint32_t maxlen);
-  uint32_t Deserialize(uint8_t *serbuf, uint32_t len);
+  uint32_t Serialize(uint8_t* serbuf, uint32_t maxlen);
+  uint32_t Deserialize(uint8_t* serbuf, uint32_t len);
   bool Read(bool& val);
   bool Write(bool val);
   bool Read(std::string& val);
@@ -104,8 +104,8 @@ public:
   void Print(const std::string& extra);
 
 private:
-  uint8_t *_buffer;
-  uint8_t *_payload;
+  uint8_t* _buffer;
+  uint8_t* _payload;
   uint32_t _readindex;
   uint8_t _opcode;
   uint32_t _payloadlength;

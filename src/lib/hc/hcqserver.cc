@@ -36,7 +36,7 @@
 
 using namespace std;
 
-HCQServer::HCQServer(Device *lowdev, HCContainer *top)
+HCQServer::HCQServer(Device* lowdev, HCContainer* top)
 {
   //Assert valid arguments
   assert((lowdev != 0) && (top != 0));
@@ -75,7 +75,7 @@ bool HCQServer::NextReadCharEquals(char ch)
   return false;
 }
 
-bool HCQServer::ReadField(char termchar, char *field, uint32_t fieldsize)
+bool HCQServer::ReadField(char termchar, char* field, uint32_t fieldsize)
 {
   char ch;
   uint32_t i;
@@ -135,7 +135,7 @@ bool HCQServer::WriteChar(char ch)
   return true;
 }
 
-bool HCQServer::WriteString(const char *str)
+bool HCQServer::WriteString(const char* str)
 {
   uint32_t len;
 
@@ -159,7 +159,7 @@ bool HCQServer::WriteString(const char *str)
   return true;
 }
 
-bool HCQServer::WriteStringQuote(const char *str)
+bool HCQServer::WriteStringQuote(const char* str)
 {
   uint32_t len;
 
@@ -192,7 +192,7 @@ bool HCQServer::WriteStringQuote(const char *str)
 bool HCQServer::ProcessCallCell(void)
 {
   char pname[100];
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -229,7 +229,7 @@ bool HCQServer::ProcessCallCell(void)
 bool HCQServer::ProcessGetCell(void)
 {
   char pname[100];
-  HCParameter *param;
+  HCParameter* param;
   string pval;
   int err;
 
@@ -268,7 +268,7 @@ bool HCQServer::ProcessSetCell(void)
 {
   char pname[100];
   char pval[100];
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -331,7 +331,7 @@ bool HCQServer::ProcessICallCell(void)
   char pname[100];
   char eidstr[11];
   uint32_t eid;
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -407,7 +407,7 @@ bool HCQServer::ProcessIGetCell(void)
   char pname[100];
   char eidstr[11];
   uint32_t eid;
-  HCParameter *param;
+  HCParameter* param;
   string pval;
   int err;
 
@@ -485,7 +485,7 @@ bool HCQServer::ProcessISetCell(void)
   char eidstr[11];
   char pval[100];
   uint32_t eid;
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -584,7 +584,7 @@ bool HCQServer::ProcessAddCell(void)
 {
   char pname[100];
   char pval[100];
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -646,7 +646,7 @@ bool HCQServer::ProcessSubCell(void)
 {
   char pname[100];
   char pval[100];
-  HCParameter *param;
+  HCParameter* param;
   int err;
 
   //Check for next character not parameter name opening quote
@@ -867,7 +867,7 @@ void HCQServer::CtlThread(void)
     if((_readcount = _lowdev->Read(_readbuf, sizeof(_readbuf)-1)) == 0)
     {
       //Sleep a while to prevent starving other threads
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
 
       //Ignore rest of loop
       continue;

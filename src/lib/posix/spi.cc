@@ -35,7 +35,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-SPI::SPI(const char *name, uint32_t speed)
+SPI::SPI(const char* name, uint32_t speed)
 {
   uint32_t temp;
 
@@ -90,7 +90,7 @@ SPI::~SPI()
   delete _mutex;
 }
 
-uint32_t SPI::Transfer(uint8_t *wdata, uint8_t *rdata, uint32_t len)
+uint32_t SPI::Transfer(uint8_t* wdata, uint8_t* rdata, uint32_t len)
 {
   struct spi_ioc_transfer xfer[len];
   uint32_t i;

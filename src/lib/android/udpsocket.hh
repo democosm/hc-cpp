@@ -27,15 +27,14 @@
 #pragma once
 
 #include <inttypes.h>
-#include <netinet/in.h>
 
 class UDPSocket
 {
 public:
-  UDPSocket(uint16_t port=0, const char *bindif=0);
+  UDPSocket(uint16_t port=0, const char* bindif=0);
   virtual ~UDPSocket();
-  uint32_t RecvFrom(void *buf, uint32_t maxlen, uint32_t &srcipaddr, uint16_t &srcport);
-  uint32_t SendTo(const void *buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport);
+  uint32_t RecvFrom(void* buf, uint32_t maxlen, uint32_t& srcipaddr, uint16_t& srcport);
+  uint32_t SendTo(const void* buf, uint32_t len, uint32_t dstipaddr, uint16_t dstport);
 
 private:
   int _socketfd;

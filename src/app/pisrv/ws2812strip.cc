@@ -30,7 +30,7 @@
 #include <cassert>
 #include <string.h>
 
-WS2812Strip::WS2812Strip(SPI *spi, uint32_t count)
+WS2812Strip::WS2812Strip(SPI* spi, uint32_t count)
 {
   //Assert valid arguments
   assert((spi != 0) && (count <= 300));
@@ -50,7 +50,7 @@ WS2812Strip::~WS2812Strip()
   delete[] _colorbuf;
 }
 
-int WS2812Strip::GetColor(uint32_t id, uint32_t &val)
+int WS2812Strip::GetColor(uint32_t id, uint32_t& val)
 {
   uint32_t index;
 
@@ -89,7 +89,7 @@ int WS2812Strip::SetColor(uint32_t id, uint32_t val)
 int WS2812Strip::Update(void)
 {
   //Must wait at least 500us before performing new update so chips know this is a new sequence
-  ThreadSleep(500);
+  ThreadSleep(1);
 
   //Write color buffer to strip
   _spi->Transfer(_colorbuf, 0, _count*3);

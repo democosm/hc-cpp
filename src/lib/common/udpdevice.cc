@@ -39,7 +39,7 @@
 
 using namespace std;
 
-UDPDevice::UDPDevice(uint16_t port, const char *bindif, const char *dstipaddr, uint16_t dstport)
+UDPDevice::UDPDevice(uint16_t port, const char* bindif, const char* dstipaddr, uint16_t dstport)
 {
   //Create socket
   _sock = new UDPSocket(port, bindif);
@@ -76,7 +76,7 @@ UDPDevice::~UDPDevice()
   delete _sock;
 }
 
-uint32_t UDPDevice::Read(void *buf, uint32_t maxlen)
+uint32_t UDPDevice::Read(void* buf, uint32_t maxlen)
 {
   uint32_t srcipaddr;
   uint16_t srcport;
@@ -106,7 +106,7 @@ uint32_t UDPDevice::Read(void *buf, uint32_t maxlen)
   return retval;
 }
 
-uint32_t UDPDevice::Write(const void *buf, uint32_t len)
+uint32_t UDPDevice::Write(const void* buf, uint32_t len)
 {
   uint32_t dstipaddr;
   uint16_t dstport;

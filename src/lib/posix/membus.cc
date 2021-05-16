@@ -47,23 +47,18 @@ MemBus::MemBus(uint32_t physbase, uint32_t size)
   //Map physical address space to virtual memory
   if((_virtbase = (uint8_t*)mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, _memfd, physbase)) == MAP_FAILED)
     printf("MemBus - Error mapping physical memory 0x%X to virtual space\n", physbase);
-
-  //Create mutex
-  _mutex = new Mutex();
 }
 
 MemBus::~MemBus()
 {
   //Cleanup
-  delete _mutex;
-
   if(_virtbase != MAP_FAILED)
     munmap((void*)_virtbase, _size);
 
   close(_memfd);
 }
 
-int MemBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
+int MemBus::Get(uint32_t addr, uint8_t* data, uint32_t len)
 {
   //Assert valid arguments
   assert((data != 0) && (len > 0));
@@ -81,7 +76,7 @@ int MemBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
   return ERR_NONE;
 }
 
-int MemBus::Set(uint32_t addr, uint8_t *data, uint32_t len)
+int MemBus::Set(uint32_t addr, uint8_t* data, uint32_t len)
 {
   //Assert valid arguments
   assert((data != 0) && (len > 0));

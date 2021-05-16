@@ -39,11 +39,11 @@ class HCCommand
 public:
   HCCommand();
   ~HCCommand();
-  void operator =(const HCCommand &cmd);
-  bool operator ==(const HCCommand &cmd);
+  void operator =(const HCCommand& cmd);
+  bool operator ==(const HCCommand& cmd);
   const std::string GetStr();
-  void SetStr(const std::string &str);
-  void GetEnd(std::string &str);
+  void SetStr(const std::string& str);
+  void GetEnd(std::string& str);
   uint32_t GetLen();
   uint32_t GetIndex();
   void Reset();
@@ -53,7 +53,7 @@ public:
   void Insert(char ch);
   void Delete();
   char EndChar();
-  void Tokenize(std::vector<std::string> &toks);
+  void Tokenize(std::vector<std::string>& toks);
 
 private:
   std::string _str;
@@ -73,8 +73,8 @@ public:
   bool AtNewest(void);
   void Back(void);
   void Forward(void);
-  void GetCurrentCmd(HCCommand &cmd);
-  void NewCmd(HCCommand &cmd);
+  void GetCurrentCmd(HCCommand& cmd);
+  void NewCmd(HCCommand& cmd);
   void Show(void);
 
 private:
@@ -105,7 +105,7 @@ public:
   static const int KEY_DELETE = -10;
 
 public:
-  HCConsole(HCContainer *top);
+  HCConsole(HCContainer* top);
   ~HCConsole();
   void Run(void);
 
@@ -123,29 +123,29 @@ private:
   void CmdTokensProc(void);
   void DeleteProc(void);
   void DefaultProc(char ch);
-  void HelpCmdProc(uint32_t tokcnt);
-  void HistCmdProc(uint32_t tokcnt);
-  void ChdirCmdProc(uint32_t tokcnt);
-  void ListCmdProc(uint32_t tokcnt);
-  void InfoCmdProc(uint32_t tokcnt);
-  void FindCmdProc(uint32_t tokcnt);
-  void ExitCmdProc(uint32_t tokcnt);
-  void CallCmdProc(uint32_t tokcnt);
-  void SaveCmdProc(uint32_t tokcnt);
-  void LoadCmdProc(uint32_t tokcnt);
-  void ParamCmdProc(uint32_t tokcnt);
+  void HelpCmdProc(uint32_t tokcount);
+  void HistCmdProc(uint32_t tokcount);
+  void ChdirCmdProc(uint32_t tokcount);
+  void ListCmdProc(uint32_t tokcount);
+  void InfoCmdProc(uint32_t tokcount);
+  void FindCmdProc(uint32_t tokcount);
+  void ExitCmdProc(uint32_t tokcount);
+  void CallCmdProc(uint32_t tokcount);
+  void SaveCmdProc(uint32_t tokcount);
+  void LoadCmdProc(uint32_t tokcount);
+  void ParamCmdProc(uint32_t tokcount);
   void Prompt(void);
-  bool GetNextCommonChar(const std::string &name, HCContainer *startcont, char &ch, size_t index=0);
-  void ShowListing(const std::string &name, HCContainer *startcont, size_t index=0);
-  void ShowInfo(const std::string &name, HCContainer *startcont, size_t index=0);
-  void ShowNames(const std::string &name, HCContainer *startcont, size_t index=0);
-  void ShowFinds(const std::string &name, HCContainer *cont);
+  bool GetNextCommonChar(const std::string& name, HCContainer* startcont, char& ch, size_t index=0);
+  void ShowListing(const std::string& name, HCContainer* startcont, size_t index=0);
+  void ShowInfo(const std::string& name, HCContainer* startcont, size_t index=0);
+  void ShowNames(const std::string& name, HCContainer* startcont, size_t index=0);
+  void ShowFinds(const std::string& name, HCContainer* cont);
 
 private:
   struct termios _oldopts;
-  HCContainer *_top;
-  HCContainer *_workcont;
-  HCHistory *_hist;
+  HCContainer* _top;
+  HCContainer* _workcont;
+  HCHistory* _hist;
   HCCommand _cmd;
   HCCommand _cmdcopy;
   std::vector<std::string> _tokens;

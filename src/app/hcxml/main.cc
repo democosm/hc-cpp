@@ -30,16 +30,16 @@
 using namespace tinyxml2;
 using namespace std;
 
-void Usage(const char *appname)
+void Usage(const char* appname)
 {
   cout << "Usage: " << appname << " <XML FILE NAME>\n";
 }
 
-bool ParseElement(XMLElement *pelt)
+bool ParseElement(XMLElement* pelt)
 {
-  XMLElement *elt;
-  XMLElement *nameelt;
-  const char *name;
+  XMLElement* elt;
+  XMLElement* nameelt;
+  const char* name;
 
   //Check for null parent object
   if(pelt == 0)
@@ -106,7 +106,7 @@ bool ParseElement(XMLElement *pelt)
   return true;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   XMLDocument doc;
 

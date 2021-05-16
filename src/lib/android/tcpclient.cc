@@ -34,7 +34,7 @@
 
 using namespace std;
 
-TCPClient::TCPClient(uint16_t port, const char *srvipaddr, uint16_t srvport)
+TCPClient::TCPClient(uint16_t port, const char* srvipaddr, uint16_t srvport)
 : Device()
 {
   struct sockaddr_in addr;
@@ -71,7 +71,7 @@ TCPClient::~TCPClient()
   delete _mutex;
 }
 
-uint32_t TCPClient::Read(void *buf, uint32_t maxlen)
+uint32_t TCPClient::Read(void* buf, uint32_t maxlen)
 {
   int connfd;
   ssize_t retval;
@@ -97,7 +97,7 @@ uint32_t TCPClient::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TCPClient::Write(const void *buf, uint32_t len)
+uint32_t TCPClient::Write(const void* buf, uint32_t len)
 {
   int connfd;
   ssize_t wlen;
@@ -149,7 +149,7 @@ int TCPClient::WaitForConnection(void)
     if((_connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error creating connection socket" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -158,11 +158,11 @@ int TCPClient::WaitForConnection(void)
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(_port);
-    if(bind(_connfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+    if(bind(_connfd, (struct sockaddr*)&addr, sizeof(addr)) != 0)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -172,7 +172,7 @@ int TCPClient::WaitForConnection(void)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -181,11 +181,11 @@ int TCPClient::WaitForConnection(void)
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = _srvipaddr;
     saddr.sin_port = htons(_srvport);
-    if(connect(_connfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
+    if(connect(_connfd, (struct sockaddr*)&saddr, sizeof(saddr)) < 0)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error connecting" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 

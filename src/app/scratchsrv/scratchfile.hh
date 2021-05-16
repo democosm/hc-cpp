@@ -33,7 +33,7 @@
 class ScratchFile
 {
 public:
-  ScratchFile(const char *filename)
+  ScratchFile(const char* filename)
   {
     //Initialize member variables
     _filename = filename;
@@ -43,9 +43,9 @@ public:
   {
   }
 
-  int Read(uint32_t offset, uint8_t *val, uint16_t maxlen, uint16_t &len)
+  int Read(uint32_t offset, uint8_t* val, uint16_t maxlen, uint16_t& len)
   {
-    FILE *file;
+    FILE* file;
 
     //Open file and check for error
     if((file = fopen(_filename.c_str(), "r")) == NULL)
@@ -74,9 +74,9 @@ public:
     return ERR_NONE;
   }
 
-  int Write(uint32_t offset, uint8_t *val, uint16_t len)
+  int Write(uint32_t offset, uint8_t* val, uint16_t len)
   {
-    FILE *file;
+    FILE* file;
 
     //Open file and check for error
     if((file = fopen(_filename.c_str(), "w")) == NULL)

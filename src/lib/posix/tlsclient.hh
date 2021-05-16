@@ -36,23 +36,23 @@
 class TLSClient : public Device
 {
 public:
-  TLSClient(uint16_t port, const char *srvipaddr, uint16_t srvport, const char *authstring);
+  TLSClient(uint16_t port, const char* srvipaddr, uint16_t srvport, const char* authstring);
   virtual ~TLSClient();
-  virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(const void *buf, uint32_t len);
+  virtual uint32_t Read(void* buf, uint32_t maxlen);
+  virtual uint32_t Write(const void* buf, uint32_t len);
 
 private:
   void CloseConnection(void);
-  SSL *WaitForConnection(void);
-  void Authenticate(SSL *ssl);
+  SSL* WaitForConnection(void);
+  void Authenticate(SSL* ssl);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
   uint16_t _port;
   uint32_t _srvipaddr;
   uint16_t _srvport;
   int _connfd;
-  SSL_CTX *_sslctx;
-  SSL *_ssl;
+  SSL_CTX* _sslctx;
+  SSL* _ssl;
   uint32_t _authcode;
 };

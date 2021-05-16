@@ -32,8 +32,8 @@
 #define SC_QUIET_BEG "("
 #define SC_QUIET_END ") > /dev/null 2>&1"
 
-int SystemExecute(const char *fmt, ...);
-void SystemPrint(uint8_t detail, const char *fmt, ...);
+int SystemExecute(const char* fmt, ...);
+void SystemPrint(uint8_t detail, const char* fmt, ...);
 bool SystemGetPrintEnable(void);
 void SystemSetPrintEnable(bool enable);
 uint8_t SystemGetMaxPrintDetail(void);

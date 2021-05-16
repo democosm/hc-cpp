@@ -34,8 +34,8 @@ class SimBus : public Bus
 public:
   SimBus(uint32_t size);
   virtual ~SimBus();
-  virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
-  virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  virtual int Get(uint32_t addr, uint8_t* data, uint32_t len);
+  virtual int Set(uint32_t addr, uint8_t* data, uint32_t len);
 
 private:
   uint32_t _size;

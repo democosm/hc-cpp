@@ -33,7 +33,7 @@
 using namespace std;
 using namespace tinyxml2;
 
-HCAggregator::HCAggregator(const string &filename)
+HCAggregator::HCAggregator(const string& filename)
 {
   XMLDocument doc;
 
@@ -42,7 +42,7 @@ HCAggregator::HCAggregator(const string &filename)
 
   //Initialize connection array information
   _conn = 0;
-  _conncnt = 0;
+  _conncount = 0;
 
   //Initialize query server information
   _qsrvdev = 0;
@@ -83,7 +83,7 @@ HCAggregator::~HCAggregator()
   delete _qsrv;
   delete _qsrvdev;
 
-  for(i=0; i<_conncnt; i++)
+  for(i=0; i<_conncount; i++)
     if(_conn[i] == 0)
       delete _conn[i];
 
@@ -91,15 +91,15 @@ HCAggregator::~HCAggregator()
   delete _topcont;
 }
 
-HCContainer *HCAggregator::GetTopCont(void)
+HCContainer* HCAggregator::GetTopCont(void)
 {
   return _topcont;
 }
 
-void HCAggregator::AddParamsToServer(HCContainer *startcont)
+void HCAggregator::AddParamsToServer(HCContainer* startcont)
 {
-  HCParameter *param;
-  HCContainer *cont;
+  HCParameter* param;
+  HCContainer* cont;
 
   //Check for server not created
   if(_srv == 0)
@@ -114,10 +114,10 @@ void HCAggregator::AddParamsToServer(HCContainer *startcont)
     AddParamsToServer(cont);
 }
 
-HCServer *HCAggregator::ParseServer(XMLElement *pelt)
+HCServer* HCAggregator::ParseServer(XMLElement* pelt)
 {
   uint32_t i;
-  XMLElement *elt;
+  XMLElement* elt;
   string name;
   uint16_t port;
   uint16_t qport;
@@ -127,19 +127,19 @@ HCServer *HCAggregator::ParseServer(XMLElement *pelt)
     return 0;
 
   //Count number of connections
-  _conncnt = 0;
+  _conncount = 0;
   for(elt = pelt->FirstChildElement("conn"); elt != 0; elt = elt->NextSiblingElement("conn"))
-    _conncnt++;
+    _conncount++;
 
   //Check for no connections
-  if(_conncnt == 0)
+  if(_conncount == 0)
     return 0;
 
   //Create connection array
-  _conn = new HCConnection *[_conncnt];
+  _conn = new HCConnection*[_conncount];
 
   //Parse all connections
-  for(i = 0, elt = pelt->FirstChildElement("conn"); i < _conncnt; i++, elt = elt->NextSiblingElement("conn"))
+  for(i = 0, elt = pelt->FirstChildElement("conn"); i < _conncount; i++, elt = elt->NextSiblingElement("conn"))
     _conn[i] = ParseConn(elt);
 
   //Parse name element and check for error
@@ -167,12 +167,12 @@ HCServer *HCAggregator::ParseServer(XMLElement *pelt)
   return new HCServer(_srvdev, _topcont, name, __DATE__ " " __TIME__);
 }
 
-HCConnection *HCAggregator::ParseConn(XMLElement *pelt)
+HCConnection* HCAggregator::ParseConn(XMLElement* pelt)
 {
   string name;
   uint32_t timeout;
-  Device *dev;
-  XMLElement *elt;
+  Device* dev;
+  XMLElement* elt;
 
   //Check for null parent element
   if(pelt == 0)
@@ -203,7 +203,7 @@ HCConnection *HCAggregator::ParseConn(XMLElement *pelt)
   return new HCConnection(dev, _topcont, name, timeout);
 }
 
-UDPDevice *HCAggregator::ParseUDPSocket(XMLElement *pelt)
+UDPDevice* HCAggregator::ParseUDPSocket(XMLElement* pelt)
 {
   uint16_t port;
   string destipaddr;
@@ -229,11 +229,11 @@ UDPDevice *HCAggregator::ParseUDPSocket(XMLElement *pelt)
   return new UDPDevice(port, 0, destipaddr.c_str(), destport);
 }
 
-SLIPFramer *HCAggregator::ParseSLIPFramer(XMLElement *pelt)
+SLIPFramer* HCAggregator::ParseSLIPFramer(XMLElement* pelt)
 {
   uint32_t maxpldsiz;
-  Device *dev;
-  XMLElement *elt;
+  Device* dev;
+  XMLElement* elt;
 
   //Check for null parent element
   if(pelt == 0)
@@ -260,7 +260,7 @@ SLIPFramer *HCAggregator::ParseSLIPFramer(XMLElement *pelt)
   return new SLIPFramer(dev, maxpldsiz);
 }
 
-TCPClient *HCAggregator::ParseTCPClient(XMLElement *pelt)
+TCPClient* HCAggregator::ParseTCPClient(XMLElement* pelt)
 {
   uint16_t port;
   string srvipaddr;
@@ -286,7 +286,7 @@ TCPClient *HCAggregator::ParseTCPClient(XMLElement *pelt)
   return new TCPClient(port, srvipaddr.c_str(), srvport);
 }
 
-TLSClient *HCAggregator::ParseTLSClient(XMLElement *pelt)
+TLSClient* HCAggregator::ParseTLSClient(XMLElement* pelt)
 {
   uint16_t port;
   string srvipaddr;
@@ -317,9 +317,9 @@ TLSClient *HCAggregator::ParseTLSClient(XMLElement *pelt)
   return new TLSClient(port, srvipaddr.c_str(), srvport, authstring.c_str());
 }
 
-bool HCAggregator::ParseValue(XMLElement *pelt, const char *name, string &val)
+bool HCAggregator::ParseValue(XMLElement* pelt, const char* name, string& val)
 {
-  const char *text;
+  const char* text;
 
   //Check for null parent element
   if(pelt == 0)
@@ -337,9 +337,9 @@ bool HCAggregator::ParseValue(XMLElement *pelt, const char *name, string &val)
   return true;
 }
 
-bool HCAggregator::ParseValue(XMLElement *pelt, const char *name, uint16_t &val)
+bool HCAggregator::ParseValue(XMLElement* pelt, const char* name, uint16_t& val)
 {
-  const char *text;
+  const char* text;
 
   //Check for null parent element
   if(pelt == 0)
@@ -356,9 +356,9 @@ bool HCAggregator::ParseValue(XMLElement *pelt, const char *name, uint16_t &val)
   return StringConvert(text, val);
 }
 
-bool HCAggregator::ParseValue(XMLElement *pelt, const char *name, uint32_t &val)
+bool HCAggregator::ParseValue(XMLElement* pelt, const char* name, uint32_t& val)
 {
-  const char *text;
+  const char* text;
 
   //Check for null parent element
   if(pelt == 0)

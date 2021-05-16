@@ -44,7 +44,7 @@ template <class T>
 class HCVec2Cli
 {
 public:
-  HCVec2Cli(HCClient *cli, uint16_t pid)
+  HCVec2Cli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -59,7 +59,7 @@ public:
     //Cleanup
   }
 
-  int Get(T &val0, T &val1)
+  int Get(T& val0, T& val1)
   {
     //Delegate to client
     return _cli->Get(_pid, val0, val1);
@@ -71,7 +71,7 @@ public:
     return _cli->Set(_pid, val0, val1);
   }
 
-  int IGet(uint32_t eid, T &val0, T &val1)
+  int IGet(uint32_t eid, T& val0, T& val1)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val0, val1);
@@ -84,7 +84,7 @@ public:
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -102,11 +102,11 @@ class HCVec2 : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(T &, T &);
+  typedef int (C::*GetMethod)(T&, T&);
   typedef int (C::*SetMethod)(const T, const T);
 
 public:
-  HCVec2(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale0, T scale1)
+  HCVec2(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, T scale0, T scale1)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -175,7 +175,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val0;
     T val1;
@@ -199,7 +199,7 @@ public:
     st << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
 
@@ -211,7 +211,7 @@ public:
     st << "\n  Scale1: " << _scale1;
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
 
@@ -226,7 +226,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy) << ">" << "\n";
   }
 
-  virtual int GetVec(T &val0, T &val1)
+  virtual int GetVec(T& val0, T& val1)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -249,7 +249,7 @@ public:
     return (_object->*_setmethod)(val0, val1);
   }
 
-  virtual int GetStr(std::string &val)
+  virtual int GetStr(std::string& val)
   {
     T nval0;
     T nval1;
@@ -272,7 +272,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStr(const std::string &val)
+  virtual int SetStr(const std::string& val)
   {
     T nval0;
     T nval1;
@@ -289,12 +289,12 @@ public:
     return (_object->*_setmethod)(nval0 / _scale0, nval1 / _scale1);
   }
 
-  virtual int SetStrLit(const std::string &val)
+  virtual int SetStrLit(const std::string& val)
   {
     return SetStr(val);
   }
 
-  virtual bool GetCell(HCCell *icell, HCCell *ocell)
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
   {
     T val0;
     T val1;
@@ -331,7 +331,7 @@ public:
     return true;
   }
 
-  virtual bool SetCell(HCCell *icell, HCCell *ocell)
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val0;
@@ -383,7 +383,7 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   T _scale0;
@@ -397,7 +397,7 @@ template <class C, class T>
 class HCVec2S : public HCVec2<C, T>
 {
 public:
-  HCVec2S(const std::string &name, C *object, int (C::*getmethod)(T &, T &), int (C::*setmethod)(const T, const T), T scale0, T scale1)
+  HCVec2S(const std::string& name, C* object, int (C::*getmethod)(T&, T&), int (C::*setmethod)(const T, const T), T scale0, T scale1)
   : HCVec2<C, T>(name, object, getmethod, setmethod, scale0, scale1)
   {
   }
@@ -415,12 +415,12 @@ template <class C>
 class HCV2F32 : public HCVec2<C, float>
 {
 public:
-  HCV2F32(const std::string &name, C *object, int (C::*getmethod)(float &, float &), int (C::*setmethod)(const float, const float))
+  HCV2F32(const std::string& name, C* object, int (C::*getmethod)(float&, float&), int (C::*setmethod)(const float, const float))
   : HCVec2<C, float>(name, object, getmethod, setmethod, 1.0, 1.0)
   {
   }
 
-  HCV2F32(const std::string &name, C *object, int (C::*getmethod)(float &, float &), int (C::*setmethod)(const float, const float), float scale0, float scale1)
+  HCV2F32(const std::string& name, C* object, int (C::*getmethod)(float&, float&), int (C::*setmethod)(const float, const float), float scale0, float scale1)
   : HCVec2<C, float>(name, object, getmethod, setmethod, scale0, scale1)
   {
   }
@@ -430,12 +430,12 @@ template <class C>
 class HCV2F32S : public HCVec2S<C, float>
 {
 public:
-  HCV2F32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &), int (C::*setmethod)(const float, const float))
+  HCV2F32S(const std::string& name, C* object, int (C::*getmethod)(float&, float&), int (C::*setmethod)(const float, const float))
   : HCVec2S<C, float>(name, object, getmethod, setmethod, 1.0, 1.0)
   {
   }
 
-  HCV2F32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &), int (C::*setmethod)(const float, const float), float scale0, float scale1)
+  HCV2F32S(const std::string& name, C* object, int (C::*getmethod)(float&, float&), int (C::*setmethod)(const float, const float), float scale0, float scale1)
   : HCVec2S<C, float>(name, object, getmethod, setmethod, scale0, scale1)
   {
   }
@@ -445,12 +445,12 @@ template <class C>
 class HCV2F64 : public HCVec2<C, double>
 {
 public:
-  HCV2F64(const std::string &name, C *object, int (C::*getmethod)(double &, double &), int (C::*setmethod)(const double, const double))
+  HCV2F64(const std::string& name, C* object, int (C::*getmethod)(double&, double&), int (C::*setmethod)(const double, const double))
   : HCVec2<C, double>(name, object, getmethod, setmethod, 1.0, 1.0)
   {
   }
 
-  HCV2F64(const std::string &name, C *object, int (C::*getmethod)(double &, double &), int (C::*setmethod)(const double, const double), double scale0, double scale1)
+  HCV2F64(const std::string& name, C* object, int (C::*getmethod)(double&, double&), int (C::*setmethod)(const double, const double), double scale0, double scale1)
   : HCVec2<C, double>(name, object, getmethod, setmethod, scale0, scale1)
   {
   }
@@ -460,12 +460,12 @@ template <class C>
 class HCV2F64S : public HCVec2S<C, double>
 {
 public:
-  HCV2F64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &), int (C::*setmethod)(const double, const double))
+  HCV2F64S(const std::string& name, C* object, int (C::*getmethod)(double&, double&), int (C::*setmethod)(const double, const double))
   : HCVec2S<C, double>(name, object, getmethod, setmethod, 1.0, 1.0)
   {
   }
 
-  HCV2F64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &), int (C::*setmethod)(const double, const double), double scale0, double scale1)
+  HCV2F64S(const std::string& name, C* object, int (C::*getmethod)(double&, double&), int (C::*setmethod)(const double, const double), double scale0, double scale1)
   : HCVec2S<C, double>(name, object, getmethod, setmethod, scale0, scale1)
   {
   }
@@ -479,11 +479,11 @@ class HCVec2Table : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, T &, T &);
+  typedef int (C::*GetMethod)(uint32_t, T&, T&);
   typedef int (C::*SetMethod)(uint32_t, const T, const T);
 
 public:
-  HCVec2Table(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1)
+  HCVec2Table(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum* eidenums, T scale0, T scale1)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -594,7 +594,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val0;
     T val1;
@@ -653,7 +653,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -677,7 +677,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -705,7 +705,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy) << "t>" << "\n";
   }
 
-  virtual int GetVecTbl(uint32_t eid, T &val0, T &val1)
+  virtual int GetVecTbl(uint32_t eid, T& val0, T& val1)
   {
     //Check for EID out of range
     if(eid >= _size)
@@ -739,7 +739,7 @@ public:
     return (_object->*_setmethod)(eid, val0, val1);
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     T nval0;
     T nval1;
@@ -769,7 +769,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string& val)
   {
     T nval0;
     T nval1;
@@ -790,12 +790,12 @@ public:
     return (_object->*_setmethod)(eid, nval0 / _scale0, nval1 / _scale1);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string& val)
   {
     return SetStrTbl(eid, val);
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     T val0;
     T val1;
@@ -832,7 +832,7 @@ public:
     return true;
   }
 
-  virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool SetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val0;
@@ -888,7 +888,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -914,7 +914,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -941,13 +941,13 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   T _scale0;
   T _scale1;
   uint32_t _size;
-  const HCEIDEnum *_eidenums;
+  const HCEIDEnum* _eidenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -957,7 +957,7 @@ template <class C, class T>
 class HCVec2TableS : public HCVec2Table<C, T>
 {
 public:
-  HCVec2TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &, T &), int (C::*setmethod)(uint32_t, const T, const T), uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1)
+  HCVec2TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, T&, T&), int (C::*setmethod)(uint32_t, const T, const T), uint32_t size, const HCEIDEnum* eidenums, T scale0, T scale1)
   : HCVec2Table<C, T>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1)
   {
   }
@@ -975,22 +975,22 @@ template <class C>
 class HCV2F32Table : public HCVec2Table<C, float>
 {
 public:
-  HCV2F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size)
+  HCV2F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size)
   : HCVec2Table<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0)
   {
   }
 
-  HCV2F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, float scale0, float scale1)
+  HCV2F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, float scale0, float scale1)
   : HCVec2Table<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1)
   {
   }
 
-  HCV2F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  HCV2F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec2Table<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0)
   {
   }
 
-  HCV2F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1)
+  HCV2F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum* eidenums, float scale0, float scale1)
   : HCVec2Table<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1)
   {
   }
@@ -1000,22 +1000,22 @@ template <class C>
 class HCV2F32TableS : public HCVec2TableS<C, float>
 {
 public:
-  HCV2F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size)
+  HCV2F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size)
   : HCVec2TableS<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0)
   {
   }
 
-  HCV2F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, float scale0, float scale1)
+  HCV2F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, float scale0, float scale1)
   : HCVec2TableS<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1)
   {
   }
 
-  HCV2F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  HCV2F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec2TableS<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0)
   {
   }
 
-  HCV2F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1)
+  HCV2F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&), int (C::*setmethod)(uint32_t, const float, const float), uint32_t size, const HCEIDEnum* eidenums, float scale0, float scale1)
   : HCVec2TableS<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1)
   {
   }
@@ -1025,22 +1025,22 @@ template <class C>
 class HCV2F64Table : public HCVec2Table<C, double>
 {
 public:
-  HCV2F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size)
+  HCV2F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size)
   : HCVec2Table<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0)
   {
   }
 
-  HCV2F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, double scale0, double scale1)
+  HCV2F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, double scale0, double scale1)
   : HCVec2Table<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1)
   {
   }
 
-  HCV2F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  HCV2F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec2Table<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0)
   {
   }
 
-  HCV2F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1)
+  HCV2F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum* eidenums, double scale0, double scale1)
   : HCVec2Table<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1)
   {
   }
@@ -1050,22 +1050,22 @@ template <class C>
 class HCV2F64TableS : public HCVec2TableS<C, double>
 {
 public:
-  HCV2F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size)
+  HCV2F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size)
   : HCVec2TableS<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0)
   {
   }
 
-  HCV2F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, double scale0, double scale1)
+  HCV2F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, double scale0, double scale1)
   : HCVec2TableS<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1)
   {
   }
 
-  HCV2F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  HCV2F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec2TableS<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0)
   {
   }
 
-  HCV2F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1)
+  HCV2F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&), int (C::*setmethod)(uint32_t, const double, const double), uint32_t size, const HCEIDEnum* eidenums, double scale0, double scale1)
   : HCVec2TableS<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1)
   {
   }
@@ -1078,7 +1078,7 @@ template <class T>
 class HCVec3Cli
 {
 public:
-  HCVec3Cli(HCClient *cli, uint16_t pid)
+  HCVec3Cli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -1093,7 +1093,7 @@ public:
     //Cleanup
   }
 
-  int Get(T &val0, T &val1, T &val2)
+  int Get(T& val0, T& val1, T& val2)
   {
     //Delegate to client
     return _cli->Get(_pid, val0, val1, val2);
@@ -1105,7 +1105,7 @@ public:
     return _cli->Set(_pid, val0, val1, val2);
   }
 
-  int IGet(uint32_t eid, T &val0, T &val1, T &val2)
+  int IGet(uint32_t eid, T& val0, T& val1, T& val2)
   {
     //Delegate to client
     return _cli->IGet(_pid, eid, val0, val1, val2);
@@ -1118,7 +1118,7 @@ public:
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -1136,11 +1136,11 @@ class HCVec3 : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(T &, T &, T &);
+  typedef int (C::*GetMethod)(T&, T&, T&);
   typedef int (C::*SetMethod)(const T, const T, const T);
 
 public:
-  HCVec3(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, T scale0, T scale1, T scale2)
+  HCVec3(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, T scale0, T scale1, T scale2)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -1212,7 +1212,7 @@ public:
     std::cout << TC_RESET << "\n";
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val0;
     T val1;
@@ -1238,7 +1238,7 @@ public:
     st << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
 
@@ -1251,7 +1251,7 @@ public:
     st << "\n  Scale2: " << _scale2;
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
 
@@ -1267,7 +1267,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy, dummy) << ">" << "\n";
   }
 
-  virtual int GetVec(T &val0, T &val1, T &val2)
+  virtual int GetVec(T& val0, T& val1, T& val2)
   {
     //Check for null method
     if(_getmethod == 0)
@@ -1290,7 +1290,7 @@ public:
     return (_object->*_setmethod)(val0, val1, val2);
   }
 
-  virtual int GetStr(std::string &val)
+  virtual int GetStr(std::string& val)
   {
     T nval0;
     T nval1;
@@ -1315,7 +1315,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStr(const std::string &val)
+  virtual int SetStr(const std::string& val)
   {
     T nval0;
     T nval1;
@@ -1333,12 +1333,12 @@ public:
     return (_object->*_setmethod)(nval0 / _scale0, nval1 / _scale1, nval2 / _scale2);
   }
 
-  virtual int SetStrLit(const std::string &val)
+  virtual int SetStrLit(const std::string& val)
   {
     return SetStr(val);
   }
 
-  virtual bool GetCell(HCCell *icell, HCCell *ocell)
+  virtual bool GetCell(HCCell* icell, HCCell* ocell)
   {
     T val0;
     T val1;
@@ -1376,7 +1376,7 @@ public:
     return true;
   }
 
-  virtual bool SetCell(HCCell *icell, HCCell *ocell)
+  virtual bool SetCell(HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val0;
@@ -1429,7 +1429,7 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   T _scale0;
@@ -1444,7 +1444,7 @@ template <class C, class T>
 class HCVec3S : public HCVec3<C, T>
 {
 public:
-  HCVec3S(const std::string &name, C *object, int (C::*getmethod)(T &, T &, T &), int (C::*setmethod)(const T, const T, const T), T scale0, T scale1, T scale2)
+  HCVec3S(const std::string& name, C* object, int (C::*getmethod)(T&, T&, T&), int (C::*setmethod)(const T, const T, const T), T scale0, T scale1, T scale2)
   : HCVec3<C, T>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
@@ -1462,12 +1462,12 @@ template <class C>
 class HCV3F32 : public HCVec3<C, float>
 {
 public:
-  HCV3F32(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float))
+  HCV3F32(const std::string& name, C* object, int (C::*getmethod)(float&, float&, float&), int (C::*setmethod)(const float, const float, const float))
   : HCVec3<C, float>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
+  HCV3F32(const std::string& name, C* object, int (C::*getmethod)(float&, float&, float&), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
   : HCVec3<C, float>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
@@ -1477,12 +1477,12 @@ template <class C>
 class HCV3F32S : public HCVec3S<C, float>
 {
 public:
-  HCV3F32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float))
+  HCV3F32S(const std::string& name, C* object, int (C::*getmethod)(float&, float&, float&), int (C::*setmethod)(const float, const float, const float))
   : HCVec3S<C, float>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32S(const std::string &name, C *object, int (C::*getmethod)(float &, float &, float &), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
+  HCV3F32S(const std::string& name, C* object, int (C::*getmethod)(float&, float&, float&), int (C::*setmethod)(const float, const float, const float), float scale0, float scale1, float scale2)
   : HCVec3S<C, float>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
@@ -1492,12 +1492,12 @@ template <class C>
 class HCV3F64 : public HCVec3<C, double>
 {
 public:
-  HCV3F64(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double))
+  HCV3F64(const std::string& name, C* object, int (C::*getmethod)(double&, double&, double&), int (C::*setmethod)(const double, const double, const double))
   : HCVec3<C, double>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
+  HCV3F64(const std::string& name, C* object, int (C::*getmethod)(double&, double&, double&), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
   : HCVec3<C, double>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
@@ -1507,12 +1507,12 @@ template <class C>
 class HCV3F64S : public HCVec3S<C, double>
 {
 public:
-  HCV3F64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double))
+  HCV3F64S(const std::string& name, C* object, int (C::*getmethod)(double&, double&, double&), int (C::*setmethod)(const double, const double, const double))
   : HCVec3S<C, double>(name, object, getmethod, setmethod, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64S(const std::string &name, C *object, int (C::*getmethod)(double &, double &, double &), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
+  HCV3F64S(const std::string& name, C* object, int (C::*getmethod)(double&, double&, double&), int (C::*setmethod)(const double, const double, const double), double scale0, double scale1, double scale2)
   : HCVec3S<C, double>(name, object, getmethod, setmethod, scale0, scale1, scale2)
   {
   }
@@ -1526,11 +1526,11 @@ class HCVec3Table : public HCParameter
 {
 public:
   //Method signatures
-  typedef int (C::*GetMethod)(uint32_t, T &, T &, T &);
+  typedef int (C::*GetMethod)(uint32_t, T&, T&, T&);
   typedef int (C::*SetMethod)(uint32_t, const T, const T, const T);
 
 public:
-  HCVec3Table(const std::string &name, C *object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1, T scale2)
+  HCVec3Table(const std::string& name, C* object, GetMethod getmethod, SetMethod setmethod, uint32_t size, const HCEIDEnum* eidenums, T scale0, T scale1, T scale2)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -1644,7 +1644,7 @@ public:
     }
   }
 
-  virtual void PrintConfig(const std::string &path, std::ostream &st=std::cout)
+  virtual void PrintConfig(const std::string& path, std::ostream& st=std::cout)
   {
     T val0;
     T val1;
@@ -1705,7 +1705,7 @@ public:
     }
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     T dummy;
     uint32_t i;
@@ -1730,7 +1730,7 @@ public:
     }
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     T dummy;
     uint32_t i;
@@ -1759,7 +1759,7 @@ public:
     file << std::string(indent, ' ') << "</" << TypeString(dummy, dummy, dummy) << "t>" << "\n";
   }
 
-  virtual int GetVecTbl(uint32_t eid, T &val0, T &val1, T &val2)
+  virtual int GetVecTbl(uint32_t eid, T& val0, T& val1, T& val2)
   {
     //Check for EID out of range
     if(eid >= _size)
@@ -1793,7 +1793,7 @@ public:
     return (_object->*_setmethod)(eid, val0, val1, val2);
   }
 
-  virtual int GetStrTbl(uint32_t eid, std::string &val)
+  virtual int GetStrTbl(uint32_t eid, std::string& val)
   {
     T nval0;
     T nval1;
@@ -1825,7 +1825,7 @@ public:
     return lerr;
   }
 
-  virtual int SetStrTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrTbl(uint32_t eid, const std::string& val)
   {
     T nval0;
     T nval1;
@@ -1847,12 +1847,12 @@ public:
     return (_object->*_setmethod)(eid, nval0 / _scale0, nval1 / _scale1, nval2 / _scale2);
   }
 
-  virtual int SetStrLitTbl(uint32_t eid, const std::string &val)
+  virtual int SetStrLitTbl(uint32_t eid, const std::string& val)
   {
     return SetStrTbl(eid, val);
   }
 
-  virtual bool GetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool GetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     T val0;
     T val1;
@@ -1890,7 +1890,7 @@ public:
     return true;
   }
 
-  virtual bool SetCellTbl(uint32_t eid, HCCell *icell, HCCell *ocell)
+  virtual bool SetCellTbl(uint32_t eid, HCCell* icell, HCCell* ocell)
   {
     uint8_t type;
     T val0;
@@ -1947,7 +1947,7 @@ public:
     return _size;
   }
 
-  virtual bool EIDStrToNum(const std::string &str, uint32_t &num)
+  virtual bool EIDStrToNum(const std::string& str, uint32_t& num)
   {
     uint32_t i;
 
@@ -1973,7 +1973,7 @@ public:
     return false;
   }
 
-  virtual bool EIDNumToStr(uint32_t num, std::string &str)
+  virtual bool EIDNumToStr(uint32_t num, std::string& str)
   {
     uint32_t i;
 
@@ -2000,14 +2000,14 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   GetMethod _getmethod;
   SetMethod _setmethod;
   T _scale0;
   T _scale1;
   T _scale2;
   uint32_t _size;
-  const HCEIDEnum *_eidenums;
+  const HCEIDEnum* _eidenums;
 };
 
 //-----------------------------------------------------------------------------
@@ -2017,7 +2017,7 @@ template <class C, class T>
 class HCVec3TableS : public HCVec3Table<C, T>
 {
 public:
-  HCVec3TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, T &, T &, T &), int (C::*setmethod)(uint32_t, const T, const T, const T), uint32_t size, const HCEIDEnum *eidenums, T scale0, T scale1, T scale2)
+  HCVec3TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, T&, T&, T&), int (C::*setmethod)(uint32_t, const T, const T, const T), uint32_t size, const HCEIDEnum* eidenums, T scale0, T scale1, T scale2)
   : HCVec3Table<C, T>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
@@ -2035,22 +2035,22 @@ template <class C>
 class HCV3F32Table : public HCVec3Table<C, float>
 {
 public:
-  HCV3F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
+  HCV3F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
   : HCVec3Table<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
+  HCV3F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
   : HCVec3Table<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCV3F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  HCV3F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec3Table<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1, float scale2)
+  HCV3F32Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum* eidenums, float scale0, float scale1, float scale2)
   : HCVec3Table<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
@@ -2060,22 +2060,22 @@ template <class C>
 class HCV3F32TableS : public HCVec3TableS<C, float>
 {
 public:
-  HCV3F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
+  HCV3F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size)
   : HCVec3TableS<C, float>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
+  HCV3F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, float scale0, float scale1, float scale2)
   : HCVec3TableS<C, float>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCV3F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums)
+  HCV3F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec3TableS<C, float>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F32TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, float &, float &, float &), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum *eidenums, float scale0, float scale1, float scale2)
+  HCV3F32TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, float&, float&, float&), int (C::*setmethod)(uint32_t, const float, const float, const float), uint32_t size, const HCEIDEnum* eidenums, float scale0, float scale1, float scale2)
   : HCVec3TableS<C, float>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
@@ -2085,22 +2085,22 @@ template <class C>
 class HCV3F64Table : public HCVec3Table<C, double>
 {
 public:
-  HCV3F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
+  HCV3F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
   : HCVec3Table<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
+  HCV3F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
   : HCVec3Table<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCV3F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  HCV3F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec3Table<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64Table(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1, double scale2)
+  HCV3F64Table(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum* eidenums, double scale0, double scale1, double scale2)
   : HCVec3Table<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }
@@ -2110,22 +2110,22 @@ template <class C>
 class HCV3F64TableS : public HCVec3TableS<C, double>
 {
 public:
-  HCV3F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
+  HCV3F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size)
   : HCVec3TableS<C, double>(name, object, getmethod, setmethod, size, 0, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
+  HCV3F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, double scale0, double scale1, double scale2)
   : HCVec3TableS<C, double>(name, object, getmethod, setmethod, size, 0, scale0, scale1, scale2)
   {
   }
 
-  HCV3F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums)
+  HCV3F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum* eidenums)
   : HCVec3TableS<C, double>(name, object, getmethod, setmethod, size, eidenums, 1.0, 1.0, 1.0)
   {
   }
 
-  HCV3F64TableS(const std::string &name, C *object, int (C::*getmethod)(uint32_t, double &, double &, double &), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum *eidenums, double scale0, double scale1, double scale2)
+  HCV3F64TableS(const std::string& name, C* object, int (C::*getmethod)(uint32_t, double&, double&, double&), int (C::*setmethod)(uint32_t, const double, const double, const double), uint32_t size, const HCEIDEnum* eidenums, double scale0, double scale1, double scale2)
   : HCVec3TableS<C, double>(name, object, getmethod, setmethod, size, eidenums, scale0, scale1, scale2)
   {
   }

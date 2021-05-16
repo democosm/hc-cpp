@@ -73,7 +73,7 @@ void Pipe::Reset(void)
   _wrevt->Reset();
 }
 
-uint32_t Pipe::Read(void *buf, uint32_t maxlen, uint32_t usecs)
+uint32_t Pipe::Read(void* buf, uint32_t maxlen, uint32_t msecs)
 {
   uint32_t i, amtread;
 
@@ -90,7 +90,7 @@ uint32_t Pipe::Read(void *buf, uint32_t maxlen, uint32_t usecs)
     _mutex->Give();
 
     //Wait for write event
-    if(_wrevt->Wait(usecs) != ERR_NONE)
+    if(_wrevt->Wait(msecs) != ERR_NONE)
       return 0;
 
     //Begin mutual exclusion
@@ -106,7 +106,7 @@ uint32_t Pipe::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   //Copy the data
   for(i=0; i<amtread; i++)
   {
-    *((uint8_t *)buf + i) = *(_buffer + _tail++);
+    *((uint8_t*)buf + i) = *(_buffer + _tail++);
 
     //Check for rollover
     if(_tail >= _size)
@@ -125,7 +125,7 @@ uint32_t Pipe::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   return amtread;
 }
 
-uint32_t Pipe::Write(const void *buf, uint32_t len, uint32_t usecs)
+uint32_t Pipe::Write(const void* buf, uint32_t len, uint32_t msecs)
 {
   uint32_t i, empty;
 
@@ -149,7 +149,7 @@ uint32_t Pipe::Write(const void *buf, uint32_t len, uint32_t usecs)
     _mutex->Give();
 
     //Wait for read event
-    if(_rdevt->Wait(usecs) != ERR_NONE)
+    if(_rdevt->Wait(msecs) != ERR_NONE)
       return 0;
 
     //Begin mutual exclusion
@@ -162,7 +162,7 @@ uint32_t Pipe::Write(const void *buf, uint32_t len, uint32_t usecs)
   //Copy the data
   for(i=0; i<len; i++)
   {
-    *(_buffer + _head++) = *((uint8_t *)buf + i);
+    *(_buffer + _head++) = *((uint8_t*)buf + i);
 
     //Check for rollover
     if(_head >= _size)

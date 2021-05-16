@@ -32,12 +32,12 @@
 class SPI
 {
 public:
-  SPI(const char *name, uint32_t speed=1000000);
+  SPI(const char* name, uint32_t speed=1000000);
   virtual ~SPI();
-  uint32_t Transfer(uint8_t *wdata, uint8_t *rdata, uint32_t len);
+  uint32_t Transfer(uint8_t* wdata, uint8_t* rdata, uint32_t len);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
   int _fd;
   uint32_t _speed;
 };

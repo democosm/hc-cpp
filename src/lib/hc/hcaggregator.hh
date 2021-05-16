@@ -40,26 +40,26 @@
 class HCAggregator
 {
 public:
-  HCAggregator(const std::string &filename);
+  HCAggregator(const std::string& filename);
   virtual ~HCAggregator();
-  HCContainer *GetTopCont(void);
-  void AddParamsToServer(HCContainer *startcont);
-  HCServer *ParseServer(tinyxml2::XMLElement *pelt);
-  HCConnection *ParseConn(tinyxml2::XMLElement *pelt);
-  UDPDevice *ParseUDPSocket(tinyxml2::XMLElement *pelt);
-  SLIPFramer *ParseSLIPFramer(tinyxml2::XMLElement *pelt);
-  TCPClient *ParseTCPClient(tinyxml2::XMLElement *pelt);
-  TLSClient *ParseTLSClient(tinyxml2::XMLElement *pelt);
-  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, std::string &val);
-  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, uint16_t &val);
-  bool ParseValue(tinyxml2::XMLElement *pelt, const char *name, uint32_t &val);
+  HCContainer* GetTopCont(void);
+  void AddParamsToServer(HCContainer* startcont);
+  HCServer* ParseServer(tinyxml2::XMLElement* pelt);
+  HCConnection* ParseConn(tinyxml2::XMLElement* pelt);
+  UDPDevice* ParseUDPSocket(tinyxml2::XMLElement* pelt);
+  SLIPFramer* ParseSLIPFramer(tinyxml2::XMLElement* pelt);
+  TCPClient* ParseTCPClient(tinyxml2::XMLElement* pelt);
+  TLSClient* ParseTLSClient(tinyxml2::XMLElement* pelt);
+  bool ParseValue(tinyxml2::XMLElement* pelt, const char* name, std::string& val);
+  bool ParseValue(tinyxml2::XMLElement* pelt, const char* name, uint16_t& val);
+  bool ParseValue(tinyxml2::XMLElement* pelt, const char* name, uint32_t& val);
 
 private:
-  HCContainer *_topcont;
-  HCConnection **_conn;
-  uint32_t _conncnt;
-  Device *_qsrvdev;
-  HCQServer *_qsrv;
-  UDPDevice *_srvdev;
-  HCServer *_srv;
+  HCContainer* _topcont;
+  HCConnection** _conn;
+  uint32_t _conncount;
+  Device* _qsrvdev;
+  HCQServer* _qsrv;
+  UDPDevice* _srvdev;
+  HCServer* _srv;
 };

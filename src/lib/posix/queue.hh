@@ -36,33 +36,33 @@ public:
   QueueBuffer(uint32_t size);
   ~QueueBuffer();
   void Reset(void);
-  uint32_t Read(void *buf, uint32_t maxlen);
-  uint32_t Write(const void *buf, uint32_t len);
+  uint32_t Read(void* buf, uint32_t maxlen);
+  uint32_t Write(const void* buf, uint32_t len);
 
 private:
   uint32_t _head;
   uint32_t _size;
-  uint8_t *_buffer;
+  uint8_t* _buffer;
 };
 
 class Queue
 {
 public:
-  Queue(uint32_t bufcnt, uint32_t bufsiz);
+  Queue(uint32_t bufcount, uint32_t bufsiz);
   ~Queue();
   void Reset(void);
-  uint32_t Read(void *buf, uint32_t maxlen, uint32_t usecs);
-  uint32_t Write(const void *buf, uint32_t len, uint32_t usecs);
+  uint32_t Read(void* buf, uint32_t maxlen, uint32_t msecs);
+  uint32_t Write(const void* buf, uint32_t len, uint32_t msecs);
 
 private:
-  Mutex *_mutex;
-  Semaphore *_emptysem;
-  Semaphore *_fullsem;
+  Mutex* _mutex;
+  Semaphore* _emptysem;
+  Semaphore* _fullsem;
   uint32_t _wrbufind;
   uint32_t _rdbufind;
-  uint32_t _bufcnt;
+  uint32_t _bufcount;
   uint32_t _bufsiz;
-  QueueBuffer **_bufarray;
-  QueueBuffer *_writebuf;
-  QueueBuffer *_readbuf;
+  QueueBuffer** _bufarray;
+  QueueBuffer* _writebuf;
+  QueueBuffer* _readbuf;
 };

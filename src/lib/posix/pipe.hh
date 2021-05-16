@@ -36,16 +36,16 @@ public:
   Pipe(uint32_t size);
   ~Pipe();
   void Reset(void);
-  uint32_t Read(void *buf, uint32_t maxlen, uint32_t usecs);
-  uint32_t Write(const void *buf, uint32_t len, uint32_t usecs);
+  uint32_t Read(void* buf, uint32_t maxlen, uint32_t msecs);
+  uint32_t Write(const void* buf, uint32_t len, uint32_t msecs);
 
 private:
-  Mutex *_mutex;
-  Event *_wrevt;
-  Event *_rdevt;
+  Mutex* _mutex;
+  Event* _wrevt;
+  Event* _rdevt;
   uint32_t _head;
   uint32_t _tail;
   uint32_t _full;
   uint32_t _size;
-  uint8_t *_buffer;
+  uint8_t* _buffer;
 };

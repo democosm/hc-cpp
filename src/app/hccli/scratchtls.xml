@@ -4,7 +4,7 @@
   <qport>5555</qport>
   <conn>
     <name>scratch</name>
-    <timeout>3000000</timeout>
+    <timeout>3000</timeout>
     <slipframer>
       <maxpldsiz>2000</maxpldsiz>
       <tlsclient>

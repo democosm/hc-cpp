@@ -36,7 +36,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-I2C::I2C(const char *name)
+I2C::I2C(const char* name)
 {
   //Assert valid arguments
   assert(name != 0);
@@ -58,7 +58,7 @@ I2C::~I2C()
   delete _mutex;
 }
 
-int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)
+int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint32_t len)
 {
   //Assert valid arguments
   assert((data != 0) && (len > 0) && (len < 1000));
@@ -99,7 +99,7 @@ int I2C::Get(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)
   return ERR_NONE;
 }
 
-int I2C::Set(uint8_t devaddr, uint8_t regaddr, uint8_t *data, uint32_t len)
+int I2C::Set(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint32_t len)
 {
   uint8_t buf[len+1];
 

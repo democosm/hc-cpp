@@ -36,21 +36,21 @@
 class TLSServer : public Device
 {
 public:
-  TLSServer(uint16_t port, const char *certfile, const char *keyfile, uint32_t authcode);
+  TLSServer(uint16_t port, const char* certfile, const char* keyfile, uint32_t authcode);
   virtual ~TLSServer();
-  virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(const void *buf, uint32_t len);
+  virtual uint32_t Read(void* buf, uint32_t maxlen);
+  virtual uint32_t Write(const void* buf, uint32_t len);
 
 private:
   void CloseConnection(void);
-  SSL *WaitForConnection(void);
-  bool Authenticate(SSL *ssl);
+  SSL* WaitForConnection(void);
+  bool Authenticate(SSL* ssl);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
   int _listenfd;
   int _connfd;
-  SSL_CTX *_sslctx;
-  SSL *_ssl;
+  SSL_CTX* _sslctx;
+  SSL* _ssl;
   uint32_t _authcode;
 };

@@ -39,13 +39,13 @@ Scratch::~Scratch()
 {
 }
 
-int Scratch::GetString(string &val)
+int Scratch::GetString(string& val)
 {
   val = _string;
   return ERR_NONE;
 }
 
-int Scratch::SetString(const string &val)
+int Scratch::SetString(const string& val)
 {
   _string = val;
   return ERR_NONE;

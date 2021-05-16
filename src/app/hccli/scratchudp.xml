@@ -4,7 +4,7 @@
   <qport>5555</qport>
   <conn>
     <name>scratch</name>
-    <timeout>100000</timeout>
+    <timeout>100</timeout>
     <udpsocket>
       <port>0</port>
       <destipaddr>127.0.0.1</destipaddr>

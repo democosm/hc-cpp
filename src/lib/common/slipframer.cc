@@ -28,7 +28,7 @@
 #include "slipframer.hh"
 #include <cassert>
 
-SLIPFramer::SLIPFramer(Device *lowdev, uint32_t maxpldsiz)
+SLIPFramer::SLIPFramer(Device* lowdev, uint32_t maxpldsiz)
 : Device()
 {
   //Assert valid arguments
@@ -47,10 +47,10 @@ SLIPFramer::~SLIPFramer()
   delete _lowdev;
 }
 
-uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
+uint32_t SLIPFramer::Read(void* buf, uint32_t maxlen)
 {
   uint8_t ch;
-  uint32_t rcnt;
+  uint32_t rlen;
   uint32_t rbufind;
   int rxmode;
 
@@ -62,7 +62,7 @@ uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
   rbufind = 0;
 
   //Read a byte at a time
-  while((rcnt = _lowdev->Read(&ch, 1)) == 1)
+  while((rlen = _lowdev->Read(&ch, 1)) == 1)
   {
     //Process depending on mode
     switch(rxmode)
@@ -97,7 +97,7 @@ uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
       }
 
       //Buffer received byte
-      *((uint8_t *)buf + rbufind++) = ch;
+      *((uint8_t*)buf + rbufind++) = ch;
 
       break;
     case RX_MODE_ESCAPE:
@@ -115,12 +115,12 @@ uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
       {
       case BYTE_ESC_END:
         //Buffer decoded END byte and go back to normal mode
-        *((uint8_t *)buf + rbufind++) = BYTE_END;
+        *((uint8_t*)buf + rbufind++) = BYTE_END;
         rxmode = RX_MODE_NORMAL;
         break;
       case BYTE_ESC_ESC:
         //Buffer decoded ESC byte and go back to normal mode
-        *((uint8_t *)buf + rbufind++) = BYTE_ESC;
+        *((uint8_t*)buf + rbufind++) = BYTE_ESC;
         rxmode = RX_MODE_NORMAL;
         break;
       default:
@@ -143,7 +143,7 @@ uint32_t SLIPFramer::Read(void *buf, uint32_t maxlen)
   return rbufind;
 }
 
-uint32_t SLIPFramer::Write(const void *buf, uint32_t len)
+uint32_t SLIPFramer::Write(const void* buf, uint32_t len)
 {
   uint32_t i;
   uint32_t byteind;
@@ -162,7 +162,7 @@ uint32_t SLIPFramer::Write(const void *buf, uint32_t len)
   for(i=0; i<len; i++)
   {
     //Get byte
-    ch = *((uint8_t *)buf + i);
+    ch = *((uint8_t*)buf + i);
 
     //Put data into transmit buffer
     switch(ch)

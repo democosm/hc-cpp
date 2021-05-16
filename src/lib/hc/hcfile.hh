@@ -40,7 +40,7 @@
 class HCFileCli
 {
 public:
-  HCFileCli(HCClient *cli, uint16_t pid)
+  HCFileCli(HCClient* cli, uint16_t pid)
   {
     //Assert valid arguments
     assert(cli != 0);
@@ -55,20 +55,20 @@ public:
     //Cleanup
   }
 
-  int Read(uint32_t offset, uint8_t *val, uint16_t maxlen, uint16_t &len)
+  int Read(uint32_t offset, uint8_t* val, uint16_t maxlen, uint16_t& len)
   {
     //Delegate to client
     return _cli->Read(_pid, offset, val, maxlen, len);
   }
 
-  int Write(uint32_t offset, uint8_t *val, uint16_t len)
+  int Write(uint32_t offset, uint8_t* val, uint16_t len)
   {
     //Delegate to client
     return _cli->Write(_pid, offset, val, len);
   }
 
 private:
-  HCClient *_cli;
+  HCClient* _cli;
   uint16_t _pid;
 };
 
@@ -77,15 +77,15 @@ template <class C>
 class HCFile : public HCParameter
 {
   //Method signatures
-  typedef int (C::*ReadMethod)(uint32_t offset, uint8_t *val, uint16_t maxlen, uint16_t &len);
-  typedef int (C::*WriteMethod)(uint32_t offset, uint8_t *val, uint16_t len);
+  typedef int (C::*ReadMethod)(uint32_t offset, uint8_t* val, uint16_t maxlen, uint16_t& len);
+  typedef int (C::*WriteMethod)(uint32_t offset, uint8_t* val, uint16_t len);
 
 public:
   //File buffer size (pid, offset, length, error code = 9 bytes)
   static const uint32_t BUFFSER_SIZE = HCCell::PAYLOAD_MAX - 9;
 
 public:
-  HCFile(const std::string &name, C *object, ReadMethod readmethod, WriteMethod writemethod)
+  HCFile(const std::string& name, C* object, ReadMethod readmethod, WriteMethod writemethod)
   : HCParameter(name)
   {
     //Assert valid arguments
@@ -139,14 +139,14 @@ public:
     std::cout << TC_GREEN << _name << " = FILETYPE" << TC_RESET << "\n";
   }
 
-  virtual void PrintInfo(std::ostream &st=std::cout)
+  virtual void PrintInfo(std::ostream& st=std::cout)
   {
     st << _name;
     st << "\n  Type: file";
     st << "\n  Access: " << (_readmethod == 0 ? "" : "R") << (_writemethod == 0 ? "" : "W");
   }
 
-  virtual void SaveInfo(std::ofstream &file, uint32_t indent, uint16_t pid)
+  virtual void SaveInfo(std::ofstream& file, uint32_t indent, uint16_t pid)
   {
     //Generate XML information
     file << std::string(indent, ' ') << "<file>" << "\n";
@@ -156,9 +156,9 @@ public:
     file << std::string(indent, ' ') << "</file>" << "\n";
   }
 
-  virtual int Upload(const std::string &val)
+  virtual int Upload(const std::string& val)
   {
-    FILE *file;
+    FILE* file;
     uint32_t offset;
     uint16_t len;
     int ierr;
@@ -210,9 +210,9 @@ public:
     return ERR_NONE;
   }
 
-  virtual int Download(const std::string &val)
+  virtual int Download(const std::string& val)
   {
-    FILE *file;
+    FILE* file;
     uint16_t len;
     int ierr;
 
@@ -260,7 +260,7 @@ public:
     return ERR_NONE;
   }
 
-  virtual bool ReadCell(uint32_t offset, uint16_t maxlen, HCCell *icell, HCCell *ocell)
+  virtual bool ReadCell(uint32_t offset, uint16_t maxlen, HCCell* icell, HCCell* ocell)
   {
     uint16_t len;
     int lerr;
@@ -296,7 +296,7 @@ public:
     return true;
   }
 
-  virtual bool WriteCell(uint32_t offset, HCCell *icell, HCCell *ocell)
+  virtual bool WriteCell(uint32_t offset, HCCell* icell, HCCell* ocell)
   {
     uint16_t len;
     int lerr;
@@ -328,8 +328,8 @@ public:
   }
 
 private:
-  C *_object;
+  C* _object;
   ReadMethod _readmethod;
   WriteMethod _writemethod;
-  uint8_t *_buffer;
+  uint8_t* _buffer;
 };

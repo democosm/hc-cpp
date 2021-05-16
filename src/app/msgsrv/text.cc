@@ -41,14 +41,14 @@ Text::~Text()
 {
 }
 
-int Text::GetMessage(string &val)
+int Text::GetMessage(string& val)
 {
   //Get value
   val = _message;
   return ERR_NONE;
 }
 
-int Text::SetMessage(const string &val)
+int Text::SetMessage(const string& val)
 {
   //Get value
   _message = val;

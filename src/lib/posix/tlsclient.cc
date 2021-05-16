@@ -36,11 +36,11 @@
 
 using namespace std;
 
-TLSClient::TLSClient(uint16_t port, const char *srvipaddr, uint16_t srvport, const char *authstring)
+TLSClient::TLSClient(uint16_t port, const char* srvipaddr, uint16_t srvport, const char* authstring)
 : Device()
 {
   struct sockaddr_in addr;
-  const SSL_METHOD *sslmethod;
+  const SSL_METHOD* sslmethod;
 
   //Assert valid arguments
   assert((srvipaddr != 0) && (authstring != 0));
@@ -92,9 +92,9 @@ TLSClient::~TLSClient()
   delete _mutex;
 }
 
-uint32_t TLSClient::Read(void *buf, uint32_t maxlen)
+uint32_t TLSClient::Read(void* buf, uint32_t maxlen)
 {
-  SSL *ssl;
+  SSL* ssl;
   ssize_t retval;
 
   //Assert valid arguments
@@ -118,9 +118,9 @@ uint32_t TLSClient::Read(void *buf, uint32_t maxlen)
   return (uint32_t)retval;
 }
 
-uint32_t TLSClient::Write(const void *buf, uint32_t len)
+uint32_t TLSClient::Write(const void* buf, uint32_t len)
 {
-  SSL *ssl;
+  SSL* ssl;
   ssize_t wlen;
 
   //Assert valid arguments
@@ -159,7 +159,7 @@ void TLSClient::CloseConnection(void)
   _connfd = -1;
 }
 
-SSL *TLSClient::WaitForConnection(void)
+SSL* TLSClient::WaitForConnection(void)
 {
   struct sockaddr_in addr;
   int optval;
@@ -176,7 +176,7 @@ SSL *TLSClient::WaitForConnection(void)
     if((_connfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
       cout << __FILE__ << ":" << __LINE__ << " - Error creating connection socket" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -185,11 +185,11 @@ SSL *TLSClient::WaitForConnection(void)
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(_port);
-    if(bind(_connfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+    if(bind(_connfd, (struct sockaddr*)&addr, sizeof(addr)) != 0)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error binding socket" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -199,7 +199,7 @@ SSL *TLSClient::WaitForConnection(void)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error setting socket reuse" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -208,11 +208,11 @@ SSL *TLSClient::WaitForConnection(void)
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = _srvipaddr;
     saddr.sin_port = htons(_srvport);
-    if(connect(_connfd, (struct sockaddr *)&saddr, sizeof(saddr)) < 0)
+    if(connect(_connfd, (struct sockaddr*)&saddr, sizeof(saddr)) < 0)
     {
       close(_connfd);
       cout << __FILE__ << ":" << __LINE__ << " - Error connecting" << "\n";
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -225,7 +225,7 @@ SSL *TLSClient::WaitForConnection(void)
     {
       ERR_print_errors_fp(stderr);
       CloseConnection();
-      ThreadSleep(1000000);
+      ThreadSleep(1000);
       continue;
     }
 
@@ -237,7 +237,7 @@ SSL *TLSClient::WaitForConnection(void)
   }
 }
 
-void TLSClient::Authenticate(SSL *ssl)
+void TLSClient::Authenticate(SSL* ssl)
 {
   uint8_t buf[4];
 

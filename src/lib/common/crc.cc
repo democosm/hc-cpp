@@ -77,15 +77,15 @@ static uint32_t Crc32table[] =
   0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-uint32_t CRC32(uint32_t crc, const void *buf, uint32_t size)
+uint32_t CRC32(uint32_t crc, const void* buf, uint32_t size)
 {
-  const uint8_t *ptr;
+  const uint8_t* ptr;
 
   //Assert valid arguments
   assert(buf != 0);
 
   //Cast buffer to usable type
-  ptr = (const uint8_t *)buf;
+  ptr = (const uint8_t*)buf;
 
   //Invert CRC
   crc = crc ^ ~0U;
@@ -98,7 +98,7 @@ uint32_t CRC32(uint32_t crc, const void *buf, uint32_t size)
   return crc ^ ~0U;
 }
 
-uint32_t CRC32File(const string &name)
+uint32_t CRC32File(const string& name)
 {
   uint32_t crc;
   ifstream file;
@@ -115,11 +115,11 @@ uint32_t CRC32File(const string &name)
   crc = 0xFFFFFFFF;
 
   //Update CRC per file contents
-  file.read((char *)&byte, 1);
+  file.read((char*)&byte, 1);
   while(file.good())
   {
     crc = Crc32table[(crc ^ byte) & 0xFF] ^ (crc >> 8);
-    file.read((char *)&byte, 1);
+    file.read((char*)&byte, 1);
   }
 
   //Invert CRC

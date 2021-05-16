@@ -41,7 +41,7 @@
 using namespace std;
 using namespace tinyxml2;
 
-HCConnection::HCConnection(Device *dev, HCContainer *pcont, const string &contname, uint32_t timeout, const string &sifname)
+HCConnection::HCConnection(Device* dev, HCContainer* pcont, const string& contname, uint32_t timeout, const string& sifname)
 {
   XMLDocument doc;
   string srvname;
@@ -146,9 +146,9 @@ HCConnection::~HCConnection()
   delete _dev;
 }
 
-void HCConnection::ParseServer(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseServer(XMLElement* pelt, HCContainer* pcont)
 {
-  XMLElement *elt;
+  XMLElement* elt;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -267,11 +267,11 @@ void HCConnection::ParseServer(XMLElement *pelt, HCContainer *pcont)
   }
 }
 
-void HCConnection::ParseCont(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseCont(XMLElement* pelt, HCContainer* pcont)
 {
   string name;
-  XMLElement *elt;
-  HCContainer *cont;
+  XMLElement* elt;
+  HCContainer* cont;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -398,12 +398,12 @@ void HCConnection::ParseCont(XMLElement *pelt, HCContainer *pcont)
   }
 }
 
-void HCConnection::ParseCall(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseCall(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
-  HCCallCli *stub;
-  HCParameter *param;
+  HCCallCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -427,15 +427,15 @@ void HCConnection::ParseCall(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseCallT(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseCallT(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   uint32_t size;
-  XMLElement *elt;
-  HCEIDEnum *eidenums;
-  HCCallCli *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCEIDEnum* eidenums;
+  HCCallCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -472,16 +472,16 @@ void HCConnection::ParseCallT(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseBool(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseBool(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
-  XMLElement *elt;
-  HCBooleanEnum *valenums;
-  HCBooleanCli *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCBooleanEnum* valenums;
+  HCBooleanCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -543,18 +543,18 @@ void HCConnection::ParseBool(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseBoolT(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseBoolT(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   uint32_t size;
-  XMLElement *elt;
-  HCBooleanEnum *valenums;
-  HCEIDEnum *eidenums;
-  HCBooleanCli *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCBooleanEnum* valenums;
+  HCEIDEnum* eidenums;
+  HCBooleanCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -623,11 +623,11 @@ void HCConnection::ParseBoolT(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-HCBooleanEnum *HCConnection::ParseBoolEnum(XMLElement *pelt)
+HCBooleanEnum* HCConnection::ParseBoolEnum(XMLElement* pelt)
 {
-  XMLElement *elt;
-  uint32_t enumcnt;
-  HCBooleanEnum *enums;
+  XMLElement* elt;
+  uint32_t enumcount;
+  HCBooleanEnum* enums;
   string enumnumstr;
   string enumstr;
   size_t seppos;
@@ -637,20 +637,20 @@ HCBooleanEnum *HCConnection::ParseBoolEnum(XMLElement *pelt)
     return 0;
 
   //Count number of enumerations
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
     if(strcmp(elt->Name(), "eq") == 0)
-      enumcnt++;
+      enumcount++;
 
   //Check for no enumerations
-  if(enumcnt == 0)
+  if(enumcount == 0)
     return 0;
 
   //Create storage for enumerations
-  enums = new HCBooleanEnum[enumcnt + 1];
+  enums = new HCBooleanEnum[enumcount + 1];
 
   //Loop through all children and gather information
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
   {
     //Check for equality element node
@@ -667,31 +667,31 @@ HCBooleanEnum *HCConnection::ParseBoolEnum(XMLElement *pelt)
       enumstr = enumstr.substr(seppos+1, enumstr.length()-seppos);
 
       //Convert number and check for error
-      if(!StringConvert(enumnumstr.c_str(), enums[enumcnt]._num))
+      if(!StringConvert(enumnumstr.c_str(), enums[enumcount]._num))
       {
         cout << __FILE__ << ' ' << __LINE__ << " - Error converting enumeration number (" << enumnumstr << ")\n";
         return enums;
       }
 
       //Get enumeration string
-      enums[enumcnt]._str = enumstr;
+      enums[enumcount]._str = enumstr;
 
       //Advance to next index into enumeration array
-      enumcnt++;
+      enumcount++;
     }
   }
 
   return enums;
 }
 
-void HCConnection::ParseStr(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseStr(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
-  HCStringCli *stub;
-  HCParameter *param;
+  HCStringCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -744,17 +744,17 @@ void HCConnection::ParseStr(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseStrT(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseStrT(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   uint32_t size;
-  XMLElement *elt;
-  HCEIDEnum *eidenums;
-  HCStringCli *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCEIDEnum* eidenums;
+  HCStringCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -820,15 +820,15 @@ void HCConnection::ParseStrT(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseStrL(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseStrL(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   uint32_t maxsize;
-  HCStringCli *stub;
-  HCParameter *param;
+  HCStringCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -885,13 +885,13 @@ void HCConnection::ParseStrL(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-void HCConnection::ParseFile(XMLElement *pelt, HCContainer *pcont)
+void HCConnection::ParseFile(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
-  HCFileCli *stub;
-  HCParameter *param;
+  HCFileCli* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -926,16 +926,16 @@ void HCConnection::ParseFile(XMLElement *pelt, HCContainer *pcont)
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseInt(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseInt(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
-  XMLElement *elt;
-  HCIntegerEnum<T> *valenums;
-  HCIntegerCli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCIntegerEnum<T>* valenums;
+  HCIntegerCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -997,18 +997,18 @@ template <typename T> void HCConnection::ParseInt(XMLElement *pelt, HCContainer 
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseIntT(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseIntT(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   uint32_t size;
-  XMLElement *elt;
-  HCIntegerEnum<T> *valenums;
-  HCEIDEnum *eidenums;
-  HCIntegerCli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCIntegerEnum<T>* valenums;
+  HCEIDEnum* eidenums;
+  HCIntegerCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1077,17 +1077,17 @@ template <typename T> void HCConnection::ParseIntT(XMLElement *pelt, HCContainer
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseIntL(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseIntL(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   uint32_t maxsize;
-  XMLElement *elt;
-  HCIntegerEnum<T> *valenums;
-  HCIntegerCli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCIntegerEnum<T>* valenums;
+  HCIntegerCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1153,14 +1153,14 @@ template <typename T> void HCConnection::ParseIntL(XMLElement *pelt, HCContainer
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseIntA(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseIntA(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
-  HCIntegerCli<T> *stub;
-  HCParameter *param;
+  HCIntegerCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1213,11 +1213,11 @@ template <typename T> void HCConnection::ParseIntA(XMLElement *pelt, HCContainer
   pcont->Add(param);
 }
 
-template <typename T> HCIntegerEnum<T> *HCConnection::ParseIntEnum(XMLElement *pelt)
+template <typename T> HCIntegerEnum<T>* HCConnection::ParseIntEnum(XMLElement* pelt)
 {
-  XMLElement *elt;
-  uint32_t enumcnt;
-  HCIntegerEnum<T> *enums;
+  XMLElement* elt;
+  uint32_t enumcount;
+  HCIntegerEnum<T>* enums;
   string enumnumstr;
   string enumstr;
   size_t seppos;
@@ -1227,20 +1227,20 @@ template <typename T> HCIntegerEnum<T> *HCConnection::ParseIntEnum(XMLElement *p
     return 0;
 
   //Count number of enumerations
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
     if(strcmp(elt->Name(), "eq") == 0)
-      enumcnt++;
+      enumcount++;
 
   //Check for no enumerations
-  if(enumcnt == 0)
+  if(enumcount == 0)
     return 0;
 
   //Create storage for enumerations
-  enums = new HCIntegerEnum<T>[enumcnt + 1];
+  enums = new HCIntegerEnum<T>[enumcount + 1];
 
   //Loop through all children and gather information
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
   {
     //Check for equality element node
@@ -1257,28 +1257,28 @@ template <typename T> HCIntegerEnum<T> *HCConnection::ParseIntEnum(XMLElement *p
       enumstr = enumstr.substr(seppos+1, enumstr.length()-seppos);
 
       //Convert number and check for error
-      if(!StringConvert(enumnumstr.c_str(), enums[enumcnt]._num))
+      if(!StringConvert(enumnumstr.c_str(), enums[enumcount]._num))
       {
         cout << __FILE__ << ' ' << __LINE__ << " - Error converting enumeration number (" << enumnumstr << ")\n";
         return enums;
       }
 
       //Get enumeration string
-      enums[enumcnt]._str = enumstr;
+      enums[enumcount]._str = enumstr;
 
       //Advance to next index into enumeration array
-      enumcnt++;
+      enumcount++;
     }
   }
 
   return enums;
 }
 
-HCEIDEnum *HCConnection::ParseEIDEnum(XMLElement *pelt)
+HCEIDEnum* HCConnection::ParseEIDEnum(XMLElement* pelt)
 {
-  XMLElement *elt;
-  uint32_t enumcnt;
-  HCEIDEnum *enums;
+  XMLElement* elt;
+  uint32_t enumcount;
+  HCEIDEnum* enums;
   string enumnumstr;
   string enumstr;
   size_t seppos;
@@ -1288,20 +1288,20 @@ HCEIDEnum *HCConnection::ParseEIDEnum(XMLElement *pelt)
     return 0;
 
   //Count number of enumerations
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
     if(strcmp(elt->Name(), "eq") == 0)
-      enumcnt++;
+      enumcount++;
 
   //Check for no enumerations
-  if(enumcnt == 0)
+  if(enumcount == 0)
     return 0;
 
   //Create storage for enumerations
-  enums = new HCEIDEnum[enumcnt + 1];
+  enums = new HCEIDEnum[enumcount + 1];
 
   //Loop through all children and gather information
-  enumcnt = 0;
+  enumcount = 0;
   for(elt = pelt->FirstChildElement(); elt != 0; elt = elt->NextSiblingElement())
   {
     //Check for equality element node
@@ -1318,32 +1318,32 @@ HCEIDEnum *HCConnection::ParseEIDEnum(XMLElement *pelt)
       enumstr = enumstr.substr(seppos+1, enumstr.length()-seppos);
 
       //Convert number and check for error
-      if(!StringConvert(enumnumstr.c_str(), enums[enumcnt]._num))
+      if(!StringConvert(enumnumstr.c_str(), enums[enumcount]._num))
       {
         cout << __FILE__ << ' ' << __LINE__ << " - Error converting enumeration number (" << enumnumstr << ")\n";
         return enums;
       }
 
       //Get enumeration string
-      enums[enumcnt]._str = enumstr;
+      enums[enumcount]._str = enumstr;
 
       //Advance to next index into enumeration array
-      enumcnt++;
+      enumcount++;
     }
   }
 
   return enums;
 }
 
-template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseFloat(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
   string acc;
   string sav;
   T scl;
-  HCFloatCli<T> *stub;
-  HCParameter *param;
+  HCFloatCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1400,7 +1400,7 @@ template <typename T> void HCConnection::ParseFloat(XMLElement *pelt, HCContaine
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseFloatTable(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
@@ -1408,10 +1408,10 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
   string sav;
   T scl;
   uint32_t size;
-  XMLElement *elt;
-  HCEIDEnum *eidenums;
-  HCFloatCli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCEIDEnum* eidenums;
+  HCFloatCli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1481,7 +1481,7 @@ template <typename T> void HCConnection::ParseFloatTable(XMLElement *pelt, HCCon
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseVec2(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseVec2(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
@@ -1489,8 +1489,8 @@ template <typename T> void HCConnection::ParseVec2(XMLElement *pelt, HCContainer
   string sav;
   T scl0;
   T scl1;
-  HCVec2Cli<T> *stub;
-  HCParameter *param;
+  HCVec2Cli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1551,7 +1551,7 @@ template <typename T> void HCConnection::ParseVec2(XMLElement *pelt, HCContainer
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseVec2T(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseVec2T(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
@@ -1560,10 +1560,10 @@ template <typename T> void HCConnection::ParseVec2T(XMLElement *pelt, HCContaine
   T scl0;
   T scl1;
   uint32_t size;
-  XMLElement *elt;
-  HCEIDEnum *eidenums;
-  HCVec2Cli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCEIDEnum* eidenums;
+  HCVec2Cli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1637,7 +1637,7 @@ template <typename T> void HCConnection::ParseVec2T(XMLElement *pelt, HCContaine
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseVec3(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseVec3(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
@@ -1646,8 +1646,8 @@ template <typename T> void HCConnection::ParseVec3(XMLElement *pelt, HCContainer
   T scl0;
   T scl1;
   T scl2;
-  HCVec3Cli<T> *stub;
-  HCParameter *param;
+  HCVec3Cli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1712,7 +1712,7 @@ template <typename T> void HCConnection::ParseVec3(XMLElement *pelt, HCContainer
   pcont->Add(param);
 }
 
-template <typename T> void HCConnection::ParseVec3T(XMLElement *pelt, HCContainer *pcont)
+template <typename T> void HCConnection::ParseVec3T(XMLElement* pelt, HCContainer* pcont)
 {
   uint16_t pid;
   string name;
@@ -1722,10 +1722,10 @@ template <typename T> void HCConnection::ParseVec3T(XMLElement *pelt, HCContaine
   T scl1;
   T scl2;
   uint32_t size;
-  XMLElement *elt;
-  HCEIDEnum *eidenums;
-  HCVec3Cli<T> *stub;
-  HCParameter *param;
+  XMLElement* elt;
+  HCEIDEnum* eidenums;
+  HCVec3Cli<T>* stub;
+  HCParameter* param;
 
   //Check for null parent objects
   if((pelt == 0) || (pcont == 0))
@@ -1803,10 +1803,10 @@ template <typename T> void HCConnection::ParseVec3T(XMLElement *pelt, HCContaine
   pcont->Add(param);
 }
 
-template <typename T> bool HCConnection::ParseValue(XMLElement *pelt, const char *name, T &val)
+template <typename T> bool HCConnection::ParseValue(XMLElement* pelt, const char* name, T& val)
 {
-  XMLElement *childelt;
-  const char *text;
+  XMLElement* childelt;
+  const char* text;
 
   //Check for null parent element
   if(pelt == 0)

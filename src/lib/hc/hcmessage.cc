@@ -66,7 +66,7 @@ uint8_t HCMessage::GetTransaction(void)
   return _transaction;
 }
 
-int HCMessage::Send(Device *dev)
+int HCMessage::Send(Device* dev)
 {
   uint32_t i;
 
@@ -90,24 +90,24 @@ int HCMessage::Send(Device *dev)
   return ERR_NONE;
 }
 
-int HCMessage::Recv(Device *dev)
+int HCMessage::Recv(Device* dev)
 {
-  uint32_t rcnt;
+  uint32_t rlen;
   uint32_t i;
 
   //Assert valid arguments
   assert(dev != 0);
 
   //Read serialized message from device and check for error
-  if((rcnt = dev->Read(_buffer, OVERHEAD + PAYLOAD_MAX)) == 0)
+  if((rlen = dev->Read(_buffer, OVERHEAD + PAYLOAD_MAX)) == 0)
   {
     //Sleep a while to prevent starving other threads
-    ThreadSleep(1000000);
+    ThreadSleep(1000);
     return ERR_UNSPEC;
   }
 
   //Check for overflow
-  if((rcnt < OVERHEAD) || (rcnt > (OVERHEAD + PAYLOAD_MAX)))
+  if((rlen < OVERHEAD) || (rlen > (OVERHEAD + PAYLOAD_MAX)))
     return ERR_UNSPEC;
 
   //Zero index
@@ -120,13 +120,13 @@ int HCMessage::Recv(Device *dev)
   _readindex = 0;
 
   //Set payload length
-  _payloadlength = rcnt - OVERHEAD;
+  _payloadlength = rlen - OVERHEAD;
 
   //Success
   return ERR_NONE;
 }
 
-bool HCMessage::Read(HCCell *cell)
+bool HCMessage::Read(HCCell* cell)
 {
   uint32_t len;
 
@@ -140,7 +140,7 @@ bool HCMessage::Read(HCCell *cell)
   return true;
 }
 
-bool HCMessage::Write(HCCell *cell)
+bool HCMessage::Write(HCCell* cell)
 {
   uint32_t len;
 
@@ -154,7 +154,7 @@ bool HCMessage::Write(HCCell *cell)
   return true;
 }
 
-void HCMessage::Print(const string &extra)
+void HCMessage::Print(const string& extra)
 {
   uint32_t i;
 

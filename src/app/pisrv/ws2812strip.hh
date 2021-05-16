@@ -32,14 +32,14 @@
 class WS2812Strip
 {
 public:
-  WS2812Strip(SPI *spi, uint32_t count);
+  WS2812Strip(SPI* spi, uint32_t count);
   ~WS2812Strip();
-  int GetColor(uint32_t id, uint32_t &val);
+  int GetColor(uint32_t id, uint32_t& val);
   int SetColor(uint32_t id, uint32_t val);
   int Update(void);
 
 private:
-  SPI *_spi;
+  SPI* _spi;
   uint32_t _count;
-  uint8_t *_colorbuf;
+  uint8_t* _colorbuf;
 };

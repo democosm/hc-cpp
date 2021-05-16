@@ -45,15 +45,15 @@ public:
   ~HCMessage();
   void Reset(uint8_t transaction);
   uint8_t GetTransaction(void);
-  int Send(Device *dev);
-  int Recv(Device *dev);
-  bool Read(HCCell *val);
-  bool Write(HCCell *val);
-  void Print(const std::string &extra);
+  int Send(Device* dev);
+  int Recv(Device* dev);
+  bool Read(HCCell* val);
+  bool Write(HCCell* val);
+  void Print(const std::string& extra);
 
 private:
-  uint8_t *_buffer;
-  uint8_t *_payload;
+  uint8_t* _buffer;
+  uint8_t* _payload;
   uint32_t _readindex;
   uint32_t _payloadlength;
   uint8_t _transaction;

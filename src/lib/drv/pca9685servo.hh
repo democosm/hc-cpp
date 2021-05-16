@@ -34,15 +34,15 @@
 class PCA9685Servo
 {
 public:
-  PCA9685Servo(PCA9685 *pca9685, uint32_t chanid, double dutymin, double dutymax);
+  PCA9685Servo(PCA9685* pca9685, uint32_t chanid, double dutymin, double dutymax);
   virtual ~PCA9685Servo();
-  void RegisterInterface(const char *contname, HCContainer *pcont, HCServer *srv);
-  int GetAngle(double &val);
+  void RegisterInterface(const char* contname, HCContainer* pcont, HCServer* srv);
+  int GetAngle(double& val);
   int SetAngle(double val);
   int SlewTest(void);
 
 private:
-  PCA9685 *_pca9685;
+  PCA9685* _pca9685;
   uint32_t _chanid;
   double _dutymin;
   double _dutymax;

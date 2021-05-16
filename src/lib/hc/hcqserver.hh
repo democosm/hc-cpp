@@ -33,15 +33,15 @@
 class HCQServer
 {
 public:
-  HCQServer(Device *lowdev, HCContainer *top);
+  HCQServer(Device* lowdev, HCContainer* top);
   ~HCQServer();
 
 private:
   bool NextReadCharEquals(char ch);
-  bool ReadField(char termchar, char *field, uint32_t fieldsize);
+  bool ReadField(char termchar, char* field, uint32_t fieldsize);
   bool WriteChar(char ch);
-  bool WriteString(const char *str);
-  bool WriteStringQuote(const char *str);
+  bool WriteString(const char* str);
+  bool WriteStringQuote(const char* str);
   bool ProcessCallCell(void);
   bool ProcessGetCell(void);
   bool ProcessSetCell(void);
@@ -56,12 +56,12 @@ private:
   void CtlThread(void);
 
 private:
-  Device *_lowdev;
-  HCContainer *_top;
+  Device* _lowdev;
+  HCContainer* _top;
   uint32_t _readcount;
   char _readbuf[65536];
   uint32_t _readind;
   char _writebuf[65536];
   uint32_t _writeind;
-  Thread<HCQServer> *_ctlthread;
+  Thread<HCQServer>* _ctlthread;
 };

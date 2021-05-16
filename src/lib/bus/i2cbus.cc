@@ -27,7 +27,7 @@
 #include "error.hh"
 #include "i2cbus.hh"
 
-I2CBus::I2CBus(I2C *i2c, uint8_t devaddr)
+I2CBus::I2CBus(I2C* i2c, uint8_t devaddr)
 : Bus()
 {
   //Initialize cache variables
@@ -39,12 +39,12 @@ I2CBus::~I2CBus()
 {
 }
 
-int I2CBus::Get(uint32_t addr, uint8_t *data, uint32_t len)
+int I2CBus::Get(uint32_t addr, uint8_t* data, uint32_t len)
 {
   return _i2c->Get(_devaddr, addr, data, len);
 }
 
-int I2CBus::Set(uint32_t addr, uint8_t *data, uint32_t len)
+int I2CBus::Set(uint32_t addr, uint8_t* data, uint32_t len)
 {
   return _i2c->Set(_devaddr, addr, data, len);
 }

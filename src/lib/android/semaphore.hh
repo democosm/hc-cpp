@@ -26,20 +26,17 @@
 
 #pragma once
 
+#include "const.hh"
 #include <inttypes.h>
 #include <pthread.h>
 
 class Semaphore
 {
 public:
-  static const uint32_t WAIT_NONE = 0;
-  static const uint32_t WAIT_INF = 0xFFFFFFFF;
-
-public:
   Semaphore(uint32_t initcount);
   ~Semaphore();
   int Clear(void);
-  int Wait(uint32_t usecs=WAIT_INF);
+  int Wait(uint32_t msecs=WAIT_INF);
   int Give(void);
   int Reset(void);
 

@@ -33,12 +33,12 @@
 class I2CBus : public Bus
 {
 public:
-  I2CBus(I2C *i2c, uint8_t devaddr);
+  I2CBus(I2C* i2c, uint8_t devaddr);
   virtual ~I2CBus();
-  virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
-  virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  virtual int Get(uint32_t addr, uint8_t* data, uint32_t len);
+  virtual int Set(uint32_t addr, uint8_t* data, uint32_t len);
 
 private:
-  I2C *_i2c;
+  I2C* _i2c;
   uint8_t _devaddr;
 };

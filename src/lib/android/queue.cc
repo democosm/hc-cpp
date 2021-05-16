@@ -51,7 +51,7 @@ void QueueBuffer::Reset(void)
   _head = 0;
 }
 
-uint32_t QueueBuffer::Read(void *buf, uint32_t maxlen)
+uint32_t QueueBuffer::Read(void* buf, uint32_t maxlen)
 {
   uint32_t i;
 
@@ -64,7 +64,7 @@ uint32_t QueueBuffer::Read(void *buf, uint32_t maxlen)
 
   //Copy remaining data
   for(i=0; i<_head; i++)
-    *((uint8_t *)buf + i) = *(_buffer + i);
+    *((uint8_t*)buf + i) = *(_buffer + i);
 
   //Reset head
   _head = 0;
@@ -72,7 +72,7 @@ uint32_t QueueBuffer::Read(void *buf, uint32_t maxlen)
   return i;
 }
 
-uint32_t QueueBuffer::Write(const void *buf, uint32_t len)
+uint32_t QueueBuffer::Write(const void* buf, uint32_t len)
 {
   uint32_t i;
 
@@ -85,7 +85,7 @@ uint32_t QueueBuffer::Write(const void *buf, uint32_t len)
 
   //Copy data
   for(i=0; i<len; i++)
-    *(_buffer + i) = *((uint8_t *)buf + i);
+    *(_buffer + i) = *((uint8_t*)buf + i);
 
   //Adjust head
   _head = len;
@@ -93,19 +93,19 @@ uint32_t QueueBuffer::Write(const void *buf, uint32_t len)
   return len;
 }
 
-Queue::Queue(uint32_t bufcnt, uint32_t bufsiz)
+Queue::Queue(uint32_t bufcount, uint32_t bufsiz)
 {
   uint32_t i;
 
   //Assert valid arguments
-  assert((bufcnt > 0) && (bufsiz > 0));
+  assert((bufcount > 0) && (bufsiz > 0));
 
   //Initialize member variables
-  _bufarray = new QueueBuffer *[bufcnt];
-  _bufcnt = bufcnt;
+  _bufarray = new QueueBuffer*[bufcount];
+  _bufcount = bufcount;
   _bufsiz = bufsiz;
 
-  for(i=0; i<_bufcnt; i++)
+  for(i=0; i<_bufcount; i++)
     _bufarray[i] = new QueueBuffer(_bufsiz);
 
   _wrbufind = 0;
@@ -113,7 +113,7 @@ Queue::Queue(uint32_t bufcnt, uint32_t bufsiz)
   _writebuf = _bufarray[_wrbufind];
   _readbuf = _bufarray[_rdbufind];
   _mutex = new Mutex();
-  _emptysem = new Semaphore(bufcnt);
+  _emptysem = new Semaphore(bufcount);
   _fullsem = new Semaphore(0);
 }
 
@@ -127,7 +127,7 @@ Queue::~Queue()
   delete _fullsem;
 
   //Destroy the buffers
-  for(i=0; i<_bufcnt; i++)
+  for(i=0; i<_bufcount; i++)
     delete _bufarray[i];
 
   //Deallocate memory for the buffer array
@@ -139,7 +139,7 @@ void Queue::Reset(void)
   uint32_t i;
 
   //Reset the buffers
-  for(i=0; i<_bufcnt; i++)
+  for(i=0; i<_bufcount; i++)
     _bufarray[i]->Reset();
 
   //Reset queue fields
@@ -154,7 +154,7 @@ void Queue::Reset(void)
   _fullsem->Reset();
 }
 
-uint32_t Queue::Read(void *buf, uint32_t maxlen, uint32_t usecs)
+uint32_t Queue::Read(void* buf, uint32_t maxlen, uint32_t msecs)
 {
   uint32_t retval;
 
@@ -162,7 +162,7 @@ uint32_t Queue::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   assert((buf != 0) && (maxlen > 0));
 
   //Wait for a full buffer
-  if(_fullsem->Wait(usecs) != ERR_NONE)
+  if(_fullsem->Wait(msecs) != ERR_NONE)
     return 0;
 
   //Begin mutual exclusion
@@ -172,7 +172,7 @@ uint32_t Queue::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   retval = _readbuf->Read(buf, maxlen);
 
   //Advance the read buffer
-  if(++_rdbufind >= _bufcnt)
+  if(++_rdbufind >= _bufcount)
     _rdbufind = 0;
 
   _readbuf = _bufarray[_rdbufind];
@@ -186,7 +186,7 @@ uint32_t Queue::Read(void *buf, uint32_t maxlen, uint32_t usecs)
   return retval;
 }
 
-uint32_t Queue::Write(const void *buf, uint32_t len, uint32_t usecs)
+uint32_t Queue::Write(const void* buf, uint32_t len, uint32_t msecs)
 {
   uint32_t retval;
 
@@ -198,7 +198,7 @@ uint32_t Queue::Write(const void *buf, uint32_t len, uint32_t usecs)
     return 0;
 
   //Wait for an empty buffer
-  if(_emptysem->Wait(usecs) != ERR_NONE)
+  if(_emptysem->Wait(msecs) != ERR_NONE)
     return 0;
 
   //Begin mutual exclusion
@@ -208,7 +208,7 @@ uint32_t Queue::Write(const void *buf, uint32_t len, uint32_t usecs)
   retval = _writebuf->Write(buf, len);
 
   //Advance the write buffer
-  if(++_wrbufind >= _bufcnt)
+  if(++_wrbufind >= _bufcount)
     _wrbufind = 0;
 
   _writebuf = _bufarray[_wrbufind];

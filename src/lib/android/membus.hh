@@ -27,7 +27,6 @@
 #pragma once
 
 #include "bus.hh"
-#include "mutex.hh"
 #include <inttypes.h>
 
 class MemBus : public Bus
@@ -35,12 +34,11 @@ class MemBus : public Bus
 public:
   MemBus(uint32_t physbase, uint32_t size);
   virtual ~MemBus();
-  virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
-  virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  virtual int Get(uint32_t addr, uint8_t* data, uint32_t len);
+  virtual int Set(uint32_t addr, uint8_t* data, uint32_t len);
 
 private:
   uint32_t _size;
   int _memfd;
   uint8_t* _virtbase;
-  Mutex* _mutex;
 };

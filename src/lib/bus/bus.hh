@@ -34,13 +34,13 @@ class Bus
 public:
   Bus();
   virtual ~Bus();
-  virtual int Get(uint32_t addr, uint8_t *data, uint32_t len);
-  virtual int Set(uint32_t addr, uint8_t *data, uint32_t len);
+  virtual int Get(uint32_t addr, uint8_t* data, uint32_t len);
+  virtual int Set(uint32_t addr, uint8_t* data, uint32_t len);
   template <typename T> int Get(uint32_t addr, T& val);
   template <typename T> int Set(uint32_t addr, const T val);
   void Reserve(void);
   void Release(void);
 
 private:
-  Mutex *_mutex;
+  Mutex* _mutex;
 };

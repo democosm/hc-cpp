@@ -33,7 +33,7 @@ class PiGPIO
 public:
   PiGPIO(uint8_t num, bool output=false, bool initval=false);
   ~PiGPIO();
-  int GetValue(bool &val);
+  int GetValue(bool& val);
   int SetValue(bool val);
 
 private:

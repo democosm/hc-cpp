@@ -33,8 +33,8 @@ class Scratch
 public:
   Scratch();
   ~Scratch();
-  int GetString(std::string &val);
-  int SetString(const std::string &val);
+  int GetString(std::string& val);
+  int SetString(const std::string& val);
 
 private:
   std::string _string;

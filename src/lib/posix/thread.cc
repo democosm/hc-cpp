@@ -28,13 +28,13 @@
 #include <time.h>
 #include <unistd.h>
 
-int ThreadSleep(uint32_t usecs)
+int ThreadSleep(uint32_t msecs)
 {
   struct timespec ts;
 
   //Sleep now
-  ts.tv_sec = usecs / 1000000;
-  ts.tv_nsec = (usecs % 1000000) * 1000;
+  ts.tv_sec = msecs / 1000;
+  ts.tv_nsec = (msecs % 1000) * 1000000;
   nanosleep(&ts, 0);
 
   return ERR_NONE;

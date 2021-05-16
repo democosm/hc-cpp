@@ -33,10 +33,10 @@
 class SerDev : public Device
 {
 public:
-  SerDev(const char *name, uint32_t baud, int hwflowctl);
+  SerDev(const char* name, uint32_t baud, int hwflowctl);
   virtual ~SerDev();
-  virtual uint32_t Read(void *buf, uint32_t maxlen);
-  virtual uint32_t Write(const void *buf, uint32_t len);
+  virtual uint32_t Read(void* buf, uint32_t maxlen);
+  virtual uint32_t Write(const void* buf, uint32_t len);
 
 private:
   int _fd;

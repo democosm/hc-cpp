@@ -40,12 +40,12 @@ static const HCBooleanEnum Offon[] =
   HCBooleanEnum()
 };
 
-HCClient::HCClient(Device *lowdev, HCContainer *parent, uint32_t timeout)
+HCClient::HCClient(Device* lowdev, HCContainer* parent, uint32_t timeout)
 {
-  HCContainer *cont;
+  HCContainer* cont;
 
   //Assert valid arguments
-  assert((lowdev != 0) && (parent != 0) && (timeout > 1000));
+  assert((lowdev != 0) && (parent != 0) && (timeout > 1));
 
   //Initialize member variables
   _pidmax = 0;
@@ -56,17 +56,17 @@ HCClient::HCClient(Device *lowdev, HCContainer *parent, uint32_t timeout)
   _omsg = new HCMessage();
   _ocell = new HCCell();
   _debug = false;
-  _senderrcnt = 0;
-  _recverrcnt = 0;
-  _transactionerrcnt = 0;
-  _cellerrcnt = 0;
-  _opcodeerrcnt = 0;
-  _timeouterrcnt = 0;
-  _piderrcnt = 0;
-  _typeerrcnt = 0;
-  _eiderrcnt = 0;
-  _offseterrcnt = 0;
-  _goodxactcnt = 0;
+  _senderrcount = 0;
+  _recverrcount = 0;
+  _transactionerrcount = 0;
+  _cellerrcount = 0;
+  _opcodeerrcount = 0;
+  _timeouterrcount = 0;
+  _piderrcount = 0;
+  _typeerrcount = 0;
+  _eiderrcount = 0;
+  _offseterrcount = 0;
+  _goodxactcount = 0;
   _transaction = 0;
   _xactmutex = new Mutex();
   _exptransaction = 0xFFFF;
@@ -81,17 +81,17 @@ HCClient::HCClient(Device *lowdev, HCContainer *parent, uint32_t timeout)
   cont = new HCContainer(".client");
   parent->Add(cont);
   cont->Add(new HCBoolean<HCClient>("debug", this, &HCClient::GetDebug, &HCClient::SetDebug, Offon));
-  cont->Add(new HCUns32<HCClient>("senderrcnt", this, &HCClient::GetSendErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("recverrcnt", this, &HCClient::GetRecvErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("transactionerrcnt", this, &HCClient::GetTransactionErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("cellerrcnt", this, &HCClient::GetCellErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("opcodeerrcnt", this, &HCClient::GetOpCodeErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("timeouterrcnt", this, &HCClient::GetTimeoutErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("piderrcnt", this, &HCClient::GetPIDErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("typeerrcnt", this, &HCClient::GetTypeErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("eiderrcnt", this, &HCClient::GetEIDErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("offseterrcnt", this, &HCClient::GetOffsetErrCnt, 0));
-  cont->Add(new HCUns32<HCClient>("goodxactcnt", this, &HCClient::GetGoodXactCnt, 0));
+  cont->Add(new HCUns32<HCClient>("senderrcount", this, &HCClient::GetSendErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("recverrcount", this, &HCClient::GetRecvErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("transactionerrcount", this, &HCClient::GetTransactionErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("cellerrcount", this, &HCClient::GetCellErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("opcodeerrcount", this, &HCClient::GetOpCodeErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("timeouterrcount", this, &HCClient::GetTimeoutErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("piderrcount", this, &HCClient::GetPIDErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("typeerrcount", this, &HCClient::GetTypeErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("eiderrcount", this, &HCClient::GetEIDErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("offseterrcount", this, &HCClient::GetOffsetErrCount, 0));
+  cont->Add(new HCUns32<HCClient>("goodxactcount", this, &HCClient::GetGoodXactCount, 0));
 
   //Create and start the read thread
   _readthread = new Thread<HCClient>(this, &HCClient::ReadThread);
@@ -111,7 +111,7 @@ HCClient::~HCClient()
   delete _ocell;
 }
 
-int HCClient::GetDebug(bool &val)
+int HCClient::GetDebug(bool& val)
 {
   //Get the value
   val = _debug;
@@ -127,90 +127,90 @@ int HCClient::SetDebug(bool val)
   return ERR_NONE;
 }
 
-int HCClient::GetSendErrCnt(uint32_t &val)
+int HCClient::GetSendErrCount(uint32_t& val)
 {
   //Get the value
-  val = _senderrcnt;
+  val = _senderrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetRecvErrCnt(uint32_t &val)
+int HCClient::GetRecvErrCount(uint32_t& val)
 {
   //Get the value
-  val = _recverrcnt;
+  val = _recverrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetTransactionErrCnt(uint32_t &val)
+int HCClient::GetTransactionErrCount(uint32_t& val)
 {
   //Get the value
-  val = _transactionerrcnt;
+  val = _transactionerrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetCellErrCnt(uint32_t &val)
+int HCClient::GetCellErrCount(uint32_t& val)
 {
   //Get the value
-  val = _cellerrcnt;
+  val = _cellerrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetOpCodeErrCnt(uint32_t &val)
+int HCClient::GetOpCodeErrCount(uint32_t& val)
 {
   //Get the value
-  val = _opcodeerrcnt;
+  val = _opcodeerrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetTimeoutErrCnt(uint32_t &val)
+int HCClient::GetTimeoutErrCount(uint32_t& val)
 {
   //Get the value
-  val = _timeouterrcnt;
+  val = _timeouterrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetPIDErrCnt(uint32_t &val)
+int HCClient::GetPIDErrCount(uint32_t& val)
 {
   //Get the value
-  val = _piderrcnt;
+  val = _piderrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetTypeErrCnt(uint32_t &val)
+int HCClient::GetTypeErrCount(uint32_t& val)
 {
   //Get the value
-  val = _typeerrcnt;
+  val = _typeerrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetEIDErrCnt(uint32_t &val)
+int HCClient::GetEIDErrCount(uint32_t& val)
 {
   //Get the value
-  val = _eiderrcnt;
+  val = _eiderrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetOffsetErrCnt(uint32_t &val)
+int HCClient::GetOffsetErrCount(uint32_t& val)
 {
   //Get the value
-  val = _offseterrcnt;
+  val = _offseterrcount;
 
   return ERR_NONE;
 }
 
-int HCClient::GetGoodXactCnt(uint32_t &val)
+int HCClient::GetGoodXactCount(uint32_t& val)
 {
   //Get the value
-  val = _goodxactcnt;
+  val = _goodxactcount;
 
   return ERR_NONE;
 }
@@ -260,7 +260,7 @@ int HCClient::ICall(uint16_t pid, uint32_t eid)
   return ierr;
 }
 
-int HCClient::Read(uint16_t pid, uint32_t offset, uint8_t *val, uint16_t maxlen, uint16_t &len)
+int HCClient::Read(uint16_t pid, uint32_t offset, uint8_t* val, uint16_t maxlen, uint16_t& len)
 {
   int8_t merr;
   int ierr;
@@ -291,7 +291,7 @@ int HCClient::Read(uint16_t pid, uint32_t offset, uint8_t *val, uint16_t maxlen,
   return ierr;
 }
 
-int HCClient::Write(uint16_t pid, uint32_t offset, uint8_t *val, uint16_t len)
+int HCClient::Write(uint16_t pid, uint32_t offset, uint8_t* val, uint16_t len)
 {
   int ierr;
 
@@ -315,9 +315,9 @@ int HCClient::Write(uint16_t pid, uint32_t offset, uint8_t *val, uint16_t len)
   return ierr;
 }
 
-int HCClient::DownloadSIF(uint16_t pid, const char *filename)
+int HCClient::DownloadSIF(uint16_t pid, const char* filename)
 {
-  FILE *file;
+  FILE* file;
   uint16_t len;
   int ierr;
 
@@ -363,7 +363,7 @@ int HCClient::DownloadSIF(uint16_t pid, const char *filename)
   return ERR_NONE;
 }
 
-template <typename T> int HCClient::Get(uint16_t pid, T &val)
+template <typename T> int HCClient::Get(uint16_t pid, T& val)
 {
   uint8_t type;
   int8_t merr;
@@ -426,7 +426,7 @@ template <typename T> int HCClient::Set(uint16_t pid, const T val)
   return ierr;
 }
 
-template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T &val)
+template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T& val)
 {
   uint8_t type;
   int8_t merr;
@@ -546,91 +546,91 @@ template <typename T> int HCClient::Sub(uint16_t pid, const T val)
   return ierr;
 }
 
-template int HCClient::Get<bool>(uint16_t pid, bool &val);
+template int HCClient::Get<bool>(uint16_t pid, bool& val);
 template int HCClient::Set<bool>(uint16_t pid, const bool val);
-template int HCClient::IGet<bool>(uint16_t pid, uint32_t eid, bool &val);
+template int HCClient::IGet<bool>(uint16_t pid, uint32_t eid, bool& val);
 template int HCClient::ISet<bool>(uint16_t pid, uint32_t eid, const bool val);
 template int HCClient::Add<bool>(uint16_t pid, const bool val);
 template int HCClient::Sub<bool>(uint16_t pid, const bool val);
 
-template int HCClient::Get<string>(uint16_t pid, string &val);
+template int HCClient::Get<string>(uint16_t pid, string& val);
 template int HCClient::Set<string>(uint16_t pid, const string val);
-template int HCClient::IGet<string>(uint16_t pid, uint32_t eid, string &val);
+template int HCClient::IGet<string>(uint16_t pid, uint32_t eid, string& val);
 template int HCClient::ISet<string>(uint16_t pid, uint32_t eid, const string val);
 template int HCClient::Add<string>(uint16_t pid, const string val);
 template int HCClient::Sub<string>(uint16_t pid, const string val);
 
-template int HCClient::Get<int8_t>(uint16_t pid, int8_t &val);
+template int HCClient::Get<int8_t>(uint16_t pid, int8_t& val);
 template int HCClient::Set<int8_t>(uint16_t pid, const int8_t val);
-template int HCClient::IGet<int8_t>(uint16_t pid, uint32_t eid, int8_t &val);
+template int HCClient::IGet<int8_t>(uint16_t pid, uint32_t eid, int8_t& val);
 template int HCClient::ISet<int8_t>(uint16_t pid, uint32_t eid, const int8_t val);
 template int HCClient::Add<int8_t>(uint16_t pid, const int8_t val);
 template int HCClient::Sub<int8_t>(uint16_t pid, const int8_t val);
 
-template int HCClient::Get<int16_t>(uint16_t pid, int16_t &val);
+template int HCClient::Get<int16_t>(uint16_t pid, int16_t& val);
 template int HCClient::Set<int16_t>(uint16_t pid, const int16_t val);
-template int HCClient::IGet<int16_t>(uint16_t pid, uint32_t eid, int16_t &val);
+template int HCClient::IGet<int16_t>(uint16_t pid, uint32_t eid, int16_t& val);
 template int HCClient::ISet<int16_t>(uint16_t pid, uint32_t eid, const int16_t val);
 template int HCClient::Add<int16_t>(uint16_t pid, const int16_t val);
 template int HCClient::Sub<int16_t>(uint16_t pid, const int16_t val);
 
-template int HCClient::Get<int32_t>(uint16_t pid, int32_t &val);
+template int HCClient::Get<int32_t>(uint16_t pid, int32_t& val);
 template int HCClient::Set<int32_t>(uint16_t pid, const int32_t val);
-template int HCClient::IGet<int32_t>(uint16_t pid, uint32_t eid, int32_t &val);
+template int HCClient::IGet<int32_t>(uint16_t pid, uint32_t eid, int32_t& val);
 template int HCClient::ISet<int32_t>(uint16_t pid, uint32_t eid, const int32_t val);
 template int HCClient::Add<int32_t>(uint16_t pid, const int32_t val);
 template int HCClient::Sub<int32_t>(uint16_t pid, const int32_t val);
 
-template int HCClient::Get<int64_t>(uint16_t pid, int64_t &val);
+template int HCClient::Get<int64_t>(uint16_t pid, int64_t& val);
 template int HCClient::Set<int64_t>(uint16_t pid, const int64_t val);
-template int HCClient::IGet<int64_t>(uint16_t pid, uint32_t eid, int64_t &val);
+template int HCClient::IGet<int64_t>(uint16_t pid, uint32_t eid, int64_t& val);
 template int HCClient::ISet<int64_t>(uint16_t pid, uint32_t eid, const int64_t val);
 template int HCClient::Add<int64_t>(uint16_t pid, const int64_t val);
 template int HCClient::Sub<int64_t>(uint16_t pid, const int64_t val);
 
-template int HCClient::Get<uint8_t>(uint16_t pid, uint8_t &val);
+template int HCClient::Get<uint8_t>(uint16_t pid, uint8_t& val);
 template int HCClient::Set<uint8_t>(uint16_t pid, const uint8_t val);
-template int HCClient::IGet<uint8_t>(uint16_t pid, uint32_t eid, uint8_t &val);
+template int HCClient::IGet<uint8_t>(uint16_t pid, uint32_t eid, uint8_t& val);
 template int HCClient::ISet<uint8_t>(uint16_t pid, uint32_t eid, const uint8_t val);
 template int HCClient::Add<uint8_t>(uint16_t pid, const uint8_t val);
 template int HCClient::Sub<uint8_t>(uint16_t pid, const uint8_t val);
 
-template int HCClient::Get<uint16_t>(uint16_t pid, uint16_t &val);
+template int HCClient::Get<uint16_t>(uint16_t pid, uint16_t& val);
 template int HCClient::Set<uint16_t>(uint16_t pid, const uint16_t val);
-template int HCClient::IGet<uint16_t>(uint16_t pid, uint32_t eid, uint16_t &val);
+template int HCClient::IGet<uint16_t>(uint16_t pid, uint32_t eid, uint16_t& val);
 template int HCClient::ISet<uint16_t>(uint16_t pid, uint32_t eid, const uint16_t val);
 template int HCClient::Add<uint16_t>(uint16_t pid, const uint16_t val);
 template int HCClient::Sub<uint16_t>(uint16_t pid, const uint16_t val);
 
-template int HCClient::Get<uint32_t>(uint16_t pid, uint32_t &val);
+template int HCClient::Get<uint32_t>(uint16_t pid, uint32_t& val);
 template int HCClient::Set<uint32_t>(uint16_t pid, const uint32_t val);
-template int HCClient::IGet<uint32_t>(uint16_t pid, uint32_t eid, uint32_t &val);
+template int HCClient::IGet<uint32_t>(uint16_t pid, uint32_t eid, uint32_t& val);
 template int HCClient::ISet<uint32_t>(uint16_t pid, uint32_t eid, const uint32_t val);
 template int HCClient::Add<uint32_t>(uint16_t pid, const uint32_t val);
 template int HCClient::Sub<uint32_t>(uint16_t pid, const uint32_t val);
 
-template int HCClient::Get<uint64_t>(uint16_t pid, uint64_t &val);
+template int HCClient::Get<uint64_t>(uint16_t pid, uint64_t& val);
 template int HCClient::Set<uint64_t>(uint16_t pid, const uint64_t val);
-template int HCClient::IGet<uint64_t>(uint16_t pid, uint32_t eid, uint64_t &val);
+template int HCClient::IGet<uint64_t>(uint16_t pid, uint32_t eid, uint64_t& val);
 template int HCClient::ISet<uint64_t>(uint16_t pid, uint32_t eid, const uint64_t val);
 template int HCClient::Add<uint64_t>(uint16_t pid, const uint64_t val);
 template int HCClient::Sub<uint64_t>(uint16_t pid, const uint64_t val);
 
-template int HCClient::Get<float>(uint16_t pid, float &val);
+template int HCClient::Get<float>(uint16_t pid, float& val);
 template int HCClient::Set<float>(uint16_t pid, const float val);
-template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float &val);
+template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float& val);
 template int HCClient::ISet<float>(uint16_t pid, uint32_t eid, const float val);
 template int HCClient::Add<float>(uint16_t pid, const float val);
 template int HCClient::Sub<float>(uint16_t pid, const float val);
 
-template int HCClient::Get<double>(uint16_t pid, double &val);
+template int HCClient::Get<double>(uint16_t pid, double& val);
 template int HCClient::Set<double>(uint16_t pid, const double val);
-template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double &val);
+template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double& val);
 template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val);
 template int HCClient::Add<double>(uint16_t pid, const double val);
 template int HCClient::Sub<double>(uint16_t pid, const double val);
 
-template <typename T> int HCClient::Get(uint16_t pid, T &val0, T &val1)
+template <typename T> int HCClient::Get(uint16_t pid, T& val0, T& val1)
 {
   uint8_t type;
   int8_t merr;
@@ -695,7 +695,7 @@ template <typename T> int HCClient::Set(uint16_t pid, const T val0, const T val1
   return ierr;
 }
 
-template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T &val0, T &val1)
+template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T& val0, T& val1)
 {
   uint8_t type;
   int8_t merr;
@@ -761,17 +761,17 @@ template <typename T> int HCClient::ISet(uint16_t pid, uint32_t eid, const T val
   return ierr;
 }
 
-template int HCClient::Get<float>(uint16_t pid, float &val0, float &val1);
+template int HCClient::Get<float>(uint16_t pid, float& val0, float& val1);
 template int HCClient::Set<float>(uint16_t pid, const float val0, const float val1);
-template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float &val0, float &val1);
+template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float& val0, float& val1);
 template int HCClient::ISet<float>(uint16_t pid, uint32_t eid, const float val0, const float val1);
 
-template int HCClient::Get<double>(uint16_t pid, double &val0, double &val1);
+template int HCClient::Get<double>(uint16_t pid, double& val0, double& val1);
 template int HCClient::Set<double>(uint16_t pid, const double val0, const double val1);
-template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double &val0, double &val1);
+template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double& val0, double& val1);
 template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val0, const double val1);
 
-template <typename T> int HCClient::Get(uint16_t pid, T &val0, T &val1, T &val2)
+template <typename T> int HCClient::Get(uint16_t pid, T& val0, T& val1, T& val2)
 {
   uint8_t type;
   int8_t merr;
@@ -838,7 +838,7 @@ template <typename T> int HCClient::Set(uint16_t pid, const T val0, const T val1
   return ierr;
 }
 
-template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T &val0, T &val1, T &val2)
+template <typename T> int HCClient::IGet(uint16_t pid, uint32_t eid, T& val0, T& val1, T& val2)
 {
   uint8_t type;
   int8_t merr;
@@ -906,14 +906,14 @@ template <typename T> int HCClient::ISet(uint16_t pid, uint32_t eid, const T val
   return ierr;
 }
 
-template int HCClient::Get<float>(uint16_t pid, float &val0, float &val1, float &val2);
+template int HCClient::Get<float>(uint16_t pid, float& val0, float& val1, float& val2);
 template int HCClient::Set<float>(uint16_t pid, const float val0, const float val1, const float val2);
-template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float &val0, float &val1, float &val2);
+template int HCClient::IGet<float>(uint16_t pid, uint32_t eid, float& val0, float& val1, float& val2);
 template int HCClient::ISet<float>(uint16_t pid, uint32_t eid, const float val0, const float val1, const float val2);
 
-template int HCClient::Get<double>(uint16_t pid, double &val0, double &val1, double &val2);
+template int HCClient::Get<double>(uint16_t pid, double& val0, double& val1, double& val2);
 template int HCClient::Set<double>(uint16_t pid, const double val0, const double val1, const double val2);
-template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double &val0, double &val1, double &val2);
+template int HCClient::IGet<double>(uint16_t pid, uint32_t eid, double& val0, double& val1, double& val2);
 template int HCClient::ISet<double>(uint16_t pid, uint32_t eid, const double val0, const double val1, const double val2);
 
 template <typename T> int HCClient::Get(uint16_t pid, T* val, uint16_t maxlen, uint16_t& len)
@@ -1020,7 +1020,7 @@ int HCClient::CallXact(uint16_t pid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1033,7 +1033,7 @@ int HCClient::CallXact(uint16_t pid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1053,7 +1053,7 @@ int HCClient::CallXact(uint16_t pid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1062,7 +1062,7 @@ int HCClient::CallXact(uint16_t pid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1093,7 +1093,7 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1106,7 +1106,7 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1126,7 +1126,7 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1138,13 +1138,13 @@ int HCClient::GetXact(uint16_t pid, uint8_t type)
   if(itype != type)
   {
     //Increment type error count
-    _typeerrcnt++;
+    _typeerrcount++;
 
     return ERR_TYPE;
   }
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return ERR_NONE;
 }
@@ -1172,7 +1172,7 @@ int HCClient::SetXact(uint16_t pid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1185,7 +1185,7 @@ int HCClient::SetXact(uint16_t pid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1205,7 +1205,7 @@ int HCClient::SetXact(uint16_t pid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1214,7 +1214,7 @@ int HCClient::SetXact(uint16_t pid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1243,7 +1243,7 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1256,7 +1256,7 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1276,7 +1276,7 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1288,7 +1288,7 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   if(ieid != eid)
   {
     //Increment EID error count
-    _eiderrcnt++;
+    _eiderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1297,7 +1297,7 @@ int HCClient::ICallXact(uint16_t pid, uint32_t eid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1330,7 +1330,7 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1343,7 +1343,7 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1363,7 +1363,7 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1375,7 +1375,7 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   if(ieid != eid)
   {
     //Increment EID error count
-    _eiderrcnt++;
+    _eiderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1387,13 +1387,13 @@ int HCClient::IGetXact(uint16_t pid, uint32_t eid, uint8_t type)
   if(itype != type)
   {
     //Increment type error count
-    _typeerrcnt++;
+    _typeerrcount++;
 
     return ERR_TYPE;
   }
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return ERR_NONE;
 }
@@ -1422,7 +1422,7 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1435,7 +1435,7 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1455,7 +1455,7 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1467,7 +1467,7 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid)
   if(ieid != eid)
   {
     //Increment EID error count
-    _eiderrcnt++;
+    _eiderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1476,7 +1476,7 @@ int HCClient::ISetXact(uint16_t pid, uint32_t eid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1504,7 +1504,7 @@ int HCClient::AddXact(uint16_t pid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1517,7 +1517,7 @@ int HCClient::AddXact(uint16_t pid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1537,7 +1537,7 @@ int HCClient::AddXact(uint16_t pid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1546,7 +1546,7 @@ int HCClient::AddXact(uint16_t pid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1574,7 +1574,7 @@ int HCClient::SubXact(uint16_t pid)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1587,7 +1587,7 @@ int HCClient::SubXact(uint16_t pid)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1607,7 +1607,7 @@ int HCClient::SubXact(uint16_t pid)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1616,7 +1616,7 @@ int HCClient::SubXact(uint16_t pid)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1649,7 +1649,7 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1662,7 +1662,7 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1682,7 +1682,7 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1694,13 +1694,13 @@ int HCClient::ReadXact(uint16_t pid, uint32_t offset, uint16_t maxlen)
   if(ioffset != offset)
   {
     //Increment offset error count
-    _offseterrcnt++;
+    _offseterrcount++;
 
     return ERR_UNSPEC;
   }
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return ERR_NONE;
 }
@@ -1729,7 +1729,7 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   if(_omsg->Send(_lowdev) != ERR_NONE)
   {
     //Increment send error count
-    _senderrcnt++;
+    _senderrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1742,7 +1742,7 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   if(_replyevent->Wait(_timeout) != 0)
   {
     //Increment timeout error count
-    _timeouterrcnt++;
+    _timeouterrcount++;
 
     //Set expected reply parameters to invalid
     _exptransaction = 0xFFFF;
@@ -1762,7 +1762,7 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   if(ipid != pid)
   {
     //Increment PID error count
-    _piderrcnt++;
+    _piderrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1774,7 +1774,7 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   if(ioffset != offset)
   {
     //Increment offset error count
-    _offseterrcnt++;
+    _offseterrcount++;
 
     return ERR_UNSPEC;
   }
@@ -1783,7 +1783,7 @@ int HCClient::WriteXact(uint16_t pid, uint32_t offset)
   _icell->Read(berr);
 
   //Increment good transaction count
-  _goodxactcnt++;
+  _goodxactcount++;
 
   return (int)berr;
 }
@@ -1797,7 +1797,7 @@ void HCClient::ReadThread(void)
     if(_imsg->Recv(_lowdev) != ERR_NONE)
     {
       //Increment receive error count
-      _recverrcnt++;
+      _recverrcount++;
 
       //Ignore the rest of this loop
       continue;
@@ -1811,7 +1811,7 @@ void HCClient::ReadThread(void)
     if(_imsg->GetTransaction() != _exptransaction)
     {
       //Increment transaction error count
-      _transactionerrcnt++;
+      _transactionerrcount++;
 
       //Ignore the rest of this loop
       continue;
@@ -1821,7 +1821,7 @@ void HCClient::ReadThread(void)
     if(!_imsg->Read(_icell))
     {
       //Increment cell error count
-      _cellerrcnt++;
+      _cellerrcount++;
 
       //Ignore the rest of this loop
       continue;
@@ -1831,7 +1831,7 @@ void HCClient::ReadThread(void)
     if(_icell->GetOpCode() != _expopcode)
     {
       //Increment opcode error count
-      _opcodeerrcnt++;
+      _opcodeerrcount++;
 
       //Ignore the rest of this loop
       continue;

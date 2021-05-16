@@ -90,7 +90,7 @@ int System::SetPrintLogFile(const string& val)
   return ERR_NONE;
 }
 
-int SystemExecute(const char *fmt, ...)
+int SystemExecute(const char* fmt, ...)
 {
   char cmdstr[1000];
   int retval;
@@ -126,7 +126,7 @@ int SystemExecute(const char *fmt, ...)
   return WEXITSTATUS(retval);
 }
 
-void SystemPrint(uint8_t detail, const char *fmt, ...)
+void SystemPrint(uint8_t detail, const char* fmt, ...)
 {
   va_list args;
 

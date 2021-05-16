@@ -26,20 +26,17 @@
 
 #pragma once
 
+#include "const.hh"
 #include <inttypes.h>
 #include <pthread.h>
 
 class Event
 {
 public:
-  static const uint32_t WAIT_NONE = 0;
-  static const uint32_t WAIT_INF = 0xFFFFFFFF;
-
-public:
   Event(bool signalled=false);
   ~Event();
   int Clear(void);
-  int Wait(uint32_t usecs=WAIT_INF);
+  int Wait(uint32_t msecs=WAIT_INF);
   int Signal(void);
   int Reset(void);
 

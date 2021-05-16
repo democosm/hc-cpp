@@ -31,7 +31,7 @@
 
 using namespace std;
 
-HCNode::HCNode(const string &name)
+HCNode::HCNode(const string& name)
 {
   //Initialize member variables
   _name = name;
@@ -47,24 +47,24 @@ const string HCNode::GetName(void)
   return _name;
 }
 
-void HCNode::GetName(const string &name)
+void HCNode::GetName(const string& name)
 {
   _name = name;
 }
 
-bool HCNode::IsNamed(const string &name)
+bool HCNode::IsNamed(const string& name)
 {
   //Check for exact name match
   return _name == name;
 }
 
-bool HCNode::NameStartsWith(const string &name)
+bool HCNode::NameStartsWith(const string& name)
 {
   //Check for name starts with
   return _name.rfind(name, 0) == 0 ? true : false;
 }
 
-bool HCNode::NameMatchesExpression(const string &expression)
+bool HCNode::NameMatchesExpression(const string& expression)
 {
   //Check for name matching expression
   return StrExp(_name, expression);

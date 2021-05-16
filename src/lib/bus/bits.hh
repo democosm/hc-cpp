@@ -36,7 +36,7 @@ template <class T>
 class Bits
 {
 public:
-  Bits(Bus *bus, uint32_t addr, T mask)
+  Bits(Bus* bus, uint32_t addr, T mask)
   {
     //Assert valid arguments
     assert((bus != 0) && (mask != 0));
@@ -56,14 +56,14 @@ public:
   {
   }
 
-  int Get(T &val)
+  int Get(T& val)
   {
     int terr;
     T buf;
 
     //Get data using bus
     _bus->Reserve();
-    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t*)&buf, sizeof(T));
     _bus->Release();
 
     //Check for error
@@ -92,7 +92,7 @@ public:
     _bus->Reserve();
 
     //Get data using bus
-    terr = _bus->Get(_addr, (uint8_t *)&buf, sizeof(T));
+    terr = _bus->Get(_addr, (uint8_t*)&buf, sizeof(T));
 
     //Check for error
     if(terr != ERR_NONE)
@@ -113,7 +113,7 @@ public:
     buf = HostToNet(tval);
 
     //Set data using bus
-    terr = _bus->Set(_addr, (uint8_t *)&buf, sizeof(T));
+    terr = _bus->Set(_addr, (uint8_t*)&buf, sizeof(T));
 
     //Release bus
     _bus->Release();
@@ -122,7 +122,7 @@ public:
   }
 
 private:
-  Bus *_bus;
+  Bus* _bus;
   uint32_t _addr;
   T _mask;
   uint8_t _shift;

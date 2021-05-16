@@ -29,11 +29,11 @@
 
 using namespace std;
 
-HCContainer *HCUtility::GetCont(const string &name, HCContainer *startcont, size_t index)
+HCContainer* HCUtility::GetCont(const string& name, HCContainer* startcont, size_t index)
 {
   string nodename;
   size_t nextindex;
-  HCContainer *cont;
+  HCContainer* cont;
 
   //Assert valid arguments
   assert(startcont != 0);
@@ -113,11 +113,11 @@ HCContainer *HCUtility::GetCont(const string &name, HCContainer *startcont, size
   return 0;
 }
 
-HCParameter *HCUtility::GetParam(const string &name, HCContainer *startcont, size_t index)
+HCParameter* HCUtility::GetParam(const string& name, HCContainer* startcont, size_t index)
 {
   string nodename;
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
   size_t nextindex;
 
   //Assert valid arguments

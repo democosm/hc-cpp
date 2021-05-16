@@ -48,14 +48,14 @@ HCCommand::~HCCommand()
 {
 }
 
-void HCCommand::operator =(const HCCommand &cmd)
+void HCCommand::operator =(const HCCommand& cmd)
 {
   //Copy string and set index
   _str = cmd._str;
   _index = _str.length();
 }
 
-bool HCCommand::operator ==(const HCCommand &cmd)
+bool HCCommand::operator ==(const HCCommand& cmd)
 {
   //Compare strings
   return _str == cmd._str;
@@ -66,14 +66,14 @@ const string HCCommand::GetStr()
   return _str;
 }
 
-void HCCommand::SetStr(const string &str)
+void HCCommand::SetStr(const string& str)
 {
   //Copy string and set index
   _str = str;
   _index = _str.length();
 }
 
-void HCCommand::GetEnd(string &str)
+void HCCommand::GetEnd(string& str)
 {
   str = _str.substr(_index, _str.length()-_index);
 }
@@ -168,7 +168,7 @@ char HCCommand::EndChar()
   return _str.at(len-1);
 }
 
-void HCCommand::Tokenize(vector<string> &toks)
+void HCCommand::Tokenize(vector<string>& toks)
 {
   bool literalmode;
   string token;
@@ -324,13 +324,13 @@ void HCHistory::Forward(void)
   _index = NextIndex(_index);
 }
 
-void HCHistory::GetCurrentCmd(HCCommand &cmd)
+void HCHistory::GetCurrentCmd(HCCommand& cmd)
 {
   //Copy command at current index
   cmd = _cmd[_index];
 }
 
-void HCHistory::NewCmd(HCCommand &cmd)
+void HCHistory::NewCmd(HCCommand& cmd)
 {
   uint32_t prev;
 
@@ -394,7 +394,7 @@ uint32_t HCHistory::PrevIndex(uint32_t curindex)
 }
 
 //Console
-HCConsole::HCConsole(HCContainer *top)
+HCConsole::HCConsole(HCContainer* top)
 {
   struct termios opts;
 
@@ -746,7 +746,7 @@ void HCConsole::BackspaceProc(void)
 
 void HCConsole::TabProc(uint32_t recurlevel)
 {
-  HCContainer *startcont;
+  HCContainer* startcont;
   char nextchar;
 
   //Check for max recursion
@@ -934,10 +934,10 @@ void HCConsole::DefaultProc(char ch)
     cout << TC_LEFT;
 }
 
-void HCConsole::HelpCmdProc(uint32_t tokcnt)
+void HCConsole::HelpCmdProc(uint32_t tokcount)
 {
   //Check for invalid argument count
-  if(tokcnt != 1)
+  if(tokcount != 1)
   {
     cout << "Syntax: " << _tokens[0] << "\n";
     return;
@@ -969,10 +969,10 @@ void HCConsole::HelpCmdProc(uint32_t tokcnt)
   cout << "P#\"S\"           = Download parameter P to local file S" << "\n";
 }
 
-void HCConsole::HistCmdProc(uint32_t tokcnt)
+void HCConsole::HistCmdProc(uint32_t tokcount)
 {
   //Check for invalid argument count
-  if(tokcnt != 1)
+  if(tokcount != 1)
   {
     cout << "Syntax: " << _tokens[0] << "\n";
     return;
@@ -982,20 +982,20 @@ void HCConsole::HistCmdProc(uint32_t tokcnt)
   _hist->Show();
 }
 
-void HCConsole::ChdirCmdProc(uint32_t tokcnt)
+void HCConsole::ChdirCmdProc(uint32_t tokcount)
 {
-  HCContainer *startcont;
-  HCContainer *cont;
+  HCContainer* startcont;
+  HCContainer* cont;
 
   //Check for invalid argument count
-  if(tokcnt != 2)
+  if(tokcount != 2)
   {
     cout << "Syntax: " << _tokens[0] << " <CONTAINER NAME>" << "\n";
     return;
   }
 
   //If name begins with '/' start from top, else start from current working container
-  if(_tokens[tokcnt - 1].at(0) == '/')
+  if(_tokens[tokcount - 1].at(0) == '/')
     startcont = _top;
   else
     startcont = _workcont;
@@ -1016,13 +1016,13 @@ void HCConsole::ChdirCmdProc(uint32_t tokcnt)
   }
 }
 
-void HCConsole::ListCmdProc(uint32_t tokcnt)
+void HCConsole::ListCmdProc(uint32_t tokcount)
 {
-  HCContainer *startcont;
+  HCContainer* startcont;
   uint32_t i;
 
   //Check for no arguments
-  if(tokcnt == 1)
+  if(tokcount == 1)
   {
     //Show listing of everything in working container
     ShowListing("*", _workcont);
@@ -1030,7 +1030,7 @@ void HCConsole::ListCmdProc(uint32_t tokcnt)
   else
   {
     //Loop through all arguments
-    for(i=1; i<tokcnt; i++)
+    for(i=1; i<tokcount; i++)
     {
       //If name begins with '/' start from top, else start from current working container
       if(_tokens[i].at(0) == '/')
@@ -1044,13 +1044,13 @@ void HCConsole::ListCmdProc(uint32_t tokcnt)
   }
 }
 
-void HCConsole::InfoCmdProc(uint32_t tokcnt)
+void HCConsole::InfoCmdProc(uint32_t tokcount)
 {
-  HCContainer *startcont;
+  HCContainer* startcont;
   uint32_t i;
 
   //Check for no arguments
-  if(tokcnt == 1)
+  if(tokcount == 1)
   {
     //Show information of everything in working container
     ShowInfo("*", _workcont);
@@ -1058,7 +1058,7 @@ void HCConsole::InfoCmdProc(uint32_t tokcnt)
   else
   {
     //Loop through all arguments
-    for(i=1; i<tokcnt; i++)
+    for(i=1; i<tokcount; i++)
     {
       //If name begins with '/' start from top, else start from current working container
       if(_tokens[i].at(0) == '/')
@@ -1072,29 +1072,29 @@ void HCConsole::InfoCmdProc(uint32_t tokcnt)
   }
 }
 
-void HCConsole::FindCmdProc(uint32_t tokcnt)
+void HCConsole::FindCmdProc(uint32_t tokcount)
 {
   uint32_t i;
 
   //Check for invalid argument count
-  if(tokcnt < 2)
+  if(tokcount < 2)
   {
     cout << "Syntax: " << _tokens[0] << " <EXPRESSION(s)>" << "\n";
     return;
   }
 
   //Loop through all specified arguments
-  for(i=1; i<tokcnt; i++)
+  for(i=1; i<tokcount; i++)
   {
     //Show finds of matching parameters and containers
     ShowFinds(_tokens[i], _top);
   }
 }
 
-void HCConsole::ExitCmdProc(uint32_t tokcnt)
+void HCConsole::ExitCmdProc(uint32_t tokcount)
 {
   //Check for invalid argument count
-  if(tokcnt != 1)
+  if(tokcount != 1)
   {
     cout << "Syntax: " << _tokens[0] << "\n";
     return;
@@ -1104,22 +1104,22 @@ void HCConsole::ExitCmdProc(uint32_t tokcnt)
   _exit = true;
 }
 
-void HCConsole::CallCmdProc(uint32_t tokcnt)
+void HCConsole::CallCmdProc(uint32_t tokcount)
 {
-  HCContainer *startcont;
+  HCContainer* startcont;
   uint32_t i;
-  HCParameter *param;
+  HCParameter* param;
   int ierr;
 
   //Check invalid number of arguments
-  if(tokcnt < 2)
+  if(tokcount < 2)
   {
     cout << "Syntax: " << _tokens[0] << " <CALL PARAM LIST>" << "\n";
     return;
   }
 
   //Loop through all specified arguments
-  for(i=1; i<tokcnt; i++)
+  for(i=1; i<tokcount; i++)
   {
     //If name begins with '/' start from top, else start from current working container
     if(_tokens[i].at(0) == '/')
@@ -1141,12 +1141,12 @@ void HCConsole::CallCmdProc(uint32_t tokcnt)
   }
 }
 
-void HCConsole::SaveCmdProc(uint32_t tokcnt)
+void HCConsole::SaveCmdProc(uint32_t tokcount)
 {
   ofstream file;
 
   //Check for arguments
-  if(tokcnt != 1)
+  if(tokcount != 1)
   {
     cout << "Syntax: " << _tokens[0] << "\n";
     return;
@@ -1169,14 +1169,14 @@ void HCConsole::SaveCmdProc(uint32_t tokcnt)
   file.close();
 }
 
-void HCConsole::LoadCmdProc(uint32_t tokcnt)
+void HCConsole::LoadCmdProc(uint32_t tokcount)
 {
   ifstream file;
   string line;
   HCCommand cmd;
 
   //Check for arguments
-  if(tokcnt != 1)
+  if(tokcount != 1)
   {
     cout << "Syntax: " << _tokens[0] << "\n";
     return;
@@ -1212,10 +1212,10 @@ void HCConsole::LoadCmdProc(uint32_t tokcnt)
   file.close();
 }
 
-void HCConsole::ParamCmdProc(uint32_t tokcnt)
+void HCConsole::ParamCmdProc(uint32_t tokcount)
 {
-  HCContainer *startcont;
-  HCParameter *param;
+  HCContainer* startcont;
+  HCParameter* param;
   uint32_t eid;
   int ierr;
 
@@ -1241,7 +1241,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P=N pattern
-  if((tokcnt == 3) && (_tokens[1] == "="))
+  if((tokcount == 3) && (_tokens[1] == "="))
   {
     //Set parameter value using string and check for error
     if((ierr = param->SetStr(_tokens[2])) != ERR_NONE)
@@ -1251,7 +1251,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P<N pattern
-  if((tokcnt == 3) && (_tokens[1] == "<"))
+  if((tokcount == 3) && (_tokens[1] == "<"))
   {
     //Add value to parameter using string and check for error
     if((ierr = param->AddStr(_tokens[2])) != ERR_NONE)
@@ -1261,7 +1261,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P>N pattern
-  if((tokcnt == 3) && (_tokens[1] == ">"))
+  if((tokcount == 3) && (_tokens[1] == ">"))
   {
     //Subtract native value string and check for error
     if((ierr = param->SubStr(_tokens[2])) != ERR_NONE)
@@ -1271,7 +1271,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P() pattern
-  if((tokcnt == 3) && (_tokens[1] == "(") && (_tokens[2] == ")"))
+  if((tokcount == 3) && (_tokens[1] == "(") && (_tokens[2] == ")"))
   {
     //Call parameter and check for error
     if((ierr = param->Call()) != ERR_NONE)
@@ -1281,7 +1281,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P="" pattern
-  if((tokcnt == 4) && (_tokens[1] == "=") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
+  if((tokcount == 4) && (_tokens[1] == "=") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
   {
     //Set parameter value to empty string and check for error
     if((ierr = param->SetStrLit("")) != ERR_NONE)
@@ -1291,7 +1291,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P<"" pattern
-  if((tokcnt == 4) && (_tokens[1] == "<") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
+  if((tokcount == 4) && (_tokens[1] == "<") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
   {
     //Add empty string and check for error
     if((ierr = param->AddStrLit("")) != ERR_NONE)
@@ -1301,7 +1301,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P>"" pattern
-  if((tokcnt == 4) && (_tokens[1] == ">") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
+  if((tokcount == 4) && (_tokens[1] == ">") && (_tokens[2] == "\"") && (_tokens[3] == "\""))
   {
     //Subtract empty string and check for error
     if((ierr = param->SubStrLit("")) != ERR_NONE)
@@ -1311,7 +1311,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P(I) pattern
-  if((tokcnt == 4) && (_tokens[1] == "(") && (_tokens[3] == ")"))
+  if((tokcount == 4) && (_tokens[1] == "(") && (_tokens[3] == ")"))
   {
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
@@ -1328,7 +1328,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P="S" pattern
-  if((tokcnt == 5) && (_tokens[1] == "=") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
+  if((tokcount == 5) && (_tokens[1] == "=") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
   {
     //Set parameter value to literal string and check for error
     if((ierr = param->SetStrLit(_tokens[3])) != ERR_NONE)
@@ -1338,7 +1338,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P<"S" pattern
-  if((tokcnt == 5) && (_tokens[1] == "<") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
+  if((tokcount == 5) && (_tokens[1] == "<") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
   {
     //Add literal string and check for error
     if((ierr = param->AddStrLit(_tokens[3])) != ERR_NONE)
@@ -1348,7 +1348,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P>"S" pattern
-  if((tokcnt == 5) && (_tokens[1] == ">") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
+  if((tokcount == 5) && (_tokens[1] == ">") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
   {
     //Subtract literal string and check for error
     if((ierr = param->SubStrLit(_tokens[3])) != ERR_NONE)
@@ -1358,7 +1358,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P@"S" pattern
-  if((tokcnt == 5) && (_tokens[1] == "@") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
+  if((tokcount == 5) && (_tokens[1] == "@") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
   {
     //Execute file upload
     if((ierr = param->Upload(_tokens[3])) != ERR_NONE)
@@ -1368,7 +1368,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P#"S" pattern
-  if((tokcnt == 5) && (_tokens[1] == "#") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
+  if((tokcount == 5) && (_tokens[1] == "#") && (_tokens[2] == "\"") && (_tokens[4] == "\""))
   {
     //Execute file download
     if((ierr = param->Download(_tokens[3])) != ERR_NONE)
@@ -1378,7 +1378,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P[I]=N pattern
-  if((tokcnt == 6) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "="))
+  if((tokcount == 6) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "="))
   {
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
@@ -1395,7 +1395,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P("E") pattern
-  if((tokcnt == 6) && (_tokens[1] == "(") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == ")"))
+  if((tokcount == 6) && (_tokens[1] == "(") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == ")"))
   {
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
@@ -1412,7 +1412,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P[I]="" pattern
-  if((tokcnt == 7) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "=") && (_tokens[5] == "\"") && (_tokens[6] == "\""))
+  if((tokcount == 7) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "=") && (_tokens[5] == "\"") && (_tokens[6] == "\""))
   {
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
@@ -1429,7 +1429,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P[I]="S" pattern
-  if((tokcnt == 8) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "=") && (_tokens[5] == "\"") && (_tokens[7] == "\""))
+  if((tokcount == 8) && (_tokens[1] == "[") && (_tokens[3] == "]") && (_tokens[4] == "=") && (_tokens[5] == "\"") && (_tokens[7] == "\""))
   {
     //Convert table id to integer and check for error
     if(!StringConvert(_tokens[2], eid))
@@ -1446,7 +1446,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P["E"]=N pattern
-  if((tokcnt == 8) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "="))
+  if((tokcount == 8) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "="))
   {
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
@@ -1463,7 +1463,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P["E"]="" pattern
-  if((tokcnt == 9) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "=") && (_tokens[7] == "\"") && (_tokens[8] == "\""))
+  if((tokcount == 9) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "=") && (_tokens[7] == "\"") && (_tokens[8] == "\""))
   {
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
@@ -1480,7 +1480,7 @@ void HCConsole::ParamCmdProc(uint32_t tokcnt)
   }
 
   //Check for P["E"]="S" pattern
-  if((tokcnt == 10) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "=") && (_tokens[7] == "\"") && (_tokens[9] == "\""))
+  if((tokcount == 10) && (_tokens[1] == "[") && (_tokens[2] == "\"") && (_tokens[4] == "\"") && (_tokens[5] == "]") && (_tokens[6] == "=") && (_tokens[7] == "\"") && (_tokens[9] == "\""))
   {
     //Convert table id string to number
     if(!param->EIDStrToNum(_tokens[3], eid))
@@ -1506,12 +1506,12 @@ void HCConsole::Prompt(void)
   cout << '\r' << _workcont->GetName() << '>';
 }
 
-bool HCConsole::GetNextCommonChar(const string &name, HCContainer *startcont, char &ch, size_t index)
+bool HCConsole::GetNextCommonChar(const string& name, HCContainer* startcont, char& ch, size_t index)
 {
   string nodename;
   size_t nextindex;
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
   bool foundone;
   char nextchar;
 
@@ -1609,12 +1609,12 @@ bool HCConsole::GetNextCommonChar(const string &name, HCContainer *startcont, ch
   return foundone;
 }
 
-void HCConsole::ShowListing(const string &name, HCContainer *startcont, size_t index)
+void HCConsole::ShowListing(const string& name, HCContainer* startcont, size_t index)
 {
   string nodename;
   size_t nextindex;
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
 
   //Assert valid arguments
   assert(startcont != 0);
@@ -1673,12 +1673,12 @@ void HCConsole::ShowListing(const string &name, HCContainer *startcont, size_t i
       cout << cont->GetName() << "\n";
 }
 
-void HCConsole::ShowInfo(const string &name, HCContainer *startcont, size_t index)
+void HCConsole::ShowInfo(const string& name, HCContainer* startcont, size_t index)
 {
   string nodename;
   size_t nextindex;
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
 
   //Assert valid arguments
   assert(startcont != 0);
@@ -1747,12 +1747,12 @@ void HCConsole::ShowInfo(const string &name, HCContainer *startcont, size_t inde
   }
 }
 
-void HCConsole::ShowNames(const string &name, HCContainer *startcont, size_t index)
+void HCConsole::ShowNames(const string& name, HCContainer* startcont, size_t index)
 {
   string nodename;
   size_t nextindex;
-  HCContainer *cont;
-  HCParameter *param;
+  HCContainer* cont;
+  HCParameter* param;
 
   //Assert valid arguments
   assert(startcont != 0);
@@ -1811,10 +1811,10 @@ void HCConsole::ShowNames(const string &name, HCContainer *startcont, size_t ind
       cout << TC_CYAN << cont->GetName() << '/' << TC_RESET << "\n";
 }
 
-void HCConsole::ShowFinds(const string &name, HCContainer *startcont)
+void HCConsole::ShowFinds(const string& name, HCContainer* startcont)
 {
-  HCParameter *param;
-  HCContainer *cont;
+  HCParameter* param;
+  HCContainer* cont;
 
   //Assert valid arguments
   assert(startcont != 0);

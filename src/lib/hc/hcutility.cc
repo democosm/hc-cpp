@@ -182,3 +182,17 @@ HCParameter* HCUtility::GetParam(const string& name, HCContainer* startcont, siz
   //Not found
   return 0;
 }
+
+void HCAdd(HCParameter* param, HCContainer* cont, HCServer* srv)
+{
+  //Assert valid arguments
+  assert(param != 0);
+
+  //Add parameter to container if desired
+  if(cont != 0)
+    cont->Add(param);
+
+  //Add parameter to server if desired
+  if(srv != 0)
+    srv->Add(param);
+}

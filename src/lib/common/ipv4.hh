@@ -1,6 +1,6 @@
-// HC utility
+// IPv4 functions
 //
-// Copyright 2019 Democosm
+// Copyright 2021 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -26,19 +26,8 @@
 
 #pragma once
 
-#include "hccontainer.hh"
-#include "hcparameter.hh"
-#include "hcserver.hh"
-#include "device.hh"
 #include <inttypes.h>
-#include <string>
-#include <stdio.h>
 
-class HCUtility
-{
-public:
-  static HCContainer* GetCont(const std::string& name, HCContainer* startcont, size_t index=0);
-  static HCParameter* GetParam(const std::string& name, HCContainer* startcont, size_t index=0);
-};
-
-void HCAdd(HCParameter* param, HCContainer* cont, HCServer* srv=0);
+bool IPv4AddrIsUnicast(const uint32_t addr);
+bool IPv4AddrIsUnicast(const char* addr);
+bool IPv4AddrStrToInt(const char* addrstr, uint32_t& addrint);

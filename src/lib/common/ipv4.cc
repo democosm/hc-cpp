@@ -1,6 +1,6 @@
-// HC utility
+// IPv4 functions
 //
-// Copyright 2019 Democosm
+// Copyright 2021 Democosm
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
@@ -24,21 +24,45 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#pragma once
+#include <arpa/inet.h>
+#include <cassert>
 
-#include "hccontainer.hh"
-#include "hcparameter.hh"
-#include "hcserver.hh"
-#include "device.hh"
-#include <inttypes.h>
-#include <string>
-#include <stdio.h>
-
-class HCUtility
+bool IPv4AddrStrToInt(const char* addrstr, uint32_t& addrint)
 {
-public:
-  static HCContainer* GetCont(const std::string& name, HCContainer* startcont, size_t index=0);
-  static HCParameter* GetParam(const std::string& name, HCContainer* startcont, size_t index=0);
-};
+  struct sockaddr_in sa;
 
-void HCAdd(HCParameter* param, HCContainer* cont, HCServer* srv=0);
+  //Assert valid arguments
+  assert(addrstr != 0);
+
+  //Initialize integer value to zero
+  addrint = 0;
+
+  //Convert string to struct
+  if(inet_pton(AF_INET, addrstr, &(sa.sin_addr)) != 1)
+    return false;
+
+  //Return integer value
+  addrint = ntohl(sa.sin_addr.s_addr);
+  return true;
+}
+
+bool IPv4AddrIsUnicast(const uint32_t addr)
+{
+  //Check for address in valid 
+  if((addr > 0x00FFFFFF) && (addr < 0xE0000000))
+    return true;
+
+  //Not a good unicast address
+  return false;
+}
+
+bool IPv4AddrIsUnicast(const char* addr)
+{
+  uint32_t addrint;
+
+  //Convert to integer form
+  if(!IPv4AddrStrToInt(addr, addrint))
+    return false;
+
+  return IPv4AddrIsUnicast(addrint);
+}
